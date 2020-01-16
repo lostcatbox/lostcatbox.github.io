@@ -570,6 +570,7 @@ height:50vh;
 </li>
 </ul>
 <p><strong><code>QuerySet</code>에 대한 직렬화를 지원해줍니다만,<code>Model</code> 타입에 대한 직렬화는 없습니다.</strong> 이는 <code>ModelSerializer</code>의 도움을 받습니다. (까보면 없다)</p>
+<p>Tip: QuerySet타입은 SQL로 해석 CRUD 구현된다.</p>
 <p><code>rest_framework/renderer.py</code>내 <code>JSONRenderer</code>는 <code>json.dumps</code> 함수에 대한 래핑 클래스입니다. 보다 편리한 JSON 직렬화를 도와줍니다. 다음 코드로 직렬화를 수행하실 수 있어요. utf8 인코딩도 추가로 수행해줍니다. (즉 래핑하고있어서 클래스내에 render()함수호출하면 json.dumps일어나게되어있다)</p>
 <p>In [21]:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from rest_framework.renderers import JSONRenderer</span><br><span class="line"></span><br><span class="line">data = &#123;&apos;이름&apos;: &apos;AskDjango&apos;&#125;</span><br><span class="line">json_utf8_string = JSONRenderer().render(data) #이렇게 편리함</span><br><span class="line"></span><br><span class="line">json_utf8_string.decode(&apos;utf8&apos;)  # 출력포맷 조정을 위한 목적일 뿐, 실제 서비스에서는 decode하지 않습니다.</span><br></pre></td></tr></table></figure>
@@ -741,14 +742,14 @@ height:50vh;
 <p>In [84]: # ListAPIView도 뜯어보면 ModelViewSet중에 몇개만 구성되어있음. 비슷하게 모두구성됨</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from rest_framework import generics</span><br><span class="line"></span><br><span class="line">class PostListAPIView(generics.ListAPIView):</span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostModelSerializer</span><br></pre></td></tr></table></figure>
 
-<p>이렇게 간결하게 정의한 뷰 만으로 다음과 같이 JSON 응답을 만들어낼 수 있습니다.</p>
-<p>Tip: ModelViewSet은 urls.py에서도 여러가지 url들을 활용해야하므로 urlpatterns= [ ]앞에 아래코드가 꼭 필요하다</p>
+<p>이렇게 간결하게 정의한 뷰 만으로 다음과 같이 JSON 응답을 만들어낼 수 있습니다.(router불필요)</p>
+<p>Tip: ModelViewSet은 urls.py에서도 여러가지 url들을 활용해야하므로 urlpatterns= [ ]앞에 아래코드가 꼭 필요하다 (ViewSet은 뷰자체가 4개임)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">router = DefaultRouter()</span><br><span class="line">router.register(r&apos;posts&apos;, views.PostViewSet) # 이렇게 posts는 url프리픽스로 지정하면 posts/하면 목록나오고 posts/&#123;pk&#125;하면 특정 글에대해 열림</span><br></pre></td></tr></table></figure>
 
 
 
 <p>In [86]: (???)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from django.http import HttpRequest</span><br><span class="line"></span><br><span class="line">class DummyUser:</span><br><span class="line">    pass</span><br><span class="line"></span><br><span class="line">request = HttpRequest()</span><br><span class="line">request.user = DummyUser()</span><br><span class="line">request.method = &apos;GET&apos;</span><br><span class="line"></span><br><span class="line">response = PostListAPIView.as_view()(request)</span><br><span class="line">response.rendered_content.decode(&apos;utf8&apos;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">from django.http import HttpRequest</span><br><span class="line"></span><br><span class="line">class DummyUser:</span><br><span class="line">    pass</span><br><span class="line"></span><br><span class="line">request = HttpRequest()</span><br><span class="line">request.user = DummyUser()</span><br><span class="line">request.method = &apos;GET&apos;</span><br><span class="line"></span><br><span class="line">#뷰함수호출후 (request) 필요하잖아!</span><br><span class="line">response = PostListAPIView.as_view()(request)</span><br><span class="line">response.rendered_content.decode(&apos;utf8&apos;)</span><br></pre></td></tr></table></figure>
 
 <p>Out[86]:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos;[&#123;&quot;id&quot;:1,&quot;title&quot;:&quot;횡단보도 보행자 없으면 우회전 가능?…혼란 빚은 까닭&quot;,&quot;content&quot;:&quot;교차로에서 우회전할 때 횡단 보도를 건너는 사람이 없다면 보행자 신호가 녹색이더라도 진입할 수 있을까요? 이 문제를 놓고 대법원과 경찰의 판단이 다른 상황입니다.&quot;,&quot;created_at&quot;:&quot;2017-10-16T14:15:12.102064&quot;,&quot;updated_at&quot;:&quot;2017-10-16T14:15:12.102093&quot;&#125;,&#123;&quot;id&quot;:2,&quot;title&quot;:&quot;\&apos;디지털세대, 아날로그에 빠지다\&apos;…아날로그 인기 이유는?&quot;,&quot;content&quot;:&quot;옛 방식을 고집하는 아날로그 공간들이 젊은 층을 중심으로 주목받고 있습니다.&quot;,&quot;created_at&quot;:&quot;2017-10-16T14:15:12.102431&quot;,&quot;updated_at&quot;:&quot;2017-10-16T14:15:12.102446&quot;&#125;,&#123;&quot;id&quot;:3,&quot;title&quot;:&quot;저녁 줄였는데 누구는 살 빠지고, 난 안 빠지고…이유는&quot;,&quot;content&quot;:&quot;늦은 시간에 야식 먹으면 다 살로 간다고 하죠? 그래서 야식 증후군이란 말까지 생겼습니다. 또 아침은 많이 먹고 저녁은 되도록 적게 먹는 것이 다이어트의 지름길이라고 생각하기도 합니다. 이게 다 얼마나 맞는 말일까요?&quot;,&quot;created_at&quot;:&quot;2017-10-16T14:15:12.102714&quot;,&quot;updated_at&quot;:&quot;2017-10-16T14:15:12.102729&quot;&#125;]&apos;</span><br></pre></td></tr></table></figure>
@@ -1189,10 +1190,6 @@ top:50vh;
     
     
     
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 24
@@ -1330,12 +1327,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
         </li>
     
     </div>
@@ -1353,11 +1350,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
-    
         <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
     
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -1369,17 +1366,17 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
-        <span class="sidebar-tag-name" data-tags="Terminal"><span class="iconfont-archer">&#xe606;</span>Terminal</span>
-    
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
         <span class="sidebar-tag-name" data-tags="Crawling"><span class="iconfont-archer">&#xe606;</span>Crawling</span>
     
-        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
-    
-        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+        <span class="sidebar-tag-name" data-tags="Terminal"><span class="iconfont-archer">&#xe606;</span>Terminal</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1422,15 +1419,15 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
-        <span class="sidebar-category-name" data-categories="Terminal"><span class="iconfont-archer">&#xe60a;</span>Terminal</span>
-    
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
-        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Terminal"><span class="iconfont-archer">&#xe60a;</span>Terminal</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>

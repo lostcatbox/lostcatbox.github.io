@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">0</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.8k</span>Reading time: <span class="post-count reading-time">11 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -403,7 +403,237 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        
+        <h1 id="EP-03-JSON-응답뷰-만들기-부제-APIView부터-ViewSet까지"><a href="#EP-03-JSON-응답뷰-만들기-부제-APIView부터-ViewSet까지" class="headerlink" title="EP 03 - JSON 응답뷰 만들기 (부제 - APIView부터 ViewSet까지)"></a>EP 03 - JSON 응답뷰 만들기 (부제 - APIView부터 ViewSet까지)</h1><p>Tip: render=직렬화, parser=비직렬화</p>
+<p>장고에서는 뷰를 통해 HTTP요청을 처리합니다.</p>
+<p>장고의 기본 함수기반뷰/클래스기반뷰를 활용하셔도 API를 충분히 만드실 수 있습니다. 하지만 <code>rest_framework</code>를 쓰신다면, <code>APIView</code>/<code>ViewSet</code>을 활용하시면, API뷰를 보다 적은 양의 코드로 효율적으로 작성하실 수 있습니다.</p>
+<p>그에 앞서 장고 기본 뷰에서의 <code>Serializer</code> 활용코드를 먼저 살펴보겠습니다.</p>
+<h2 id="Serializer를-통한-뷰처리"><a href="#Serializer를-통한-뷰처리" class="headerlink" title="Serializer를 통한 뷰처리"></a>Serializer를 통한 뷰처리</h2><p><code>rest_framework</code>의 <code>Serializer</code>는 장고의 Form과 유사한 역할을 합니다. <strong>데이터 유효성 검사 및 데이터베이스로의 저장을 지원해줍니다.</strong></p>
+<p>Serializer를 통한 뷰처리는 다음과 같습니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostSerializer</span><span class="params">(serializers.ModelSerializer)</span>:</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">        model = Post</span><br><span class="line">        fields = [<span class="string">'title'</span>, <span class="string">'content'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># views 직접만듬 , data가 첫번째 인자가 아니므로data= 반드시 필요</span></span><br><span class="line">serializer = PostSerializer(data=request.POST)</span><br><span class="line"><span class="keyword">if</span> serializer.is_valid():</span><br><span class="line">    serializer.save()</span><br><span class="line">    <span class="keyword">return</span> JsonResonse(serializer.data, status=<span class="number">201</span>)</span><br><span class="line"><span class="keyword">return</span> JsonResponse(serializer.errors, status=<span class="number">400</span>)</span><br></pre></td></tr></table></figure>
+
+<p>Serializer에 대해서는 <a href="https://nomade.kr/vod/apiserver/164/" target="_blank" rel="noopener">Serializer를 통한 유효성 검사 및 저장</a> 에피소드에서 자세히 살펴보겠습니다.</p>
+<h2 id="APIView-클래스와-api-view-장식자-3가지꼭잘다루기"><a href="#APIView-클래스와-api-view-장식자-3가지꼭잘다루기" class="headerlink" title="APIView 클래스와 api_view 장식자(3가지꼭잘다루기)"></a>APIView 클래스와 api_view 장식자(3가지꼭잘다루기)</h2><p>APIView클래스와 api_view 장식자는 뷰에 여러 기본 설정을 부여합니다. <a href="https://github.com/encode/django-rest-framework/blob/3.7.1/rest_framework/views.py#L100" target="_blank" rel="noopener">관련코드</a></p>
+<ul>
+<li>직렬화 클래스 지정 :</li>
+</ul>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">renderer_classes</span><br></pre></td></tr></table></figure>
+
+
+
+<p>  속성 (list)</p>
+<ul>
+<li>디폴트<ul>
+<li><code>rest_framework.renderers.JSONRenderer</code> : JSON 직렬화</li>
+<li><code>rest_framework.renderers.TemplateHTMLRenderer</code> : HTML 페이지 직렬화</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>비직렬화 클래스 지정 :</li>
+</ul>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">parser_classes</span><br></pre></td></tr></table></figure>
+
+
+
+<p>  속성 (list)</p>
+<ul>
+<li>디폴트<ul>
+<li><code>rest_framework.parsers.JSONParser</code> : JSON 포맷 처리</li>
+<li><code>rest_framework.parsers.FormParser</code></li>
+<li><code>rest_framework.parsers.MultiPartParser</code></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>인증 클래스 지정</strong> :</li>
+</ul>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">authentication_classes</span><br></pre></td></tr></table></figure>
+
+
+
+<p>  속성 (list)</p>
+<ul>
+<li>디폴트<ul>
+<li><code>rest_framework.authentication.SessionAuthentication</code> : 세션에 기반한 인증(세션에 로그인되어있다고기록된상태봄)</li>
+<li><code>rest_framework.authentication.BasicAuthentication</code> : HTTP Basic 인증</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>사용량 제한 클래스 지정</strong> : (초당 몇회, 요청 가능 제한가능, 골드 맴버쉽은 만회, 일반 멤버쉽은 100회처럼)</li>
+</ul>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">throttle_classes</span><br></pre></td></tr></table></figure>
+
+
+
+<p>  속성 (list)</p>
+<ul>
+<li>디폴트 : 빈 튜플</li>
+</ul>
+<ul>
+<li><strong>권한 클래스 지정</strong> :</li>
+</ul>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">permission_cla sses</span><br></pre></td></tr></table></figure>
+
+
+
+<p>  속성 (list)</p>
+<ul>
+<li>디폴트<ul>
+<li><code>rest_framework.permissions.AllowAny</code> : 누구라도 접근 허용</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>요청에 따라 적절한 직렬화/비직렬화 클래스를 선택 :</li>
+</ul>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">content_negotiation_class</span><br></pre></td></tr></table></figure>
+
+
+
+<p>  속성 (문자열)</p>
+<ul>
+<li>같은 URL로의 요청이지만, JSON응답을 요구하는 것이냐 / HTML응답을 요구하는 것인지 판단</li>
+<li>디폴트 : <code>rest_framework.negotiation.DefaultContentNegotiation</code></li>
+</ul>
+<ul>
+<li>요청 내역에서 API 버전 정보를 탐지할 클래스 지정 :</li>
+</ul>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">versioning_class</span><br></pre></td></tr></table></figure>
+
+
+
+<p>  속성</p>
+<ul>
+<li>디폴트 : <code>None</code> : API 버전 정보를 탐지하지 않겠다.</li>
+<li>요청 URL에서, GET인자에서, HEADER에서 버전정보를 탐지하여, 해당 버전의 API뷰를 호출토록 합니다.</li>
+</ul>
+<h3 id="장고에는-FBV와-CBV가-있어요"><a href="#장고에는-FBV와-CBV가-있어요" class="headerlink" title="장고에는 FBV와 CBV가 있어요."></a>장고에는 FBV와 CBV가 있어요.</h3><p>장고에는 FBV와 CBV가 있어요. 둘 다 많이 사용합니다. FBV는 Legacy가 아니예요.</p>
+<ul>
+<li>FBV (함수 기반 뷰, Function Based View)<ul>
+<li>함수로 구현한 뷰</li>
+<li><strong>Specialize 한 뷰는 FBV로 구현하는 것이 훨씬 간단</strong></li>
+</ul>
+</li>
+<li>CBV (클래스 기반 뷰, Class Based View)<ul>
+<li>클래스로 구현한 뷰</li>
+<li>재사용성에 포커스 : 여러 뷰에 걸쳐서, 반복되는 루틴이 있다면 <strong>클래스 상속</strong>문법을 통해 중복을 줄여갈 수 있어요.</li>
+</ul>
+</li>
+</ul>
+<p><code>rest_framework</code>에서 지원해주는 API 뷰를 구현하기 위해 다음 2가지를 지원해줍니다.</p>
+<ul>
+<li><code>APIView</code> : CBV</li>
+<li><code>api_view</code> : FBV &gt;&gt;파이썬 장식자</li>
+</ul>
+<p>Slide Type-SlideSub-SlideFragmentSkipNotes</p>
+<h3 id="APIView-tutorial-샘플"><a href="#APIView-tutorial-샘플" class="headerlink" title="APIView #tutorial 샘플"></a>APIView <a href="http://www.django-rest-framework.org/tutorial/3-class-based-views/" target="_blank" rel="noopener">#tutorial</a> 샘플</h3><p>APIView는 django-rest-framework 규격의 Class Based View입니다.</p>
+<p>아래는 만들것</p>
+<ol>
+<li><p>하나의 Class Based View이므로, 한 URL에 대해서만 처리할 수 있습니다.</p>
+<ul>
+<li><pre><code>/post/
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">  에 대한 CBV일 경우</span><br><span class="line"></span><br><span class="line">  - get요청 : 포스팅 목록 요청</span><br><span class="line">  - post요청 : 새 포스팅 등록 요청</span><br><span class="line"></span><br><span class="line">-</span><br></pre></td></tr></table></figure>
+/post/10/
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">     에 대한 CBV일 경우</span><br><span class="line"></span><br><span class="line">     - get요청 : 10번 포스팅 내용 요청</span><br><span class="line">     - put요청 : 10번 포스팅 수정 요청</span><br><span class="line">     - delete요청 : 10번 포스팅 삭제 요청</span><br><span class="line"></span><br><span class="line">2. 요청 method에 맞게 멤버함수를 정의하면, 해당 method 요청이 들어올 때 호출이 됩니다.</span><br><span class="line"></span><br><span class="line">   - `def get(self, request)`</span><br><span class="line">   - `def post(self, request)`</span><br><span class="line">   - `def put(self, request)`</span><br><span class="line">   - `def delete(self, request)`</span><br><span class="line"></span><br><span class="line">3. 각 method가 호출될 때, 다음 처리가 이뤄집니다.</span><br><span class="line"></span><br><span class="line">   - 직렬화/비직렬화</span><br><span class="line">   - 인증 처리 : 인증 체크</span><br><span class="line">   - 사용량 제한 체크 : 호출 허용량 범위인지 체크</span><br><span class="line">   - 권한 클래스 지정 : 비인증유저/인증유저에 대해 해당 API 호출을 허용할 것인지를 결정</span><br><span class="line">   - 요청된 API 버전 문자열을 탐지하여 `request.version`에 저장</span><br><span class="line"></span><br><span class="line">Slide Type-SlideSub-SlideFragmentSkipNotes</span><br><span class="line"></span><br><span class="line">APIView 클래스를 활용하여, 다음과 같이 글목록응답/새글등록을 처리해주는 CBV를 만들어보겠습니다.</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">from rest_framework.response import Response</span><br><span class="line">from rest_framework.views import APIView</span><br><span class="line">from .models import Post</span><br><span class="line">from .serializers import PostSerializer</span><br><span class="line"></span><br><span class="line">class PostListAPIView(APIView):</span><br><span class="line">    def get(self, request):</span><br><span class="line">        # 모델 serializer에서는 queryset또는 model인스턴스 넣을수있는데 queryset이면 many=True를 해줘야함</span><br><span class="line">        serializer = PostSerializer(Post.objects.all(), many=True) </span><br><span class="line">        return Response(serializer.data)</span><br><span class="line"></span><br><span class="line">    def post(self, request):</span><br><span class="line">        serializer = PostSerializer(data=request.data)</span><br><span class="line">        if serializer.is_valid():</span><br><span class="line">            serializer.save()</span><br><span class="line">            return Response(serializer.data, status=201)</span><br><span class="line">        return Response(serializer.errors, status=400)</span><br></pre></td></tr></table></figure>
+</code></pre></li>
+</ul>
+</li>
+</ol>
+<p>새글 터미널에서 생성해보기(httpie이용)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http --form http://localhost:8000/ep03/post/ title=&apos;제목&apos; content=&apos;내용&apos;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>APIView 클래스를 활용하여, 다음과 같이 특정 글의 내용응답/수정/삭제를 처리해주는 CBV를 만들어보겠습니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> get_object_or_404</span><br><span class="line"><span class="keyword">from</span> rest_framework.response <span class="keyword">import</span> Response</span><br><span class="line"><span class="keyword">from</span> rest_framework.views <span class="keyword">import</span> APIView</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Post</span><br><span class="line"><span class="keyword">from</span> .serializers <span class="keyword">import</span> PostSerializer</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostDetailAPIView</span><span class="params">(APIView)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_object</span><span class="params">(self, pk)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> get_object_or_404(Post, pk=pk)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request, pk, format=None)</span>:</span></span><br><span class="line">        post = self.get_object(pk)</span><br><span class="line">        serializer = PostSerializer(post)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, request, pk)</span>:</span></span><br><span class="line">        post = self.get_object(pk)</span><br><span class="line">        serializer = PostSerializer(post, data=request.data)</span><br><span class="line">        <span class="keyword">if</span> serializer.is_valid():</span><br><span class="line">            serializer.save()</span><br><span class="line">            <span class="keyword">return</span> Response(serializer.data)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) <span class="comment">#여기 그냥 400써도무방</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self, request, pk)</span>:</span></span><br><span class="line">        post = self.get_object(pk)</span><br><span class="line">        post.delete()</span><br><span class="line">        <span class="keyword">return</span> Response(status=status.HTTP_204_NO_CONTENT)</span><br></pre></td></tr></table></figure>
+
+<p>Slide Type-SlideSub-SlideFragmentSkipNotes</p>
+<p>POST요청을 받기 위해 별도로 <code>csrf_exempt</code> 처리를 해줄 필요가 없습니다. <code>APIView.as_view()</code>에서 이미 <code>csrf_exempt</code>(장식자)처리된 뷰를 만들어주고 있기 때문입니다.(settings.py에 middleware에서 csrfviewmiddleware처리를예외처리)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rest_framework/views.py</span></span><br><span class="line"><span class="keyword">from</span> django.views.decorators.csrf <span class="keyword">import</span> csrf_exempt</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">APIView</span><span class="params">(View)</span>:</span></span><br><span class="line">    <span class="comment"># 중략</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">as_view</span><span class="params">(cls, **initkwargs)</span>:</span></span><br><span class="line">        <span class="comment"># 중략</span></span><br><span class="line">        <span class="keyword">return</span> csrf_exempt(view)  <span class="comment"># HERE !!!</span></span><br></pre></td></tr></table></figure>
+
+<p>파이썬의 장식자활용법은 다음과 같이 활용할 수 있습니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 장식자 문법으로 써도 되고,(어떤 뷰에대해)</span></span><br><span class="line"><span class="meta">@csrf_exempt</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">myview1</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(<span class="string">'hello askdjango'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 장식자는 실제로 다음과 같이 동작합니다.!! 한번 래핑하는원리</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">myview2</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(<span class="string">'hello askdjango'</span>)</span><br><span class="line">myview2 = csrf_exempt(myview2)</span><br></pre></td></tr></table></figure>
+
+<h3 id="api-view-장식자-샘플"><a href="#api-view-장식자-샘플" class="headerlink" title="@api_view 장식자 샘플"></a><code>@api_view</code> 장식자 샘플</h3><p><code>api_view</code>는 django-rest-framework 규격의 Function Based View를 세팅해주는 <strong>장식자 (Decorator)</strong>입니다.</p>
+<p>참고) 장식자에 대한 자세한 내용은 <a href="https://nomade.kr/vod/python/102/" target="_blank" rel="noopener">파이썬 차근차근 시작하기 - 장식자</a>를 참고해보세요.</p>
+<p>위에서 구현한 CBV버전의 <code>PostListAPIView</code>를 FBV로 구현하면 다음과 같습니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> get_object_or_404</span><br><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> status, Response</span><br><span class="line"><span class="keyword">from</span> rest_framework.decorators <span class="keyword">import</span> api_view</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Post</span><br><span class="line"><span class="keyword">from</span> .serializers <span class="keyword">import</span> PostSerializer</span><br><span class="line"></span><br><span class="line"><span class="meta">@api_view(['GET', 'POST']) #cbv와 달리, 하나 함수안에 각각 방식을 모름.</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">post_list</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'GET'</span>:</span><br><span class="line">        serializer = PostSerializer(Post.objects.all(), many=<span class="literal">True</span>)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        serializer = PostSerializer(data=request.data)</span><br><span class="line">        <span class="keyword">if</span> serializer.is_valid():</span><br><span class="line">            serializer.save()</span><br><span class="line">            <span class="keyword">return</span> Response(serializer.data, status=<span class="number">201</span>)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.errors, status=<span class="number">400</span>)</span><br></pre></td></tr></table></figure>
+
+<p>어떤가요? CBV에 비해서 조금 직관적이죠? :)</p>
+<p><code>@api_view</code>에서는 허용할 <strong>http method</strong>를 지정해줘야하는 것이 조금 다릅니다.</p>
+<p>위에서 구현한 CBV버전의 <code>PostDetailAPIView</code>를 FBV로 구현하면 다음과 같습니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.decorators <span class="keyword">import</span> api_view</span><br><span class="line"></span><br><span class="line"><span class="meta">@api_view(['GET', 'PUT', 'DELETE'])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">post_detail</span><span class="params">(request, pk)</span>:</span></span><br><span class="line">    post = get_object_or_404(Post, pk=pk)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'GET'</span>:</span><br><span class="line">        serializer = PostSerializer(post)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data)</span><br><span class="line">    <span class="keyword">elif</span> request.method == <span class="string">'PUT'</span>:</span><br><span class="line">        serializer = PostSerializer(post, data=request.data)</span><br><span class="line">        <span class="keyword">if</span> serializer.is_valid():</span><br><span class="line">            serializer.save()</span><br><span class="line">            <span class="keyword">return</span> Response(serializer.data)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        post.delete()</span><br><span class="line">        <span class="keyword">return</span> Response(status=status.HTTP_204_NO_CONTENT)</span><br></pre></td></tr></table></figure>
+
+<h2 id="mixins-src-상속을-통한-APIView-로직-재사용"><a href="#mixins-src-상속을-통한-APIView-로직-재사용" class="headerlink" title="mixins #src 상속을 통한 APIView 로직 재사용"></a>mixins <a href="https://github.com/encode/django-rest-framework/blob/master/rest_framework/mixins.py" target="_blank" rel="noopener">#src</a> 상속을 통한 APIView 로직 재사용</h2><p>위에서 구현한 APIView에서는 직접 <code>Serializer</code>를 처리를 해줬어야했습니다. 그런데 여러 <code>Serializer</code>에 대해서 구현을 하다보면 필연적으로 중복이 발생하게 됩니다. 이를 줄여보고자 하는 데요.</p>
+<p><code>APIView</code>는 클래스이기 때문에 클래스 상속을 통해 로직을 재활용할 수 있습니다.</p>
+<p><code>rest_framework.mixins</code>에서는 다음 Mixin을 통해 <strong>위에서 구현한 기능</strong>들을 모두 지원합니다. 참고로 파이썬에서 Mixin 문법이 따로 있는 것이 아니라, 문법적으로는 단순히 파이썬 클래스입니다. <a href="https://github.com/encode/django-rest-framework/blob/master/rest_framework/mixins.py" target="_blank" rel="noopener">관련코드</a> (즉, 저렇게 뷰의 로직을 직접 해줄필요없다 이미 다 비슷하기때문에 상속받아서쓰자,)</p>
+<ul>
+<li><code>CreateModelMixin</code> : <code>create</code> 함수</li>
+<li><code>ListModelMixin</code> : <code>list</code> 함수</li>
+<li><code>RetrieveModelMixin</code> : <code>retrieve</code> 함수</li>
+<li><code>UpdateModelMixin</code> : <code>update</code> 함수</li>
+<li><code>DestroyModelMixin</code> : <code>destroy</code> 함수</li>
+</ul>
+<p>이렇게 여러 Mixin이 준비만 되어있습니다. 이 함수들이 호출되기 위해서는 직접 연결해주셔야 합니다.</p>
+<p><code>PostListAPIView</code>를 다음과 같이 구현해봅시다. :D</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> generics</span><br><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> mixins</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostListAPIView</span><span class="params">(mixins.ListModelMixin, mixins.CreateModelMixin,</span></span></span><br><span class="line"><span class="class"><span class="params">                   generics.GenericAPIView)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.list(request, *args, **kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.create(request, *args, **kwargs)</span><br></pre></td></tr></table></figure>
+
+<p>Slide Type-SlideSub-SlideFragmentSkipNotes</p>
+<p><code>PostDetailAPIView</code>를 다음과 같이 구현해봅시다. :D</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> generics</span><br><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> mixins</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostDetailAPIView</span><span class="params">(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,</span></span></span><br><span class="line"><span class="class"><span class="params">                     mixins.DestroyModelMixin, generics.GenericAPIView)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.retrieve(request, *args, **kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.update(request, *args, **kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.destroy(request, *args, **kwargs)</span><br></pre></td></tr></table></figure>
+
+<p>Slide Type-SlideSub-SlideFragmentSkipNotes</p>
+<p>자. 어떤가요? 코드가 훨씬 간결해졌죠?</p>
+<p>FBV만 쓰다가 처음으로 CBV를 썼을 때의 감동이 밀려오는 듯 하네요. :D</p>
+<h2 id="generics-APIView를-통한-로직-재사용"><a href="#generics-APIView를-통한-로직-재사용" class="headerlink" title="generics APIView를 통한 로직 재사용"></a>generics APIView를 통한 로직 재사용</h2><p>위에 연결과정 조차 이미 다 만들어놓은것도있다.</p>
+<p>REST API에서는 목록조회와 생성을 하나의 URL에서 처리합니다. 그래서 이를 하나로 묶은 CBV도 <code>rest_framework</code>에서 지원합니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rest_framework/generics.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListCreateAPIView</span><span class="params">(mixins.ListModelMixin,</span></span></span><br><span class="line"><span class="class"><span class="params">                        mixins.CreateModelMixin,</span></span></span><br><span class="line"><span class="class"><span class="params">                        GenericAPIView)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.list(request, *args, **kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.create(request, *args, **kwargs)</span><br></pre></td></tr></table></figure>
+
+<p>그래서 이를 활용하면, 코드가 이렇게 간단해져요 :D</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> generics</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostListAPIView</span><span class="params">(generics.ListCreateAPIView)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br></pre></td></tr></table></figure>
+
+<p>그리고 특정 레코드의 조회/수정/삭제도 하나의 URL에서 처리를 합니다. 그래서 이를 하나로 묶은 CBV도 지원합니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rest_framework/generics.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RetrieveUpdateDestroyAPIView</span><span class="params">(mixins.RetrieveModelMixin,</span></span></span><br><span class="line"><span class="class"><span class="params">                                   mixins.UpdateModelMixin,</span></span></span><br><span class="line"><span class="class"><span class="params">                                   mixins.DestroyModelMixin,</span></span></span><br><span class="line"><span class="class"><span class="params">                                   GenericAPIView)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.retrieve(request, *args, **kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.update(request, *args, **kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">patch</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.partial_update(request, *args, **kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.destroy(request, *args, **kwargs)</span><br></pre></td></tr></table></figure>
+
+<p>그래서 이를 활용하면, 코드가 이렇게 간단해지죠. :D</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> generics</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostDetailAPIView</span><span class="params">(generics.RetrieveUpdateDestroyAPIView)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br></pre></td></tr></table></figure>
+
+<p>Slide Type-SlideSub-SlideFragmentSkipNotes</p>
+<p>위에서 살펴본 generics 외에도, 다음 generics가 추가로 지원됩니다. 모두 <code>GenericsAPIView</code>를 상속받으므로 추가로 상속받으실 필요가 없습니다.</p>
+<ul>
+<li><code>generics.CreateAPIView</code> : 생성만 지원</li>
+<li><code>generics.ListAPIView</code> : 목록만 지원</li>
+<li><code>generics.RetrieveAPIView</code> : 조회만 지원</li>
+<li><code>generics.DestroyAPIView</code> : 삭제만 지원</li>
+<li><code>generics.UpdateAPIView</code> : 수정만 지원</li>
+<li><code>generics.RetrieveUpdateAPIView</code> : 조회/수정 지원</li>
+<li><code>generics.RetrieveDestroyAPIView</code> : 조회/삭제 지원</li>
+</ul>
+<h2 id="최종병기-ViewSet"><a href="#최종병기-ViewSet" class="headerlink" title="최종병기 ViewSet"></a>최종병기 ViewSet</h2><p><strong>하나의 Model에 대해서 기본적인 REST API는 목록/생성/조회/수정/삭제인데요. 이를 지원할려면 2개의 URL, 즉 다음과 같이 2개의 뷰가 필요합니다.</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> generics</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostListAPIView</span><span class="params">(generics.ListCreateAPIView)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostDetailAPIView</span><span class="params">(generics.RetrieveUpdateDestroyAPIView)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br></pre></td></tr></table></figure>
+
+<p>2개의 뷰 모두 <code>queryset</code>, <code>serializer_class</code>를 동일하게 지정하고 있습니다. 이를 한 번에 처리해주면 좋겠어요.</p>
+<p>그것이 <strong>ViewSet</strong>입니다. ViewSet은 CBV가 아닙니다. 2개의 뷰를 만들어주는 <strong>헬퍼 클래스</strong>일 뿐입니다. ViewSet은 다음 2가지가 지원되고 있습니다.</p>
+<ul>
+<li><code>viewsets.ReadOnlyModelViewSet</code> : 목록 조회, 특정 레코드 조회를 지원 =&gt; 2개의 URL 지원</li>
+<li><code>viewsets.ModelViewSet</code> : 목록 조회, 생성, 특정 레코드 조회/수정/삭제 지원 =&gt; 2개의 URL 지원</li>
+</ul>
+<p>조회만 지원하는 API를 만들어볼까요? ㅎㅎ</p>
+<p>가입한 회원 목록에 대한 API가 제공된다면 <strong>조회 기능</strong>만 제공하는 것이 좋을 듯 하네요. “회원 생성” 기능은 별도의 가입기능을 활용해야겠죠? :)</p>
+<p>다음과 같이 <code>UserViewSet</code>를 만들었다면, 목록조회/특정유저조회 API를 제공받으실 수 있습니다.</p>
+<p>Tip: 장고에서 기본지원 User모델 get_user_model()로 인자부름 get_user_model().objects.all()가능</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> viewsets</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserViewSet</span><span class="params">(viewsets.ReadOnlyModelViewSet)</span>:</span></span><br><span class="line">    queryset = User.objects.all()</span><br><span class="line">    serializer_class = UserSerializer</span><br></pre></td></tr></table></figure>
+
+<p>이렇게 만들어진 <code>UserViewSet</code>을 URLConf에 등록해야겠죠?</p>
+<p>다음과 같이 <code>UserViewSet</code>을 통해, 개별 View를 생성하실 수도 있습니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#views.py</span></span><br><span class="line"></span><br><span class="line">user_list = UserViewSet.as_view(&#123;</span><br><span class="line">    <span class="string">'get'</span>: <span class="string">'list'</span>,  <span class="comment"># 호출될 함수와 호출할 함수를 지정합니다.</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">user_detail = UserViewSet.as_view(&#123;</span><br><span class="line">    <span class="string">'get'</span>: <span class="string">'retrieve'</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>하지만 이렇게 하지 않아도 <code>Router</code>를 통해 일괄적으로 URLConf에 등록하실 수 있습니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.routers <span class="keyword">import</span> DefaultRouter</span><br><span class="line"></span><br><span class="line">router = DefaultRouter()</span><br><span class="line">router.register(<span class="string">r'user'</span>, views.UserViewSet)</span><br><span class="line"><span class="comment"># router.register(r'post', views.PostViewSet)  # PostViewSet이 있다면, 다음과 같이 추가등록하실 수 있습니다.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 아래처럼 등록하면 결국엔 각 url이 user/, user/&lt;pk&gt;이런 Url에 대응하는것을 만들어줌</span></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(<span class="string">r''</span>, include(router.urls)),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>차암~ 쉽죠? :D</p>
+
     </article>
     <!-- license  -->
     
@@ -535,7 +765,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-03-JSON-응답뷰-만들기-부제-APIView부터-ViewSet까지"><span class="toc-number">1.</span> <span class="toc-text">EP 03 - JSON 응답뷰 만들기 (부제 - APIView부터 ViewSet까지)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Serializer를-통한-뷰처리"><span class="toc-number">1.1.</span> <span class="toc-text">Serializer를 통한 뷰처리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#APIView-클래스와-api-view-장식자-3가지꼭잘다루기"><span class="toc-number">1.2.</span> <span class="toc-text">APIView 클래스와 api_view 장식자(3가지꼭잘다루기)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#장고에는-FBV와-CBV가-있어요"><span class="toc-number">1.2.1.</span> <span class="toc-text">장고에는 FBV와 CBV가 있어요.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#APIView-tutorial-샘플"><span class="toc-number">1.2.2.</span> <span class="toc-text">APIView #tutorial 샘플</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#api-view-장식자-샘플"><span class="toc-number">1.2.3.</span> <span class="toc-text">@api_view 장식자 샘플</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mixins-src-상속을-통한-APIView-로직-재사용"><span class="toc-number">1.3.</span> <span class="toc-text">mixins #src 상속을 통한 APIView 로직 재사용</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#generics-APIView를-통한-로직-재사용"><span class="toc-number">1.4.</span> <span class="toc-text">generics APIView를 통한 로직 재사용</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#최종병기-ViewSet"><span class="toc-number">1.5.</span> <span class="toc-text">최종병기 ViewSet</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -548,10 +778,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
     
     
     
@@ -977,12 +1203,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
         </li>
     
     </div>
@@ -1000,11 +1226,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
-    
         <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
     
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -1016,17 +1242,17 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
-        <span class="sidebar-tag-name" data-tags="Terminal"><span class="iconfont-archer">&#xe606;</span>Terminal</span>
-    
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
         <span class="sidebar-tag-name" data-tags="Crawling"><span class="iconfont-archer">&#xe606;</span>Crawling</span>
     
-        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
-    
-        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+        <span class="sidebar-tag-name" data-tags="Terminal"><span class="iconfont-archer">&#xe606;</span>Terminal</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1069,15 +1295,15 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
-        <span class="sidebar-category-name" data-categories="Terminal"><span class="iconfont-archer">&#xe60a;</span>Terminal</span>
-    
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
-        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Terminal"><span class="iconfont-archer">&#xe60a;</span>Terminal</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
