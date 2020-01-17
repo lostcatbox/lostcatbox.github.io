@@ -403,7 +403,7 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="EP-03-JSON-응답뷰-만들기-부제-APIView부터-ViewSet까지"><a href="#EP-03-JSON-응답뷰-만들기-부제-APIView부터-ViewSet까지" class="headerlink" title="EP 03 - JSON 응답뷰 만들기 (부제 - APIView부터 ViewSet까지)"></a>EP 03 - JSON 응답뷰 만들기 (부제 - APIView부터 ViewSet까지)</h1><p>Tip: render=직렬화, parser=비직렬화</p>
+        <h1 id="EP-03-JSON-응답뷰-만들기-부제-APIView부터-ViewSet까지"><a href="#EP-03-JSON-응답뷰-만들기-부제-APIView부터-ViewSet까지" class="headerlink" title="EP 03 - JSON 응답뷰 만들기 (부제 - APIView부터 ViewSet까지)"></a>EP 03 - JSON 응답뷰 만들기 (부제 - APIView부터 ViewSet까지)</h1><p>Tip: render= parser=&gt;구조화된 객체로 만들어줌</p>
 <p>장고에서는 뷰를 통해 HTTP요청을 처리합니다.</p>
 <p>장고의 기본 함수기반뷰/클래스기반뷰를 활용하셔도 API를 충분히 만드실 수 있습니다. 하지만 <code>rest_framework</code>를 쓰신다면, <code>APIView</code>/<code>ViewSet</code>을 활용하시면, API뷰를 보다 적은 양의 코드로 효율적으로 작성하실 수 있습니다.</p>
 <p>그에 앞서 장고 기본 뷰에서의 <code>Serializer</code> 활용코드를 먼저 살펴보겠습니다.</p>
@@ -526,7 +526,6 @@ height:50vh;
 <li><code>APIView</code> : CBV</li>
 <li><code>api_view</code> : FBV &gt;&gt;파이썬 장식자</li>
 </ul>
-<p>Slide Type-SlideSub-SlideFragmentSkipNotes</p>
 <h3 id="APIView-tutorial-샘플"><a href="#APIView-tutorial-샘플" class="headerlink" title="APIView #tutorial 샘플"></a>APIView <a href="http://www.django-rest-framework.org/tutorial/3-class-based-views/" target="_blank" rel="noopener">#tutorial</a> 샘플</h3><p>APIView는 django-rest-framework 규격의 Class Based View입니다.</p>
 <p>아래는 만들것</p>
 <ol>
@@ -579,11 +578,9 @@ height:50vh;
 <p><code>PostListAPIView</code>를 다음과 같이 구현해봅시다. :D</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> generics</span><br><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> mixins</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostListAPIView</span><span class="params">(mixins.ListModelMixin, mixins.CreateModelMixin,</span></span></span><br><span class="line"><span class="class"><span class="params">                   generics.GenericAPIView)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.list(request, *args, **kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.create(request, *args, **kwargs)</span><br></pre></td></tr></table></figure>
 
-<p>Slide Type-SlideSub-SlideFragmentSkipNotes</p>
 <p><code>PostDetailAPIView</code>를 다음과 같이 구현해봅시다. :D</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> generics</span><br><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> mixins</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostDetailAPIView</span><span class="params">(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,</span></span></span><br><span class="line"><span class="class"><span class="params">                     mixins.DestroyModelMixin, generics.GenericAPIView)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.retrieve(request, *args, **kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.update(request, *args, **kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.destroy(request, *args, **kwargs)</span><br></pre></td></tr></table></figure>
 
-<p>Slide Type-SlideSub-SlideFragmentSkipNotes</p>
 <p>자. 어떤가요? 코드가 훨씬 간결해졌죠?</p>
 <p>FBV만 쓰다가 처음으로 CBV를 썼을 때의 감동이 밀려오는 듯 하네요. :D</p>
 <h2 id="generics-APIView를-통한-로직-재사용"><a href="#generics-APIView를-통한-로직-재사용" class="headerlink" title="generics APIView를 통한 로직 재사용"></a>generics APIView를 통한 로직 재사용</h2><p>위에 연결과정 조차 이미 다 만들어놓은것도있다.</p>
@@ -599,7 +596,6 @@ height:50vh;
 <p>그래서 이를 활용하면, 코드가 이렇게 간단해지죠. :D</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> generics</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostDetailAPIView</span><span class="params">(generics.RetrieveUpdateDestroyAPIView)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br></pre></td></tr></table></figure>
 
-<p>Slide Type-SlideSub-SlideFragmentSkipNotes</p>
 <p>위에서 살펴본 generics 외에도, 다음 generics가 추가로 지원됩니다. 모두 <code>GenericsAPIView</code>를 상속받으므로 추가로 상속받으실 필요가 없습니다.</p>
 <ul>
 <li><code>generics.CreateAPIView</code> : 생성만 지원</li>
@@ -631,15 +627,17 @@ height:50vh;
 
 <p>하지만 이렇게 하지 않아도 <code>Router</code>를 통해 일괄적으로 URLConf에 등록하실 수 있습니다.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.routers <span class="keyword">import</span> DefaultRouter</span><br><span class="line"></span><br><span class="line">router = DefaultRouter()</span><br><span class="line">router.register(<span class="string">r'user'</span>, views.UserViewSet)</span><br><span class="line"><span class="comment"># router.register(r'post', views.PostViewSet)  # PostViewSet이 있다면, 다음과 같이 추가등록하실 수 있습니다.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 아래처럼 등록하면 결국엔 각 url이 user/, user/&lt;pk&gt;이런 Url에 대응하는것을 만들어줌</span></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(<span class="string">r''</span>, include(router.urls)),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<p>차암~ 쉽죠? :D</p>
-
     </article>
     <!-- license  -->
     
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/01/17/api04/" title= "api 기본편 4">
+                    <div class="nextTitle">api 기본편 4</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -1066,9 +1064,26 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 24
+        Total : 25
         </div>
         <!-- search  -->
         
@@ -1081,6 +1096,11 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/api04/" >api 기본편 4</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1203,12 +1223,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
         </li>
     
     </div>
@@ -1226,11 +1246,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
         <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
     
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
-        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -1238,21 +1262,17 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
-        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+        <span class="sidebar-tag-name" data-tags="Terminal"><span class="iconfont-archer">&#xe606;</span>Terminal</span>
     
-        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
-        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
-    
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
         <span class="sidebar-tag-name" data-tags="Crawling"><span class="iconfont-archer">&#xe606;</span>Crawling</span>
-    
-        <span class="sidebar-tag-name" data-tags="Terminal"><span class="iconfont-archer">&#xe606;</span>Terminal</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1295,15 +1315,15 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
+        <span class="sidebar-category-name" data-categories="Terminal"><span class="iconfont-archer">&#xe60a;</span>Terminal</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
-        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
-    
         <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
-    
-        <span class="sidebar-category-name" data-categories="Terminal"><span class="iconfont-archer">&#xe60a;</span>Terminal</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
