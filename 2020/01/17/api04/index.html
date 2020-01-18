@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">1k</span>Reading time: <span class="post-count reading-time">6 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.3k</span>Reading time: <span class="post-count reading-time">8 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -406,71 +406,89 @@ height:50vh;
         <h1 id="EP-04-ViewSet과-Router"><a href="#EP-04-ViewSet과-Router" class="headerlink" title="EP 04 - ViewSet과 Router"></a>EP 04 - ViewSet과 Router</h1><h2 id="ViewSet"><a href="#ViewSet" class="headerlink" title="ViewSet"></a>ViewSet</h2><p>ViewSet은 <strong>일반적인 장고 CBV</strong>는 아닙니다. 2개의 뷰를 만들어주는 <strong>보다 확장된 형태의 CBV</strong>입니다. “View + Set” 즉, <strong>다수 View를 지원하는 CBV</strong>.</p>
 <p>모든 뷰셋은 <code>.as_view({&#39;http_method&#39;: &#39;처리할멤버함수&#39;})</code>를 호출하여, 해당 <code>http_method</code>를 지원하는 뷰 함수를 생성합니다. <strong>1개의 뷰 함수</strong>를 생성하므로, <strong>하나의 URL</strong>만을 처리할 수 있습니다.</p>
 <p><code>rest_framework/viewsets.py</code>에서는 다음 2가지 뷰셋을 지원하고 있습니다.</p>
-<ul>
-<li><pre><code>viewsets.ReadOnlyModelViewSet
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">  : 목록 조회, 특정 레코드 조회를 지원 =&gt; 2개의 URL 지원</span><br><span class="line"></span><br><span class="line">  - 특정 Record 조회 : `mixins.RetrieveModelMixin`을 통해 `retrieve()`함수 지원</span><br><span class="line">  - 리스트 조회 : `mixins.ListModelMixin`을 통해 `list()`함수 지원</span><br><span class="line"></span><br><span class="line">-</span><br></pre></td></tr></table></figure>
-viewsets.ModelViewSet
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">  : 목록 조회, 생성, 특정 레코드 조회/수정/삭제 지원 =&gt; 2개의 URL 지원</span><br><span class="line"></span><br><span class="line">  - 리스트 조회 : `mixins.ListModelMixin`을 통해 `list()`함수 지원</span><br><span class="line">  - 특정 Record 조회 : `mixins.RetrieveModelMixin`을 통해 `retrieve()`함수 지원</span><br><span class="line">  - 새 Record 생성 : `mixins.CreateModelMixin`을 통해 `create()`함수 지원</span><br><span class="line">  - 특정 Record 수정 : `mixins.UpdateModelMixin`을 통해 `update()`함수 및 `paartial_update()`함수 지원</span><br><span class="line">  - 특정 Record 삭제 : `mixins.DestroyModelMixin`을 통해 `destroy()`함수 지원</span><br><span class="line"></span><br><span class="line">다음 코드에서 보듯이, `PostViewSet`에서 `list/create/retrieve/update/partial_update/destory` 함수를 모두 지원한다고 하여, 이 함수들을 하나의 URL에서 처리할 수 없습니다. 일반적인 `REST API`설계에서 벗어나기 때문입니다.</span><br><span class="line"></span><br><span class="line">### REST API 규격에 맞춰, URL 매핑을 해봅시다.</span><br></pre></td></tr></table></figure>
-list route
-# list/create를 쌍으로 주로 씁니다. (URL 예 - &quot;/posts/&quot;, &quot;/article/&quot;)
-post_list = PostViewSet.as_view({
-  # GET요청이 들어오면 get함수가 호출이 될 것이며, 이어 list함수를 통해 처리하려 합니다.
-  &apos;get&apos;: &apos;list&apos;,
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">viewsets.ReadOnlyModelViewSet</span><br></pre></td></tr></table></figure>
 
-  # POST요청이 들어오면 post함수가 호출이 될 것이며, 이어 create함수를 통해 처리하려 합니다.
-  &apos;post&apos;: &apos;create&apos;,
-})
-detail route
-# retrieve/update/partial\_update/destory를 쌍으로 주로 씁니다. (URL 예 - &quot;/posts/10/&quot;, &quot;/article/hello-world/&quot;)
-post_detail = PostViewSet.as_view({
-  # GET요청이 들어오면 get함수가 호출이 될 것이며, 이어 retrieve 통해 처리하려 합니다.
-  &apos;get&apos;: &apos;retrieve&apos;,
-  # PUT요청이 들어오면 put 호출이 될 것이며, 이어 update함수를 통해 처리하려 합니다.
-  &apos;put&apos;: &apos;update&apos;,
-  # PATCH요청이 들어오면 patch함수가 호출이 될 것이며, 이어 partial_update함수를 통해 처리하려 합니다.
-  &apos;patch&apos;: &apos;partial_update&apos;,
-  # DELETE요청이 들어오면 delete함수가 호출이 될 것이며, 이어 destroy함수를 통해 처리하려 합니다.
-  &apos;delete&apos;: &apos;destroy&apos;,
-})
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">이렇게 만들어진 뷰 함수는 다른 FBV(함수 기반 뷰)와 동일하게 URLConf에 매핑할 수 있습니다.</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(r&apos;^posts/&apos;, post_list),</span><br><span class="line">    url(r&apos;^posts/(?P&lt;pk&gt;\d+)/$&apos;, post_detail),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-</code></pre></li>
+<p>: 목록 조회, 특정 레코드 조회를 지원 =&gt; 2개의 URL 지원</p>
+<ul>
+<li>특정 Record 조회 : <code>mixins.RetrieveModelMixin</code>을 통해 <code>retrieve()</code>함수 지원</li>
+<li>리스트 조회 : <code>mixins.ListModelMixin</code>을 통해 <code>list()</code>함수 지원</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">viewsets.ModelViewSet</span><br></pre></td></tr></table></figure>
+
+<p>: 목록 조회, 생성, 특정 레코드 조회/수정/삭제 지원 =&gt; 2개의 URL 지원</p>
+<ul>
+<li>리스트 조회 : <code>mixins.ListModelMixin</code>을 통해 <code>list()</code>함수 지원</li>
+<li>특정 Record 조회 : <code>mixins.RetrieveModelMixin</code>을 통해 <code>retrieve()</code>함수 지원</li>
+<li>새 Record 생성 : <code>mixins.CreateModelMixin</code>을 통해 <code>create()</code>함수 지원</li>
+<li>특정 Record 수정 : <code>mixins.UpdateModelMixin</code>을 통해 <code>update()</code>함수 및 <code>partial_update()</code>함수 지원</li>
+<li>특정 Record 삭제 : <code>mixins.DestroyModelMixin</code>을 통해 <code>destroy()</code>함수 지원</li>
+</ul>
+<p>다음 코드에서 보듯이, <code>PostViewSet</code>에서 <code>list/create/retrieve/update/partial_update/destory</code> 함수를 모두 지원한다고 하여, 이 함수들을 하나의 URL에서 처리할 수 없습니다. 일반적인 <code>REST API</code>설계에서 벗어나기 때문입니다. &gt;&gt;결국 url 2개 지원해야함</p>
+<h3 id="REST-API-규격에-맞춰-URL-매핑을-해봅시다"><a href="#REST-API-규격에-맞춰-URL-매핑을-해봅시다" class="headerlink" title="REST API 규격에 맞춰, URL 매핑을 해봅시다."></a>REST API 규격에 맞춰, URL 매핑을 해봅시다.</h3><p><strong>list route</strong>(Pk값 필요없음)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># list/create를 쌍으로 주로 씁니다. (URL 예 - &quot;/posts/&quot;, &quot;/article/&quot;)</span><br><span class="line">post_list = PostViewSet.as_view(&#123;</span><br><span class="line">    # GET요청이 들어오면 get함수가 호출이 될 것이며, 이어 list함수를 통해 처리하려 합니다.</span><br><span class="line">    &apos;get&apos;: &apos;list&apos;,</span><br><span class="line"></span><br><span class="line">    # POST요청이 들어오면 post함수가 호출이 될 것이며, 이어 create함수를 통해 처리하려 합니다.</span><br><span class="line">    &apos;post&apos;: &apos;create&apos;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>detail route</strong>(Pk값 필요함)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># retrieve/update/partial\_update/destory를 쌍으로 주로 씁니다. (URL 예 - &quot;/posts/10/&quot;, &quot;/article/hello-world/&quot;)</span><br><span class="line">post_detail = PostViewSet.as_view(&#123;</span><br><span class="line">    # GET요청이 들어오면 get함수가 호출이 될 것이며, 이어 retrieve 통해 처리하려 합니다.</span><br><span class="line">    &apos;get&apos;: &apos;retrieve&apos;,</span><br><span class="line">    # PUT요청이 들어오면 put 호출이 될 것이며, 이어 update함수를 통해 처리하려 합니다.</span><br><span class="line">    &apos;put&apos;: &apos;update&apos;,</span><br><span class="line">    # PATCH요청이 들어오면 patch함수가 호출이 될 것이며, 이어 partial_update함수를 통해 처리하려 합니다.</span><br><span class="line">    &apos;patch&apos;: &apos;partial_update&apos;,</span><br><span class="line">    # DELETE요청이 들어오면 delete함수가 호출이 될 것이며, 이어 destroy함수를 통해 처리하려 합니다.</span><br><span class="line">    &apos;delete&apos;: &apos;destroy&apos;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>이렇게 만들어진 뷰 함수는 다른 FBV(함수 기반 뷰)와 동일하게 URLConf에 매핑할 수 있습니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns = [</span><br><span class="line">    url(<span class="string">r'^post/'</span>, post_list),</span><br><span class="line">    url(<span class="string">r'^post/(?P&lt;pk&gt;\d+)/$'</span>, post_detail),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
 <p>읽기 전용 뷰가 필요할 경우, 다음과 같이 매핑하실 수 있습니다.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">post_list = PostViewSet.as_view(&#123;</span><br><span class="line">    <span class="string">'get'</span>: <span class="string">'list'</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">post_detail = PostViewSet.as_view(&#123;</span><br><span class="line">    <span class="string">'get'</span>: <span class="string">'retrieve'</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
-<h2 id="Router-활용"><a href="#Router-활용" class="headerlink" title="Router 활용"></a>Router 활용</h2><p>Router를 활용하면, 관례(Convention)에 기반하여 URL매핑을 손쉽게 할 수 있습니다. 아래 코드에서 보듯이 <code>PostViewSet</code>을 <code>Router</code>에 등록하면, <strong>해당 뷰셋이 지원하는 메소드/함수들에 한해서 URL매핑을 수행</strong>합니다. 뷰는 등록할 수 없습니다. 뷰셋만 등록가능합니다.</p>
+<h2 id="Router-활용"><a href="#Router-활용" class="headerlink" title="Router 활용"></a>Router 활용</h2><p>Router를 활용하면, 관례(Convention)에 기반하여 URL매핑을 손쉽게 할 수 있습니다. 아래 코드에서 보듯이 <code>PostViewSet</code>을 <code>Router</code>에 등록하면, <strong>해당 뷰셋이 지원하는 메소드/함수들에 한해서 URL매핑을 수행</strong>합니다. 뷰는 등록할 수 없습니다. <strong>뷰셋만 등록가능합니다.</strong></p>
 <p>하나의 Router에 다수 뷰셋을 등록하실 수 있습니다.</p>
 <p>디폴트 매핑은 위에서 수행한 내역대로 리스트/디테일 라우팅을 수행합니다.</p>
 <ul>
-<li><pre><code>list route
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">에서는</span><br></pre></td></tr></table></figure>
-/prefix/
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  주소가 지정되며, URL Reverse 이름으로서</span><br><span class="line"></span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">  모델명소문자-list</span><br><span class="line"></span><br><span class="line">  가 사용됩니다.</span><br><span class="line"></span><br><span class="line">  - get =&gt; list</span><br><span class="line">  - post =&gt; create</span><br><span class="line"></span><br><span class="line">-</span><br></pre></td></tr></table></figure>
-detail route
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">에서는</span><br></pre></td></tr></table></figure>
-/prefix/pk/
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  주소가 지정되며, URL Reverse 이름으로서</span><br><span class="line"></span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">  모델명소문자-detail</span><br><span class="line"></span><br><span class="line">  이 사용됩니다.</span><br><span class="line"></span><br><span class="line">  - get =&gt; retrieve</span><br><span class="line">  - put =&gt; update</span><br><span class="line">  - patch =&gt; partial_update</span><br><span class="line">  - delete =&gt; destroy</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line"># myapp/urls.py</span><br><span class="line">from rest_framework.routers import DefaultRouter</span><br><span class="line"></span><br><span class="line">router = DefaultRouter()</span><br><span class="line">router.register(r&apos;prefix&apos;, PostViewSet)</span><br><span class="line"></span><br><span class="line"># 이제, router.urls를 urlpatterns에 등록(include)시키면 OK</span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(r&apos;&apos;, include(router.urls)),  # 셋업된 라우팅 URLConf는 router.urls를 통해 제공받습니다.</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-</code></pre></li>
+<li><p>list route에서는 /prefix/주소가 지정되며, URL Reverse 이름으로서 <code>모델명소문자-list</code></p>
+<p>가 사용됩니다.</p>
+<ul>
+<li>get =&gt; list</li>
+<li>post =&gt; create</li>
 </ul>
+</li>
+<li><p>detail route에서는 /prefix/pk/ 주소가 지정되며, URL Reverse 이름으로서 <code>모델명소문자-detail</code> 이 사용됩니다.</p>
+<ul>
+<li>get =&gt; retrieve</li>
+<li>put =&gt; update</li>
+<li>patch =&gt; partial_update</li>
+<li>delete =&gt; destroy</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># myapp/urls.py</span></span><br><span class="line"><span class="keyword">from</span> rest_framework.routers <span class="keyword">import</span> DefaultRouter</span><br><span class="line"></span><br><span class="line">router = DefaultRouter()</span><br><span class="line">router.register(<span class="string">r'prefix'</span>, PostViewSet)  <span class="comment">#prefix가 'prefix'로 지정됨</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 이제, router.urls를 urlpatterns에 등록(include)시키면 OK</span></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(<span class="string">r''</span>, include(router.urls)),  <span class="comment"># 셋업된 라우팅 URLConf는 router.urls를 통해 제공받습니다.</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
 <h3 id="예1"><a href="#예1" class="headerlink" title="예1)"></a>예1)</h3><p>다음과 같이 register될 경우</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">router.register(<span class="string">r'post'</span>, PostViewSet)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">router.register(<span class="string">r'post'</span>, PostViewSet)  <span class="comment">#prefix가 post로 지정됨</span></span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><code>/post/</code> 주소에 대해 URL Reverse 이름은 <code>post-list</code>이 등록됩니다.</li>
+<li><code>/post/</code> 주소에 대해 URL Reverse 이름은 <code>post-list</code>이 등록됩니다.(name=post-list임)</li>
 <li><code>/post/10/</code> 류의 주소에 대해 URL Reverse 이름은 <code>post-detail</code>이 등록됩니다.</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py shell  #장고 쉘 부름</span><br><span class="line">&gt;&gt;&gt; from django.urls import reverse</span><br><span class="line">&gt;&gt;&gt; reverse(&apos;ep04:post-list&apos;)      # 데이터이름소문자</span><br><span class="line">&apos;/ep04/post/&apos;    # post는 prefix이름따라감.</span><br><span class="line">&gt;&gt;&gt; reverse(&apos;ep04:post-detail&apos;, args=[100])    #pk 값을 줌, 데이터이름소문자</span><br><span class="line">&apos;/ep04/post/100/&apos;   # post는 prefix이름따라감.</span><br></pre></td></tr></table></figure>
+
+<p>Tip: 아래는 rest-framework에 routers.py 내용중 하나이다, 보면queryset에서 model가져와서  _meta데이터에서 이름가져와서 소문자로 받는것을 알수있다. basename은 결국 위에 reverse name인 post-list, post-detail에서 post가 데이터이름에 따라 바뀔수있다는것임</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">def get_default_basename(self, viewset):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        If `basename` is not specified, attempt to automatically determine</span><br><span class="line">        it from the viewset.</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        queryset = getattr(viewset, &apos;queryset&apos;, None)</span><br><span class="line"></span><br><span class="line">        assert queryset is not None, &apos;`basename` argument not specified, and could &apos; \</span><br><span class="line">            &apos;not automatically determine the name from the viewset, as &apos; \</span><br><span class="line">            &apos;it does not have a `.queryset` attribute.&apos;</span><br><span class="line"></span><br><span class="line">        return queryset.model._meta.object_name.lower()</span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="예2"><a href="#예2" class="headerlink" title="예2)"></a>예2)</h3><p>다음과 같이 register될 경우</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">router.register(<span class="string">r'hello'</span>, PostViewSet)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">router.register(<span class="string">r'hello'</span>, PostViewSet)  <span class="comment">#prefix이름 hello</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><code>/hello/</code> 주소에 대해 URL Reverse 이름은 <code>post-list</code>가 등록됩니다.</li>
 <li><code>/hello/10/</code> 류의 주소에 대해 URL Reverse 이름은 <code>post-detail</code>이 등록됩니다.</li>
 </ul>
-<h3 id="api-root뷰를-통한-지원-ViewSet-목록-조회"><a href="#api-root뷰를-통한-지원-ViewSet-목록-조회" class="headerlink" title="api-root뷰를 통한 지원 ViewSet 목록 조회"></a><code>api-root</code>뷰를 통한 지원 ViewSet 목록 조회</h3><p>Router에서는 추가로 현 Router에 등록된 ViewSet내역을 조회할 수 있는 <code>api-root</code> 뷰를 추가로 지원합니다. <code>router.urls</code>가 매핑된 주소로 브라우저 접속 혹은 GET요청을 날려보세요. ;)</p>
-<h1 id="ViewSet에-추가-API는-어떻게-추가할-수-있죠"><a href="#ViewSet에-추가-API는-어떻게-추가할-수-있죠" class="headerlink" title="ViewSet에 추가 API는 어떻게 추가할 .. 수 있죠 ??"></a>ViewSet에 추가 API는 어떻게 추가할 .. 수 있죠 ??</h1><p>물론입니다. list route로서 <code>list/create</code>함수와 detail route로서 <code>retrieve/update/partial_update/delete</code>외에 추가로 구현하여 매핑하실 수 있습니다. 이때 추가할 API가 list route에 등록할 것인지, detail route에 등록할 것인지를 결정해야합니다.</p>
+<h3 id="router를-쓸-경우는-api-root뷰를-통한-지원-ViewSet-목록-조회"><a href="#router를-쓸-경우는-api-root뷰를-통한-지원-ViewSet-목록-조회" class="headerlink" title="router를 쓸 경우는 api-root뷰를 통한 지원 ViewSet 목록 조회"></a>router를 쓸 경우는 <code>api-root</code>뷰를 통한 지원 ViewSet 목록 조회</h3><p>Router에서는 추가로 현 Router에 등록된 ViewSet내역을 조회할 수 있는 <code>api-root</code> 뷰를 추가로 지원합니다. <code>router.urls</code>가 매핑된 주소로 브라우저 접속 혹은 GET요청을 날려보세요. ;)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">현재 예시에서는</span><br><span class="line">http://127.0.0.1:8000/ep04/</span><br></pre></td></tr></table></figure>
+
+<h1 id="ViewSet에-추가-API는-어떻게-추가할-수-있죠"><a href="#ViewSet에-추가-API는-어떻게-추가할-수-있죠" class="headerlink" title="ViewSet에 추가 API는 어떻게 추가할 .. 수 있죠 ??"></a>ViewSet에 추가 API는 어떻게 추가할 .. 수 있죠 ??</h1><p>물론입니다. list route로서 <code>list/create</code>함수와 detail route로서 <code>retrieve/update/partial_update/delete</code>외에 추가로 구현하여 매핑하실 수 있습니다. 이때 추가할 API가 list route에 등록할 것인지, detail route에 등록할 것인지를 결정해야합니다.(pk값필요유무차이)</p>
 <p>구현은 해당 ViewSet 클래스 내에 멤버함수로서 구현하고 <code>list_route</code> 장식자 혹은 <code>detail_route</code> 장식자로 꾸며주면 끄읕 !!! URL매핑은 Router에서 알아서 해줍니다.</p>
+<p>Django-rest-framework 3.8버전이상부터는 action으로 통합됨</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Replace detail_route uses with @action(detail=True).</span><br><span class="line">Replace list_route uses with @action(detail=False).</span><br></pre></td></tr></table></figure>
+
 <p><code>PostViewSet</code>에 다음 2개 API를 추가해봅시다. 아래 예시는 Post모델에 <code>is_public=models.BooleanField()</code>가 있음을 가정한 코드입니다.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.decorators <span class="keyword">import</span> list_route, detail_route</span><br><span class="line"><span class="keyword">from</span> rest_framework.response <span class="keyword">import</span> Response</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(ModelViewSet)</span>:</span></span><br><span class="line">    queryset = PostViewSet.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line"></span><br><span class="line"><span class="meta">    @list_route()  # 목록 단위로 적용할 API이기에, list_route 장식자 사용</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">public_list</span><span class="params">(self, request)</span>:</span></span><br><span class="line">        qs = self.queryset.filter(is_public=<span class="literal">True</span>)  <span class="comment"># Post모델에 is_public 필드가 있을 경우</span></span><br><span class="line">        serializer = self.get_serializer(qs, many=<span class="literal">True</span>)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @detail_route(methods=['patch'])  # Record 단위로 적용할 API이기에, detail_route 장식자 사용</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_public</span><span class="params">(self, request, pk)</span>:</span></span><br><span class="line">        instance = self.get_object()</span><br><span class="line">        instance.is_public = <span class="literal">True</span></span><br><span class="line">        instance.save()</span><br><span class="line">        serializer = self.get_serializer(instance)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#views.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rest_framework.decorators <span class="keyword">import</span> list_route, detail_route</span><br><span class="line"><span class="keyword">from</span> rest_framework.response <span class="keyword">import</span> Response</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(ModelViewSet)</span>:</span></span><br><span class="line">    queryset = PostViewSet.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># /ep04/post/ =&gt; list() 함수</span></span><br><span class="line">    <span class="comment"># /ep04/post/public_list/ =&gt; public_list() 함수  # 즉 함수명으로 url뒤에붙음</span></span><br><span class="line"><span class="meta">    @action(detail=False)  # 목록 단위로 적용할 API이기에, list_route 장식자 사용</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">public_list</span><span class="params">(self, request)</span>:</span></span><br><span class="line">        qs = self.queryset.filter(is_public=<span class="literal">True</span>)  <span class="comment"># Post모델에 is_public 필드가 있을 경우</span></span><br><span class="line">        <span class="comment">#serializer = self.serializer(qs, many=True) 써도되지만 viewset에 구현되어있는 함수 get_serializer를 이용했음</span></span><br><span class="line">        serializer = self.get_serializer(qs, many=<span class="literal">True</span>)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data)</span><br><span class="line">      </span><br><span class="line">    <span class="comment"># /ep04/post/10/ =&gt; retrieve() 함수가 호출</span></span><br><span class="line">    <span class="comment"># /ep04/post/10/set_public/ =&gt; set_public()함수가 호출</span></span><br><span class="line"><span class="meta">    @action(methods=['patch'], detail=True)  # Record 단위로 적용할 API이기에, detail_route 장식자 사용</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_public</span><span class="params">(self, request, pk)</span>:</span></span><br><span class="line">        <span class="comment">#viewset에는 이미 get_object_or_404(Post, pk=pk)가 이미구현된 get_object()함수가 존재</span></span><br><span class="line">        instance = self.get_object()</span><br><span class="line">        instance.is_public = <span class="literal">True</span></span><br><span class="line">        instance.save()</span><br><span class="line">        serializer = self.get_serializer(instance)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data)</span><br></pre></td></tr></table></figure>
 
 <h2 id="PostViewSet의-public-list-API"><a href="#PostViewSet의-public-list-API" class="headerlink" title="PostViewSet의 public_list API"></a><code>PostViewSet</code>의 <code>public_list</code> API</h2><ul>
 <li>URL 매핑은 <code>/prefix/함수명/</code>으로서 <code>/post/public_list/</code>가 됩니다.</li>
@@ -480,16 +498,16 @@ detail route
 <p>요청 예시</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http http://localhost:8000/ep04/post/public_list/</span><br></pre></td></tr></table></figure>
 
-<h2 id="PostViewSet의-set-public-API"><a href="#PostViewSet의-set-public-API" class="headerlink" title="PostViewSet의 set_public API"></a><code>PostViewSet</code>의 <code>set_public</code> API</h2><ul>
+<h2 id="PostViewSet의-set-public-API"><a href="#PostViewSet의-set-public-API" class="headerlink" title="PostViewSet의 set_public API"></a>PostViewSet의 set_public API</h2><ul>
 <li>URL 매핑은 <code>/prefix/{pk}/함수명/</code>으로서 <code>/post/{pk}/set_public/</code>이 됩니다.</li>
-<li>methods이 post로 지정되었으므로, POST 요청에 응답합니다.</li>
+<li>methods이 patch로 지정되었으므로, patch 요청에 응답합니다.</li>
 <li>함수명이 <code>set_public</code>이므로, URL Reverse 이름은 <code>모델명-함수명</code>으로서 <code>post-set-public</code>이 됩니다. 언더바(<code>_</code>)는 하이픈(<code>-</code>)으로 변경하여 처리됩니다.</li>
 </ul>
 <p>요청 예시</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http PATCH http://localhost:8000/ep04/post/&#123;pk&#125;/set_public/</span><br></pre></td></tr></table></figure>
 
 <p>본 API는 <code>detail_route</code>예로서 작성한 것일 뿐, 다음과 같이 <code>PATCH</code>요청을 통한 <code>partial_update</code>을 이용해도 충분합니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http --form PATCH http://localhost:8000/ep04/post/&#123;pk&#125;/ title=&quot;수정된 제목&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http --form PATCH http://localhost:8000/ep04/post/&#123;pk&#125;/ title=&quot;수정된 제목&quot; is_public=true</span><br></pre></td></tr></table></figure>
 
 <p>Tip: <code>PUT</code>을 통한 수정에서는 모든 필수(required) 필드를 지정하여야 하며, <code>PATCH</code>를 통한 수정에서는 “부분수정”으로서 수정할 필드만 지정하면 됩니다.</p>
 <h2 id="관련-공식문서"><a href="#관련-공식문서" class="headerlink" title="관련 공식문서"></a>관련 공식문서</h2><ul>
@@ -503,6 +521,11 @@ detail route
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/01/18/api05/" title= "api 기본편 5">
+                    <div class="nextTitle">api 기본편 5</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -628,7 +651,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-04-ViewSet과-Router"><span class="toc-number">1.</span> <span class="toc-text">EP 04 - ViewSet과 Router</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ViewSet"><span class="toc-number">1.1.</span> <span class="toc-text">ViewSet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Router-활용"><span class="toc-number">1.2.</span> <span class="toc-text">Router 활용</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#예1"><span class="toc-number">1.2.1.</span> <span class="toc-text">예1)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#예2"><span class="toc-number">1.2.2.</span> <span class="toc-text">예2)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#api-root뷰를-통한-지원-ViewSet-목록-조회"><span class="toc-number">1.2.3.</span> <span class="toc-text">api-root뷰를 통한 지원 ViewSet 목록 조회</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ViewSet에-추가-API는-어떻게-추가할-수-있죠"><span class="toc-number">2.</span> <span class="toc-text">ViewSet에 추가 API는 어떻게 추가할 .. 수 있죠 ??</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#PostViewSet의-public-list-API"><span class="toc-number">2.1.</span> <span class="toc-text">PostViewSet의 public_list API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PostViewSet의-set-public-API"><span class="toc-number">2.2.</span> <span class="toc-text">PostViewSet의 set_public API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#관련-공식문서"><span class="toc-number">2.3.</span> <span class="toc-text">관련 공식문서</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-04-ViewSet과-Router"><span class="toc-number">1.</span> <span class="toc-text">EP 04 - ViewSet과 Router</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ViewSet"><span class="toc-number">1.1.</span> <span class="toc-text">ViewSet</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#REST-API-규격에-맞춰-URL-매핑을-해봅시다"><span class="toc-number">1.1.1.</span> <span class="toc-text">REST API 규격에 맞춰, URL 매핑을 해봅시다.</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Router-활용"><span class="toc-number">1.2.</span> <span class="toc-text">Router 활용</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#예1"><span class="toc-number">1.2.1.</span> <span class="toc-text">예1)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#예2"><span class="toc-number">1.2.2.</span> <span class="toc-text">예2)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#router를-쓸-경우는-api-root뷰를-통한-지원-ViewSet-목록-조회"><span class="toc-number">1.2.3.</span> <span class="toc-text">router를 쓸 경우는 api-root뷰를 통한 지원 ViewSet 목록 조회</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ViewSet에-추가-API는-어떻게-추가할-수-있죠"><span class="toc-number">2.</span> <span class="toc-text">ViewSet에 추가 API는 어떻게 추가할 .. 수 있죠 ??</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#PostViewSet의-public-list-API"><span class="toc-number">2.1.</span> <span class="toc-text">PostViewSet의 public_list API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PostViewSet의-set-public-API"><span class="toc-number">2.2.</span> <span class="toc-text">PostViewSet의 set_public API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#관련-공식문서"><span class="toc-number">2.3.</span> <span class="toc-text">관련 공식문서</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -946,9 +969,14 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 25
+        Total : 26
         </div>
         <!-- search  -->
         
@@ -961,6 +989,11 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/api05/" >api 기본편 5</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1088,12 +1121,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
         </li>
     
     </div>
@@ -1101,15 +1134,15 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
-    
-        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
-    
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
         <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
     
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
@@ -1117,23 +1150,23 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
-        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
-    
-        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
-    
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
         <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
-        <span class="sidebar-tag-name" data-tags="Terminal"><span class="iconfont-archer">&#xe606;</span>Terminal</span>
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
     
-        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="Terminal"><span class="iconfont-archer">&#xe606;</span>Terminal</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
@@ -1172,21 +1205,21 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
-    
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
-        <span class="sidebar-category-name" data-categories="Terminal"><span class="iconfont-archer">&#xe60a;</span>Terminal</span>
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
-        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
-    
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="Terminal"><span class="iconfont-archer">&#xe60a;</span>Terminal</span>
     
         <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
