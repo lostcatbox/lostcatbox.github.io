@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>api 기본편 5 + 6 · lostcatbox</title>
+    <title>api 기본편 5 + 6 + 7 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >Hello LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">api 기본편 5 + 6</a>
+                <a href="#" class="post-name">api 기본편 5 + 6 + 7</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            api 기본편 5 + 6
+            api 기본편 5 + 6 + 7
             <!-- 404 -->
             
         </h1>
@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">1.1k</span>Reading time: <span class="post-count reading-time">7 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.4k</span>Reading time: <span class="post-count reading-time">8 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -508,8 +508,6 @@ height:50vh;
 <p>예시</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#views.py</span><br><span class="line"></span><br><span class="line">from django.shortcuts import render</span><br><span class="line">from ep04.models import Post</span><br><span class="line">from ep04.serializers import PostSerializer</span><br><span class="line">from rest_framework.viewsets import ModelViewSet</span><br><span class="line"></span><br><span class="line">class PostViewSet(ModelViewSet):</span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line"></span><br><span class="line">    def get_queryset(self):</span><br><span class="line">        qs = super().get_queryset()</span><br><span class="line">        if self.request.user.is_authenticated:  #로그인상태라면</span><br><span class="line">            qs = qs.filter(</span><br><span class="line">                author=self.request.user</span><br><span class="line">            )</span><br><span class="line">        else:</span><br><span class="line">            qs = qs.none() #empty result 나옴</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        return qs</span><br></pre></td></tr></table></figure>
 
-
-
 <h2 id="Search-구현-브라우저에서접속하는-api환경에서-ui생성"><a href="#Search-구현-브라우저에서접속하는-api환경에서-ui생성" class="headerlink" title="Search 구현(브라우저에서접속하는 api환경에서 ui생성)"></a>Search 구현(브라우저에서접속하는 api환경에서 ui생성)</h2><p><a href="https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.ModelAdmin.search_fields" target="_blank" rel="noopener">Django Admin의 Search기능</a>(즉, 장고 admin.py에서 search_fields = (‘title’, ‘content’)추가하면 admin환경에서 검색기능 활성화되는것처럼..)과 유사하게 제공합니다. 이는 별도의 검색엔진을 사용하는 것이 아니라, <strong>DBMS의 LIKE/ILIKE 조건절을 활용합니다.</strong> (순수 DB에 query한다)</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.filters <span class="keyword">import</span> SearchFilter</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostListAPIView</span><span class="params">(generics.ListAPIView)</span>:</span></span><br><span class="line">    <span class="comment"># 중략</span></span><br><span class="line"></span><br><span class="line">    filter_backends = [SearchFilter]</span><br><span class="line">    search_fields = [<span class="string">'title'</span>]  <span class="comment"># 검색 키워드를 지정했을 때, 매칭을 시도할 필드</span></span><br></pre></td></tr></table></figure>
 
@@ -523,6 +521,39 @@ height:50vh;
 
 <p>아래방법은 그냥 기본적인 검색</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">def get_queryset(self):</span><br><span class="line">    qs = super().get_queryset()</span><br><span class="line"></span><br><span class="line">    search = self.request.GET.get(&apos;search&apos;,&apos;&apos;)</span><br><span class="line"></span><br><span class="line">    if search:</span><br><span class="line">        qs = qs.filter(title__icontains=search)</span><br><span class="line">    if self.request.user.is_authenticated:  #로그인상태라면</span><br><span class="line">        qs = qs.filter(</span><br><span class="line">            author=self.request.user</span><br><span class="line">        )</span><br><span class="line">    else:</span><br><span class="line">        qs = qs.none() #empty result 나옴</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    return qs</span><br></pre></td></tr></table></figure>
+
+<h1 id="EP-07-Pagination-처리-ep03앱을-이용"><a href="#EP-07-Pagination-처리-ep03앱을-이용" class="headerlink" title="EP 07. Pagination 처리(ep03앱을 이용)"></a>EP 07. Pagination 처리(ep03앱을 이용)</h1><p>레코드 갯수가 많은 경우 목록을 하나의 API 요청만으로 받는 것은 피해야할 것입니다. 이럴 때 여러 페이지에 나눠서 요청을 처리할 수 있겠는 데요. 이에 대해 <code>rest_framework</code>에서는 여러 페이징 기법을 지원해주고 있습니다.</p>
+<ul>
+<li><code>PageNumberPagination</code>:<code>page</code>인자를 통해 페이징 처리 (page는 페이지수, page_size는 page당 post수)<ul>
+<li><code>http://api.example.org/accounts/?page=4</code></li>
+<li><code>http://api.example.org/accounts/?page=4&amp;page_size=100</code></li>
+</ul>
+</li>
+<li><code>LimitOffsetPagination</code>:<code>limit</code>인자를 통한 페이징 처리(offset은 레코드정렬순서기준 400번째부터~, limit 까지, limit만 지정시 처음부터 limit까지)<ul>
+<li><code>http://api.example.org/accounts/?limit=100</code></li>
+<li><code>http://api.example.org/accounts/?offset=400&amp;limit=100</code></li>
+</ul>
+</li>
+</ul>
+<p><code>rest_framework/generics.py</code> 내 <code>GenericAPIView</code>에는 이미 <code>pagination_class = PageNumberPagination</code> 설정이었습니다. 하지만, <code>3.7.0</code>버전부터는 <code>디폴트 None</code>으로 지정으로 변경되었습니다. 현재 (2017년 11월) 최신 버전은 <code>3.7.3</code>버전입니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 버전확인</span><br><span class="line">pip3 freeze | grep djangorestframework</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#models.py 에서 순서 꼭 지정해주기 ordering</span><br><span class="line"></span><br><span class="line">class Post(models.Model):</span><br><span class="line">    title = models.CharField(max_length=100)</span><br><span class="line">    content = models.TextField()ㄴ</span><br><span class="line">    created_at = models.DateTimeField(auto_now_add=True)</span><br><span class="line">    updated_at = models.DateTimeField(auto_now=True)</span><br><span class="line"></span><br><span class="line">    class Meta:</span><br><span class="line">        ordering = (&apos;-id&apos;,)  #,가 튜플이라는 증거</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Tip: <code>3.7.0</code>버전부터 디폴트 페이징 클래스 설정이 <code>None</code>으로 <a href="https://github.com/encode/django-rest-framework/commit/107e8b3d23a933b8cdc1f14045d7d42742be53a9#diff-f9716c39348a77db61afdaa2ed35cd87R54" target="_blank" rel="noopener">디폴트 설정이 변경</a>되기에, 낮은 버전을 쓰고 계시더라도 다음과 같이 전역설정을 해두시는 것이 좋습니다. ;) 기본 페이징사이즈도 넣어주는게 좋음</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># settings.py</span></span><br><span class="line"></span><br><span class="line">REST_FRAMEWORK = &#123;</span><br><span class="line">    <span class="string">'DEFAULT_PAGINATION_CLASS'</span>: <span class="string">'rest_framework.pagination.PageNumberPagination'</span>,</span><br><span class="line">    <span class="string">'PAGE_SIZE'</span>: <span class="number">3</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="커스텀으로-pagination"><a href="#커스텀으로-pagination" class="headerlink" title="커스텀으로 pagination"></a>커스텀으로 pagination</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.pagination <span class="keyword">import</span> PageNumberPagination</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GenericAPIView</span><span class="params">(ApiView)</span>:</span></span><br><span class="line">    pagination_class = PageNumberPagination  <span class="comment"># 디폴트 지정</span></span><br></pre></td></tr></table></figure>
+
+<p>하지만 디폴트 설정으로 <code>PAGE_SIZE</code>인자가 <code>None</code>으로 설정되어있기 때문에, 리스트 처리에서 페이징처리가 되지 않습니다. 다음과 같이 전역으로 <code>PAGE_SIZE</code>설정을 하셔도 되구요.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 프로젝트/settings.py</span><br><span class="line"></span><br><span class="line">REST_FRAMEWORK = &#123;</span><br><span class="line">    &apos;PAGE_SIZE&apos;: 20,  # 디폴트 값은 None으로서 페이징 비활성화</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>각 API별로 <code>PAGE_SIZE</code>설정을 다르게 할 수도 있지만, 이는 <code>Pagination</code>의 역할이기에 <code>Pagination</code>을 커스텀하셔야 합니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.pagination <span class="keyword">import</span> PageNumberPagination</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostPageNumberPagination</span><span class="params">(PageNumberPagination)</span>:</span></span><br><span class="line">    page_size = <span class="number">20</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(..)</span>:</span></span><br><span class="line">    pagination_class = PostPageNumberPagination</span><br></pre></td></tr></table></figure>
 
 
     </article>
@@ -656,7 +687,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-05-format-인자와-다양한-Renderer"><span class="toc-number">1.</span> <span class="toc-text">EP 05 - format 인자와 다양한 Renderer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#기본-지원되는-Renderer-몇-가지-DRF에서"><span class="toc-number">2.</span> <span class="toc-text">기본 지원되는 Renderer 몇 가지(DRF에서)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#API를-사용하는-HTML-페이지-만들기"><span class="toc-number">2.1.</span> <span class="toc-text">API를 사용하는 HTML 페이지 만들기</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-06-필터링"><span class="toc-number">3.</span> <span class="toc-text">EP 06 - 필터링</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#필터링에-필요한-인자-획득"><span class="toc-number">3.0.1.</span> <span class="toc-text">필터링에 필요한 인자 획득</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get-queryset을-통한-쿼리셋-필터링"><span class="toc-number">3.0.2.</span> <span class="toc-text">get_queryset을 통한 쿼리셋 필터링</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Search-구현-브라우저에서접속하는-api환경에서-ui생성"><span class="toc-number">3.1.</span> <span class="toc-text">Search 구현(브라우저에서접속하는 api환경에서 ui생성)</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-05-format-인자와-다양한-Renderer"><span class="toc-number">1.</span> <span class="toc-text">EP 05 - format 인자와 다양한 Renderer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#기본-지원되는-Renderer-몇-가지-DRF에서"><span class="toc-number">2.</span> <span class="toc-text">기본 지원되는 Renderer 몇 가지(DRF에서)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#API를-사용하는-HTML-페이지-만들기"><span class="toc-number">2.1.</span> <span class="toc-text">API를 사용하는 HTML 페이지 만들기</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-06-필터링"><span class="toc-number">3.</span> <span class="toc-text">EP 06 - 필터링</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#필터링에-필요한-인자-획득"><span class="toc-number">3.0.1.</span> <span class="toc-text">필터링에 필요한 인자 획득</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get-queryset을-통한-쿼리셋-필터링"><span class="toc-number">3.0.2.</span> <span class="toc-text">get_queryset을 통한 쿼리셋 필터링</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Search-구현-브라우저에서접속하는-api환경에서-ui생성"><span class="toc-number">3.1.</span> <span class="toc-text">Search 구현(브라우저에서접속하는 api환경에서 ui생성)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-07-Pagination-처리-ep03앱을-이용"><span class="toc-number">4.</span> <span class="toc-text">EP 07. Pagination 처리(ep03앱을 이용)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#커스텀으로-pagination"><span class="toc-number">4.1.</span> <span class="toc-text">커스텀으로 pagination</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -669,6 +700,8 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
     
     
     
@@ -997,7 +1030,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/api05/" >api 기본편 5 + 6</a>
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/api05/" >api 기본편 5 + 6 + 7</a>
         </li>
     
     
@@ -1126,12 +1159,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
         </li>
     
     </div>
@@ -1149,11 +1182,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
     
-        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
-    
         <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
     
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -1165,13 +1198,13 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
+        <span class="sidebar-tag-name" data-tags="Terminal"><span class="iconfont-archer">&#xe606;</span>Terminal</span>
+    
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
-    
-        <span class="sidebar-tag-name" data-tags="Terminal"><span class="iconfont-archer">&#xe606;</span>Terminal</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
@@ -1218,13 +1251,13 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
+        <span class="sidebar-category-name" data-categories="Terminal"><span class="iconfont-archer">&#xe60a;</span>Terminal</span>
+    
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
-    
-        <span class="sidebar-category-name" data-categories="Terminal"><span class="iconfont-archer">&#xe60a;</span>Terminal</span>
     
         <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
