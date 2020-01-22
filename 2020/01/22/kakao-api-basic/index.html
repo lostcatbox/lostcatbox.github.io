@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>Kakao_api 기본편 · lostcatbox</title>
+    <title>Kakao_api_kakaotalkchannel · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >Hello LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">Kakao_api 기본편</a>
+                <a href="#" class="post-name">Kakao_api_kakaotalkchannel</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            Kakao_api 기본편
+            Kakao_api_kakaotalkchannel
             <!-- 404 -->
             
         </h1>
@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">1.2k</span>Reading time: <span class="post-count reading-time">7 min</span></span>
+                        <span>Word count: <span class="post-count word-count">42</span>Reading time: <span class="post-count reading-time">1 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -403,103 +403,10 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="Kakao-api-시작하기-전에"><a href="#Kakao-api-시작하기-전에" class="headerlink" title="Kakao api 시작하기 전에"></a>Kakao api 시작하기 전에</h1><p>이 내용은 모두 <a href="https://developers.kakao.com/docs/ios" target="_blank" rel="noopener">KakaoDevelopers 개발가이드</a>에 있는 내용임을 알립니다!</p>
-<p> 카카오 플랫폼 서비스는 카카오톡, 카카오스토리와 같은 카카오 서비스 및 카카오 플랫폼 기술과 관련된 API를 제공합니다. 해당 기능을 쉽게, 올바르게 사용하기 위해서는 카카오에서 제공하는 Kakao SDK가 필요합니다.</p>
-<p>본 문서는 카카오 플랫폼 서비스를 사용하기 위한 기본 개발환경 구성 및 Kakao SDK 사용법 뿐만 아니라, 카카오 플랫폼 서비스가 제공하는 각각의 기능별 상세 설명을 포함합니다.</p>
-<p>앞으로 제공될 상세기능에 대한 설명을 참고하거나 해당 기능을 실행해 보기전에, 반드시 아래의 기본 과정을 숙지하기를 권장합니다.</p>
-<h1 id="시작하기"><a href="#시작하기" class="headerlink" title="시작하기"></a>시작하기</h1><h2 id="개발환경구성"><a href="#개발환경구성" class="headerlink" title="개발환경구성"></a>개발환경구성</h2><p>iOS용 앱의 개발을 위해서는 개발툴인 Xcode를 설치해야 합니다. Xcode의 설치 및 기본 가이드는 <a href="https://developer.apple.com/devcenter/ios/index.action" target="_blank" rel="noopener">여기</a>를 참고해 주세요.</p>
-<blockquote>
-<p>올바른 테스트 및 샘플 실행을 위해서는 iOS 기기에 최신의 카카오톡 앱이 설치되어 있어야 합니다. 포함된 샘플은 카카오톡 <strong>3.9.5</strong> 버젼 이상이 요구됩니다.</p>
-</blockquote>
-<h2 id="Kakao-SDK-설치-여기"><a href="#Kakao-SDK-설치-여기" class="headerlink" title="Kakao SDK 설치(여기)"></a>Kakao SDK 설치(<a href="https://developers.kakao.com/docs/ios#kakao-sdk-설치" target="_blank" rel="noopener">여기</a>)</h2><p>카카오 플랫폼 서비스에서 제공하는 기능을 사용하기 위해서는 카카오에서 제공하는 Kakao SDK가 필요합니다.</p>
-<blockquote>
-<p>Kakao SDK는 ARMv7, ARMv7s, ARM64를 지원하며 iOS <strong>9.0</strong> 버전 이상이 필요합니다.</p>
-</blockquote>
-<h3 id="다운로드"><a href="#다운로드" class="headerlink" title="다운로드"></a>다운로드</h3><p>iOS용 최신 Kakao SDK를 직접 다운로드 하시려면 <a href="https://developers.kakao.com/sdk/latest-ios-sdk" target="_blank" rel="noopener">최신 SDK 다운로드</a>를 클릭해 주세요.</p>
-<blockquote>
-<p>그외 제공되는 Kakao SDK의 자세한 정보는 <a href="https://developers.kakao.com/docs/sdk" target="_blank" rel="noopener">SDK 다운로드</a>에서 확인하실 수 있습니다.</p>
-</blockquote>
-<h3 id="압축풀기"><a href="#압축풀기" class="headerlink" title="압축풀기"></a>압축풀기</h3><p>위에서 다운로드한 파일의 압축을 풉니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip kakao-ios-sdk-x.x.x.zip</span><br></pre></td></tr></table></figure>
-
-<p>압축을 풀면 KakaoOpenSDK.framework 와 샘플(samples) 폴더를 볼 수 있습니다.</p>
-<h2 id="개발프로젝트-설정"><a href="#개발프로젝트-설정" class="headerlink" title="개발프로젝트 설정"></a>개발프로젝트 설정</h2><p>Kakao SDK를 개발툴에 설정하는 방법을 설명합니다.</p>
-<h5 id="프로젝트-생성"><a href="#프로젝트-생성" class="headerlink" title="프로젝트 생성"></a>프로젝트 생성</h5><p>Kakao SDK 를 참조하는 새로운 프로젝트를 생성합니다.</p>
-<p><em>File</em> &gt; <em>New</em> &gt; <em>New Project</em> 메뉴를 통해 새로운 프로젝트를 생성합니다.</p>
-<h5 id="Kakao-SDK-import"><a href="#Kakao-SDK-import" class="headerlink" title="Kakao SDK import"></a>Kakao SDK import</h5><p>다운로드 받은 KakaoOpenSDK.framework 폴더를 새로 생성한 Project의 Frameworks Group 에 drag &amp; drop 합니다.</p>
-<p>아래는 KakaoOpenSDK.framework 가 project 에 포함된 후의 모습입니다. Frameworks 에 KakaoOpenSDK.framework 가 추가되어 있습니다.</p>
-<p><img src="https://developers.kakao.com/assets/images/ios/drag_sdk_after.png" alt="drag_sdk_after"></p>
-<p>Link Binary With Libraries에 SDK framework 가 올바르게 추가되어 있는지 확인합니다.</p>
-<p><img src="https://developers.kakao.com/assets/images/ios/link_binary_with_libraries_confirm.png" alt="link_binary_with_libraries_confirm"></p>
-<p>관련파일을 추가한 이후에 현재 작업중인 프로젝트에서 Other Linker Flags에 “-all_load” 를 추가합니다.</p>
-<p><img src="https://developers.kakao.com/assets/images/ios/other_linker_flags.png" alt="other_linker_flags"></p>
-<p>이로서 기본적인 프로젝트 설정은 완료되었습니다</p>
-<h2 id="앱-생성"><a href="#앱-생성" class="headerlink" title="앱 생성"></a>앱 생성</h2><p><a href="https://developers.kakao.com/apps/new" target="_blank" rel="noopener">내 애플리케이션 &gt; 앱 만들기</a>를 통해 <em>앱을 생성</em>합니다.</p>
-<ul>
-<li>앱 이름과 앱 아이콘을 지정합니다.</li>
-<li><strong>앱 만들기</strong>를 클릭하면 앱 생성이 완료되고 앱 키가 할당됩니다. iOS SDK를 사용할 때에는 <strong>네이티브 앱 키</strong>를 사용합니다. <strong>설정</strong>을 클릭하여 설정을 이어 갑니다.</li>
-<li><em>플랫폼 추가</em> &gt; <em>iOS</em> 선택후 <strong>번들ID</strong>를 입력합니다. 여기서 입력한 번들ID는 XCode Project의 Bundle Identifier 값과 일치하여야 합니다.</li>
-</ul>
-<h5 id="프로젝트에-내-앱-설정"><a href="#프로젝트에-내-앱-설정" class="headerlink" title="프로젝트에 내 앱 설정"></a>프로젝트에 내 앱 설정</h5><p>카카오계정을 통해 인증을 받고 자신의 앱 실행을 위해서 아래 사진과 같이 <em>URL Types</em> 항목을 추가해야 합니다. URL Schemes에는 <em>KAKAO_APP_KEY</em> 앞에 “kakao” 문자열을 붙여서 등록합니다.</p>
-<p><img src="https://developers.kakao.com/assets/images/ios/url_types.png" alt="url_types"></p>
-<p>카카오 개발자 웹사이트에 등록된 해당 앱의 네이티브 앱 키를 프로젝트 plist 파일에 등록을 합니다. “KAKAO_APP_KEY”라는 이름으로 Key를 추가하고, Type은 String, Value는 해당 앱의 네이티브 앱 키 값으로 등록합니다.</p>
-<p><img src="https://developers.kakao.com/assets/images/ios/setting_plist.png" alt="setting_plist"></p>
-<h5 id="프로젝트에-내-앱-설정-iOS9-지원"><a href="#프로젝트에-내-앱-설정-iOS9-지원" class="headerlink" title="프로젝트에 내 앱 설정(iOS9 지원)"></a>프로젝트에 내 앱 설정(iOS9 지원)</h5><p>iOS9에서는 다양한 기능이 추가되면서 동작 및 설정의 변화가 생겼습니다. iOS9에서 올바로 Kakao SDK를 사용하기 위해서는 다음과 같은 두가지 설정을 앱의 plist(또는 프로젝트의 Info 설정)에 반드시 해 주어야 합니다.</p>
-<h6 id="Kakao-SDK가-사용하는-카카오-앱들의-커스텀-스킴-스위칭을-허용하는-화이트리스트-추가"><a href="#Kakao-SDK가-사용하는-카카오-앱들의-커스텀-스킴-스위칭을-허용하는-화이트리스트-추가" class="headerlink" title="Kakao SDK가 사용하는 카카오 앱들의 커스텀 스킴 스위칭을 허용하는 화이트리스트 추가"></a>Kakao SDK가 사용하는 카카오 앱들의 커스텀 스킴 스위칭을 허용하는 화이트리스트 추가</h6><p>두번째, <em>LSApplicationQueriesSchemes*의 키로 Array 값 *kakao{your_app_key}</em> 및 카카오 앱들의 커스텀 스킴들을 등록합니다. 다음은 예시 입니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;key&gt;LSApplicationQueriesSchemes&lt;/key&gt;</span><br><span class="line">&lt;array&gt;</span><br><span class="line">    &lt;!-- 공통 --&gt;</span><br><span class="line">    &lt;string&gt;kakao0123456789abcdefghijklmn&lt;/string&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 간편로그인 --&gt;</span><br><span class="line">    &lt;string&gt;kakaokompassauth&lt;/string&gt;</span><br><span class="line">    &lt;string&gt;storykompassauth&lt;/string&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 카카오톡링크 --&gt;</span><br><span class="line">    &lt;string&gt;kakaolink&lt;/string&gt;         </span><br><span class="line">    &lt;string&gt;kakaotalk-5.9.7&lt;/string&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 카카오스토리링크 --&gt;</span><br><span class="line">    &lt;string&gt;storylink&lt;/string&gt;</span><br><span class="line">&lt;/array&gt;</span><br></pre></td></tr></table></figure>
-
-<p>보다 자세한 설명은 <a href="https://developer.apple.com/videos/wwdc/2015/?id=703" target="_blank" rel="noopener">Privacy and Your App</a>을 참고합니다.</p>
-<h6 id="보안-네트워크-통신을-원활히-하기-위해-Kakao-도메인의-화이트리스트-추가"><a href="#보안-네트워크-통신을-원활히-하기-위해-Kakao-도메인의-화이트리스트-추가" class="headerlink" title="보안 네트워크 통신을 원활히 하기 위해 Kakao 도메인의 화이트리스트 추가"></a><del>보안 네트워크 통신을 원활히 하기 위해 Kakao 도메인의 화이트리스트 추가</del></h6><p>첫번째, NSAppTransportSecurity의 키로 Dictionary 값 NSExceptionDomains을 등록하여 하위에 kakao.com을 설정합니다. 자세한 것은 아래의 예시를 참고합니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;key&gt;NSAppTransportSecurity&lt;/key&gt; &lt;dict&gt;     &lt;key&gt;NSExceptionDomains&lt;/key&gt;     &lt;dict&gt;         &lt;key&gt;kakaocorp.com&lt;/key&gt;         &lt;dict&gt;             &lt;key&gt;NSExceptionAllowsInsecureHTTPLoads&lt;/key&gt;             &lt;true/&gt;             &lt;key&gt;NSExceptionRequiresForwardSecrecy&lt;/key&gt;             &lt;false/&gt;             &lt;key&gt;NSIncludesSubdomains&lt;/key&gt;             &lt;true/&gt;         &lt;/dict&gt;         &lt;key&gt;kakao.com&lt;/key&gt;         &lt;dict&gt;             &lt;key&gt;NSIncludesSubdomains&lt;/key&gt;             &lt;true/&gt;             &lt;key&gt;NSExceptionRequiresForwardSecrecy&lt;/key&gt;             &lt;false/&gt;             &lt;key&gt;NSExceptionAllowsInsecureHTTPLoads&lt;/key&gt;             &lt;true/&gt;         &lt;/dict&gt;         &lt;key&gt;kakao.co.kr&lt;/key&gt;         &lt;dict&gt;             &lt;key&gt;NSIncludesSubdomains&lt;/key&gt;             &lt;true/&gt;             &lt;key&gt;NSExceptionRequiresForwardSecrecy&lt;/key&gt;             &lt;false/&gt;             &lt;key&gt;NSExceptionAllowsInsecureHTTPLoads&lt;/key&gt;             &lt;true/&gt;         &lt;/dict&gt;         &lt;key&gt;kakaocdn.net&lt;/key&gt;         &lt;dict&gt;             &lt;key&gt;NSIncludesSubdomains&lt;/key&gt;             &lt;true/&gt;             &lt;key&gt;NSExceptionRequiresForwardSecrecy&lt;/key&gt;             &lt;false/&gt;             &lt;key&gt;NSExceptionAllowsInsecureHTTPLoads&lt;/key&gt;             &lt;true/&gt;         &lt;/dict&gt;         &lt;key&gt;daumcdn.net&lt;/key&gt;         &lt;dict&gt;             &lt;key&gt;NSIncludesSubdomains&lt;/key&gt;             &lt;true/&gt;             &lt;key&gt;NSExceptionRequiresForwardSecrecy&lt;/key&gt;             &lt;false/&gt;             &lt;key&gt;NSExceptionAllowsInsecureHTTPLoads&lt;/key&gt;             &lt;true/&gt;         &lt;/dict&gt;     &lt;/dict&gt; &lt;/dict&gt;</span><br></pre></td></tr></table></figure>
-
-<h5 id="그-밖의-설정"><a href="#그-밖의-설정" class="headerlink" title="그 밖의 설정"></a>그 밖의 설정</h5><p>iOS 앱에서 Kakao SDK의 API를 호출하기 위해서는 기본적으로 KakaoOpenSDK.h 파일을 import 합니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;KakaoOpenSDK/KakaoOpenSDK.h&gt;</span><br></pre></td></tr></table></figure>
-
-<p>iOS 앱에서 Kakao SDK의 API를 호출하기 전에 현재 작성중인 앱의 번들 ID를 카카오 개발자 웹사이트（대쉬보드의 설정 &gt; 앱 정보 &gt; iOS）에 등록하여야 합니다. 앱의 번들 ID는 XCode 의 프로젝트정보에서 설정 가능합니다.</p>
-<p><img src="https://developers.kakao.com/assets/images/ios/bundle_id.png" alt="bundle_id"></p>
-<blockquote>
-<p>카카오 개발자 웹사이트에 등록한 번들 ID와 실행하려는 앱에 설정된 번들 ID가 다를 경우에는 다음과 같은 에러가 출력되면서 인증이 되지 않습니다.</p>
-<p><strong>invalid android_key_hash or ios_bundle_id</strong></p>
-</blockquote>
-<h3 id="샘플앱-실행"><a href="#샘플앱-실행" class="headerlink" title="샘플앱 실행"></a>샘플앱 실행</h3><p>Kakao SDK 에는 아래와 같은 샘플이 포함되어 있습니다.</p>
-<ul>
-<li>KakaoSample: 사용자 관리에 대한 샘플앱입니다.</li>
-<li>LinkSample: 카카오링크에 대한 샘플앱입니다.</li>
-<li>KakaoNaviSample: 카카오내비에 대한 샘플앱입니다.</li>
-</ul>
-<p>KakaoSample 앱을 간단히 실행해 보도록 합니다.</p>
-<h5 id="실행"><a href="#실행" class="headerlink" title="실행"></a>실행</h5><p>설치한 KakaoSample 앱을 ios simulator로 실행한 화면은 아래와 같습니다.</p>
-<p><img src="https://developers.kakao.com/assets/images/ios/sample_app_run.png" alt="sample_app_run"></p>
-<p>‘카카오계정으로 로그인’ 버튼을 클릭하면 카카오계정로그인 화면으로 이동합니다. 아래 왼쪽은 카카오톡이 설치되어 있지 않은 경우의 모습입니다. 로그인 후에는 아래 오른쪽 화면처럼 샘플앱을 기동시키기 위해 사용자 동의를 거칩니다.</p>
-<p>Signup 버튼을 눌러서 연결하고 me 버튼을 다시 누르면 아래 우측화면처럼 ‘내 정보’를 불러옵니다. ( 텍스트 박스에 값을 입력한 채로 signup 을 하면 signup 과 동시에 입력값들을 사용자 정보로서 저장하게 됩니다. )</p>
-<p>update 는 화면상의 입력값들로 사용자 정보를 갱신합니다. unlink 는 샘플앱과 카카오계정과의 연결을 끊습니다. 연결이 끊어지면 기존 사용자 정보는 모두 사라지고 샘플앱을 사용하기 위해서는 카카오계정 동의 절차를 다시 거쳐야 합니다.</p>
-<h4 id="문제해결"><a href="#문제해결" class="headerlink" title="문제해결"></a>문제해결</h4><p>시작하기를 진행하면서 어려움이 있거나, 샘플앱 등이 잘 실행되지 않는다면 아래의 경우를 참고해 보세요. 또한 <a href="https://devtalk.kakao.com/category/ios" target="_blank" rel="noopener">DevTalk_(카카오 개발자 포럼) for iOS</a>를 참고하세요.</p>
-<ul>
-<li><p>로그인 시도시 ‘+[NSBundle ko_appKey]: unrecognized selector sent to class 0x111111’의 에러가 발생하면서 앱이 크래쉬 되는 문제</p>
-<blockquote>
-<p>현재 작업중인 프로젝트에서 Other Linker Flags에 “-all_load”가 추가되었는지 확인해 봅니다. 자세한 내용은 <a href="https://developers.kakao.com/docs/ios#Kakao-SDK-import" target="_blank" rel="noopener">Kakao SDK import</a>를 참고합니다.</p>
-</blockquote>
-</li>
-<li><p>Other Linker Flags에 “-all_load”를 추가하였을 경우, 타 라이브러리와의 충돌로 빌드가 실패하는 경우</p>
-<blockquote>
-<p>“-all_load”대신에 “-force_load $(SRCROOT)/KakaoOpenSDK.framework/KakaoOpenSDK”를 사용하여 Kakao SDK를 강제 로드합니다.</p>
-</blockquote>
-</li>
-<li><p>웹뷰 등 취소 후 다시 로그인 시도시 “The operation is cancelled.”가 반복적으로 나오는 현상</p>
-<blockquote>
-<p>openWithCompletionHandler 호출 전에 [[KOSession sharedSession] close]를 해주는 로직이 빠지지 않았는지 확인합니다. 로그인 예제를 통해 구현을 다시 한번 확인합니다.</p>
-</blockquote>
-</li>
-</ul>
-<h4 id="더-알아보기"><a href="#더-알아보기" class="headerlink" title="더 알아보기"></a>더 알아보기</h4><p>앱 개발을 위한 기본 환경 설정이 모두 끝났습니다. 이제 카카오 플랫폼 서비스에서 제공하는 여러 기능들을 활용하여 앱을 개발해 보세요.</p>
-<ul>
-<li><a href="https://developers.kakao.com/docs/ios/user-management" target="_blank" rel="noopener">사용자 관리</a> 알아보기</li>
-<li><a href="https://developers.kakao.com/docs/ios/kakaotalk-link" target="_blank" rel="noopener">카카오링크</a> 알아보기</li>
-<li><a href="https://developers.kakao.com/docs/ios/kakaotalk-api" target="_blank" rel="noopener">카카오톡</a> 알아보기</li>
-<li><a href="https://developers.kakao.com/docs/ios/kakaonavi-api" target="_blank" rel="noopener">카카오내비</a> 알아보기</li>
-<li><a href="https://developers.kakao.com/docs/ios/kakaostory-api" target="_blank" rel="noopener">카카오스토리</a> 알아보기</li>
-<li><a href="https://developers.kakao.com/docs/ios/push-notification" target="_blank" rel="noopener">푸시 알림</a> 알아보기</li>
-</ul>
+        <h1 id="Kakao-api-시작하기-전에"><a href="#Kakao-api-시작하기-전에" class="headerlink" title="Kakao api 시작하기 전에"></a>Kakao api 시작하기 전에</h1><p>이 내용은 모두 <a href="[https://developers.kakao.com/docs/ios/kakao-talk-channel#%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1-%EC%B1%84%EB%84%90-%EC%B6%94%EA%B0%80%ED%95%98%EA%B8%B0](https://developers.kakao.com/docs/ios/kakao-talk-channel#카카오톡-채널-추가하기)">KakaoDevelopers 개발가이드</a>에 있는 내용임을 알립니다!</p>
+<p><a href="https://developers.kakao.com/" target="_blank" rel="noopener">개발자로 회원가입</a></p>
+<h1 id="시작하기"><a href="#시작하기" class="headerlink" title="시작하기"></a>시작하기</h1><h2 id="카카오-채널관리자-만들기"><a href="#카카오-채널관리자-만들기" class="headerlink" title="카카오 채널관리자 만들기"></a>카카오 채널관리자 만들기</h2><p>카카오톡채널 관리자센터<a href="https://accounts.kakao.com/login/kakaoforbusiness?continue=https://center-pf.kakao.com/" target="_blank" rel="noopener">여기</a>에접속</p>
+<p><a href="https://developers.kakao.com/features/kakao#카카오톡-채널-API" target="_blank" rel="noopener">https://developers.kakao.com/features/kakao#%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1-%EC%B1%84%EB%84%90-API</a></p>
 
     </article>
     <!-- license  -->
@@ -632,7 +539,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Kakao-api-시작하기-전에"><span class="toc-number">1.</span> <span class="toc-text">Kakao api 시작하기 전에</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#시작하기"><span class="toc-number">2.</span> <span class="toc-text">시작하기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#개발환경구성"><span class="toc-number">2.1.</span> <span class="toc-text">개발환경구성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kakao-SDK-설치-여기"><span class="toc-number">2.2.</span> <span class="toc-text">Kakao SDK 설치(여기)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#다운로드"><span class="toc-number">2.2.1.</span> <span class="toc-text">다운로드</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#압축풀기"><span class="toc-number">2.2.2.</span> <span class="toc-text">압축풀기</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#개발프로젝트-설정"><span class="toc-number">2.3.</span> <span class="toc-text">개발프로젝트 설정</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#프로젝트-생성"><span class="toc-number">2.3.0.0.1.</span> <span class="toc-text">프로젝트 생성</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Kakao-SDK-import"><span class="toc-number">2.3.0.0.2.</span> <span class="toc-text">Kakao SDK import</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#앱-생성"><span class="toc-number">2.4.</span> <span class="toc-text">앱 생성</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#프로젝트에-내-앱-설정"><span class="toc-number">2.4.0.0.1.</span> <span class="toc-text">프로젝트에 내 앱 설정</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#프로젝트에-내-앱-설정-iOS9-지원"><span class="toc-number">2.4.0.0.2.</span> <span class="toc-text">프로젝트에 내 앱 설정(iOS9 지원)</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Kakao-SDK가-사용하는-카카오-앱들의-커스텀-스킴-스위칭을-허용하는-화이트리스트-추가"><span class="toc-number">2.4.0.0.2.1.</span> <span class="toc-text">Kakao SDK가 사용하는 카카오 앱들의 커스텀 스킴 스위칭을 허용하는 화이트리스트 추가</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#보안-네트워크-통신을-원활히-하기-위해-Kakao-도메인의-화이트리스트-추가"><span class="toc-number">2.4.0.0.2.2.</span> <span class="toc-text">보안 네트워크 통신을 원활히 하기 위해 Kakao 도메인의 화이트리스트 추가</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#그-밖의-설정"><span class="toc-number">2.4.0.0.3.</span> <span class="toc-text">그 밖의 설정</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#샘플앱-실행"><span class="toc-number">2.4.1.</span> <span class="toc-text">샘플앱 실행</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#실행"><span class="toc-number">2.4.1.0.1.</span> <span class="toc-text">실행</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#문제해결"><span class="toc-number">2.4.1.1.</span> <span class="toc-text">문제해결</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#더-알아보기"><span class="toc-number">2.4.1.2.</span> <span class="toc-text">더 알아보기</span></a></li></ol></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Kakao-api-시작하기-전에"><span class="toc-number">1.</span> <span class="toc-text">Kakao api 시작하기 전에</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#시작하기"><span class="toc-number">2.</span> <span class="toc-text">시작하기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#카카오-채널관리자-만들기"><span class="toc-number">2.1.</span> <span class="toc-text">카카오 채널관리자 만들기</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1022,7 +929,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >Kakao_api 기본편</a>
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >Kakao_api_kakaotalkchannel</a>
         </li>
     
     
