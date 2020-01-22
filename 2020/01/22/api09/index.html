@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>api09 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >Hello LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">api09</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>Hello LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            api09
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "API">API</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "DRF">DRF</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">1.9k</span>Reading time: <span class="post-count reading-time">11 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/01/22</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="EP-09-Authentication과-Permissions"><a href="#EP-09-Authentication과-Permissions" class="headerlink" title="EP 09 - Authentication과 Permissions"></a>EP 09 - Authentication과 Permissions</h2><p>이제 API 요청을 처리할 때 접근제한을 지원해봅시다. 아무나 다른 사람의 글을 수정/삭제할 수 있어서는 안 되겠습니다.</p>
+<p>Django에서는 <code>auth</code>앱을 통해 <code>User</code>모델을 지원해주고 있습니다.</p>
+<p><code>User</code>모델을 통해 <code>Post</code>모델에 작성자를 기록해봅시다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># myapp/models.py</span></span><br><span class="line"><span class="keyword">from</span> django.conf <span class="keyword">import</span> settings  <span class="comment"># 추가</span></span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Post</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    author = models.ForeignKey(settings.AUTH_USER_MODEL)  <span class="comment"># 추가</span></span><br><span class="line">    title = models.CharField(max_length=<span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+
+<p>모델 변경이 발생했으니, 마이그레이션을 해줘야겠죠? :)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; python3 manage.py makemigrations myapp</span><br><span class="line"></span><br><span class="line">You are trying to add a non-nullable field &apos;author&apos; to post without a default; we can&apos;t do that (the database needs something to populate existing rows).</span><br><span class="line">Please select a fix:</span><br><span class="line"> 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)</span><br><span class="line"> 2) Quit, and let me add a default in models.py</span><br><span class="line">Select an option: 1</span><br><span class="line">Please enter the default value now, as valid Python</span><br><span class="line">The datetime and django.utils.timezone modules are available, so you can do e.g. timezone.now</span><br><span class="line">Type &apos;exit&apos; to exit this prompt</span><br><span class="line">&gt;&gt;&gt; 1</span><br><span class="line"></span><br><span class="line">쉘&gt; python3 manage.py migrate myapp</span><br></pre></td></tr></table></figure>
+
+<p>필수필드로서 <code>author</code> 필드를 추가했기 때문에 <code>makemigrations</code> 명령 수행 시에 질문이 나옵니다. 마이그레이션에 대해서 가물가물하신 분은 “<a href="https://nomade.kr/vod/django/9/" target="_blank" rel="noopener">장고 기본편 Migration</a>“ VOD 에피소드를 참고하세요.</p>
+<p>이제 json api 요청을 하면, author부분은 Primary Key값이 지정되어 다음과 같은 응답이 옵니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http GET :8000/1/</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;author&quot;: 1,</span><br><span class="line">    # 중략</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="사용자-인증을-처리해봅시다-Authentication"><a href="#사용자-인증을-처리해봅시다-Authentication" class="headerlink" title="사용자 인증을 처리해봅시다. (Authentication)"></a>사용자 인증을 처리해봅시다. (Authentication)</h2><p>지원하는 인증의 종류 (<code>rest_framework/authentication.py</code>)</p>
+<ul>
+<li>SessionAuthentication<ul>
+<li>세션을 통한 인증 여부 체크</li>
+<li>APIView를 통해 디폴트 지정 (우선순위 1)</li>
+</ul>
+</li>
+<li>BasicAuthentication<ul>
+<li>Basic 인증헤더를 통한 인증 수행 (ex: <code>Authorization: Basic YWxsaWV1czE6MTAyOXNoYWtl</code>)</li>
+<li>APIView를 통해 디폴트 지정 (우선순위 2)</li>
+</ul>
+</li>
+<li>TokenAuthentication<ul>
+<li>Token 헤더를 통한 인증 수행 (ex: <code>Authorization: Token 401f7ac837da42b97f613d789819ff93537bee6a</code>)</li>
+</ul>
+</li>
+<li>RemoteUserAuthentication<ul>
+<li>User 정보가 다른 서비스에서 관리될 때, Remote 인증 (<a href="https://docs.djangoproject.com/en/1.11/howto/auth-remote-user/" target="_blank" rel="noopener">장고 공식문서</a>)</li>
+<li>Remote-User 헤더를 통한 인증 수행</li>
+</ul>
+</li>
+</ul>
+<p>인증 처리 순서</p>
+<ol>
+<li>매 요청 시마다 APIView의 dispatch(request) 호출</li>
+<li>APIView의 initial(request) 호출</li>
+<li>APIView의 perform_authentication(request) 호출</li>
+<li>Request의 user Property 호출</li>
+<li>Request의 _authenticate() 호출<ul>
+<li>APIView를 통해 지정된 Authentication 호출</li>
+</ul>
+</li>
+</ol>
+<p>포스팅을 저장할 때, 현재 인증된 유저 정보를 기록토록 해보겠습니다. author필드를 API를 통해 지정되지 않도록 <code>PostSerializer</code>의 <code>Meta.fields</code>에서 author필드를 제외시켜주세요.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># myapp/serializers.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostSerializer</span><span class="params">(...)</span>:</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">        model = ...</span><br><span class="line">        fields = [<span class="string">'pk'</span>, <span class="string">'title'</span>, <span class="string">'content'</span>]</span><br></pre></td></tr></table></figure>
+
+<p>이제 API를 통해 Post 저장 시에 현재 인증된 유저를 지정해봅시다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># myapp/views.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(viewsets.ModelViewSet)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">perform_create</span><span class="params">(self, serializer)</span>:</span>  <span class="comment"># 추가</span></span><br><span class="line">        serializer.save(author=self.request.user)  <span class="comment"># 추가</span></span><br></pre></td></tr></table></figure>
+
+<p><code>perform_create</code> 함수는 <code>rest_framework/mixins.py</code>내 <code>CreateModelMixin</code> 클래스에서 <code>create</code>시에 호출을 하고 있습니다. 원래 구현은 단순히 <code>serializer.save()</code> 이지만, 메소드 오버라이딩을 통해 저장할 필드를 추가로 지정해줬습니다. <code>serializer.save(**kwargs)</code>함수는 <code>kwargs</code> 항목을 통해, 추가로 저장할 필드를 지정할 수 있습니다.</p>
+<p>다음과 같이 요청해보면 500 에러응답을 받습니다. API 요청 시에 인증정보를 제공하지 않았기 때문에 <code>self.request.user</code>에 AnonymouseUser 인스턴스가 할당되어 모델저장에 실패한 것입니다. 외래키에는 “모델 객체”가 아닌 “파이썬 객체”는 할당할 수 없습니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http --form POST :8000 title=t1 content=c1</span><br><span class="line">HTTP/1.0 500 Internal Server Error</span><br></pre></td></tr></table></figure>
+
+<p><code>perform_create</code> 호출 전에 인증여부를 체크하는 것이 필요하겠습니다만, 이는 뒤에서 살펴보겠습니다.</p>
+<p>다음 명령으로 API 요청 시에 <strong>HTTP Basic 인증헤더</strong>를 제공해봅시다. <code>--auth</code> 인자로 웹로그인 아이디/암호를 지정해주세요.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http --auth username:password --form POST :8000 title=t1 content=c1</span><br></pre></td></tr></table></figure>
+
+<p>이 요청에서 <code>&quot;username:password&quot;</code> 문자열은 base64로 인코딩되어 Authorization 헤더로 전달되고, 이 헤더를 BasicAuthorization에서 인지하여 인증을 처리합니다. <code>httpbin.org</code>를 통해 헤더를 확인해봅시다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http -a username:password --form POST httpbin.org/post</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;args&quot;: &#123;&#125;,</span><br><span class="line">    &quot;data&quot;: &quot;&quot;,</span><br><span class="line">    &quot;files&quot;: &#123;&#125;,</span><br><span class="line">    &quot;form&quot;: &#123;&#125;,</span><br><span class="line">    &quot;headers&quot;: &#123;</span><br><span class="line">        &quot;Accept&quot;: &quot;*/*&quot;,</span><br><span class="line">        &quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;,</span><br><span class="line">        &quot;Authorization&quot;: &quot;Basic dXNlcm5hbWU6cGFzc3dvcmQ=&quot;,</span><br><span class="line">        &quot;Connection&quot;: &quot;close&quot;,</span><br><span class="line">        &quot;Content-Length&quot;: &quot;0&quot;,</span><br><span class="line">        &quot;Content-Type&quot;: &quot;application/x-www-form-urlencoded; charset=utf-8&quot;,</span><br><span class="line">        &quot;Host&quot;: &quot;httpbin.org&quot;,</span><br><span class="line">        &quot;User-Agent&quot;: &quot;HTTPie/0.9.9&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;json&quot;: null,</span><br><span class="line">    &quot;origin&quot;: &quot;221.148.61.230&quot;,</span><br><span class="line">    &quot;url&quot;: &quot;http://httpbin.org/post&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>base64 인코딩은 파이썬에서는 다음과 같이 확인해보실 수 있습니다.</p>
+<p>In [7]:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from base64 import b64encode</span><br><span class="line"></span><br><span class="line">b64encode(b&apos;username:password&apos;)</span><br></pre></td></tr></table></figure>
+
+<p>Out[7]:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b&apos;dXNlcm5hbWU6cGFzc3dvcmQ=&apos;</span><br></pre></td></tr></table></figure>
+
+<p>base64 인코딩된 문자열은 손쉽게 디코딩해서 원본 문자열을 확득할 수 있습니다.</p>
+<p>In [9]:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from base64 import b64decode</span><br><span class="line"></span><br><span class="line">b64decode(b&apos;dXNlcm5hbWU6cGFzc3dvcmQ=&apos;)</span><br></pre></td></tr></table></figure>
+
+<p>Out[9]:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b&apos;username:password&apos;</span><br></pre></td></tr></table></figure>
+
+<h3 id="웹브라우저를-통한-API-접근에서-로그인-로그아웃-지원하기"><a href="#웹브라우저를-통한-API-접근에서-로그인-로그아웃-지원하기" class="headerlink" title="웹브라우저를 통한 API 접근에서 로그인/로그아웃 지원하기"></a>웹브라우저를 통한 API 접근에서 로그인/로그아웃 지원하기</h3><p>django-rest-framework는 웹브라우저를 통한 API 접근도 지원해주기에, 웹브라우저를 통한 로그인/로그아웃도 지원해주고 있습니다. 이는 <code>auth</code>앱의 <code>login</code>/<code>logout</code>뷰를 그대로 활용하고 있으며, 템플릿만 <code>rest_framework/login.html</code>로 변경해서 적용되어있습니다.</p>
+<p>웹브라우저로 <code>http://localhost:8000</code>에 접속해보시면, 화면 우상단에 <code>&#39;Login&#39;</code>버튼이 없습니다. <code>프로젝트/urls.py</code>에 다음과 같이 URLConf 설정을 변경해주세요.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.conf.urls <span class="keyword">import</span> include  <span class="comment"># 추가가 안 되어있다면, 추가</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 중략</span></span><br><span class="line"></span><br><span class="line">urlpatterns += [</span><br><span class="line">    url(<span class="string">r'^api-auth/'</span>, include(<span class="string">'rest_framework.urls'</span>, namespace=<span class="string">'rest_framework'</span>)),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>이제 Login버튼이 보여집니다. 클릭해서 로그인을 수행해보세요. :D</p>
+<h3 id="권한-Permission-시스템-비인증-요청에-한해서-읽기권한만-부여하기"><a href="#권한-Permission-시스템-비인증-요청에-한해서-읽기권한만-부여하기" class="headerlink" title="권한 (Permission) 시스템 - 비인증 요청에 한해서 읽기권한만 부여하기"></a>권한 (Permission) 시스템 - 비인증 요청에 한해서 읽기권한만 부여하기</h3><p><code>django-rest-framework</code>에서는 Permission 시스템을 제공해주고 있습니다.</p>
+<p>권한 체크는 다음 기본 룰을 가집니다.</p>
+<ul>
+<li>is_superuser=True 유저는 별도 Permission을 지정하지 않아도 모든 권한이 허용</li>
+<li>is_staff=True 유저는 /admin/ 접속만 가능할 뿐, 일반 유저와 동일하게 허용된 권한만 가능</li>
+<li>is_active=False 유저는 권한 지정여부에 상관없이, 모든 권한 <strong>불허</strong></li>
+</ul>
+<p><code>django-rest-framework</code>에서 기본 제공하는 Permission는 다음과 같습니다.</p>
+<ol>
+<li>AllowAny : 인증여부에 상관없이, 뷰 호출 허용 (디폴트 지정)</li>
+<li>IsAuthenticated : 인증된 요청에 한해서, 뷰 호출 허용</li>
+<li>IsAdminUser : Staff 인증 요청에 한해서, 뷰 호출 허용</li>
+<li>IsAuthenticatedOrReadOnly : 비인증 요청에게는, 읽기 권한만 허용</li>
+<li>DjangoModelPermissions : 인증된 요청에 한해서만 뷰 호출을 허용하고, 추가로 유저별 인증 권한체크를 수행</li>
+<li>DjangoModelPermissionsOrAnonReadOnly : DjangoModelPermissions과 유사하나, 비인증 요청에 대해서는 읽기 권한만 허용</li>
+<li>DjangoObjectPermissions<ul>
+<li>비인증된 요청은 거부</li>
+<li>인증된 요청에 한, Record 접근에 대한 권한체크를 추가로 수행</li>
+</ul>
+</li>
+</ol>
+<p>APIView 클래스에서는 permission_classes 속성을 통해 API별로 권한 체크를 다르게 가져갈 수 있습니다. ViewSet은 APIView를 상속받았으므로 동일하게 지정가능합니다. 다음과 같이 <code>IsAuthenticated</code>를 지정해보세요.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.permissions <span class="keyword">import</span> AllowAny, IsAuthenticated</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(viewsets.ModelViewSet)</span>:</span></span><br><span class="line">    permission_classes = [</span><br><span class="line">        <span class="comment"># AllowAny, # 디폴트</span></span><br><span class="line">        IsAuthenticated,</span><br><span class="line">    ]</span><br><span class="line">    <span class="comment"># 생략</span></span><br></pre></td></tr></table></figure>
+
+<p>이제 인증되지 않은 모든 요청에 대해서는 모두 거부 403 Forbidden 응답을 받게됩니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http :8000/1/</span><br><span class="line">HTTP/1.0 403 Forbidden</span><br><span class="line">중략</span><br><span class="line">&#123;</span><br><span class="line">    &quot;detail&quot;: &quot;Authentication credentials were not provided.&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>다음과 같이 인증에 통과하면, 해당 API요청은 정상적으로 처리됩니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http --auth username:password :8000/1/</span><br><span class="line"></span><br><span class="line">HTTP/1.0 200 OK</span><br><span class="line">중략</span><br><span class="line">&#123;</span><br><span class="line">    &quot;content&quot;: &quot;c1&quot;,</span><br><span class="line">    &quot;pk&quot;: 1,</span><br><span class="line">    &quot;title&quot;: &quot;t1&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="커스텀-Permission-만들기"><a href="#커스텀-Permission-만들기" class="headerlink" title="커스텀 Permission 만들기"></a>커스텀 Permission 만들기</h3><p><code>django-rest-framework</code>에서 기본 제공해주는 Permission만으로도 대개 충분합니다만, 필요에 의해 커스텀 Permission을 만들고 싶을 수 있습니다.</p>
+<p>모든 Permission 클래스는 다음 2가지 함수를 선택적으로 구현합니다.</p>
+<ul>
+<li><pre><code>has_permission(request, view)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">  : 뷰 호출 접근권한</span><br><span class="line"></span><br><span class="line">  - APIView 접근 시, 체크</span><br><span class="line">  - 이를 구현한 Permission 클래스 : IsAuthenticated, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly</span><br><span class="line"></span><br><span class="line">-</span><br></pre></td></tr></table></figure>
+has_object_permission(request, view, obj)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">  : 개별 Record 접근권한</span><br><span class="line"></span><br><span class="line">  - APIView의 get_object함수를 통해 object 획득 시, 체크 - 개별 GET/PUT/DELETE 요청</span><br><span class="line">  - 브라우저를 통한 API 접근에서 CREATE/UPDATE Form 노출 여부 확인 시에, 체크</span><br><span class="line">  - 이를 구현한 Permission 클래스 : DjangoObjectPermissions</span><br><span class="line"></span><br><span class="line">기본 Permission 클래스 코드를 살펴보면, Permission 구현에 대한 이해도를 보다 높일 수 있습니다.</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line"># rest_framework/permissions.py</span><br><span class="line"></span><br><span class="line"># 안전한 메소드 종류. 이 METHOD만으로는 단순 조회만 될 뿐, 데이터를 파괴 (추가/수정/삭제) 하지 못합니다.</span><br><span class="line">SAFE_METHODS = (&apos;GET&apos;, &apos;HEAD&apos;, &apos;OPTIONS&apos;)</span><br><span class="line"></span><br><span class="line"># 인증여부에 상관없이, 뷰 호출 허용</span><br><span class="line">class AllowAny(BasePermission):</span><br><span class="line">    def has_permission(self, request, view):</span><br><span class="line">        return True</span><br><span class="line"></span><br><span class="line"># 인증된 요청에 한해서, 뷰 호출 허용</span><br><span class="line">class IsAuthenticated(BasePermission):</span><br><span class="line">    def has_permission(self, request, view):</span><br><span class="line">        return request.user and request.user.is_authenticated</span><br><span class="line"></span><br><span class="line"># Staff 인증 요청에 한해서, 뷰 호출 허용</span><br><span class="line">class IsAdminUser(BasePermission):</span><br><span class="line">    def has_permission(self, request, view):</span><br><span class="line">        return request.user and request.user.is_staff</span><br><span class="line"></span><br><span class="line"># 비인증 요청에게는, 읽기 권한만 허용</span><br><span class="line">class IsAuthenticatedOrReadOnly(BasePermission):</span><br><span class="line">    def has_permission(self, request, view):</span><br><span class="line">        # 안전한 METHOD요청이면, 인증여부에 상관없이, 뷰 호출 허용</span><br><span class="line">        if request.method in SAFE_METHODS:</span><br><span class="line">            return True</span><br><span class="line">        # 안전하지 않은 METHOD일 경우, 인증유저에게만, 뷰 호출 허용</span><br><span class="line">        elif request.user and is_authenticated(request.user):</span><br><span class="line">            return True</span><br><span class="line">        # 안전하지 않은 METHOD일 경우, 비인증유저에게는, 뷰 호출 제한</span><br><span class="line">        return False</span><br><span class="line"></span><br><span class="line"># 인증된 요청에 한해서만 뷰 호출을 허용하고, 추가로 유저별 인증 권한체크를 수행합니다.</span><br><span class="line"># Django에서는 유저/그룹 별로 add/change/delete 권한을 세팅할 수 있습니다.</span><br><span class="line">class DjangoModelPermissions(BasePermission):</span><br><span class="line">    # 디폴트 설정으로, 인증된 유저에 한해서 권한 체크</span><br><span class="line">    authenticated_users_only = True</span><br><span class="line"></span><br><span class="line">    # perms_map을 통해, METHOD별로 체크할 권한을 지정합니다.</span><br><span class="line">    perms = &#123;</span><br><span class="line">        # GET/OPTIONS/OPTIONS에 대해서는 별도 권한 체크를 하지 않습니다.</span><br><span class="line">        &apos;GET&apos;: [],</span><br><span class="line">        &apos;OPTIONS&apos;: [],</span><br><span class="line">        &apos;GET&apos;: [],</span><br><span class="line"></span><br><span class="line">        # POST 요청 : 해당 모델에 대한 add 권한 체크</span><br><span class="line">        &apos;POST&apos;: [&apos;%(app_label)s.add_%(model_name)&apos;],</span><br><span class="line"></span><br><span class="line">        # PUT/PATCH 요청 : 해당 모델에 대한 change 권한 체크</span><br><span class="line">        &apos;PUT&apos;: [&apos;%(app_label)s.add_%(model_name)&apos;],</span><br><span class="line">        &apos;PATCH&apos;: [&apos;%(app_label)s.add_%(model_name)&apos;],</span><br><span class="line"></span><br><span class="line">        # DELETE 요청 : 해당 모델에 대한 delete 권한 체크</span><br><span class="line">        &apos;DELETE&apos;: [&apos;%(app_label)s.add_%(model_name)&apos;],</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    def has_permission(self, request, view):</span><br><span class="line">        # 뷰에 &apos;_ignore_model_permissions&apos; 플래그가 True일 경우, 별도 체크없이, 모든 뷰 호출 허용</span><br><span class="line">        if getattr(view, &apos;_ignore_model_permissions&apos;, False):</span><br><span class="line">            return True</span><br><span class="line"></span><br><span class="line">        # 중략</span><br><span class="line"></span><br><span class="line">        # 1) 현재 유저의 권한 체크</span><br><span class="line">        has_perms = request.user.has_perms(perms)</span><br><span class="line"></span><br><span class="line">        # 2) authenticated_users_only=True일 때에만, 유저의 인증여부 체크</span><br><span class="line">        is_auth = (not authenticated_users_only) or (request.user and request.user.is_authenticated)</span><br><span class="line"></span><br><span class="line">        return has_perms and is_auth</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># DjangoModelPermissions과 유사하나, 비인증 요청에 대해서는 읽기 권한만 부여합니다.</span><br><span class="line">class DjangoModelPermissionsOrAnonReadOnly(DjangoModelPermissions):</span><br><span class="line">    authenticated_users_only = False</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># DjangoModelPermissions의 has_permissions을 먼저 수행하고 권한이 있을 경우</span><br><span class="line">#   (인증된 요청에 한해서만 권한 체크를 수행합니다.)</span><br><span class="line"># 추가로 Record 접근에 대한 권한체크를 추가로 수행합니다.</span><br><span class="line">class DjangoObjectPermissions(DjangoModelPermissions):</span><br><span class="line">    def has_object_permissions(self, request, view, obj):</span><br><span class="line">        # 중략</span><br><span class="line">        if not user.has_perms(perms, obj):</span><br><span class="line">            # 404 Not Found 응답을 할 지, 403 Forbidden(권한없음) 응답을 할지 결정</span><br><span class="line"></span><br><span class="line">            # 현재 요청이 SAFE METHOD라면 404 처리</span><br><span class="line">            # 읽기 권한에 대해서는 이미 체크되었고, 거부되었기에 더 이상의 체크가 필요없습니다.</span><br><span class="line">            if request.method in SAFE_METHODS:</span><br><span class="line">                raise Http404</span><br><span class="line"></span><br><span class="line">            # 중략</span><br><span class="line"></span><br><span class="line">            # GET METHOD 에 대해서도 권한이 없다면 404 처리</span><br><span class="line">            if not user.has_perms(read_perms, obj):</span><br><span class="line">                raise Http404</span><br><span class="line"></span><br><span class="line">            # 403 응답</span><br><span class="line">            return False</span><br><span class="line"></span><br><span class="line">        return True</span><br></pre></td></tr></table></figure>
+</code></pre></li>
+</ul>
+<h4 id="포스팅-작성자에-한해서-수정-삭제-권한-부여해봅시다"><a href="#포스팅-작성자에-한해서-수정-삭제-권한-부여해봅시다" class="headerlink" title="포스팅 작성자에 한해서, 수정/삭제 권한 부여해봅시다."></a>포스팅 작성자에 한해서, 수정/삭제 권한 부여해봅시다.</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> permissions</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IsAuthorOrReadonly</span><span class="params">(permissions.BasePermission)</span>:</span></span><br><span class="line">    <span class="comment"># 인증된 유저에 한해, 목록조회/포스팅등록을 허용</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">has_permission</span><span class="params">(self, request, view)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> request.user.is_authenticated</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 작성자에 한해, Record에 대한 수정/삭제 허용</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">has_object_permission</span><span class="params">(self, request, view, obj)</span>:</span></span><br><span class="line">        <span class="comment"># 조회 요청(GET, HEAD, OPTIONS) 에 대해서는 인증여부에 상관없이 허용</span></span><br><span class="line">        <span class="keyword">if</span> request.method <span class="keyword">in</span> permissions.SAFE_METHODS:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># PUT, DELETE 요청에 대해, 작성자일 경우에만 요청 허용</span></span><br><span class="line">        <span class="keyword">return</span> obj.author == request.user</span><br></pre></td></tr></table></figure>
+
+<h4 id="포스팅-작성자에-한해서-수정-권한은-부여하되-삭제권한은-superuser에게만-부여해봅시다"><a href="#포스팅-작성자에-한해서-수정-권한은-부여하되-삭제권한은-superuser에게만-부여해봅시다" class="headerlink" title="포스팅 작성자에 한해서, 수정 권한은 부여하되 삭제권한은 superuser에게만 부여해봅시다."></a>포스팅 작성자에 한해서, 수정 권한은 부여하되 삭제권한은 superuser에게만 부여해봅시다.</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> permissions</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IsAuthorUpdateOrReadonly</span><span class="params">(permissions.BasePermission)</span>:</span></span><br><span class="line">    <span class="comment"># 인증된 유저에 한해, 목록조회/포스팅등록을 허용</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">has_permission</span><span class="params">(self, request, view)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> request.user.is_authenticated</span><br><span class="line"></span><br><span class="line">    <span class="comment"># superuser에게는 삭제 권한만 부여하고</span></span><br><span class="line">    <span class="comment"># 작성자에게는 수정 권한만 부여해봅시다.</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">has_object_permission</span><span class="params">(self, request, view, obj)</span>:</span></span><br><span class="line">        <span class="comment"># 조회 요청(GET, HEAD, OPTIONS) 에 대해서는 인증여부에 상관없이 허용</span></span><br><span class="line">        <span class="keyword">if</span> request.method <span class="keyword">in</span> permissions.SAFE_METHODS:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 삭제 요청의 경우, superuser에게만 허용</span></span><br><span class="line">        <span class="keyword">if</span> (request.method == <span class="string">'DELETE'</span>):</span><br><span class="line">            <span class="keyword">return</span> request.user.is_superuser  <span class="comment"># request.user.is_staff</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># PUT 요청에 대해, 작성자일 경우에만 요청 허용</span></span><br><span class="line">        <span class="keyword">return</span> obj.author == request.user</span><br></pre></td></tr></table></figure>
+
+<h2 id="포스팅-조회-응답에-작성자-필드를-추가해봅시다"><a href="#포스팅-조회-응답에-작성자-필드를-추가해봅시다" class="headerlink" title="포스팅 조회 응답에 작성자 필드를 추가해봅시다."></a>포스팅 조회 응답에 작성자 필드를 추가해봅시다.</h2><p>포스팅 조회 응답에 작성자 정보는 꼭 필요합니다. 이는 직렬화의 영역이므로 PostSerializer를 수정해야 합니다. PostSerializer.Meta.fields에 외래키인 author를 지정한다면 생성/수정 시에 author 지정이 가능해집니다. 그런데 author는 서버에서 인증에 의해서만 지정이 되어야합니다. 이때 <code>serializers.ReadOnlyField(source=&#39;참조할필드명.속성명&#39;)</code>을 써보세요.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> serializers</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Post</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostSerializer</span><span class="params">(serializers.ModelSerializer)</span>:</span></span><br><span class="line">    author_username = serializers.ReadOnlyField(source=<span class="string">'author.username'</span>)  <span class="comment"># 추가</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">        model = Post</span><br><span class="line">        fields = [<span class="string">'pk'</span>, <span class="string">'author_username'</span>, <span class="string">'title'</span>, <span class="string">'cotnent'</span>]  <span class="comment"># 'author_username' 추가</span></span><br></pre></td></tr></table></figure>
+
+<p>이제 조회해보면 <code>author_username</code> 필드가 조회됨을 확인하실 수 있습니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http :8000/1/</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;author_username&quot;: &quot;askdjango&quot;,</span><br><span class="line">    &quot;content&quot;: &quot;c1&quot;,</span><br><span class="line">    &quot;pk&quot;: 1,</span><br><span class="line">    &quot;title&quot;: &quot;t1&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/01/21/api08/" title= "api08">
+                    <div class="prevTitle">api08</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" target="_blank" rel="noopener" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#EP-09-Authentication과-Permissions"><span class="toc-number">1.</span> <span class="toc-text">EP 09 - Authentication과 Permissions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#사용자-인증을-처리해봅시다-Authentication"><span class="toc-number">2.</span> <span class="toc-text">사용자 인증을 처리해봅시다. (Authentication)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#웹브라우저를-통한-API-접근에서-로그인-로그아웃-지원하기"><span class="toc-number">2.1.</span> <span class="toc-text">웹브라우저를 통한 API 접근에서 로그인/로그아웃 지원하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#권한-Permission-시스템-비인증-요청에-한해서-읽기권한만-부여하기"><span class="toc-number">2.2.</span> <span class="toc-text">권한 (Permission) 시스템 - 비인증 요청에 한해서 읽기권한만 부여하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#커스텀-Permission-만들기"><span class="toc-number">2.3.</span> <span class="toc-text">커스텀 Permission 만들기</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#포스팅-작성자에-한해서-수정-삭제-권한-부여해봅시다"><span class="toc-number">2.3.1.</span> <span class="toc-text">포스팅 작성자에 한해서, 수정/삭제 권한 부여해봅시다.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#포스팅-작성자에-한해서-수정-권한은-부여하되-삭제권한은-superuser에게만-부여해봅시다"><span class="toc-number">2.3.2.</span> <span class="toc-text">포스팅 작성자에 한해서, 수정 권한은 부여하되 삭제권한은 superuser에게만 부여해봅시다.</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#포스팅-조회-응답에-작성자-필드를-추가해봅시다"><span class="toc-number">3.</span> <span class="toc-text">포스팅 조회 응답에 작성자 필드를 추가해봅시다.</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 28
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/api09/" >api09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/api08/" >api08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/api05/" >api 기본편 5 + 6 + 7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/api04/" >api 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/api03/" >api 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/api02/" >api 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/api01/" >api 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/html/" >html</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="Terminal"><span class="iconfont-archer">&#xe606;</span>Terminal</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Crawling"><span class="iconfont-archer">&#xe606;</span>Crawling</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="Terminal"><span class="iconfont-archer">&#xe60a;</span>Terminal</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
