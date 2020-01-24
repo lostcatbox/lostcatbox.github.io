@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>Markdown 기본사용법 · lostcatbox</title>
+    <title>api 기본편 12 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >Hello LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">Markdown 기본사용법</a>
+                <a href="#" class="post-name">api 기본편 12</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            Markdown 기본사용법
+            api 기본편 12
             <!-- 404 -->
             
         </h1>
@@ -266,18 +266,20 @@ height:50vh;
                 
                     <div class= post-intro-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Markdown">Markdown</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "API">API</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "DRF">DRF</a>
     
 </div>
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">288</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">852</span>Reading time: <span class="post-count reading-time">5 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2019/10/20</span>
+                    <span class="post-intro-time">2020/01/24</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -401,89 +403,95 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="따라오시기-전"><a href="#따라오시기-전" class="headerlink" title="#따라오시기 전 "></a>#따라오시기 전 <br></h1><hr>
+        <h1 id="EP-12-PostAPIView-차근차근-응답시간-줄여보기"><a href="#EP-12-PostAPIView-차근차근-응답시간-줄여보기" class="headerlink" title="EP 12. PostAPIView 차근차근 응답시간 줄여보기"></a>EP 12. PostAPIView <strong>차근차근 응답시간 줄여보기</strong></h1><h2 id="관련-문서"><a href="#관련-문서" class="headerlink" title="관련 문서"></a>관련 문서</h2><p>원문 : Web API performance: profiling Django REST framework 장고 공식문서</p>
 <ul>
-<li>마크업 언어의 한 종류.</li>
-<li>헥소의 <a href="https://hexo.io/ko/docs/tag-plugins.html" target="_blank" rel="noopener">Tag Plugins 문서</a> 참조.</li>
-<li><a href="https://tbr74.github.io/2017/07/09/Study-Hexo-2017-07-09-hexo-markdown/" target="_blank" rel="noopener">블로그 참조</a></li>
-<li>명령어 뒤에 띄어쓰기를 해야 명령으로 인식합니다</li>
-<li>직접 해보면서 따라오세요</li>
+<li>Performance and optimization</li>
+<li>Database access optimization</li>
 </ul>
-<hr>
-<h1 id="머리글"><a href="#머리글" class="headerlink" title="머리글"></a>머리글</h1><hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">markdown</span><br><span class="line"># text</span><br><span class="line">## text2</span><br><span class="line">### text3</span><br><span class="line">#### text4</span><br><span class="line">##### text5</span><br></pre></td></tr></table></figure>
-<p><strong>(박스아래에는 실행결과를 표시해드립니다)</strong></p>
-<h1 id="text"><a href="#text" class="headerlink" title="text"></a>text</h1><h2 id="text2"><a href="#text2" class="headerlink" title="text2"></a>text2</h2><h3 id="text3"><a href="#text3" class="headerlink" title="text3"></a>text3</h3><h4 id="text4"><a href="#text4" class="headerlink" title="text4"></a>text4</h4><h5 id="text5"><a href="#text5" class="headerlink" title="text5"></a>text5</h5><p>(5개이상부터는 4개와 같은 것을 볼 수 있습니다)</p>
-<hr>
-<h1 id="링크"><a href="#링크" class="headerlink" title="링크"></a>링크</h1><hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% raw %&#125;</span><br><span class="line">[텍스트](http주소) &lt;&lt; 텍스트만 보임</span><br><span class="line">&lt;http주소&gt; &lt;&lt;주소가 보이고 클릭하면 이동</span><br><span class="line">[![텍스트](이미지경로.jpg or 이미지주소)](http주소) &lt;&lt; 이미지만 보이고 클릭하면 이동</span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="왜-최적화를-해야하나요"><a href="#왜-최적화를-해야하나요" class="headerlink" title="왜 최적화를 해야하나요?"></a><strong>왜 최적화를 해야하나요</strong>?</h2><ul>
+<li><p>보다빠르게동작하는프로그램을위해!!!</p>
+<ul>
+<li>보다낮은CPU타임</li>
+<li>보다낮은메모리소모</li>
+</ul>
+</li>
+<li><p>개발비용이가장큰리소스입니다.=&gt;개발시간+인건비</p>
+</li>
+<li><p>최적화를통해성능은높아지지만,유지관리성이낮아질수도있습니다.=&gt;가성비를 체크해보세요.</p>
+</li>
+<li><p>한영역의개선이다른부분을희생시킬수있습니다.</p>
+<p>ex) CPU 연산을 아꼈는데, 메모리 소모가 늘었다.</p>
+</li>
+</ul>
+<h2 id="시작하기에-앞서"><a href="#시작하기에-앞서" class="headerlink" title="시작하기에 앞서"></a><strong>시작하기에 앞서</strong></h2><p>Throttle와 Pagination은 꺼주시고, 현재, DB Record갯수가 적기에 … <strong>뻥튀기</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from ep08.models import Post</span><br><span class="line"></span><br><span class="line">post = Post.objects.first()</span><br><span class="line"></span><br><span class="line">for i in range(100):</span><br><span class="line"> post.id = None # Django Model은 id=None일 경우, CREATE를 수행합니다.</span><br><span class="line"></span><br><span class="line">post.save()</span><br></pre></td></tr></table></figure>
 
-<p><a href="http://img.hani.co.kr/imgdb/resize/2018/0313/00500561_20180313.JPG" target="_blank" rel="noopener">고양이</a><br><a href="http://img.hani.co.kr/imgdb/resize/2018/0313/00500561_20180313.JPG" target="_blank" rel="noopener">http://img.hani.co.kr/imgdb/resize/2018/0313/00500561_20180313.JPG</a><br><a href="https://www.google.com/" target="_blank" rel="noopener"><img src="http://img.hani.co.kr/imgdb/resize/2018/0313/00500561_20180313.JPG" alt="고양이"></a><br><del>(맨마지막은 사진뷰어가 실행될것이다… 블로거 현재 테마가 뷰어로 불러오는거라.. 가볍게무시해주자)</del></p>
-<h2 id="코드-블럭"><a href="#코드-블럭" class="headerlink" title="코드 블럭"></a>코드 블럭</h2><p>이것은 ‘```’뒤에 언어를 명시하면 해당 언어의 문법에 맞게 하이라이트를 해준다.<br>(참고로 맥북을 쓸때 저거대신 ₩가 나오면 정상.. 옵션키누르면서 눌러보자!)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">​```language // python, bash</span><br><span class="line">`3개 시작하는곳 옆에 적어넣으면된다!</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line">for cat in cats</span><br><span class="line">    return &quot;고양이&quot;</span><br></pre></td></tr></table></figure>
-<hr>
-<h1 id="검정색-백그라운드"><a href="#검정색-백그라운드" class="headerlink" title="검정색 백그라운드"></a>검정색 백그라운드</h1><hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre&gt; ~~ &lt;/pre&gt;</span><br></pre></td></tr></table></figure>
-<pre> 고양이 개좋아~!
-</pre>
-<p>(태그속성이므로 꼭 마지막에 닫아주는 &lt;/~~&gt; 필요)</p>
-<hr>
-<h1 id="글자효과들"><a href="#글자효과들" class="headerlink" title="글자효과들"></a>글자효과들</h1><hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">**catissosweet**, __catissosweet__ (굵게, 강조)</span><br><span class="line">*catissosweet*, _catissosweet_ (기울여)</span><br><span class="line">~~catissosweet~~ (취소선)</span><br><span class="line">&lt;u&gt; ~~ &lt;/u&gt; (밑줄)</span><br><span class="line">**cat_is_so**_sweet_ (응용)</span><br></pre></td></tr></table></figure>
-<p><strong>catissosweet</strong>, <strong>catissosweet</strong> (굵게, 강조)<br><em>catissosweet</em>, <em>catissosweet</em> (기울여)<br><del>catissosweet</del> (취소선)<br><u> ~~ </u> (밑줄)<br><strong>cat_is_so</strong><em>sweet</em> (응용)</p>
-<hr>
-<h1 id="수평선"><a href="#수평선" class="headerlink" title="수평선"></a>수평선</h1><hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-------, *********** (여러개면 됨)</span><br></pre></td></tr></table></figure>
+<p>주의: 실제 서비스에서는 id=None과 같은 코드는 절대 쓰지 마세요.</p>
+<h2 id="측정-Metric"><a href="#측정-Metric" class="headerlink" title="측정 Metric"></a><strong>측정</strong> Metric</h2><p>다음 코드를 통해, 요청 처리시의 각 부분에 대한 시간을 측정해보겠습니다.</p>
+<ul>
+<li>Database Lookup (db_time) : 데이터베이스 Fetch 수행시간</li>
+<li>Serialization (serializer_time) : Serializer 직렬화 수행시간</li>
+<li>API View (api_view_time) : APIView 수행시간</li>
+<li>Response rendering (render_time) : Response 렌더링 수행시간</li>
+<li>Django request/response : request/response 수행시간</li>
+</ul>
+<p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7loazfo9j30yn0u0avm.jpg" alt="스크린샷 2020-01-24 오후 2.45.00"></p>
+<h2 id="수행시간-비교-단위-초"><a href="#수행시간-비교-단위-초" class="headerlink" title="수행시간 비교 (단위:초)"></a><strong>수행시간 비교</strong> (<strong>단위</strong>:<strong>초</strong>)</h2><p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7louarl1j31d80io0vr.jpg" alt="스크린샷 2020-01-24 오후 2.45.34"></p>
+<h2 id="측정을-위한-코드-코드-측정코드"><a href="#측정을-위한-코드-코드-측정코드" class="headerlink" title="측정을 위한 코드 코드 측정코드"></a><strong>측정을 위한 코드</strong> <strong>코드</strong> <a href="https://gist.github.com/nomadekr/200cb7aba56de5949b40b7de53c46259" target="_blank" rel="noopener">측정코드</a></h2><ul>
+<li>코드1/3</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import time</span><br><span class="line">from rest_framework.response import Response</span><br><span class="line">class PostViewSet(ModelViewSet): </span><br><span class="line">    queryset = Post.objects.all() </span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line">        def dispatch(self, request, *args, **kwargs):</span><br><span class="line">            global cbv</span><br><span class="line">            cbv = self</span><br><span class="line">            dispatch_start = time.time()</span><br><span class="line">            response = super().dispatch(request, *args, **kwargs)</span><br><span class="line">            </span><br><span class="line">            render_start = time.time()</span><br><span class="line">            response.render()</span><br><span class="line">            self.render_time = time.time() - render_start</span><br><span class="line">            </span><br><span class="line">            self.dispatch_time = time.time() - dispatch_start</span><br><span class="line">            self.api_view_time = self.dispatch_time - (self.render_time + self.serializer_time + self.db_time)</span><br><span class="line">            </span><br><span class="line">            return response</span><br></pre></td></tr></table></figure>
 
-<hr>
-<hr>
-<hr>
-<h1 id="줄바꿈"><a href="#줄바꿈" class="headerlink" title="줄바꿈"></a>줄바꿈</h1><hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">고양이&lt;br&gt;좋아</span><br></pre></td></tr></table></figure>
+<ul>
+<li>코드 2/3</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">def list(self, request, *args, **kwargs): </span><br><span class="line">    db_start = time.time()</span><br><span class="line">    post_list = list(self.queryset) </span><br><span class="line">    self.db_time = time.time() - db_start</span><br><span class="line">    </span><br><span class="line">    serializer_start = time.time()</span><br><span class="line">    serializer = self.get_serializer(self.queryset, many=True) data = serializer.data</span><br><span class="line">    self.serializer_time = time.time() - serializer_start</span><br><span class="line">    </span><br><span class="line">    return Response(data)</span><br></pre></td></tr></table></figure>
 
-<p>고양이<br>좋아</p>
-<hr>
-<h1 id="리스트"><a href="#리스트" class="headerlink" title="리스트"></a>리스트</h1><hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. cat</span><br><span class="line">2. is</span><br><span class="line">3. so</span><br><span class="line">4. sweet</span><br></pre></td></tr></table></figure>
-<ol>
-<li>cat</li>
-<li>is</li>
-<li>so</li>
-<li>sweet</li>
-</ol>
-<hr>
-<h1 id="tables"><a href="#tables" class="headerlink" title="tables"></a>tables</h1><hr>
-<p>표라고 생각하자</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">|cat|is|so|sweet|</span><br><span class="line">|:-:|:-:|:-:|:-:|</span><br><span class="line">|고양이|하다|존나|달콤한|</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>코드3/3</p>
+<p>주의 : 아래코드는 Single Request에서만 동작합니다. 동시 요청에서는 제대로</p>
+<p>동작하지 않습니다.</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">from django.core.signals import request_started, request_finished</span><br><span class="line"></span><br><span class="line">def started_fn(sender, **kwargs): global started</span><br><span class="line">    started = time.time()</span><br><span class="line">    </span><br><span class="line">def finished_fn(sender, **kwargs):</span><br><span class="line">    request_response_time = (time.time() - started) - cbv.dispatch_time</span><br><span class="line">    </span><br><span class="line">    total = cbv.db_time + cbv.serializer_time + cbv.api_view_time + cbv.render_time + request_response_time</span><br><span class="line">    </span><br><span class="line">    print(&apos;Database Lookup    - db_time             : &#123;:.6f&#125;s, &#123;:&gt;4.1f&#125;%&apos;.format(cbv.db_time, 100*(cbv.db_time/total)))</span><br><span class="line">    print(&apos;Serialization      - serializer_time     : &#123;:.6f&#125;s, &#123;:&gt;4.1f&#125;%&apos;.format(cbv.serializer_time, 100*(cbv.serializer_time/total)))</span><br><span class="line">    print(&apos;API View           -api_view_time.       : &#123;:.6f&#125;s, &#123;:&gt;4.1f&#125;%&apos;.format(cbv.api_view_time, 100*(cbv.api_view_time/total)))</span><br><span class="line">    print(&apos;Response rendering - render_time         : &#123;:.6f&#125;s,&#123;:&gt;4.1f&#125;%&apos;.format(cbv.render_time, 100*(cbv.render_time/total))) </span><br><span class="line">    print(&apos;Django request/response           : &#123;:.6f&#125;s,&#123;:&gt;4.1f&#125;%&apos;.format(request_response_time, 100*(request_response_time/total)))</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">   </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    request_started.connect(started_fn)      # 요청 처리 시작</span><br><span class="line">    request_finished.connect(finished_fn)    # 요청 처리 끝</span><br></pre></td></tr></table></figure>
 
-<table>
-<thead>
-<tr>
-<th align="center">cat</th>
-<th align="center">is</th>
-<th align="center">so</th>
-<th align="center">sweet</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">고양이</td>
-<td align="center">하다</td>
-<td align="center">존나</td>
-<td align="center">달콤한</td>
-</tr>
-</tbody></table>
-<hr>
-<h1 id="Youtube-링크"><a href="#Youtube-링크" class="headerlink" title="Youtube 링크"></a>Youtube 링크</h1><hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% raw %&#125;</span><br><span class="line">&#123;% youtube video_id %&#125;</span><br><span class="line">아래는 예시 코드</span><br><span class="line">&#123;% youtube LVpmk8v7s2c %&#125;</span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="기본-코드-수행"><a href="#기본-코드-수행" class="headerlink" title="기본 코드, 수행"></a><strong>기본 코드</strong>, 수행</h2><p>“GET /ep08/post/?format=json HTTP/1.1” 200 6497</p>
+<p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7m9igfb1j31fi0dimzz.jpg" alt="스크린샷 2020-01-24 오후 3.05.28"></p>
+<p>=&gt; DB Lookup 및 DRF Serializer의 시간비율이 가장 높네요.</p>
+<h2 id="Serializer를-제거해봅시다"><a href="#Serializer를-제거해봅시다" class="headerlink" title="Serializer를 제거해봅시다."></a>Serializer<strong>를 제거해봅시다</strong>.</h2><p>QuerySet.values(<strong>필드명</strong>)<strong>를 통해</strong>, <strong>원하는 필드만 가져오기</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">def list(self, request, *args, **kwargs):</span><br><span class="line">    db_start = time.time()</span><br><span class="line">    # post_list = list(self.queryset)</span><br><span class="line">    data = self.queryset.values(&apos;author__username&apos;, &apos;message&apos;) self.db_time = time.time() - db_start</span><br><span class="line">    </span><br><span class="line">    # serializer_start = time.time()</span><br><span class="line">    # serializer = self.get_serializer(self.queryset, many=True) </span><br><span class="line">    # data = serializer.data</span><br><span class="line">    # self.serializer_time = time.time() - serializer_start </span><br><span class="line">    self.serializer_time = 0</span><br><span class="line">    </span><br><span class="line">    return Response(data))</span><br></pre></td></tr></table></figure>
 
-<div class="video-container"><iframe src="//www.youtube.com/embed/LVpmk8v7s2c" frameborder="0" allowfullscreen></iframe></div>
+<h3 id="수행결과"><a href="#수행결과" class="headerlink" title="수행결과"></a>수행결과</h3><p>“GET /ep08/post/?format=json HTTP/1.1” 200 6598</p>
+<p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7mb0e80zj31b20bwtb3.jpg" alt="스크린샷 2020-01-24 오후 3.06.54"></p>
+<p>=&gt; 해당 부분이 0.8초에서 0.00019초로 줄었네요.</p>
+<p>Tip: 하지만, Serializer으로 얻는 막대한 개발생산성이 있으며, Serializer를 쓰더라도 적절한 캐싱을 통해 극복할 수 있습니다.</p>
+<h2 id="DB-Serializer-대신에-캐싱"><a href="#DB-Serializer-대신에-캐싱" class="headerlink" title="DB/Serializer 대신에 캐싱"></a>DB/Serializer 대신에 캐싱</h2><p><strong>데이터가 변경되지 않는다면</strong>, <strong>캐싱을 통해 성능을 높일 수 있습니다</strong>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from django.core.cache import cache </span><br><span class="line"></span><br><span class="line"># 중략</span><br><span class="line"></span><br><span class="line">    def list(self, request, *args, **kwargs): </span><br><span class="line">        db_start = time.time()</span><br><span class="line">        </span><br><span class="line">        data = cache.get(&apos;post_list_data&apos;)</span><br><span class="line">        </span><br><span class="line">        if data is None:</span><br><span class="line">            data = self.queryset.values(&apos;author__username&apos;, &apos;message&apos;) </span><br><span class="line">            cache.set(&apos;post_list_data&apos;, data, 60)</span><br><span class="line"></span><br><span class="line">        self.db_time = time.time() - db_start</span><br><span class="line"></span><br><span class="line">        self.serializer_time = 0</span><br><span class="line"></span><br><span class="line">        return Response(data)</span><br></pre></td></tr></table></figure>
 
-<hr>
-<h1 id="참조-hexo-초안작성법"><a href="#참조-hexo-초안작성법" class="headerlink" title="참조. hexo 초안작성법"></a>참조. hexo 초안작성법</h1><hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% raw %&#125;</span><br><span class="line">$ hexo new draft [파일명]  &lt;&lt;초안 생성됨</span><br><span class="line">$ hexo publish [파일명] &lt;&lt;초안을 포스트로 옮기기</span><br><span class="line">$ hexo server --draft &lt;&lt;원래 초안은 로컬에서 안보이지만 보이게해주는 명령어</span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="수행결과-1"><a href="#수행결과-1" class="headerlink" title="수행결과"></a>수행결과</h3><p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7md6kfqtj318a0iydjx.jpg" alt="스크린샷 2020-01-24 오후 3.08.59"></p>
+<p>Tip: 코드 최적화가 먼저입니다. 캐시는 적당히. 무분별한 캐시는 마약과도 같습니다.</p>
+<h2 id="APIView에-필요한-설정만-넣기"><a href="#APIView에-필요한-설정만-넣기" class="headerlink" title="APIView에 필요한 설정만 넣기"></a>APIView<strong>에 필요한 설정만 넣기</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from rest_framework.negotiation import BaseContentNegotiation</span><br><span class="line">from rest_framework.renderers import JSONRenderer</span><br><span class="line"></span><br><span class="line">class IgnoreClientContentNegotiation(BaseContentNegotiation): </span><br><span class="line">    def select_parser(self, request, parsers):</span><br><span class="line">   		 	&quot;Select the first parser in the `.parser_classes` list.&quot;</span><br><span class="line">        return parsers[0]</span><br><span class="line"></span><br><span class="line">    def select_renderer(self, request, renderers, format_suffix): </span><br><span class="line">        &quot;Select the first renderer in the `.renderer_classes` list.&quot; </span><br><span class="line">        return (renderers[0], renderers[0].media_type)</span><br><span class="line">        </span><br><span class="line">class PostViewSet(ModelViewSet):</span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line">    permission_classes = []</span><br><span class="line">    authentication_classes = []</span><br><span class="line">    renderer_classes = [JSONRenderer] </span><br><span class="line">    content_negotiation_class = IgnoreClientContentNegotiation</span><br></pre></td></tr></table></figure>
 
+<h3 id="수행결과-2"><a href="#수행결과-2" class="headerlink" title="수행결과"></a>수행결과</h3><p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7mfg96hdj31bi0l4n1o.jpg" alt="스크린샷 2020-01-24 오후 3.11.09"></p>
+<h2 id="미들웨어-제거하기"><a href="#미들웨어-제거하기" class="headerlink" title="미들웨어 제거하기"></a>미들웨어 제거하기</h2><p><strong>본 프로젝트가</strong> API <strong>기능만 할 경우</strong>, <strong>장고 웹페이지를 위한 기능을 꺼볼 수 있겠습니다</strong>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 프로젝트/settings.py</span><br><span class="line">INSTALLED_APPS = [</span><br><span class="line">		# &apos;debug_toolbar&apos;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">MIDDLEWARE = [</span><br><span class="line">    # &apos;debug_toolbar.middleware.DebugToolbarMiddleware&apos;,</span><br><span class="line">    # &apos;django.middleware.security.SecurityMiddleware&apos;,</span><br><span class="line">    # &apos;django.contrib.sessions.middleware.SessionMiddleware&apos;,</span><br><span class="line">    # &apos;django.middleware.common.CommonMiddleware&apos;,</span><br><span class="line">    # &apos;django.middleware.csrf.CsrfViewMiddleware&apos;,</span><br><span class="line">    # &apos;django.contrib.auth.middleware.AuthenticationMiddleware&apos;, </span><br><span class="line">    # &apos;django.contrib.messages.middleware.MessageMiddleware&apos;,</span><br><span class="line">    # &apos;django.middleware.clickjacking.XFrameOptionsMiddleware&apos;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
+<h3 id="수행결과-3"><a href="#수행결과-3" class="headerlink" title="수행결과"></a><strong>수행결과</strong></h3><p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7mgon1qvj31ae0l8jvt.jpg" alt="스크린샷 2020-01-24 오후 3.12.16"></p>
+<h2 id="Django-기본-HttpResponse-쓰기"><a href="#Django-기본-HttpResponse-쓰기" class="headerlink" title="Django 기본 HttpResponse 쓰기"></a>Django <strong>기본</strong> HttpResponse <strong>쓰기</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def list(self, request, *args, **kwargs): </span><br><span class="line">    db_start = time.time()</span><br><span class="line">    data = cache.get(&apos;post_list_data&apos;)</span><br><span class="line">    if data is None:</span><br><span class="line">    		data = list(self.queryset.values(&apos;author__username&apos;, &apos;message&apos;))   # QuerySet은 JSON 직렬화 불가</span><br><span class="line">    		cache.set(&apos;post_list_data&apos;, data, 60)</span><br><span class="line">    		</span><br><span class="line"></span><br><span class="line">    self.db_time = time.time() - db_start</span><br><span class="line">    </span><br><span class="line">    self.serializer_time = 0</span><br><span class="line">    </span><br><span class="line">    return HttpResponse(json.dumps(data), content_type=&apos;application/json; charset=utf-8&apos;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="수행-결과"><a href="#수행-결과" class="headerlink" title="수행 결과"></a>수행 결과</h3><p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7mk55zofj31ba0m0aeg.jpg" alt="스크린샷 2020-01-24 오후 3.15.39"></p>
+<h2 id="정리"><a href="#정리" class="headerlink" title="정리"></a>정리</h2><ul>
+<li>필요에따라Serializer/Response를쓰지않고직접처리 • 생산성을통한성능의희생</li>
+<li>조회요청의경우,적절한캐싱은성능을높여줍니다.<ul>
+<li>주의)로직으로캐싱된내용을적절히만료시켜야만합니다.</li>
+</ul>
+</li>
+<li>어떤설정이적용되는지정확히알고,필요한설정만적용하기.<ul>
+<li>APIView 설정 최소화</li>
+<li>미들웨어제거</li>
+</ul>
+</li>
+</ul>
 
     </article>
     <!-- license  -->
@@ -492,17 +500,12 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href= "/2019/10/20/festa1/" title= "Devfest Seoul Bingo 2019에서 배운 것들">
-                    <div class="nextTitle">Devfest Seoul Bingo 2019에서 배운 것들</div>
-                </a>
-            
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href= "/2019/10/19/git-memo/" title= "git memo">
-                    <div class="prevTitle">git memo</div>
+                <a href= "/2020/01/23/project-processing/" title= "효율적인 프로젝트 진행을 위한 것">
+                    <div class="prevTitle">효율적인 프로젝트 진행을 위한 것</div>
                 </a>
             
         </li>
@@ -621,7 +624,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#따라오시기-전"><span class="toc-number">1.</span> <span class="toc-text">#따라오시기 전 </span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#머리글"><span class="toc-number">2.</span> <span class="toc-text">머리글</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#text"><span class="toc-number">3.</span> <span class="toc-text">text</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#text2"><span class="toc-number">3.1.</span> <span class="toc-text">text2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#text3"><span class="toc-number">3.1.1.</span> <span class="toc-text">text3</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#text4"><span class="toc-number">3.1.1.1.</span> <span class="toc-text">text4</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#text5"><span class="toc-number">3.1.1.1.1.</span> <span class="toc-text">text5</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#링크"><span class="toc-number">4.</span> <span class="toc-text">링크</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#코드-블럭"><span class="toc-number">4.1.</span> <span class="toc-text">코드 블럭</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#검정색-백그라운드"><span class="toc-number">5.</span> <span class="toc-text">검정색 백그라운드</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#글자효과들"><span class="toc-number">6.</span> <span class="toc-text">글자효과들</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#수평선"><span class="toc-number">7.</span> <span class="toc-text">수평선</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#줄바꿈"><span class="toc-number">8.</span> <span class="toc-text">줄바꿈</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#리스트"><span class="toc-number">9.</span> <span class="toc-text">리스트</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tables"><span class="toc-number">10.</span> <span class="toc-text">tables</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Youtube-링크"><span class="toc-number">11.</span> <span class="toc-text">Youtube 링크</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#참조-hexo-초안작성법"><span class="toc-number">12.</span> <span class="toc-text">참조. hexo 초안작성법</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-12-PostAPIView-차근차근-응답시간-줄여보기"><span class="toc-number">1.</span> <span class="toc-text">EP 12. PostAPIView 차근차근 응답시간 줄여보기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#관련-문서"><span class="toc-number">1.1.</span> <span class="toc-text">관련 문서</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#왜-최적화를-해야하나요"><span class="toc-number">1.2.</span> <span class="toc-text">왜 최적화를 해야하나요?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#시작하기에-앞서"><span class="toc-number">1.3.</span> <span class="toc-text">시작하기에 앞서</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#측정-Metric"><span class="toc-number">1.4.</span> <span class="toc-text">측정 Metric</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#수행시간-비교-단위-초"><span class="toc-number">1.5.</span> <span class="toc-text">수행시간 비교 (단위:초)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#측정을-위한-코드-코드-측정코드"><span class="toc-number">1.6.</span> <span class="toc-text">측정을 위한 코드 코드 측정코드</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#기본-코드-수행"><span class="toc-number">1.7.</span> <span class="toc-text">기본 코드, 수행</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Serializer를-제거해봅시다"><span class="toc-number">1.8.</span> <span class="toc-text">Serializer를 제거해봅시다.</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#수행결과"><span class="toc-number">1.8.1.</span> <span class="toc-text">수행결과</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DB-Serializer-대신에-캐싱"><span class="toc-number">1.9.</span> <span class="toc-text">DB/Serializer 대신에 캐싱</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#수행결과-1"><span class="toc-number">1.9.1.</span> <span class="toc-text">수행결과</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#APIView에-필요한-설정만-넣기"><span class="toc-number">1.10.</span> <span class="toc-text">APIView에 필요한 설정만 넣기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#수행결과-2"><span class="toc-number">1.10.1.</span> <span class="toc-text">수행결과</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#미들웨어-제거하기"><span class="toc-number">1.11.</span> <span class="toc-text">미들웨어 제거하기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#수행결과-3"><span class="toc-number">1.11.1.</span> <span class="toc-text">수행결과</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Django-기본-HttpResponse-쓰기"><span class="toc-number">1.12.</span> <span class="toc-text">Django 기본 HttpResponse 쓰기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#수행-결과"><span class="toc-number">1.12.1.</span> <span class="toc-text">수행 결과</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#정리"><span class="toc-number">1.13.</span> <span class="toc-text">정리</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
