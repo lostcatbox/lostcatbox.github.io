@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>api 기본편 13 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >Hello LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">api 기본편 13</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>Hello LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            api 기본편 13
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "API">API</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "DRF">DRF</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">1.7k</span>Reading time: <span class="post-count reading-time">10 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/01/26</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="EP-13-Token-인증"><a href="#EP-13-Token-인증" class="headerlink" title="EP 13. Token 인증"></a>EP 13. Token <strong>인증</strong></h1><h2 id="DRF에서-지원하는-인증"><a href="#DRF에서-지원하는-인증" class="headerlink" title="DRF에서 지원하는 인증"></a>DRF<strong>에서 지원하는 인증</strong></h2><ul>
+<li><p>rest_framework.authentication.SessionAuthentication</p>
+<ul>
+<li>외부서비스/앱에서세션인증을못쓰죠.</li>
+</ul>
+</li>
+<li><p>rest_framework.authentication.BasicAuthentication</p>
+<ul>
+<li>외부서비스/앱에서 매번요청시 username/password를넘기는것은보안상위험하고,못할 짓.</li>
+</ul>
+</li>
+<li><p><strong>rest_framework.authentication.TokenAuthentication</strong> (강추)</p>
+<ul>
+<li>초기에username/password으로 Token을발급받고,(유저마다 하나의 토큰이며, 언제든 폐기가능)</li>
+<li>이Token을 매API요청에 담아서 보내어 인증을처리</li>
+</ul>
+</li>
+</ul>
+<h2 id="시작하기전에-기본코드"><a href="#시작하기전에-기본코드" class="headerlink" title="시작하기전에-기본코드"></a><strong>시작하기전에</strong>-<strong>기본코드</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># 앱/models.py</span><br><span class="line"></span><br><span class="line">class Post(models.Model):</span><br><span class="line">    #이미 다른 앱에서도 usermodel참고하고있으므로 reverse가 지정불가, related_name지정필요한데 &apos;+&apos;값을 주면 사용안됨</span><br><span class="line">    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE, related_name=&apos;+&apos;)</span><br><span class="line">    message = models.TextField(blank=True)</span><br><span class="line">    photo = models.ImageField(blank=True)</span><br><span class="line">    created_at = models.DateTimeField(auto_now_add=True)</span><br><span class="line">    </span><br><span class="line"># 앱/serializers.py</span><br><span class="line">from rest_framework.fields import ReadOnlyField</span><br><span class="line">from rest_framework.serializers import ModelSerializer </span><br><span class="line"></span><br><span class="line">class PostSerializer(ModelSerializer):</span><br><span class="line">    author_username = ReadOnlyField(source=&apos;author.username&apos;)</span><br><span class="line">    </span><br><span class="line">        class Meta:</span><br><span class="line">            model = Post</span><br><span class="line">            fields = (&apos;id&apos;, &apos;author_username&apos;, &apos;message&apos;, &apos;photo&apos;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 앱/views.py</span><br><span class="line">from rest_framework.authentication import TokenAuthentication </span><br><span class="line">from rest_framework.permissions import IsAuthenticated</span><br><span class="line">from rest_framework.viewsets import ModelViewSet</span><br><span class="line"></span><br><span class="line">class PostModelViewSet(ModelViewSet):</span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer </span><br><span class="line">    authentication_classes = [TokenAuthentication]  #세션인증, basic에 유저인증 은 안됨</span><br><span class="line">    permission_classes = [IsAuthenticated] #인증이 되어야만 처리</span><br><span class="line">    </span><br><span class="line">    def perform_create(self, serializer):</span><br><span class="line">    		serializer.save(author=self.request.user)</span><br><span class="line">    		</span><br><span class="line"># 앱/urls.py</span><br><span class="line">router = DefaultRouter()</span><br><span class="line">router.register(&apos;post&apos;, PostModelViewSet)</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">		url(r&apos;&apos;, include(router.urls)),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h2 id="Token인증설정하기"><a href="#Token인증설정하기" class="headerlink" title="Token인증설정하기"></a>Token<strong>인증설정하기</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># settings</span><br><span class="line">INSTALLED_APPS = ( &apos;rest_framework.authtoken&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>migrate가 필요합니다.</li>
+<li>rest_framework.authtoken.Token모델에 대한 테이블을 생성해야 합니다</li>
+</ul>
+<h2 id="Token모델"><a href="#Token모델" class="headerlink" title="Token모델"></a>Token<strong>모델</strong></h2><ul>
+<li>각 User에 대해 1:1 Relation =&gt; OneToOneField</li>
+<li>각User별 Token인스턴스가자동생성되지않습니다.(모델생성했다고 자동생성절대안됨)</li>
+<li>Token은 유저 별로 Unique합니다. Token만으로 인증을 수행합니다.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># rest_framework/authotken/models.py</span><br><span class="line"></span><br><span class="line">class Token(models.Model): # 모델 코드에서 주요부분만 발췌</span><br><span class="line">    key = models.CharField(max_length=40, primary_key=True) </span><br><span class="line">    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name=&apos;auth_token&apos;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Token생성"><a href="#Token생성" class="headerlink" title="Token생성"></a>Token생성</h2><h3 id="방법1-ObtatinAuthToken뷰를-통한-획득-or-생성"><a href="#방법1-ObtatinAuthToken뷰를-통한-획득-or-생성" class="headerlink" title="방법1) ObtatinAuthToken뷰를 통한 획득 or 생성"></a><strong>방법</strong>1) ObtatinAuthToken<strong>뷰를 통한 획득</strong> or <strong>생성</strong></h3><p>token 획득 API 뷰에서 Token 획득/생성을 아래 코드와 같이 처리하므로, <strong>Token</strong> <strong>재생성</strong>이 아니라면 특별히 처리해줄 필요는 없습니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># rest_framework/authtoken/views.py</span><br><span class="line"></span><br><span class="line">class ObtainAuthToken(APIView):</span><br><span class="line">    def post(self, request, *args, **kwargs):</span><br><span class="line">    # 중략</span><br><span class="line">    token, created = Token.objects.get_or_create(user=user)</span><br><span class="line">    return Response(&#123;&apos;token&apos;: token.key&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="방법2-Signal을-통한-자동-생성-필수는-아님-이벤트헨들러느낌"><a href="#방법2-Signal을-통한-자동-생성-필수는-아님-이벤트헨들러느낌" class="headerlink" title="방법2) Signal을 통한 자동 생성 (필수는 아님)(이벤트헨들러느낌)"></a><strong>방법</strong>2) Signal<strong>을 통한 자동 생성</strong> (<strong>필수는 아님</strong>)(이벤트헨들러느낌)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from django.conf import settings</span><br><span class="line">from django.db.models.signals import post_save </span><br><span class="line">from django.dispatch import receiver</span><br><span class="line">from rest_framework.authtoken.models import Token</span><br><span class="line"></span><br><span class="line">@receiver(post_save, sender=settings.AUTH_USER_MODEL) # post_save 처럼 save가 일어나는건데 그게 AUTH_USER_MODEL일어날 경우 끝나고 아래 함수 실행</span><br><span class="line">def create_auth_token(sender, instance=None, created=False, **kwargs):</span><br><span class="line">		if created:  #save할때가 created or updated중에 created일때 작동</span><br><span class="line">				Token.objects.create(user=instance)</span><br></pre></td></tr></table></figure>
+
+<h3 id="방법3-Management-명령을-통한-생성"><a href="#방법3-Management-명령을-통한-생성" class="headerlink" title="방법3) Management 명령을 통한 생성"></a><strong>방법</strong>3) Management <strong>명령을 통한 생성</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 본 명령은 생성된 Token을 변경하지 않습니다. 필수는 아님. </span><br><span class="line">python3 manage.py drf_create_token &lt;username&gt;</span><br><span class="line"># 강제로 Token 재생성하기</span><br><span class="line">python3 manage.py drf_create_token -r &lt;username&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Token-획득을-API-ENDPOINT로-노출하기"><a href="#Token-획득을-API-ENDPOINT로-노출하기" class="headerlink" title="Token 획득을 API ENDPOINT로 노출하기"></a>Token <strong>획득을</strong> API ENDPOINT로 노출하기</h2><p>post만 처리가능함</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from rest_framework.authtoken.views import obtain_auth_token</span><br><span class="line"></span><br><span class="line">urlpatterns += [</span><br><span class="line">		url(r&apos;^api-token-auth/&apos;, obtain_auth_token),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="HTTPie를-통한-Token-획득"><a href="#HTTPie를-통한-Token-획득" class="headerlink" title="HTTPie를 통한 Token 획득"></a>HTTPie<strong>를 통한</strong> Token 획득</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http POST http://주소/api-token-auth/ username=&quot;유저명&quot; password=&quot;암호&quot;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.0 200 OK</span><br><span class="line">Allow: POST, OPTIONS</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Date: Fri, 01 Dec 2017 06:49:35 GMT Server: WSGIServer/0.2 CPython/3.6.1</span><br><span class="line">&#123;</span><br><span class="line">		&quot;token&quot;: &quot;9cdd705c0a0e5adb8671d22bd6c7a99bbacab227&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="HTTPie-예제-맥-리눅스"><a href="#HTTPie-예제-맥-리눅스" class="headerlink" title="HTTPie 예제 (맥/리눅스)"></a>HTTPie <strong>예제</strong> (<strong>맥</strong>/<strong>리눅스</strong>)</h3><p>-헤더에 토큰값 넣어서 요청 보내야함(띄어쓰기 잘하기)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http http://localhost:8000/api/post/ &quot;Authorization: Token &lt;TOKEN값입력&gt;&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#환경변수를 설정해서 편하게 이용하자</span><br><span class="line">export HOST=&quot;http://localhost:8000&quot;</span><br><span class="line">export TOKEN=&quot;d7ec115d8370de00f06c50ec5b61bd519b1038ae&quot; </span><br><span class="line"></span><br><span class="line"># Post List</span><br><span class="line">http $HOST/api/post/ &quot;Authorization: Token $TOKEN&quot;</span><br><span class="line"></span><br><span class="line"># Post Create</span><br><span class="line">http POST $HOST/api/post/ &quot;Authorization: Token $TOKEN&quot; message=&quot;hello&quot; </span><br><span class="line"></span><br><span class="line"># Post Create with Photo</span><br><span class="line">http --form POST $HOST/api/post/ &quot;Authorization: Token $TOKEN&quot; message=&quot;hello&quot; photo@&quot;f1.jpg&quot;   # httpie 문법임, 현재 프로젝트전체폴에경로에존재하는 사진파일</span><br><span class="line"></span><br><span class="line"># Post#16 Detail</span><br><span class="line">http GET $HOST/api/post/16/ &quot;Authorization: Token $TOKEN&quot;</span><br><span class="line"></span><br><span class="line"># Post#16 Update</span><br><span class="line">http PATCH $HOST/api/post/16/ &quot;Authorization: Token $TOKEN&quot; message=&quot;patched&quot; http PUT $HOST/api/post/16/ &quot;Authorization: Token $TOKEN&quot; message=&quot;updated&quot;</span><br><span class="line"></span><br><span class="line"># Post#16 Delete</span><br><span class="line">http DELETE $HOST/api/post/16/ &quot;Authorization: Token $TOKEN&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="파이썬-코드를-통한-Token-획득"><a href="#파이썬-코드를-통한-Token-획득" class="headerlink" title="파이썬 코드를 통한 Token 획득"></a><strong>파이썬 코드를 통한</strong> Token <strong>획득</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">HOST = &apos;http://localhost:8000&apos;</span><br><span class="line"></span><br><span class="line">res = requests.post(HOST + &apos;/api-token-auth/&apos;, &#123;</span><br><span class="line">    &apos;username&apos;: &apos;유저명&apos;, # FIXME: 기입해주세요.</span><br><span class="line">    &apos;password&apos;: &apos;암호&apos;,  # FIXME: 기입해주세요.</span><br><span class="line">&#125;) </span><br><span class="line">res.raise_for_status()</span><br><span class="line"></span><br><span class="line">token = res.json()[&apos;token&apos;] </span><br><span class="line"></span><br><span class="line">print(token)</span><br><span class="line"></span><br><span class="line">이제 모든 요청에는 다음 인증헤더를 붙여주셔야 합니다. </span><br><span class="line"></span><br><span class="line">headers = &#123;</span><br><span class="line">		&apos;Authorization&apos;: &apos;Token &apos; + token, # 필히 띄워쓰기 꼭 ㄴ필요</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># Post List</span><br><span class="line">res = requests.get(HOST + &apos;/api/post/&apos;, headers=headers) res.raise_for_status()</span><br><span class="line">print(res.json())</span><br><span class="line"></span><br><span class="line"># Post Create</span><br><span class="line">data = &#123;&apos;message&apos;: &apos;hello requests&apos;&#125;</span><br><span class="line">res = requests.post(HOST + &apos;/api/post/&apos;, data=data, headers=headers) print(res)</span><br><span class="line">print(res.json())</span><br><span class="line"></span><br><span class="line"># Post Create with Photo</span><br><span class="line">files = &#123;&apos;photo&apos;: open(&apos;f1.jpg&apos;, &apos;rb&apos;)&#125;</span><br><span class="line">data = &#123;&apos;message&apos;: &apos;hello requests&apos;&#125;</span><br><span class="line">res = requests.post(HOST + &apos;/api/post/&apos;, files=files, data=data, headers=headers) </span><br><span class="line">print(res)</span><br><span class="line">print(res.json())</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># Post#16 Detail</span><br><span class="line">res = requests.get(HOST + &apos;/api/post/&apos;, headers=headers) </span><br><span class="line">res = requests.get(HOST + &apos;/api/post/16/&apos;, headers=headers) res.raise_for_status()</span><br><span class="line">print(res.json())</span><br><span class="line"></span><br><span class="line"># Post#16 Patch</span><br><span class="line">res = requests.patch(HOST + &apos;/api/post/16/&apos;, headers=headers, data=&#123;&apos;message&apos;: &apos;hello&apos;&#125;) </span><br><span class="line">res.raise_for_status()</span><br><span class="line">print(res.json())</span><br><span class="line"></span><br><span class="line"># Post#16 Update</span><br><span class="line">res = requests.put(HOST + &apos;/api/post/16/&apos;, headers=headers, data=&#123;&apos;message&apos;: &apos;hello&apos;&#125;) </span><br><span class="line">res.raise_for_status()</span><br><span class="line">print(res.json())</span><br><span class="line"></span><br><span class="line"># Post#16 Delete</span><br><span class="line">res = requests.delete(HOST + &apos;/api/post/16/&apos;, headers=headers, data=&#123;&apos;message&apos;: &apos;hello&apos;&#125;) </span><br><span class="line">res.raise_for_status()</span><br><span class="line">print(res.ok)</span><br></pre></td></tr></table></figure>
+
+<h3 id="실제-터미널"><a href="#실제-터미널" class="headerlink" title="실제 터미널"></a>실제 터미널</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">In [1]: import requests</span><br><span class="line"></span><br><span class="line">In [3]: res = requests.post(&apos;http://localhost:8000/api-auth-token/&apos;, &#123;&apos;username&apos;</span><br><span class="line">   ...: :&apos;tester&apos;, &apos;password&apos;: &apos;rhdiddl486&apos;&#125;)</span><br><span class="line"></span><br><span class="line">In [4]: res = requests.post(&apos;http://localhost:8000/api-token-auth/&apos;, &#123;&apos;username&apos;</span><br><span class="line">   ...: :&apos;tester&apos;, &apos;password&apos;: &apos;rhdiddl486&apos;&#125;)</span><br><span class="line"></span><br><span class="line">In [5]: res</span><br><span class="line">Out[5]: &lt;Response [200]&gt;</span><br><span class="line"></span><br><span class="line">In [6]: res.text</span><br><span class="line">Out[6]: &apos;&#123;&quot;token&quot;:&quot;d7ec115d8370de00f06c50ec5b61bd519b1038ae&quot;&#125;&apos;</span><br><span class="line"></span><br><span class="line">In [7]: res.json()</span><br><span class="line">Out[7]: &#123;&apos;token&apos;: &apos;d7ec115d8370de00f06c50ec5b61bd519b1038ae&apos;&#125;</span><br><span class="line"></span><br><span class="line">In [8]: res.json()[&apos;token&apos;]</span><br><span class="line">Out[8]: &apos;d7ec115d8370de00f06c50ec5b61bd519b1038ae&apos;</span><br><span class="line"></span><br><span class="line">In [9]: token = res.json()[&apos;token&apos;]</span><br><span class="line"></span><br><span class="line">In [10]: headers = &#123;</span><br><span class="line">    ...:     &apos;Authorization&apos;: &apos;Token &apos; + token,</span><br><span class="line">    ...:     &#125;</span><br><span class="line"></span><br><span class="line">In [11]: headers</span><br><span class="line">Out[11]: &#123;&apos;Authorization&apos;: &apos;Token d7ec115d8370de00f06c50ec5b61bd519b1038ae&apos;&#125;</span><br><span class="line"></span><br><span class="line">In [12]: res = requests.get(&apos;http://localhost:800/api/post/&apos;, headers=headers)</span><br><span class="line"></span><br><span class="line">In [13]: res = requests.get(&apos;http://localhost:8000/api/post/&apos;, headers=headers)</span><br><span class="line"></span><br><span class="line">In [14]: res</span><br><span class="line">Out[14]: &lt;Response [200]&gt;</span><br><span class="line"></span><br><span class="line">In [15]: res.text</span><br><span class="line">Out[15]: &apos;[&#123;&quot;id&quot;:1,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:2,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:3,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:4,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:5,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:6,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:7,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:8,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:9,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:10,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:11,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:12,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:&quot;http://localhost:8000/api/post/a_7Y7nc8e.jpg&quot;&#125;]&apos;</span><br><span class="line"></span><br><span class="line">In [16]: res.json()</span><br><span class="line">Out[16]:</span><br><span class="line">[&#123;&apos;id&apos;: 1, &apos;author_username&apos;: &apos;tester&apos;, &apos;message&apos;: &apos;Hello&apos;, &apos;photo&apos;: None&#125;,</span><br><span class="line"> &#123;&apos;id&apos;: 2, &apos;author_username&apos;: &apos;tester&apos;, &apos;message&apos;: &apos;Hello&apos;, &apos;photo&apos;: None&#125;,</span><br><span class="line"> &#123;&apos;id&apos;: 3, &apos;author_username&apos;: &apos;tester&apos;, &apos;message&apos;: &apos;Hello&apos;, &apos;photo&apos;: None&#125;,</span><br><span class="line"> &#123;&apos;id&apos;: 4, &apos;author_username&apos;: &apos;tester&apos;, &apos;message&apos;: &apos;Hello&apos;, &apos;photo&apos;: None&#125;,</span><br><span class="line"> &#123;&apos;id&apos;: 5, &apos;author_username&apos;: &apos;tester&apos;, &apos;message&apos;: &apos;Hello&apos;, &apos;photo&apos;: None&#125;,</span><br><span class="line"> &#123;&apos;id&apos;: 6, &apos;author_username&apos;: &apos;tester&apos;, &apos;message&apos;: &apos;Hello&apos;, &apos;photo&apos;: None&#125;,</span><br><span class="line"> &#123;&apos;id&apos;: 7, &apos;author_username&apos;: &apos;tester&apos;, &apos;message&apos;: &apos;Hello&apos;, &apos;photo&apos;: None&#125;,</span><br><span class="line"> &#123;&apos;id&apos;: 8, &apos;author_username&apos;: &apos;tester&apos;, &apos;message&apos;: &apos;Hello&apos;, &apos;photo&apos;: None&#125;,</span><br><span class="line"> &#123;&apos;id&apos;: 9, &apos;author_username&apos;: &apos;tester&apos;, &apos;message&apos;: &apos;Hello&apos;, &apos;photo&apos;: None&#125;,</span><br><span class="line"> &#123;&apos;id&apos;: 10, &apos;author_username&apos;: &apos;tester&apos;, &apos;message&apos;: &apos;Hello&apos;, &apos;photo&apos;: None&#125;,</span><br><span class="line"> &#123;&apos;id&apos;: 11, &apos;author_username&apos;: &apos;tester&apos;, &apos;message&apos;: &apos;Hello&apos;, &apos;photo&apos;: None&#125;,</span><br><span class="line"> &#123;&apos;id&apos;: 12,</span><br><span class="line">  &apos;author_username&apos;: &apos;tester&apos;,</span><br><span class="line">  &apos;message&apos;: &apos;Hello&apos;,</span><br><span class="line">  &apos;photo&apos;: &apos;http://localhost:8000/api/post/a_7Y7nc8e.jpg&apos;&#125;]</span><br><span class="line"></span><br><span class="line">In [17]: for post in res.json():</span><br><span class="line">    ...:     print(post[&apos;message&apos;])</span><br><span class="line">    ...:</span><br><span class="line"></span><br><span class="line">In [17]: for post in res.json():</span><br><span class="line">    ...:     print(post[&apos;message&apos;])</span><br><span class="line">    ...:</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line"></span><br><span class="line">In [19]: for post in res.json():</span><br><span class="line">    ...:     print(&apos;&#123;id&#125;: &#123;message&#125;&apos;.format(**post))</span><br><span class="line">    ...:</span><br><span class="line">    ...:</span><br><span class="line">    ...:</span><br><span class="line">1: Hello</span><br><span class="line">2: Hello</span><br><span class="line">3: Hello</span><br><span class="line">4: Hello</span><br><span class="line">5: Hello</span><br><span class="line">6: Hello</span><br><span class="line">7: Hello</span><br><span class="line">8: Hello</span><br><span class="line">9: Hello</span><br><span class="line">10: Hello</span><br><span class="line">11: Hello</span><br><span class="line">12: Hello</span><br></pre></td></tr></table></figure>
+
+<h1 id="python-pack-unpack-반드시-알아보기"><a href="#python-pack-unpack-반드시-알아보기" class="headerlink" title="python pack unpack 반드시 알아보기 (???)"></a>python pack unpack 반드시 알아보기 (???)</h1>
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/01/24/api12/" title= "api 기본편 12">
+                    <div class="prevTitle">api 기본편 12</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" target="_blank" rel="noopener" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-13-Token-인증"><span class="toc-number">1.</span> <span class="toc-text">EP 13. Token 인증</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DRF에서-지원하는-인증"><span class="toc-number">1.1.</span> <span class="toc-text">DRF에서 지원하는 인증</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#시작하기전에-기본코드"><span class="toc-number">1.2.</span> <span class="toc-text">시작하기전에-기본코드</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Token인증설정하기"><span class="toc-number">1.3.</span> <span class="toc-text">Token인증설정하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Token모델"><span class="toc-number">1.4.</span> <span class="toc-text">Token모델</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Token생성"><span class="toc-number">1.5.</span> <span class="toc-text">Token생성</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#방법1-ObtatinAuthToken뷰를-통한-획득-or-생성"><span class="toc-number">1.5.1.</span> <span class="toc-text">방법1) ObtatinAuthToken뷰를 통한 획득 or 생성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#방법2-Signal을-통한-자동-생성-필수는-아님-이벤트헨들러느낌"><span class="toc-number">1.5.2.</span> <span class="toc-text">방법2) Signal을 통한 자동 생성 (필수는 아님)(이벤트헨들러느낌)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#방법3-Management-명령을-통한-생성"><span class="toc-number">1.5.3.</span> <span class="toc-text">방법3) Management 명령을 통한 생성</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Token-획득을-API-ENDPOINT로-노출하기"><span class="toc-number">1.6.</span> <span class="toc-text">Token 획득을 API ENDPOINT로 노출하기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTPie를-통한-Token-획득"><span class="toc-number">1.6.1.</span> <span class="toc-text">HTTPie를 통한 Token 획득</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTPie-예제-맥-리눅스"><span class="toc-number">1.6.2.</span> <span class="toc-text">HTTPie 예제 (맥/리눅스)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#파이썬-코드를-통한-Token-획득"><span class="toc-number">1.7.</span> <span class="toc-text">파이썬 코드를 통한 Token 획득</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#실제-터미널"><span class="toc-number">1.7.1.</span> <span class="toc-text">실제 터미널</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#python-pack-unpack-반드시-알아보기"><span class="toc-number">2.</span> <span class="toc-text">python pack unpack 반드시 알아보기 (???)</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 33
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/api13/" >api 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/api12/" >api 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/api10/" >api 기본편 10 + 11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/api09/" >api 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/api08/" >api 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/api05/" >api 기본편 5 + 6 + 7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/api04/" >api 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/api03/" >api 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/api02/" >api 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/api01/" >api 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/html/" >html</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="Crawling"><span class="iconfont-archer">&#xe606;</span>Crawling</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
