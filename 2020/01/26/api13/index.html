@@ -423,7 +423,7 @@ height:50vh;
 </ul>
 <h2 id="시작하기전에-기본코드"><a href="#시작하기전에-기본코드" class="headerlink" title="시작하기전에-기본코드"></a><strong>시작하기전에</strong>-<strong>기본코드</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># 앱/models.py</span><br><span class="line"></span><br><span class="line">class Post(models.Model):</span><br><span class="line">    #이미 다른 앱에서도 usermodel참고하고있으므로 reverse가 지정불가, related_name지정필요한데 &apos;+&apos;값을 주면 사용안됨</span><br><span class="line">    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE, related_name=&apos;+&apos;)</span><br><span class="line">    message = models.TextField(blank=True)</span><br><span class="line">    photo = models.ImageField(blank=True)</span><br><span class="line">    created_at = models.DateTimeField(auto_now_add=True)</span><br><span class="line">    </span><br><span class="line"># 앱/serializers.py</span><br><span class="line">from rest_framework.fields import ReadOnlyField</span><br><span class="line">from rest_framework.serializers import ModelSerializer </span><br><span class="line"></span><br><span class="line">class PostSerializer(ModelSerializer):</span><br><span class="line">    author_username = ReadOnlyField(source=&apos;author.username&apos;)</span><br><span class="line">    </span><br><span class="line">        class Meta:</span><br><span class="line">            model = Post</span><br><span class="line">            fields = (&apos;id&apos;, &apos;author_username&apos;, &apos;message&apos;, &apos;photo&apos;)</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 앱/views.py</span><br><span class="line">from rest_framework.authentication import TokenAuthentication </span><br><span class="line">from rest_framework.permissions import IsAuthenticated</span><br><span class="line">from rest_framework.viewsets import ModelViewSet</span><br><span class="line"></span><br><span class="line">class PostModelViewSet(ModelViewSet):</span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer </span><br><span class="line">    authentication_classes = [TokenAuthentication]  #세션인증, basic에 유저인증 은 안됨</span><br><span class="line">    permission_classes = [IsAuthenticated] #인증이 되어야만 처리</span><br><span class="line">    </span><br><span class="line">    def perform_create(self, serializer):</span><br><span class="line">    		serializer.save(author=self.request.user)</span><br><span class="line">    		</span><br><span class="line"># 앱/urls.py</span><br><span class="line">router = DefaultRouter()</span><br><span class="line">router.register(&apos;post&apos;, PostModelViewSet)</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">		url(r&apos;&apos;, include(router.urls)),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 앱/views.py</span></span><br><span class="line"><span class="keyword">from</span> rest_framework.authentication <span class="keyword">import</span> TokenAuthentication </span><br><span class="line"><span class="keyword">from</span> rest_framework.permissions <span class="keyword">import</span> IsAuthenticated</span><br><span class="line"><span class="keyword">from</span> rest_framework.viewsets <span class="keyword">import</span> ModelViewSet</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostModelViewSet</span><span class="params">(ModelViewSet)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer </span><br><span class="line">    authentication_classes = [TokenAuthentication]  <span class="comment">#세션인증, basic에 유저인증 은 안됨</span></span><br><span class="line">    permission_classes = [IsAuthenticated] <span class="comment">#인증이 되어야만 처리</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">perform_create</span><span class="params">(self, serializer)</span>:</span></span><br><span class="line">    		serializer.save(author=self.request.user)</span><br><span class="line">    		</span><br><span class="line"><span class="comment"># 앱/urls.py</span></span><br><span class="line">router = DefaultRouter()</span><br><span class="line">router.register(<span class="string">'post'</span>, PostModelViewSet)</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">		url(<span class="string">r''</span>, include(router.urls)),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
 <h2 id="Token인증설정하기"><a href="#Token인증설정하기" class="headerlink" title="Token인증설정하기"></a>Token<strong>인증설정하기</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># settings</span><br><span class="line">INSTALLED_APPS = ( &apos;rest_framework.authtoken&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 
@@ -1047,9 +1047,26 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 34
+        Total : 35
         </div>
         <!-- search  -->
         
@@ -1062,6 +1079,11 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/api14/" >api14</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1234,12 +1256,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
         </li>
     
     </div>
@@ -1247,15 +1269,15 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
         <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
-    
-        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
-    
-        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
     
         <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
     
@@ -1263,21 +1285,21 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
-    
-        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
-    
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
         <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
-    
-        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
@@ -1322,19 +1344,19 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
-    
         <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
-    
-        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
