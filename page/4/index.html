@@ -1,1616 +1,1066 @@
 <!DOCTYPE html>
-<html lang="en">
-    <!-- title -->
-
-
-
-
-<!-- keywords -->
-
-
-
-
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
-    <meta name="author" content="Seungwon Yang">
-    <meta name="renderer" content="webkit">
-    <meta name="copyright" content="Seungwon Yang">
-    
-    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
-    
-    <meta name="description" content="생각을 자유롭게 만들때까지">
-    <meta http-equiv="Cache-control" content="no-cache">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>lostcatbox</title>
-    <style type="text/css">
-    @font-face {
-        font-family: 'Oswald-Regular';
-        src: url("/font/Oswald-Regular.ttf");
-    }
+  <meta charset="utf-8">
+  
 
-    body {
-        margin: 0;
-    }
-
-    header,
-    footer,
-    .back-top,
-    .sidebar,
-    .container,
-    .site-intro-meta,
-    .toc-wrapper {
-        display: none;
-    }
-
-    .site-intro {
-        position: relative;
-        z-index: 3;
-        width: 100%;
-        /* height: 50vh; */
-        overflow: hidden;
-    }
-
-    .site-intro-placeholder {
-        position: absolute;
-        z-index: -2;
-        top: 0;
-        left: 0;
-        width: calc(100% + 300px);
-        height: 100%;
-        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
-        background-position: center center;
-        transform: translate3d(-226px, 0, 0);
-        animation: gradient-move 2.5s ease-out 0s infinite;
-    }
-
-    @keyframes gradient-move {
-        0% {
-            transform: translate3d(-226px, 0, 0);
-        }
-        100% {
-            transform: translate3d(0, 0, 0);
-        }
-    }
-
-</style>
-
-    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
-    
-    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
-/* This file is meant as a standalone workflow for
-- testing support for link[rel=preload]
-- enabling async CSS loading in browsers that do not support rel=preload
-- applying rel preload css once loaded, whether supported or not.
-*/ -->
-<script>
-(function( w ){
-	"use strict";
-	// rel=preload support test
-	if( !w.loadCSS ){
-		w.loadCSS = function(){};
-	}
-	// define on the loadCSS obj
-	var rp = loadCSS.relpreload = {};
-	// rel=preload feature support test
-	// runs once and returns a function for compat purposes
-	rp.support = (function(){
-		var ret;
-		try {
-			ret = w.document.createElement( "link" ).relList.supports( "preload" );
-		} catch (e) {
-			ret = false;
-		}
-		return function(){
-			return ret;
-		};
-	})();
-
-	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
-	// then change that media back to its intended value on load
-	rp.bindMediaToggle = function( link ){
-		// remember existing media attr for ultimate state, or default to 'all'
-		var finalMedia = link.media || "all";
-
-		function enableStylesheet(){
-			link.media = finalMedia;
-		}
-
-		// bind load handlers to enable media
-		if( link.addEventListener ){
-			link.addEventListener( "load", enableStylesheet );
-		} else if( link.attachEvent ){
-			link.attachEvent( "onload", enableStylesheet );
-		}
-
-		// Set rel and non-applicable media type to start an async request
-		// note: timeout allows this to happen async to let rendering continue in IE
-		setTimeout(function(){
-			link.rel = "stylesheet";
-			link.media = "only x";
-		});
-		// also enable media after 3 seconds,
-		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
-		setTimeout( enableStylesheet, 3000 );
-	};
-
-	// loop through link elements in DOM
-	rp.poly = function(){
-		// double check this to prevent external calls from running
-		if( rp.support() ){
-			return;
-		}
-		var links = w.document.getElementsByTagName( "link" );
-		for( var i = 0; i < links.length; i++ ){
-			var link = links[ i ];
-			// qualify links to those with rel=preload and as=style attrs
-			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
-				// prevent rerunning on link
-				link.setAttribute( "data-loadcss", true );
-				// bind listeners to toggle media back
-				rp.bindMediaToggle( link );
-			}
-		}
-	};
-
-	// if unsupported, run the polyfill
-	if( !rp.support() ){
-		// run once at least
-		rp.poly();
-
-		// rerun poly on an interval until onload
-		var run = w.setInterval( rp.poly, 500 );
-		if( w.addEventListener ){
-			w.addEventListener( "load", function(){
-				rp.poly();
-				w.clearInterval( run );
-			} );
-		} else if( w.attachEvent ){
-			w.attachEvent( "onload", function(){
-				rp.poly();
-				w.clearInterval( run );
-			} );
-		}
-	}
-
-
-	// commonjs
-	if( typeof exports !== "undefined" ){
-		exports.loadCSS = loadCSS;
-	}
-	else {
-		w.loadCSS = loadCSS;
-	}
-}( typeof global !== "undefined" ? global : this ) );
-</script>
-
-    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
-    <link rel="preload" href="/scripts/main.js" as="script" />
-    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
-    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
-    
-    <!-- fancybox -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
-    <!-- 百度统计  -->
-    
-    <!-- 谷歌统计  -->
-    
+  
+  <title>lostcatbox</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="생각을 자유롭게 만들때까지">
+<meta name="keywords" content="고양이">
+<meta property="og:type" content="website">
+<meta property="og:title" content="lostcatbox">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;page&#x2F;4&#x2F;index.html">
+<meta property="og:site_name" content="lostcatbox">
+<meta property="og:description" content="생각을 자유롭게 만들때까지">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="lostcatbox" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
-    
-        <body class="home-body">
-    
-    
-<header class="header index-header">
-
-    <div class="read-progress"></div>
-    <div class="header-sidebar-menu">&#xe775;</div>
-    <!-- post页的toggle banner  -->
-    
-    <a class="home-link" href=/>LostCatBox</a>
-</header>
-    <div class="wrapper">
-        <div class="site-intro" style="
-
-
-
-
-
-
-
-height:50vh;
-">
-    
-    <!-- 主页  -->
-    
-    
-    <!-- 文章页  -->
-            
-    <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/index-bg.jpg)"></div>
-    <div class="site-intro-meta">
-        <!-- 标题  -->
-        <h1 class="intro-title">
-            <!-- 主页  -->
-            
-            LostCatBox
-            <!-- 文章页  -->
-            
-        </h1>
-        <!-- 副标题 -->
-        <p class="intro-subtitle">
-            <!-- 主页副标题  -->
-            
-            
-                내 생각을 자유롭게 만들 때까지
-            
-            <!-- 文章页  -->
-            
-        </p>
-        <!-- 文章页meta -->
-        
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">lostcatbox</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">고양이키우고싶다</a>
+        </h2>
+      
     </div>
-</div>
-        <script>
- 
-  // get user agent
-  var browser = {
-    versions: function () {
-      var u = window.navigator.userAgent;
-      return {
-        userAgent: u,
-        trident: u.indexOf('Trident') > -1, //IE内核
-        presto: u.indexOf('Presto') > -1, //opera内核
-        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
-        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
-        iPad: u.indexOf('iPad') > -1, //是否为iPad
-        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
-        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
-        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
-      };
-    }()
-  }
-  console.log("userAgent:" + browser.versions.userAgent);
-
-  // callback
-  function fontLoaded() {
-    console.log('font loaded');
-    if (document.getElementsByClassName('site-intro-meta')) {
-      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
-      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
-      var postIntros = document.getElementsByClassName('post-intros')[0]
-      if (postIntros) {
-        postIntros.classList.add('post-fade-in');
-      }
-    }
-  }
-
-  // UC不支持跨域，所以直接显示
-  function asyncCb(){
-    if (browser.versions.uc) {
-      console.log("UCBrowser");
-      fontLoaded();
-    } else {
-      WebFont.load({
-        custom: {
-          families: ['Oswald-Regular']
-        },
-        loading: function () {  //所有字体开始加载
-          // console.log('loading');
-        },
-        active: function () {  //所有字体已渲染
-          fontLoaded();
-        },
-        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
-          console.log('inactive: timeout');
-          fontLoaded();
-        },
-        timeout: 5000 // Set the timeout to two seconds
-      });
-    }
-  }
-
-  function asyncErr(){
-    console.warn('script load from CDN failed, will load local script')
-  }
-
-  // load webfont-loader async, and add callback function
-  function async(u, cb, err) {
-    var d = document, t = 'script',
-      o = d.createElement(t),
-      s = d.getElementsByTagName(t)[0];
-    o.src = u;
-    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
-    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
-    s.parentNode.insertBefore(o, s);
-  }
-
-  var asyncLoadWithFallBack = function(arr, success, reject) {
-      var currReject = function(){
-        reject()
-        arr.shift()
-        if(arr.length)
-          async(arr[0], success, currReject)
-        }
-
-      async(arr[0], success, currReject)
-  }
-
-  asyncLoadWithFallBack([
-    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
-    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
-    "/lib/webfontloader.min.js"
-  ], asyncCb, asyncErr)
-</script>        
-        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
-        <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/10/20/festa1/" >
-            
-                <span>Devfest Seoul Bingo 2019에서 배운 것들</span>
-        </a>
-        <div class="abstract-content">
-            
-keynote
-구글 양승도님께서 라떄는 말이야강조하신점 3가지
-
-Focus on USER
-Think 10x (10배로 생각)
-Share everything You can 
-
-쉽게 따라할 수 있는 한국어 임베딩 구축 (이기창)임베딩이란?단어, 문장(범주형 자료)를 연속형 벡터 형태로 변환시키는 것주로 인공신경망 학습을 통해 범주형 자료를 벡터 형태로 바꾼다.즉, 자연어 -&gt;백터값
-|구분|메밀꽃 필 무렵|운수 좋은 날|사랑 손님과 어머니|심포 가는길
-
-
-
-:-:
-:-:
-:-:
-:-:
-:-:
-
-
-
-
-
-
-
-
-
-
-기차
-
-2
-10...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/10/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Devfest">Devfest</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "GDG">GDG</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Google">Google</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Festival">Festival</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/10/20/using_makedown/" >
-            
-                <span>Markdown 기본사용법</span>
-        </a>
-        <div class="abstract-content">
-            #따라오시기 전 
-
-마크업 언어의 한 종류.
-헥소의 Tag Plugins 문서 참조.
-블로그 참조
-명령어 뒤에 띄어쓰기를 해야 명령으로 인식합니다
-직접 해보면서 따라오세요
-
-
-머리글
-123456markdown# text## text2### text3#### text4##### text5
-(박스아래에는 실행결과를 표시해드립니다)
-texttext2text3text4text5(5개이상부터는 4개와 같은 것을 볼 수 있습니다)
-
-링크
-12345&#123;% raw %&#125;[텍스트](http주소) &lt;&lt; 텍스트만 보임&l...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/10/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Markdown">Markdown</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/10/19/git-memo/" >
-            
-                <span>git memo</span>
-        </a>
-        <div class="abstract-content">
-            
-Git Hub
-git의 관리받는 저장소만들기123git init  #저장소 만들기rm -rf .git #저장소 삭제하기
-저장소 받아오기1git clone /로컬/저장소/경로
-원격 서버의 저장소를 복제1git clone 사용자명@호스트:/원격/저장소/경로
-원격 저장소 주소 추가 삭제123456git remote add origin &lt;주소&gt;   #주소적기git remote    git remote -v   #지금 현재 주소 git remote show &lt;리모트 저장소 이름&gt;  #리모트 저장소의 구체적인 정보...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/10/19</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Git">Git</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/10/19/henoy-tips/" >
-            
-                <span>기타 꿀팁과 햇갈리는 것 정리</span>
-        </a>
-        <div class="abstract-content">
-            정리가 필요한 것
-Rest api&gt;&gt; django-rest-framwork 학습함 &gt;&gt; 간단히 말해서 개발자가 데이터를 제공해줄때의 보편화된 양식
-터미널에서
-123456789pip freeze #현재 설치된 버전들 모두 볼수있다pip freeze&gt;requirements.txt #현재 설치된 버전들을 txt파일로 저장함pip install -r requirements.txt #패키지 이름하고 해당 버전 읽어서 다 다운로드함Cat requirements.txt #파일 내용 출력cv requirements...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/10/19</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Tip">Tip</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/10/19/django-basic/" >
-            
-                <span>django-basic (장고 개념 기초)</span>
-        </a>
-        <div class="abstract-content">
-            
-아주 중요 개념
- 뷰, 모델, url, 템플렛 view = 각종 로직 처리하는곳 request = 사용자가 서버에 요청 보낼떄 model = 웹서비스에서 서비스에 필요한 부분 저장할 당위 정의 url = 사용자가 url치면 그걸 view로 연결 즉 개발자는 모델, 뷰, 템플릿을 제공 한 다음 url에 매핑하기만 하면 장고는 결과정으로 사용자에게 제공한다  user-django-url-view-model, template 
-예를 들면 내가  192.0.1:8000/horo에 접속하면  urls.py에 url(r'^horo/$'...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/10/19</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Django">Django</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/01/08/whereMyPost/" >
-            
-                <span>기타 꿀팁과 햇갈리는 것 정리</span>
-        </a>
-        <div class="abstract-content">
-            whereMyPost만든이유
-택배를 조회할 때 우리는 항상 네이버, 다음, 해당 택배 홈페이지를 들어가서 번호를 입력하게된다
-이것을 카카오톡api를 사용하여 플러스 친구로 만들어 놓는다면 얼마나 편할까?
-
-
-구현할 기능(중요도 순)
-택배사 선택후 운송장 번호 입력하면 택배 정보가 뜨는 (url로 안내함 or return값 전부 보여주던가)
-
-사용자가 조회 한번 햇던 운송장 번호와 택배사를 저장해놓고 바로 다시조회할수있도록구현
-
-조회번호 ‘-‘상관없이 그냥 다 number로 받아드릴수있게 구현하자
-(택배는 )
-python req...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/01/08</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Project">Project</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "basic">basic</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    <!-- paginator  -->
-    
-    <nav class="page-nav">
-        <a class="extend prev" rel="prev" href="/page/3/">&amp;#60; PREV</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
-    </nav>
-    
-</main>
-            <!-- profile -->
-            
-            <div class="profile">
-    <img class="profile-avatar" alt="avatar" src= /avatar/IMG_0186.jpg >
-    <div class="profile-name">lostcatbox</div>
-    
-    <div class="profile-signature">
-        내 생각을 자유롭게 만들 때까지
-    </div>
-    
-    
-    <div class="profile-social">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
         
-    
+          <a class="main-nav-link" href="/">Home</a>
         
-            
-                <a href="mailto:lostcatbox@gmail.com" target="_blank" rel="noopener" class="iconfont-archer email" title=email ></a>
-            
+          <a class="main-nav-link" href="/archives">Archives</a>
         
-    
+      </nav>
+      <nav id="sub-nav">
         
-            
-                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
-            
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-    
-        
-            
-                <span class="iconfont-archer wechat" title=wechat>
-                  
-                  <img class="profile-qr" src="/assets/" />
-                </span>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-    </div>
-    
-    
-        <div class="friends">
-            <div>FRIENDS</div>
-            
-                
-                    <span>
-                        <a href= //www.naver.com target="_black">friendA</a>
-                    </span>
-                
-            
-                
-                    <span>
-                        <a href= //www.google.com target="_black">friendB</a>
-                    </span>
-                
-            
-                
-            
-        </div>
-    
-    
-        <div class="about-me">
-            <a href = "/about" >ABOUT ME</a>
-        </div>
-    
-</div>
-            
-        </div>
-        <footer class="footer footer-unloaded">
-    <!-- social  -->
-    
-    <div class="social">
-        
-    
-        
-            
-                <a href="mailto:lostcatbox@gmail.com" target="_blank" rel="noopener" class="iconfont-archer email" title=email ></a>
-            
-        
-    
-        
-            
-                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
-            
-        
-    
-        
-            
-                <span class="iconfont-archer wechat" title=wechat>
-                  
-                  <img class="profile-qr" src="/assets/" />
-                </span>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-    </div>
-    
-    <!-- powered by Hexo  -->
-    <div class="copyright">
-        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
-    </div>
-    <!-- 不蒜子  -->
-    
-    <div class="busuanzi-container">
-    
-     
-    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
-    
-    </div>
-    
-</footer>
-    </div>
-    <!-- toc -->
-    
-    <div class="back-top iconfont-archer">&#xe639;</div>
-    <div class="sidebar sidebar-hide">
-    <ul class="sidebar-tabs sidebar-tabs-active-0">
-        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
-        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
-        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
-    </ul>
-    <div class="sidebar-content sidebar-content-show-archive">
-          <div class="sidebar-panel-archives">
-    <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <div class="total-and-search">
-        <div class="total-archive">
-        Total : 36
-        </div>
-        <!-- search  -->
-        
-    </div>
-    
-    <div class="post-archive">
-    
-    
-    
-    
-    <div class="archive-year"> 2020 </div>
-    <ul class="year-list">
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/aws-python/" >aws_python</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/api14/" >api 기본편 14</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/api13/" >api 기본편 13</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/api12/" >api 기본편 12</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/api10/" >api 기본편 10 + 11</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/api09/" >api 기본편 9</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/api08/" >api 기본편 8</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/api05/" >api 기본편 5 + 6 + 7</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/api04/" >api 기본편 4</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/api03/" >api 기본편 3</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/api02/" >api 기본편 2</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/api01/" >api 기본편 1</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
-        </li>
-    
-    
-    
-    
-    
-        </ul>
-    
-    <div class="archive-year"> 2019 </div>
-    <ul class="year-list">
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/html/" >html</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >기타 꿀팁과 햇갈리는 것 정리</a>
-        </li>
-    
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
     </div>
   </div>
-        <div class="sidebar-panel-tags">
-    <div class="sidebar-tags-name">
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-festa1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/20/festa1/" class="article-date">
+  <time datetime="2019-10-20T08:23:25.000Z" itemprop="datePublished">2019-10-20</time>
+</a>
     
-        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Conference/">Conference</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
     
-        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
     
-        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/20/festa1/">Devfest Seoul Bingo 2019에서 배운 것들</a>
+    </h1>
+  
+
+      </header>
     
-        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
-    
-        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
-    
-        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
-    
-        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
-    
-        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
-    
-        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
-    
-        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
-    
-        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
-    
-        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
-    
-        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
-    
-        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
-    
-        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
-    
-        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
-    
-        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
-    
-        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
-    
-        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
-    
-        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
-    
-        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="keynote"><a href="#keynote" class="headerlink" title="keynote"></a>keynote</h1><hr>
+<p>구글 양승도님께서 <del>라떄는 말이야</del><br><strong>강조하신점 3가지</strong></p>
+<ul>
+<li>Focus on USER</li>
+<li>Think 10x (10배로 생각)</li>
+<li>Share everything You can </li>
+</ul>
+<h1 id="쉽게-따라할-수-있는-한국어-임베딩-구축-이기창"><a href="#쉽게-따라할-수-있는-한국어-임베딩-구축-이기창" class="headerlink" title="쉽게 따라할 수 있는 한국어 임베딩 구축 (이기창)"></a>쉽게 따라할 수 있는 한국어 임베딩 구축 (이기창)</h1><h2 id="임베딩이란"><a href="#임베딩이란" class="headerlink" title="임베딩이란?"></a>임베딩이란?</h2><p>단어, 문장(범주형 자료)를 연속형 벡터 형태로 변환시키는 것<br>주로 인공신경망 학습을 통해 범주형 자료를 벡터 형태로 바꾼다.<br>즉, 자연어 -&gt;백터값</p>
+<p>|구분|메밀꽃 필 무렵|운수 좋은 날|사랑 손님과 어머니|심포 가는길</p>
+<table>
+<thead>
+<tr>
+<th>:-:</th>
+<th>:-:</th>
+<th>:-:</th>
+<th>:-:</th>
+<th>:-:</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>기차</td>
+<td></td>
+<td>2</td>
+<td>10</td>
+<td>7</td>
+</tr>
+<tr>
+<td>—-</td>
+<td>—-</td>
+<td>—-</td>
+<td>—-</td>
+<td>—-</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>막걸리</td>
+<td></td>
+<td>1</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>——</td>
+<td>—-</td>
+<td>—-</td>
+<td>—-</td>
+<td>—-</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>선술집</td>
+<td></td>
+<td>1</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>——</td>
+<td>—-</td>
+<td>—-</td>
+<td>—-</td>
+<td>—-</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li>세로줄로 분석하면 문서임베딩</li>
+<li>가로줄로 분석하면 단어임베딩</li>
+</ul>
+<h2 id="임베딩으로-할-수-있는-것들"><a href="#임베딩으로-할-수-있는-것들" class="headerlink" title="임베딩으로 할 수 있는 것들"></a>임베딩으로 할 수 있는 것들</h2><ul>
+<li>임베딩이 되면 관련도, 유사도 계산 가능, 시각화도 가능(관련있는것끼리 묶이는 형태)</li>
+<li>벡터 연산(유추 평가): 아들 - 딸 + 소녀 = 소년<br>((((이미지))))</li>
+</ul>
+<p><em>여기는 잘 모르겠다 연산이 어떻게 가능한거지? 원리?</em></p>
+<ul>
+<li><p>전이 학습 (transfer learing): 다른 딥러닝 모델의 입력값으로 학습가능?</p>
+</li>
+<li><p>전이 학습한 모델이랑 처음부터 랜덤으로 한 모델이랑 시작점자체가 다르다<br>(구축해놓으신자료링크)</p>
+</li>
+<li><p>단어 임베딩으로 문서 분류하기</p>
+<blockquote>
+<ul>
+<li>핵심컨셉: 문서에 속한 단어가 유사하면 문서 의미도 비슷하다<br>(단어 벡터 중심=도형중심=유사값)<br>(이미지설명: 벡터값이 각자 이 영화 잼- 긍정, 이 영화 노잼 - 부정, input값이 이 영화 꿀재미? 판단은 가장유사한 학습데이터 레이블을 예측값으로 긍정이라고 판단)<br><strong>즉 따로 복잡한 딥러닝 안해도 70퍼이상 정확도나옴</strong> (딥러닝 80~90)</li>
+</ul>
+</blockquote>
+<h3 id="단어수준-임베딩-구축"><a href="#단어수준-임베딩-구축" class="headerlink" title="단어수준 임베딩 구축"></a>단어수준 임베딩 구축</h3><blockquote>
+<ul>
+<li>일단 단어 빈도를 셈(순서정보x, 빈도정보o)<br>단어 순서로 다시 분석(순서정보o)<br>(이떄 앞에서부터만 읽는것 ELMo, 앞으로 뒤로 BERT)(BERT가 더 나음)</li>
+<li>단어가 어떤 단어와 주로 같이 나타나는지 살핀다 . (Word2Vec, Fassttext, Glove이런 방식으로 학습(임베딩 구축))</li>
+</ul>
+</blockquote>
+<h3 id="문장수준-임베딩-구축"><a href="#문장수준-임베딩-구축" class="headerlink" title="문장수준 임베딩 구축"></a>문장수준 임베딩 구축</h3><blockquote>
+<ul>
+<li>ElMo, BERT 다양한 문장 수준 임베딩</li>
+<li>장점: 동음이의어 구별 가능</li>
+<li>문맥적 의미를 벡터화 할 수 있다. (ex.배)<br>((이미지링크))</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h2 id="임베딩-활용"><a href="#임베딩-활용" class="headerlink" title="임베딩 활용"></a>임베딩 활용</h2><ul>
+<li>전이학습으로 다른 네트워크의 입력값으로 사용돼 자연어 처리 성능 높일 수 있음 (미개척분야)</li>
+<li>현재까지는 폴 케익?+BERT 효율 최대?</li>
+</ul>
+<h1 id="Clean-Code-for-ML-AI-한성민"><a href="#Clean-Code-for-ML-AI-한성민" class="headerlink" title="Clean Code for ML/AI (한성민)"></a>Clean Code for ML/AI (한성민)</h1><ul>
+<li>꺠진 유리창이론: 곧 다른 유리창들도 꺠진다. 내가 코드를 잘짜야 팀한테도 열심히해야겠다는 생각이듬</li>
+<li>보이스카웃 규칙: 여러분 손을 거치게된 코드는 원래보다 더 낫게 만들고 떠나라</li>
+</ul>
+<h2 id="안좋은-케이스"><a href="#안좋은-케이스" class="headerlink" title="안좋은 케이스"></a>안좋은 케이스</h2><ul>
+<li><p>if문을 남발.(branch가 많아지면 더 불편, 안좋음)</p>
+<blockquote>
+<p>해결: ruturn을 사용해 함수가 그자리에서 끝나게하면 if문을 줄일수있다</p>
+</blockquote>
+</li>
+<li><p>주석의 남용.</p>
+</li>
+</ul>
+<blockquote>
+<p> 해결: 자세하고 친절한 주석을  함수 이름으로 바꿔보세요</p>
+</blockquote>
+<ul>
+<li>중복코드<blockquote>
+<p>해결: 데이터와 데이터 처리를 분리하여 나중에 데이터추가할떄 더 편함, 관리 용이</p>
+</blockquote>
+</li>
+<li>너무 긴 메소드, 거대한 클래스, 상속 거부, 과도한 복잡성, 게으른 클래스</li>
+</ul>
+<h2 id="좋은-코딩으로-수정하기"><a href="#좋은-코딩으로-수정하기" class="headerlink" title="좋은 코딩으로 수정하기"></a>좋은 코딩으로 수정하기</h2><ul>
+<li>안쓰는 키워드 제거, 직접기입되어있는 설정이수들을 전역 변수로 추출, </li>
+<li>복잡성이 높은 로직 함수 추출, 조건식 단순화, 중복코드함수 추출, iifififif 절대 쓰지마</li>
+<li>모델혹은 oprimizer의 인수정보들은 전역변수에서 설정프레임워크를 이용한 파라미터로 변화시킴</li>
+<li>코드 컨벤션 공통화(‘통일, 함수사이를 2줄넘김, 1줄을 넘어서는 함수 인수의 intent재조정)</li>
+</ul>
+<h2 id="지속적인-코드-관리-프로그램-쓰기"><a href="#지속적인-코드-관리-프로그램-쓰기" class="headerlink" title="지속적인 코드 관리 프로그램 쓰기"></a>지속적인 코드 관리 프로그램 쓰기</h2><ul>
+<li>lint에서 pylint or flake8 추천(한줄한줄 에러 찾아줌)</li>
+<li>quality gate의 sonarqube 추천 (전부 코드 몇점인지 평가 몇점이상만쓰기설정)</li>
+</ul>
+<h2 id="참고"><a href="#참고" class="headerlink" title="참고"></a>참고</h2><p>hot fix= 제품사용중 버그수정, 취약점보안 긴급 배포<br>채팅창 QR서비스 찾아보기</p>
+<h1 id="Toy-프로젝트"><a href="#Toy-프로젝트" class="headerlink" title="Toy 프로젝트"></a>Toy 프로젝트</h1><h2 id="어떻게-성장했는가-육하원칙"><a href="#어떻게-성장했는가-육하원칙" class="headerlink" title="어떻게 성장했는가? 육하원칙!"></a>어떻게 성장했는가? 육하원칙!</h2><h3 id="무엇을-어떻게-왜"><a href="#무엇을-어떻게-왜" class="headerlink" title="무엇을 , 어떻게, 왜"></a>무엇을 , 어떻게, 왜</h3><blockquote>
+<p> 관심사가 클라우드 서비스, 따라서 CLI로 클라우드 속도 체크 프로그램 만듬</p>
+</blockquote>
+<h3 id="어떻게"><a href="#어떻게" class="headerlink" title="어떻게?"></a>어떻게?</h3><blockquote>
+<p>만든다음 프로그램을 알리기위해 google, G AWS한국 모음, 등등<br> 국내에서 피드백을 많이 받고 외국 커뮤니티에도 피드백 받았다. git<br> <strong>결국 이것들이 피와 살이 되었다.(반드시 경험해야할것같다)</strong></p>
+</blockquote>
+<h3 id="왜"><a href="#왜" class="headerlink" title="왜"></a>왜</h3><blockquote>
+<p>적절한 커뮤니티에 공유하는 것이 중요. 혼자만들어봐야 아무도 알려주지 않는다.<br>나를 노출시키는 프로젝트을 많이 기록해놓자</p>
+</blockquote>
+<h2 id="그이후-이야기들…"><a href="#그이후-이야기들…" class="headerlink" title="그이후 이야기들…"></a>그이후 이야기들…</h2><blockquote>
+<ul>
+<li>README.md를 쉽게 정리 (프로그램의 첫 인상)<br>visual하게, 프로그램 실행하면 스크린샷까지 띄움</li>
+</ul>
+</blockquote>
+<ul>
+<li><p>무엇에 쓰는 프로그램인지?</p>
+</li>
+<li><p>프로그램 설치과정 최대한 자세히(예상되는 오류들도 적어놓으면..좋다)(피드백적기)</p>
+</li>
+<li><p><strong>기술 + 가장 중요한건 자기 브랜딩 + 내 프로젝트 오픈소스후 커뮤니티</strong> (reoin.tistory참조)</p>
+</li>
+<li><p>내가 하고싶은 분야는 4시간 출퇴근 길에서도 가능하다</p>
+</li>
+<li><p>Linked in 업데이트! (내가 인사과라고 생각하면 키워드 검색에 걸려야함!)<br>(전략적 UPdate)</p>
+</li>
+<li><p>블로그에는 내가 분석한 오픈소스까지 기록하면좋다</p>
+</li>
+</ul>
+<h1 id="톱아보다"><a href="#톱아보다" class="headerlink" title="톱아보다"></a>톱아보다</h1><p> (서버관련 지식이 많이 부족해서 들은것 거의 그대로,,)</p>
+<p>보통은 유저- Apache- Tomcat(Application(UI/UX, 유저, 주문))-MYSQL,MariaDB<br>구조이므로 어플리케이션의 유저를 고치려면 멈추고 재배포등으로 서비스가 중간에 끊겨야 가능하다.</p>
+<h2 id="MSA"><a href="#MSA" class="headerlink" title="MSA"></a>MSA</h2><p>애플리케이션을 느슨히 결합된 서비스의 모임으로 구조화하는 SOA스타일의 일종인 소프트웨어 개발 기법</p>
+<h3 id="MSA-구성"><a href="#MSA-구성" class="headerlink" title="MSA 구성"></a>MSA 구성</h3><ul>
+<li>API Gateway: API의 End-point를 통합</li>
+<li>Orchestration: 여러개의 서비를 묶어서 하나의 서비스로 만듦(관리 아주 용이)</li>
+<li>Service Mesh: 서비스간의 통신(네트워크관리)<br>(이미지 반드시 필요)<br>(티월드 예시 이미지)</li>
+</ul>
+<h3 id="MSA-장점"><a href="#MSA-장점" class="headerlink" title="MSA 장점"></a>MSA 장점</h3><p>확장의 유연함, 알림 서비스 추가<br>하나의 서비스가 죽으면 개만 죽음.. 나머지 전체는 정상작동</p>
+<h3 id="MSA-단점"><a href="#MSA-단점" class="headerlink" title="MSA 단점"></a>MSA 단점</h3><p>장애추적이 굉장히 어렵다<br>(이미지)<br>MSA Pattern 설명</p>
+<h2 id="Clould-and-Sererless"><a href="#Clould-and-Sererless" class="headerlink" title="Clould and Sererless"></a>Clould and Sererless</h2><p>On-Premise에서 MSA(아마 내가 직접돌리는 물리적서버인듯)</p>
+<ul>
+<li>관리용 애플리케이션(Batch,crow…필요)</li>
+<li>다양한 프레임 워크를 쓰다보면 매번 새로운 장애 발생(라이브러리, 모듈)</li>
+<li>물리 서버관리 (네트워크, 스토리지.. 금전적)<br>(이미지. 겪었던 문제들)</li>
+</ul>
+<h3 id="Clould-and-Serverless-차이"><a href="#Clould-and-Serverless-차이" class="headerlink" title="Clould and Serverless 차이"></a>Clould and Serverless 차이</h3><ul>
+<li>클라우드는 컴퓨터의 시스템 리소스 저장</li>
+<li>serverless 동적머신활용..</li>
+<li>아마존 Lambda 서비스는 코드실생 다른 AWS서비스에서 코드를 자동으로 트리거하도록 설정</li>
+</ul>
+<h3 id="Clould-문제점"><a href="#Clould-문제점" class="headerlink" title="Clould 문제점"></a>Clould 문제점</h3><ul>
+<li>Cloud 맞게 커스텀 필요</li>
+<li>잘못설계시 roll back 위험성 (일만 2배할 가능성 존재)</li>
+</ul>
+<h2 id="Multi-Cloud"><a href="#Multi-Cloud" class="headerlink" title="Multi Cloud"></a>Multi Cloud</h2><ul>
+<li>서비스명도 옵션도 다름. 따라서 기능 옵션통합!</li>
+</ul>
+<h2 id="HCI"><a href="#HCI" class="headerlink" title="HCI"></a>HCI</h2><ul>
+<li>데이터 센터 서비스를 페키징하고 단일 애플리케이션에서 관리할수있도록 지원하는 어플장비</li>
+</ul>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><ul>
+<li>어플들을 Container안에 배치시키는 일을 자동화하는 오픈 소스 시스템</li>
+</ul>
+<h2 id="Kubernetes"><a href="#Kubernetes" class="headerlink" title="Kubernetes"></a>Kubernetes</h2><ul>
+<li>Containerized 된 Application을 자동으로 배포, 스케일링 및 관리해주는 오픈소스 시스템</li>
+</ul>
+<h2 id="Istio"><a href="#Istio" class="headerlink" title="Istio"></a>Istio</h2><p>분산형 MSA실행을 지원하는 독립형 오픈소스 Service Mesh<br>(인증, 승인, 암호화를 확장 가능한 방식으로 제공 및 관리)</p>
+<h2 id="물리서버에서-가능한것은-클라우드-…등등-모든곳에서가능"><a href="#물리서버에서-가능한것은-클라우드-…등등-모든곳에서가능" class="headerlink" title="물리서버에서 가능한것은 클라우드,…등등 모든곳에서가능"></a>물리서버에서 가능한것은 클라우드,…등등 모든곳에서가능</h2><p>하지만 현재 최적의 조화는<br>적절한 Cloud Service + k8s Cluster의 사용<br>(이미지)</p>
+
+      
     </div>
-    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
-    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
-    缺失模块。<br/>
-    1、请确保node版本大于6.2<br/>
-    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
-    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
-    3、在根目录_config.yml里添加配置：
-    <pre style="color: #787878; font-size: 0.6rem;">
-jsonContent:
-  meta: false
-  pages: false
-  posts:
-    title: true
-    date: true
-    path: true
-    text: false
-    raw: false
-    content: false
-    slug: false
-    updated: false
-    comments: false
-    link: false
-    permalink: false
-    excerpt: false
-    categories: true
-    tags: true</pre>
-    </div> 
-    <div class="sidebar-tags-list"></div>
-</div>
-        <div class="sidebar-panel-categories">
-    <div class="sidebar-categories-name">
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/10/20/festa1/" data-id="ck6ddg3nr001ekuadd7d9bz1j" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Devfest/" rel="tag">Devfest</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Festival/" rel="tag">Festival</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GDG/" rel="tag">GDG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Google/" rel="tag">Google</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-using_makedown" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/20/using_makedown/" class="article-date">
+  <time datetime="2019-10-20T06:01:55.000Z" itemprop="datePublished">2019-10-20</time>
+</a>
     
-        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Markdown/">Markdown</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
     
-        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
-        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/20/using_makedown/">Markdown 기본사용법</a>
+    </h1>
+  
+
+      </header>
     
-        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
-    
-        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
-    
-        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
-    
-        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
-    
-        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
-    
-        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
-    
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
-    
-        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="따라오시기-전"><a href="#따라오시기-전" class="headerlink" title="#따라오시기 전 "></a>#따라오시기 전 <br></h1><hr>
+<ul>
+<li>마크업 언어의 한 종류.</li>
+<li>헥소의 <a href="https://hexo.io/ko/docs/tag-plugins.html" target="_blank" rel="noopener">Tag Plugins 문서</a> 참조.</li>
+<li><a href="https://tbr74.github.io/2017/07/09/Study-Hexo-2017-07-09-hexo-markdown/" target="_blank" rel="noopener">블로그 참조</a></li>
+<li>명령어 뒤에 띄어쓰기를 해야 명령으로 인식합니다</li>
+<li>직접 해보면서 따라오세요</li>
+</ul>
+<hr>
+<h1 id="머리글"><a href="#머리글" class="headerlink" title="머리글"></a>머리글</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">markdown</span><br><span class="line"># text</span><br><span class="line">## text2</span><br><span class="line">### text3</span><br><span class="line">#### text4</span><br><span class="line">##### text5</span><br></pre></td></tr></table></figure>
+<p><strong>(박스아래에는 실행결과를 표시해드립니다)</strong></p>
+<h1 id="text"><a href="#text" class="headerlink" title="text"></a>text</h1><h2 id="text2"><a href="#text2" class="headerlink" title="text2"></a>text2</h2><h3 id="text3"><a href="#text3" class="headerlink" title="text3"></a>text3</h3><h4 id="text4"><a href="#text4" class="headerlink" title="text4"></a>text4</h4><h5 id="text5"><a href="#text5" class="headerlink" title="text5"></a>text5</h5><p>(5개이상부터는 4개와 같은 것을 볼 수 있습니다)</p>
+<hr>
+<h1 id="링크"><a href="#링크" class="headerlink" title="링크"></a>링크</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% raw %&#125;</span><br><span class="line">[텍스트](http주소) &lt;&lt; 텍스트만 보임</span><br><span class="line">&lt;http주소&gt; &lt;&lt;주소가 보이고 클릭하면 이동</span><br><span class="line">[![텍스트](이미지경로.jpg or 이미지주소)](http주소) &lt;&lt; 이미지만 보이고 클릭하면 이동</span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="http://img.hani.co.kr/imgdb/resize/2018/0313/00500561_20180313.JPG" target="_blank" rel="noopener">고양이</a><br><a href="http://img.hani.co.kr/imgdb/resize/2018/0313/00500561_20180313.JPG" target="_blank" rel="noopener">http://img.hani.co.kr/imgdb/resize/2018/0313/00500561_20180313.JPG</a><br><a href="https://www.google.com/" target="_blank" rel="noopener"><img src="http://img.hani.co.kr/imgdb/resize/2018/0313/00500561_20180313.JPG" alt="고양이"></a><br><del>(맨마지막은 사진뷰어가 실행될것이다… 블로거 현재 테마가 뷰어로 불러오는거라.. 가볍게무시해주자)</del></p>
+<h2 id="코드-블럭"><a href="#코드-블럭" class="headerlink" title="코드 블럭"></a>코드 블럭</h2><p>이것은 ‘```’뒤에 언어를 명시하면 해당 언어의 문법에 맞게 하이라이트를 해준다.<br>(참고로 맥북을 쓸때 저거대신 ₩가 나오면 정상.. 옵션키누르면서 눌러보자!)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">​```language // python, bash</span><br><span class="line">`3개 시작하는곳 옆에 적어넣으면된다!</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line">for cat in cats</span><br><span class="line">    return &quot;고양이&quot;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="검정색-백그라운드"><a href="#검정색-백그라운드" class="headerlink" title="검정색 백그라운드"></a>검정색 백그라운드</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre&gt; ~~ &lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<pre> 고양이 개좋아~!
+</pre>
+<p>(태그속성이므로 꼭 마지막에 닫아주는 &lt;/~~&gt; 필요)</p>
+<hr>
+<h1 id="글자효과들"><a href="#글자효과들" class="headerlink" title="글자효과들"></a>글자효과들</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">**catissosweet**, __catissosweet__ (굵게, 강조)</span><br><span class="line">*catissosweet*, _catissosweet_ (기울여)</span><br><span class="line">~~catissosweet~~ (취소선)</span><br><span class="line">&lt;u&gt; ~~ &lt;/u&gt; (밑줄)</span><br><span class="line">**cat_is_so**_sweet_ (응용)</span><br></pre></td></tr></table></figure>
+<p><strong>catissosweet</strong>, <strong>catissosweet</strong> (굵게, 강조)<br><em>catissosweet</em>, <em>catissosweet</em> (기울여)<br><del>catissosweet</del> (취소선)<br><u> ~~ </u> (밑줄)<br><strong>cat_is_so</strong><em>sweet</em> (응용)</p>
+<hr>
+<h1 id="수평선"><a href="#수평선" class="headerlink" title="수평선"></a>수평선</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-------, *********** (여러개면 됨)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<hr>
+<hr>
+<h1 id="줄바꿈"><a href="#줄바꿈" class="headerlink" title="줄바꿈"></a>줄바꿈</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">고양이&lt;br&gt;좋아</span><br></pre></td></tr></table></figure>
+
+<p>고양이<br>좋아</p>
+<hr>
+<h1 id="리스트"><a href="#리스트" class="headerlink" title="리스트"></a>리스트</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. cat</span><br><span class="line">2. is</span><br><span class="line">3. so</span><br><span class="line">4. sweet</span><br></pre></td></tr></table></figure>
+<ol>
+<li>cat</li>
+<li>is</li>
+<li>so</li>
+<li>sweet</li>
+</ol>
+<hr>
+<h1 id="tables"><a href="#tables" class="headerlink" title="tables"></a>tables</h1><hr>
+<p>표라고 생각하자</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">|cat|is|so|sweet|</span><br><span class="line">|:-:|:-:|:-:|:-:|</span><br><span class="line">|고양이|하다|존나|달콤한|</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center">cat</th>
+<th align="center">is</th>
+<th align="center">so</th>
+<th align="center">sweet</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">고양이</td>
+<td align="center">하다</td>
+<td align="center">존나</td>
+<td align="center">달콤한</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="Youtube-링크"><a href="#Youtube-링크" class="headerlink" title="Youtube 링크"></a>Youtube 링크</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% raw %&#125;</span><br><span class="line">&#123;% youtube video_id %&#125;</span><br><span class="line">아래는 예시 코드</span><br><span class="line">&#123;% youtube LVpmk8v7s2c %&#125;</span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure>
+
+<div class="video-container"><iframe src="//www.youtube.com/embed/LVpmk8v7s2c" frameborder="0" allowfullscreen></iframe></div>
+
+<hr>
+<h1 id="참조-hexo-초안작성법"><a href="#참조-hexo-초안작성법" class="headerlink" title="참조. hexo 초안작성법"></a>참조. hexo 초안작성법</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% raw %&#125;</span><br><span class="line">$ hexo new draft [파일명]  &lt;&lt;초안 생성됨</span><br><span class="line">$ hexo publish [파일명] &lt;&lt;초안을 포스트로 옮기기</span><br><span class="line">$ hexo server --draft &lt;&lt;원래 초안은 로컬에서 안보이지만 보이게해주는 명령어</span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+      
     </div>
-    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
-    <div class="sidebar-categories-list"></div>
-</div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/10/20/using_makedown/" data-id="ck6ddg3of002pkuad7hcvebty" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-git-memo" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/19/git-memo/" class="article-date">
+  <time datetime="2019-10-19T10:10:31.000Z" itemprop="datePublished">2019-10-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Git/">Git</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/19/git-memo/">git memo</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="Git-Hub"><a href="#Git-Hub" class="headerlink" title="Git Hub"></a>Git Hub</h1><hr>
+<h2 id="git의-관리받는-저장소만들기"><a href="#git의-관리받는-저장소만들기" class="headerlink" title="git의 관리받는 저장소만들기"></a>git의 관리받는 저장소만들기</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git init  #저장소 만들기</span><br><span class="line"></span><br><span class="line">rm -rf .git #저장소 삭제하기</span><br></pre></td></tr></table></figure>
+<h2 id="저장소-받아오기"><a href="#저장소-받아오기" class="headerlink" title="저장소 받아오기"></a>저장소 받아오기</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone /로컬/저장소/경로</span><br></pre></td></tr></table></figure>
+<h2 id="원격-서버의-저장소를-복제"><a href="#원격-서버의-저장소를-복제" class="headerlink" title="원격 서버의 저장소를 복제"></a>원격 서버의 저장소를 복제</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone 사용자명@호스트:/원격/저장소/경로</span><br></pre></td></tr></table></figure>
+<h2 id="원격-저장소-주소-추가-삭제"><a href="#원격-저장소-주소-추가-삭제" class="headerlink" title="원격 저장소 주소 추가 삭제"></a>원격 저장소 주소 추가 삭제</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin &lt;주소&gt;   #주소적기</span><br><span class="line">git remote    </span><br><span class="line">git remote -v   #지금 현재 주소 </span><br><span class="line">git remote show &lt;리모트 저장소 이름&gt;  #리모트 저장소의 구체적인 정보를 알수있다.</span><br><span class="line">git remote rename &lt;원래 이름&gt; &lt;바꿀이름&gt;   #리모트 저장소 이름 바꾸기</span><br><span class="line">git remote remove &lt;리모트 저장소 이름&gt; #리모트 삭제</span><br></pre></td></tr></table></figure>
+
+<h2 id="리모트-저장소를-Pull-하거나-Fetch-하기"><a href="#리모트-저장소를-Pull-하거나-Fetch-하기" class="headerlink" title="리모트 저장소를 Pull 하거나 Fetch 하기"></a>리모트 저장소를 Pull 하거나 Fetch 하기</h2><p>앞서 설명했듯이 리모트 저장소에서 데이터를 가져오려면 간단히 아래와 같이 실행한다.</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git fetch &lt;remote&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>이 명령은 로컬에는 없지만, 리모트 저장소에는 있는 데이터를 모두 가져온다. 그러면 리모트 저장소의 모든 브랜치를 로컬에서 접근할 수 있어서 언제든지 Merge를 하거나 내용을 살펴볼 수 있다.</p>
+<p>저장소를 Clone 하면 명령은 자동으로 리모트 저장소를 “origin” 이라는 이름으로 추가한다. 그래서 나중에 <code>git fetch origin</code> 명령을 실행하면 Clone 한 이후에(혹은 마지막으로 가져온 이후에) 수정된 것을 모두 가져온다. <code>git fetch</code> 명령은 리모트 저장소의 데이터를 모두 로컬로 가져오지만, 자동으로 Merge 하지 않는다. 그래서 당신이 로컬에서 하던 작업을 정리하고 나서 수동으로 Merge 해야 한다.</p>
+<p>그냥 쉽게 <code>git pull</code> 명령으로 리모트 저장소 브랜치에서 데이터를 가져올 뿐만 아니라 자동으로 로컬 브랜치와 Merge 시킬 수 있다(다음 섹션과 <a href="https://git-scm.com/book/ko/v2/ch00/ch03-git-branching" target="_blank" rel="noopener">Git 브랜치</a> 에서 좀더 자세히 살펴본다). 먼저 <code>git clone</code> 명령은 자동으로 로컬의 master 브랜치가 리모트 저장소의 master 브랜치를 추적하도록 한다(물론 리모트 저장소에 master 브랜치가 있다는 가정에서). 그리고 <code>git pull</code> 명령은 Clone 한 서버에서 데이터를 가져오고 그 데이터를 자동으로 현재 작업하는 코드와 Merge 시킨다.</p>
+<h2 id="Git-의-구성"><a href="#Git-의-구성" class="headerlink" title="Git 의 구성"></a>Git 의 구성</h2><hr>
+<p>-작업디렉토리<br>-인덱스(stage)<br>-HEAD</p>
+<h2 id="관련-설명"><a href="#관련-설명" class="headerlink" title="관련 설명"></a>관련 설명</h2><hr>
+<p>작업디렉토리는 실제 파일들로 이루어져있으며<br>안에 변경사항이 일어날경우 git이 인지<br>내가 변경사항이 있는 것들을 add를 통해 추가<br>또는 기존에서 추가하는파일들이있어도 역시 add로 추가한다<br>그리고 stage에 있는 애들은 commit명령어로 HEAD로 최종확정본을 나타낸다<br>다음은 서버로 올려야한다</p>
+<h2 id="현재상태확인"><a href="#현재상태확인" class="headerlink" title="현재상태확인"></a>현재상태확인</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
+<h2 id="파일추가-및-확정"><a href="#파일추가-및-확정" class="headerlink" title="파일추가 및 확정."></a>파일추가 및 확정.</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add&lt;파일 이름&gt;</span><br><span class="line">git add *</span><br><span class="line">git commit -m &quot;이번 확정본에 대한 설명&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="변경-내용-발행하기"><a href="#변경-내용-발행하기" class="headerlink" title="변경 내용 발행하기"></a>변경 내용 발행하기</h2><p>현재의 변경 내용은 아직 로컬 저장소의 HEAD안에 머물고 있다<br>원격 서버로 올려보자</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin master (다른 가지를 발행하려면 master 대신 가지이름을 적는다)</span><br></pre></td></tr></table></figure>
+
+<h2 id="서버주소-입력해주자"><a href="#서버주소-입력해주자" class="headerlink" title="서버주소 입력해주자"></a>서버주소 입력해주자</h2><p>만약 기존에 있던 원격 저장소를 복제한것이 아니라면<br>원격 서버의 주소를 git에게 알려줘야 해요</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin &lt;원격 서버 주소&gt;</span><br></pre></td></tr></table></figure>
+<p>이제 변경 내용을 원격 서버로 발행가능</p>
+<h2 id="가지-branch"><a href="#가지-branch" class="headerlink" title="가지 (branch)"></a>가지 (branch)</h2><p>가지는 안전하게 격리된 상태에서 무언가를 만들떄 사용합니다<br>branch로 가지로 나와서 나중에 완성되면 merge로 master(혹은 현재잡혀있는 위치)와 병합합니다</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b feature_x (feature_x라는 가지생성)</span><br><span class="line"></span><br><span class="line">git checkout master(마스터 가지로 돌아옴)</span><br><span class="line"></span><br><span class="line">git branch -d feature_x (가지삭제)</span><br><span class="line"></span><br><span class="line">git push origin &lt;가지이름&gt; (서버로 보낼떄까지는 다른사람 접근 불가)</span><br></pre></td></tr></table></figure>
+<h2 id="갱신과-병합"><a href="#갱신과-병합" class="headerlink" title="갱신과 병합"></a>갱신과 병합</h2><p>나의 로컬 저장소를 원격 저장소에 맞춰 갱신하려면 (원격 저장소의 변경 내용이 로컬 작업 디렉토리에 받아지고 병합됨)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
+<p>다른 가지에 있는 변경 내용을 현재 가지에 병합하려면 현재 위치에서</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge &lt;가지 이름&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="만약-충돌일어나면"><a href="#만약-충돌일어나면" class="headerlink" title="만약 충돌일어나면?"></a>만약 충돌일어나면?</h3><p>위에 둘다  병합시도를 하는데 충돌이 일어나면 git에서 알려주는 파일을 직접 수정후 파일을 병합하라고 알려주셈 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git  add&lt;파일 이름&gt;</span><br></pre></td></tr></table></figure>
+<p>변경내용을 병합하기전에, 어떻게 내용차이가 나는지알수있음</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git diff &lt;원래 가지&gt; &lt;비교대상가지&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="로컬-변경-내용-되돌리기"><a href="#로컬-변경-내용-되돌리기" class="headerlink" title="로컬 변경 내용 되돌리기"></a>로컬 변경 내용 되돌리기</h2><p>위 명령은 로컬의 변경 내용을 변경 전  상태(HEAD)로 되돌려줘요</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -- &lt;파일 이름&gt;</span><br></pre></td></tr></table></figure>
+<p>다만 이미 인덱스에 추가된 변경 내용과 새로 생성한 파일은 그대로 남는다</p>
+<h2 id="로컬-포기"><a href="#로컬-포기" class="headerlink" title="로컬 포기"></a>로컬 포기</h2><p>만약, 로컬에 있는 모든 변경 내용과 확정본을 포기하려면,<br>아래 명령으로 원격 저장소의 최신 이력을 가져오고,<br>로컬 master 가지가 저 이력을 가리키도록 할수 있어요/</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin</span><br><span class="line">git reset --hard origin/master</span><br></pre></td></tr></table></figure>
+
+<h2 id="git-add한-걸-취소하고싶을떄"><a href="#git-add한-걸-취소하고싶을떄" class="headerlink" title="git add한 걸 취소하고싶을떄"></a>git add한 걸 취소하고싶을떄</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset HEAD[file]   #파일명이없다면 add한 파일 전체 취소한다</span><br></pre></td></tr></table></figure>
+<h2 id="그외-기능들"><a href="#그외-기능들" class="headerlink" title="그외 기능들"></a>그외 기능들</h2><h3 id="git에-올릴필요없는파일들"><a href="#git에-올릴필요없는파일들" class="headerlink" title="git에 올릴필요없는파일들"></a>git에 올릴필요없는파일들</h3><p>./gitignore 에 넣으면 안올라가</p>
+<h3 id="git의-내장-GUI"><a href="#git의-내장-GUI" class="headerlink" title="git의 내장 GUI"></a>git의 내장 GUI</h3><p>gitk</p>
+<h3 id="콘솔에서-git-output을-컬러로-출력하기"><a href="#콘솔에서-git-output을-컬러로-출력하기" class="headerlink" title="콘솔에서 git output을 컬러로 출력하기"></a>콘솔에서 git output을 컬러로 출력하기</h3><p>git config color.ui true</p>
+<h3 id="이력-log-에서-확정본-1개를-딱-한-줄로만-표시하기"><a href="#이력-log-에서-확정본-1개를-딱-한-줄로만-표시하기" class="headerlink" title="이력(log)에서 확정본 1개를 딱 한 줄로만 표시하기"></a>이력(log)에서 확정본 1개를 딱 한 줄로만 표시하기</h3><p>git config format.pretty oneline</p>
+<h3 id="파일을-추가할-때-대화식으로-추가하기"><a href="#파일을-추가할-때-대화식으로-추가하기" class="headerlink" title="파일을 추가할 때 대화식으로 추가하기"></a>파일을 추가할 때 대화식으로 추가하기</h3><p>git add -i</p>
+<h3 id="어떤상황에서-나가는-방법"><a href="#어떤상황에서-나가는-방법" class="headerlink" title="어떤상황에서 나가는 방법"></a>어떤상황에서 나가는 방법</h3><p>:q!</p>
+
+      
     </div>
-</div> 
-    <script>
-    var siteMeta = {
-        root: "/",
-        author: "Seungwon Yang"
-    }
-</script>
-    <!-- CDN failover -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-    <script type="text/javascript">
-        if (typeof window.$ === 'undefined')
-        {
-            console.warn('jquery load from jsdelivr failed, will load local script')
-            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
-        }
-    </script>
-    <script src="/scripts/main.js"></script>
-    <!-- algolia -->
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/10/19/git-memo/" data-id="ck6ddg3o9002dkuad0zem41bt" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Basic/" rel="tag">Basic</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/" rel="tag">Git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-henoy-tips" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/19/henoy-tips/" class="article-date">
+  <time datetime="2019-10-19T10:10:12.000Z" itemprop="datePublished">2019-10-19</time>
+</a>
     
-    <!-- busuanzi  -->
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Tip/">Tip</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
     
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     
-    <!-- CNZZ  -->
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/19/henoy-tips/">기타 꿀팁과 햇갈리는 것 정리</a>
+    </h1>
+  
+
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="정리가-필요한-것"><a href="#정리가-필요한-것" class="headerlink" title="정리가 필요한 것"></a>정리가 필요한 것</h1><hr>
+<p>Rest api&gt;&gt; django-rest-framwork 학습함 &gt;&gt; 간단히 말해서 개발자가 데이터를 제공해줄때의 보편화된 양식</p>
+<h1 id="터미널에서"><a href="#터미널에서" class="headerlink" title="터미널에서"></a>터미널에서</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pip freeze #현재 설치된 버전들 모두 볼수있다</span><br><span class="line">pip freeze&gt;requirements.txt #현재 설치된 버전들을 txt파일로 저장함</span><br><span class="line">pip install -r requirements.txt #패키지 이름하고 해당 버전 읽어서 다 다운로드함</span><br><span class="line"></span><br><span class="line">Cat requirements.txt #파일 내용 출력</span><br><span class="line"></span><br><span class="line">cv requirements.txt ../cbv #복붙 기능 상위폴더에 cbv폴더안에</span><br><span class="line"></span><br><span class="line">mv requirements.txt ../cbv #이동 기능 상위폴더에 cbv폴더안에</span><br></pre></td></tr></table></figure>
+
+<h2 id="파일-내용을-보고싶을때"><a href="#파일-내용을-보고싶을때" class="headerlink" title="파일 내용을 보고싶을때"></a>파일 내용을 보고싶을때</h2><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi &lt;파일이름&gt;</span><br></pre></td></tr></table></figure>
+
+<p>i를 누르면 edit mode<br>다 수정후 :wq  로 나간다 (저장후 끄기)</p>
+<h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><p><a href="https://lostcatbox.github.io/2019/10/19/git-memo/" target="_blank" rel="noopener">자세히</a></p>
+<h1 id="파이참에서"><a href="#파이참에서" class="headerlink" title="파이참에서"></a>파이참에서</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#프로젝트내에서 파일찾기임</span><br><span class="line">shift+shift</span><br><span class="line"></span><br><span class="line"># 클래스안에서 재정의할수있는 것들 보여줌</span><br><span class="line">control + o</span><br><span class="line"></span><br><span class="line"># import할것 자동으로 찾아서 입력해줌</span><br><span class="line">option + enter</span><br></pre></td></tr></table></figure>
+
+<h1 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py sqlmigrate blog 0001_initial sql언어로 뭐가 실행될지 알려준다</span><br></pre></td></tr></table></figure>
+
+<h2 id="Form"><a href="#Form" class="headerlink" title="Form"></a>Form</h2><p>Db와 model이 이어진것처럼</p>
+<p>frontend와 form이 이어짐</p>
+<h3 id="form의-특징-딱-3가지만-기억하자"><a href="#form의-특징-딱-3가지만-기억하자" class="headerlink" title="form의 특징 (딱 3가지만 기억하자)!"></a>form의 특징 (딱 3가지만 기억하자)!</h3><ul>
+<li><p>입력폼을 생성: .as_table(), .as_p(), .as_ul() 기본제공</p>
+</li>
+<li><p>입력폼 값 검증(validation) 및 값 변환 (프론트엔드) </p>
+</li>
+<li><p>검증을 통과한 값들을 사전타입(cleaned_data이름으로 제공)</p>
+</li>
+<li><p>과정: 즉, get요청으로 처음으로 form = FormClass()&gt;&gt;입력폼 호출됨&gt;&gt;유저가 입력&gt;&gt;post요청&gt;&gt;form = FormClass(request.POST, request.FILES)를 받고&gt;&gt;form.is_valid() 유효성검사&gt;&gt;</p>
+<ul>
+<li>valid판정시 form.cleaned_data통해 필드별 값 제공받음&gt;&gt; form.save()로 저장후 다른 URL로 이동</li>
+<li>invalid판정시 form.errors통해 필드별 오류메세지 제공받음&gt;&gt;오류 메세지와 함께 입력 html폼을 노출</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#뷰 함수에서 구현</span><br><span class="line">def post_new(request):</span><br><span class="line">    if request.method == &apos;POST&apos;:</span><br><span class="line">        form = PostForm(request.POST, request.FILES)</span><br><span class="line">        if form.is_valid():</span><br><span class="line">            post = Post(**self.cleaned_data)</span><br><span class="line">            post.save()</span><br><span class="line">            return redirect(post)</span><br><span class="line">            </span><br><span class="line">    else:</span><br><span class="line">        form = PostForm()</span><br><span class="line">    return render(request, &apos;blog/post_form.html&apos;, &#123;</span><br><span class="line">        &apos;form&apos;: form,</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>Tip: 꼭 return render(~~)가 있어서 템플릿 또한 필요하고 form을 넘겨서 form.as_table()으로 입력폼을 생성할수있도록 해주자</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#form의 html예시</span><br><span class="line">&lt;table&gt;</span><br><span class="line">     &lt;form action=&quot;&quot; method=&quot;post&quot;&gt;</span><br><span class="line">             &#123;% csrf_token %&#125;</span><br><span class="line">             &lt;table&gt;&#123;&#123; form.as_table &#125;&#125;&lt;/table&gt; #이게 오류를 불러와줌, Form에 각 필드가 테이블 행으로  렌더링됨!!!</span><br><span class="line">             &lt;input type=&quot;submit&quot; /&gt;</span><br><span class="line">     &lt;/form&gt;</span><br><span class="line">&lt;/table&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="모델에-값저장방법4가지"><a href="#모델에-값저장방법4가지" class="headerlink" title="모델에 값저장방법4가지"></a><a href="https://spicyhoro.github.io/2019/11/15/django03/#Django-Style" target="_blank" rel="noopener">모델에 값저장방법4가지</a></h3><h3 id="나머지-요약정리"><a href="#나머지-요약정리" class="headerlink" title="나머지 요약정리"></a><a href="https://spicyhoro.github.io/2019/11/15/django03/#Form-Fields" target="_blank" rel="noopener">나머지 요약정리</a></h3><h1 id="html"><a href="#html" class="headerlink" title="html"></a>html</h1><h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2><p>Method=”GET”은 헤더만 존재하며 urlencoded방식으로만 전달되며</p>
+<p>url뒤쪽에 ?<del>~</del>로 붙는다</p>
+<h2 id="post"><a href="#post" class="headerlink" title="post"></a>post</h2><p>Method=”POST”는 기본적으로 바디 둘다 존재하며</p>
+<ul>
+<li><p>urlencoded방식</p>
+<p>get과 같은 전달방식이므로 body에 위에 url?뒤쪽에 전부 같은 방식으로 붙는다</p>
+</li>
+<li><p>multipart/form-data 방식(파일정말 전송할려면 이방법말고없다)</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-----------------------------14973275531370807725960869059 #여기부터바디</span><br><span class="line">Content-Disposition: form-data; name=&quot;title&quot;</span><br><span class="line">title</span><br><span class="line">-----------------------------14973275531370807725960869059</span><br><span class="line">Content-Disposition: form-data; name=&quot;content&quot;</span><br><span class="line">(생략 ...)</span><br></pre></td></tr></table></figure>
+
+<p>식으로 아예 다른방식으로 바디에 붙는다. </p>
+<h1 id="Django-Bootstrap3"><a href="#Django-Bootstrap3" class="headerlink" title="Django-Bootstrap3"></a>Django-Bootstrap3</h1><p>bootstrap3 스타일로 HTML을 생성해주는 template tags 제공 설치 쉘&gt;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> pip3 install django-bootstrap3</span><br><span class="line">settings.INSTALLED_APPS 에 &quot;bootstrap3&quot;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#원하는 템플릿에서 </span><br><span class="line"></span><br><span class="line">&#123;% raw %&#125;</span><br><span class="line"></span><br><span class="line">&#123;# bootstrap3 라이브러리 로드 #&#125;</span><br><span class="line">&#123;% load bootstrap3 %&#125;</span><br><span class="line">&#123;# bootstrap3 라이브러리를 통해 css/javascript 태그 출력 #&#125;</span><br><span class="line">&#123;% bootstrap_css %&#125;</span><br><span class="line">&#123;% bootstrap_javascript %&#125;</span><br><span class="line">&lt;form action=&quot;&quot; method=&quot;post&quot; class=&quot;form&quot;&gt;</span><br><span class="line">     &#123;% csrf_token %&#125;</span><br><span class="line">     &#123;% bootstrap_form form %&#125; &lt;!-- bootstrap3 라이브러리를 통해 Form Render --&gt;</span><br><span class="line">     &lt;input type=&quot;submit&quot; class=&quot;btn btn-primary btn-lg&quot; /&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line"></span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p><a href="https://spicyhoro.github.io/2019/11/15/django03/#django-bootstrap3-%ED%8C%A9%ED%82%A4%EC%A7%80" target="_blank" rel="noopener">자세히</a></p>
+<h1 id="Python-문법"><a href="#Python-문법" class="headerlink" title="Python 문법"></a>Python 문법</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[표현식 for 항목 in 반복가능객체 if 조건문]</span><br><span class="line">조금 복잡하지만 for문을 2개 이상 사용하는 것도 가능하다. for문을 여러 개 사용할 때의 문법은 다음과 같다.</span><br><span class="line"></span><br><span class="line">[표현식 for 항목1 in 반복가능객체1 if 조건문1</span><br><span class="line">        for 항목2 in 반복가능객체2 if 조건문2</span><br><span class="line">        ...</span><br><span class="line">        for 항목n in 반복가능객체n if 조건문n]</span><br><span class="line">만약 구구단의 모든 결과를 리스트에 담고 싶다면 리스트 내포를 사용하여 다음과 같이 간단하게 구현할 수도 있다.</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; result = [x*y for x in range(2,10)</span><br><span class="line">...               for y in range(1,10)]</span><br><span class="line">&gt;&gt;&gt; print(result)</span><br><span class="line">[2, 4, 6, 8, 10, 12, 14, 16, 18, 3, 6, 9, 12, 15, 18, 21, 24, 27, 4, 8, 12, 16,</span><br><span class="line">20, 24, 28, 32, 36, 5, 10, 15, 20, 25, 30, 35, 40, 45, 6, 12, 18, 24, 30, 36, 42</span><br><span class="line">, 48, 54, 7, 14, 21, 28, 35, 42, 49, 56, 63, 8, 16, 24, 32, 40, 48, 56, 64, 72,</span><br><span class="line">9, 18, 27, 36, 45, 54, 63, 72, 81]</span><br><span class="line">지금껏 우리는 프로그램 흐름을 제어하는 if문, while문, for문에 대해 알아보았다. 아마도 여러분은 while문과 for문을 보면서 2가지가 아주 비슷하다는 느낌을 받았을 것이다. 실제로 for문을 사용한 부분을 while문으로 바꿀 수 있는 경우도 많고, while문을 for문으로 바꾸어서 사용할 수 있는 경우도 많다.</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="외부망에서-localhost"><a href="#외부망에서-localhost" class="headerlink" title="외부망에서 localhost"></a>외부망에서 localhost</h1><h2 id="Ngrok사용하기"><a href="#Ngrok사용하기" class="headerlink" title="Ngrok사용하기"></a>Ngrok사용하기</h2><p>NAT와 Proxy기반으로 동작해서 localhost에서 어딘지 알 수 없는 서버(이하 A)에 그 정보를 전송하고, 퍼블릭 환경에서 로컬호스트로 접근하기 위해서는 A서버에 request를 보내면 그것을 내 localhost로 proxy(중계)해준다고 생각하면 된다.</p>
+<p><img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FcSYoTr%2FbtqvCJOp5tX%2FXpceteh0Cj1dnbd9NwYL9K%2Fimg.png" alt="?scode=mtistory2&amp;fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FcSYoTr%2FbtqvCJOp5tX%2FXpceteh0Cj1dnbd9NwYL9K%2Fimg"></p>
+<h2 id="설치하기"><a href="#설치하기" class="headerlink" title="설치하기"></a><a href="https://dashboard.ngrok.com/get-started" target="_blank" rel="noopener">설치하기</a></h2><p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gbf10zr581j315e0sstf1.jpg" alt="스크린샷 2020-01-31 오전 12.55.11"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 3번과정은 계정의 인증이 ngrok.yml파일에 추가되고, 더많은 기능들 대시 보드에 나열됨</span><br><span class="line"></span><br><span class="line"> $ ./ngrok authtoken 1X7aYWPuFKYzvewLbnNoMo71kZi_2uzbB966Q4TU5cpgNPKhy</span><br><span class="line"></span><br><span class="line"># 설명서 읽기</span><br><span class="line">$ ./ngrok help</span><br><span class="line"></span><br><span class="line"># 포트 2802에서 HTTP 터널을 시작하려면 다음을 실행하십시오.</span><br><span class="line">$ ./ngrok http 2802</span><br></pre></td></tr></table></figure>
+
+<p>마지막로 실행하면 forwarding 을 무슨서버에서 무슨서버로 해주는지 나오고 이와 동일한 로컬주소를 만들어서 runserver해주면된다.</p>
+
+      
     </div>
-    <!-- async load share.js -->
-     
-    </body>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/10/19/henoy-tips/" data-id="ck6ddg3o50024kuadhfjq1lgx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Basic/" rel="tag">Basic</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tip/" rel="tag">Tip</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-django-basic" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/19/django-basic/" class="article-date">
+  <time datetime="2019-10-19T10:06:17.000Z" itemprop="datePublished">2019-10-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Django/">Django</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/19/django-basic/">django-basic (장고 개념 기초)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="아주-중요-개념"><a href="#아주-중요-개념" class="headerlink" title="아주 중요 개념"></a>아주 중요 개념</h1><hr>
+<p> 뷰, 모델, url, 템플렛<br> view = 각종 로직 처리하는곳<br> request = 사용자가 서버에 요청 보낼떄<br> model = 웹서비스에서 서비스에 필요한 부분 저장할 당위 정의<br> url = 사용자가 url치면 그걸 view로 연결<br> 즉 개발자는 모델, 뷰, 템플릿을 제공 한 다음 url에 매핑하기만 하면 장고는 결과정으로 사용자에게 제공한다<br> <pre> user-django-url-view-model, template </p>
+<p><strong>예를 들면</strong><br> 내가  192.0.1:8000/horo에 접속하면  urls.py에 url(r'^horo/$', views.video_list, name='list') 에 접속하고 실행하게되면서<br> 먼저 import views.py가 되어있었으므로 그 파일에 video_list함수가 실행된다<br> (request가 매개변수지만 유저가 요청한것을 대변하므로 따로 ()지정필요없다)<br> 그 함수 마지막에는<br> return render(request, 'video/video_list.html', {'video_list': video_list}) 가 있다.<br> 의미는 렌더링을 하는것이고, video폴터안에 video_list.html이라는 템플릿이  사용된다.<br> 이떄 이 템플릿으로 video_list이름의 video_list리스트정보를 보낸다.<br> 탬플랫은 html과 파이썬의 탬플랫태그를 통해 최종적으로 뷰에 들어가<br> 최종결과물이 url을 통해 유저에게 보여진다.</p>
+<p> url(r'^video/', include('video.urls')), 이런 url이 잇다면 192.0.o01/video 하면 video폴더에 urls.py에 url까지쳐야 실행됨<br> (만약 video까지만 치면 404뜸)<br> </pre></p>
+<hr>
+<h1 id="가상환경-설치방법"><a href="#가상환경-설치방법" class="headerlink" title="가상환경 설치방법"></a>가상환경 설치방법</h1><hr>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python3 -m venv myvenv  (가상환경 생성)</span><br><span class="line">source myvenv/bin/activate (가상환경 활성)</span><br><span class="line">deactivate (가상환경 비활성)</span><br></pre></td></tr></table></figure>
+<p> 가상환경 이름 myvenv로 만들기<br> 사용 활성화 source myvenv/bin/activate  #myvenv는 내가 이름 정한걸로 변경 가능<br> 활성화 성공시 맨앞에 myvenv보임</p>
+<p>보통 manage.py옆에 myvenv 폴더 둡니다</p>
+<hr>
+<h1 id="프로젝트-시작"><a href="#프로젝트-시작" class="headerlink" title="프로젝트 시작"></a>프로젝트 시작</h1><hr>
+<p> 장고 시작은 </p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject djangotube . (.은 현재 디렉토리에 설치하라는 의미 (위치지정가능))</span><br></pre></td></tr></table></figure>
+
+ <pre>
+ .
+ ├── djangotube
+ │   ├── __init__.py
+ │   ├── settings.py
+ │   ├── urls.py
+ │   └── wsgi.py
+ └── manage.py
+ 이게 생김
+ </pre>
+
+<hr>
+<h1 id="데이터베이스-생성"><a href="#데이터베이스-생성" class="headerlink" title="데이터베이스 생성"></a>데이터베이스 생성</h1><hr>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(myvenv) ~/djangogirls$ python manage.py migrate  #db.sqlite3생성됨</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="어플리케이션-추가"><a href="#어플리케이션-추가" class="headerlink" title="어플리케이션 추가"></a>어플리케이션 추가</h1><hr>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(myvenv) ~/djangogirls$ python manage.py startapp video </span><br><span class="line">#애플리케이션 비디오 추가됨 (장고튜브 프로젝트안에) #어플리케이선 video 추가</span><br></pre></td></tr></table></figure>
+<p> 어플리케이션을 만들면 이것을 서버한테도 알려줘야한다!<br> <strong>INSTALLED_APPS의 모든 요소 끝에 콤마(,)가 있는지 꼭 확인하세요!</strong><br> #djangotube폴더안이 아니라 밖임 (manage.py 있는곳에서 작업한다라고 기억하자)</p>
+ <pre>
+ ├── djangotube
+ │   ├── __init__.py
+ │   ├── settings.py
+ │   ├── urls.py
+ │   └── wsgi.py
+ ├── manage.py
+ └── video
+    ├── __init__.py
+    ├── admin.py
+    ├── apps.py
+    ├── migrations
+    │   └── __init__.py
+    ├── models.py
+    ├── tests.py
+    └── views.py
+ </pre>
+
+
+
+<hr>
+<h1 id="Model은-데이터를-저장하는-역할"><a href="#Model은-데이터를-저장하는-역할" class="headerlink" title="Model은 데이터를 저장하는 역할"></a>Model은 데이터를 저장하는 역할</h1><hr>
+<p> 모델안에 클래스 하나당 DB table하나씩생성함<br> 모델이 video 리스트를 보여줄 것입니다 video key와 제목을 저장하기 위한 video Model 을 만들어야합니다<br> model.py에 적기</p>
+<hr>
+<h1 id="데이터-베이스에-적용하는해야-실행되겠지"><a href="#데이터-베이스에-적용하는해야-실행되겠지" class="headerlink" title="데이터 베이스에 적용하는해야 실행되겠지?"></a>데이터 베이스에 적용하는해야 실행되겠지?</h1><hr>
+<p> 이 변경사항들을 데이터베이스에게 알려주기 위해서는 Migration 이라는 작업<br> makemigrations 명령어를 입력하게 되면 django 에서 자동으로 Migration 파일을 만들어주고,<br> migrate 명령어로 만들어진 Migration 파일을 데이터베이스에 적용하는 작업을 하는 거에요.<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(myvenv) $ python manage.py makemigrations video</span><br><span class="line">(myvenv) $ python manage.py migrate video</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="비디오-데이터-보여주는-view뷰-추가하기"><a href="#비디오-데이터-보여주는-view뷰-추가하기" class="headerlink" title="비디오 데이터 보여주는 view뷰 추가하기"></a>비디오 데이터 보여주는 view뷰 추가하기</h1><hr>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">video_list = Video.objects.all() (video 객체들을 전부 가져오겠다는다는것)</span><br></pre></td></tr></table></figure>
+<p> 가져오는 video 들은 파이썬의 dic 형태로 template쪽으로 넘겨주게 됩니다<br> 그러면 template 쪽에서 video_list라는 이름으로 해당 리스트를 사용할수있습니다.</p>
+<hr>
+<h1 id="url추가하기"><a href="#url추가하기" class="headerlink" title="url추가하기"></a>url추가하기</h1><hr>
+<p> template 와 view를 연경해주는 urls.py먼저 만듬<br> 즉 어떤 URL에 어떤 View를 연결시켜줄것인지 알려줌<br> urlpatterns이라는 리스트안에 url 적어준것<br> namespace는 이름공간 = 관련이름 url 이름들을 한곳에 묵ㄲ고 싶을떄 사용<br> 즉 url외우기 어려우니 name들을 부여후 이름으로소환</p>
+<hr>
+<h1 id="template-추가하기"><a href="#template-추가하기" class="headerlink" title="template 추가하기"></a>template 추가하기</h1><hr>
+<p> 템플릿 엔진이라는 것을 통해서 html에 특별한 구문 을 작성할 수 있습니다.</p>
+<p> 탬플릿 태그라고 부른다 html에서 % url ‘~~’ %라고 사용<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">편리한 기능!&#123;% for video in video_list %&#125;</span><br><span class="line">                &lt;a href=&quot;/video/&#123;&#123; video.id &#125;&#125;&quot;&gt;</span><br><span class="line">                    &lt;h4&gt;&#123;&#123; video.title &#125;&#125;&lt;/h4&gt;</span><br><span class="line">                &lt;/a&gt;</span><br><span class="line">            &#123;% endfor %&#125; #탬플릿 태그 사용시 무조건 닫아줘야함</span><br></pre></td></tr></table></figure></p>
+<p> 탬플릿태그로 파이썬의 for in 구문사용했다. 마지막<br> html에서  이 표현식으로 제목 출력가능</p>
+<hr>
+<h1 id="크롤링중-보안-참고"><a href="#크롤링중-보안-참고" class="headerlink" title="크롤링중 보안 참고"></a>크롤링중 보안 참고</h1><hr>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% csrf_token %&#125;</span><br></pre></td></tr></table></figure>
+<p> 부분일 거에요.이 템플릿 태그는 특별한 템플릿 태그인데요,<br> 웹사이트 공격기법으로 Cross-Site Request Forgery(CSRF)라는 것이 있는데 이 공격을 장고가 기본적으로  막아주는 것이랍니다.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/10/19/django-basic/" data-id="ck6ddg3nm0014kuadcfcm5rwg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Basic/" rel="tag">Basic</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Django/" rel="tag">Django</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-whereMyPost" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/08/whereMyPost/" class="article-date">
+  <time datetime="2019-01-08T06:17:12.000Z" itemprop="datePublished">2019-01-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Project/">Project</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/08/whereMyPost/">기타 꿀팁과 햇갈리는 것 정리</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="whereMyPost"><a href="#whereMyPost" class="headerlink" title="whereMyPost"></a>whereMyPost</h1><h2 id="만든이유"><a href="#만든이유" class="headerlink" title="만든이유"></a>만든이유</h2><ul>
+<li><p>택배를 조회할 때 우리는 항상 네이버, 다음, 해당 택배 홈페이지를 들어가서 번호를 입력하게된다</p>
+<p>이것을 카카오톡api를 사용하여 플러스 친구로 만들어 놓는다면 얼마나 편할까?</p>
+</li>
+</ul>
+<h2 id="구현할-기능-중요도-순"><a href="#구현할-기능-중요도-순" class="headerlink" title="구현할 기능(중요도 순)"></a>구현할 기능(중요도 순)</h2><ul>
+<li><p>택배사 선택후 운송장 번호 입력하면 택배 정보가 뜨는 (url로 안내함 or return값 전부 보여주던가)</p>
+</li>
+<li><p>사용자가 조회 한번 햇던 운송장 번호와 택배사를 저장해놓고 바로 다시조회할수있도록구현</p>
+</li>
+<li><p>조회번호 ‘-‘상관없이 그냥 다 number로 받아드릴수있게 구현하자</p>
+<p>(택배는 )</p>
+<p>python requests session 에서 _csrf값 가져오기</p>
+</li>
+<li><p>api로 연결후 json 응답받아야함.</p>
+</li>
+<li><p>카카오채널에 최근 검색기록으로 바로 가져와서 클릭시 가져옴</p>
+</li>
+<li><p>나중에 참고하기 </p>
+</li>
+<li><p>응답없거나 잘못된 송장번호일경우 따로 알려주기</p>
+</li>
+<li><p>크롤링 참고 (<a href="https://beomi.github.io/2017/01/20/HowToMakeWebCrawler-With-Login/" target="_blank" rel="noopener">https://beomi.github.io/2017/01/20/HowToMakeWebCrawler-With-Login/</a>)</p>
+</li>
+<li><p>배포 연습</p>
+</li>
+<li><p>AWS 서버 구성</p>
+</li>
+<li><p>DNS, 프로토콜, ssh, zsh, </p>
+</li>
+<li><p>Requests 라이브러리 쓰는거 꼭 자세히 알기 </p>
+</li>
+<li><p>세션 쿠키 개념 웹</p>
+<p><a href="https://github.com/iBluemind/armatis" target="_blank" rel="noopener">https://github.com/iBluemind/armatis</a></p>
+</li>
+</ul>
+<h1 id="Realize"><a href="#Realize" class="headerlink" title="Realize"></a>Realize</h1><h2 id="각-택배사-api사용-실패"><a href="#각-택배사-api사용-실패" class="headerlink" title="각 택배사 api사용(실패)"></a>각 택배사 api사용(실패)</h2><p><a href="https://www.cjlogistics.com/ko/tool/parcel/tracking" target="_blank" rel="noopener">cj대한통운</a> 을 기준으로 input한 데이터들을 처리하는 방식을 분석하고 똑같이</p>
+<p>localhost:8000에서 구현시도</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;whereMyPost&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;number-box&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; id=&quot;paramInvcNo&quot; name=&quot;paramInvcNo&quot; value=&quot;운송장 번호 입력해주세요&quot; style=&quot;width:353px;&quot; maxlength=&quot;12&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;submit&quot; id=&quot;btnSubmit&quot; title=&quot;Search&quot;&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&quot;363219681522&quot;</span><br><span class="line">&#123;&#123; post &#125;&#125;</span><br><span class="line"></span><br><span class="line">&lt;script</span><br><span class="line">  src=&quot;https://code.jquery.com/jquery-1.12.4.js&quot;</span><br><span class="line">  integrity=&quot;sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=&quot;</span><br><span class="line">  crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;script src=&quot;https://www.cjlogistics.com/static/pc/global/template/js/jquery-migrate-1.4.1.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;script src=&quot;https://www.cjlogistics.com/static/pc/global/template/js/front.js?v=2020010811&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;script src=&quot;https://www.cjlogistics.com/static/pc/global/template/js/string.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;script src=&quot;https://www.cjlogistics.com/static/pc/global/template/js/common.js?v=2020010811&quot;&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- //공통 : js --&gt;</span><br><span class="line">   	&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">		var GLOBAL_SESSION_ID = &quot;anonymousUser&quot;;</span><br><span class="line">		var GLOBAL_CSRF_NAME = &quot;_csrf&quot;;</span><br><span class="line">		var GLOBAL_CSRF_VALUE = &quot;1d119052-7262-401c-8fec-9f102beca2cb&quot;;</span><br><span class="line">		var GLOBAL_UPLOAD_URL = &quot;/cjlwupload/&quot;;</span><br><span class="line">		var GLOBAL_DOMAIN_KOREAN = &quot;&quot;;</span><br><span class="line">		var GLOBAL_DOMAIN_ENGLISH = &quot;&quot;;</span><br><span class="line">	&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">			$(&apos;#btnSubmit&apos;).on(&apos;click&apos;, function (e) &#123;</span><br><span class="line">				fncValidate();</span><br><span class="line">			&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">			function fncValidate() &#123;</span><br><span class="line">                var paramInvcNo = $(&apos;#paramInvcNo&apos;).val();</span><br><span class="line">                console.log(paramInvcNo)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                $.ajax(&#123;</span><br><span class="line">                    url: &apos;https://www.cjlogistics.com/ko/tool/parcel/tracking-detail&apos;,</span><br><span class="line">                    type: &apos;GET&apos;,</span><br><span class="line">                    dataType: &apos;jsonp&apos;,</span><br><span class="line">                    data: GLOBAL_CSRF_NAME + &apos;=&apos; + GLOBAL_CSRF_VALUE + &apos;&amp;paramInvcNo=&apos; + paramInvcNo,</span><br><span class="line">                    timeout: 1000,</span><br><span class="line">                    async: false,</span><br><span class="line"></span><br><span class="line">                    &#125;)</span><br><span class="line">                    .done(function (json) &#123;</span><br><span class="line">                        console.log(json)</span><br><span class="line">                    &#125;)</span><br><span class="line">                    .fail(function (xhr, status, error) &#123;</span><br><span class="line">                        console.log(error)</span><br><span class="line">                    &#125;)</span><br><span class="line">                    .always(function (xhr, status) &#123;</span><br><span class="line">                        console.log(&quot;요청은 완료됨&quot;)</span><br><span class="line"></span><br><span class="line">                    &#125;);</span><br><span class="line">            &#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="오류-발생"><a href="#오류-발생" class="headerlink" title="오류 발생"></a>오류 발생</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tracking-detail:1 Failed to load resource: the server responded with a status of 405 (Method Not Allowed)</span><br></pre></td></tr></table></figure>
+
+<h3 id="실패-원인"><a href="#실패-원인" class="headerlink" title="실패 원인"></a>실패 원인</h3><ul>
+<li><p>CORS (???)</p>
+<p>ajax로 요청시 같은 도메인이 아닐시 거부됨</p>
+<p>이를 해결하기 위해 json대신 jsonp의 형식을 지원해줘야하는데</p>
+<p>이는 오픈해주시는 api 가 지원안해주시면 소용없다. (???)</p>
+</li>
+<li><p>오픈api가 아니면 현재 실력으로 뚫기 어렵다고 판단.</p>
+</li>
+</ul>
+<h2 id="Crawling으로-구현-1차-시도"><a href="#Crawling으로-구현-1차-시도" class="headerlink" title="Crawling으로 구현(1차 시도)"></a>Crawling으로 구현(1차 시도)</h2><h3 id="설치-및-기본-요령-블로그참조"><a href="#설치-및-기본-요령-블로그참조" class="headerlink" title="설치 및 기본 요령(블로그참조)"></a>설치 및 기본 요령(<a href="https://beomi.github.io/gb-crawling/posts/2017-02-27-HowToMakeWebCrawler-With-Selenium.html" target="_blank" rel="noopener">블로그참조</a>)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"># 뷰에 쓰는 크롤링함수 모았음</span><br><span class="line">from selenium import webdriver</span><br><span class="line">from selenium.webdriver.support.select import Select</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line">driver = webdriver.Chrome(&apos;../chromedriver&apos;)</span><br><span class="line">driver.implicitly_wait(15)</span><br><span class="line">driver.get(&apos;https://search.naver.com/search.naver?sm=top_hty&amp;fbm=1&amp;ie=utf8&amp;query=%ED%83%9D%EB%B0%B0%EC%A1%B0%ED%9A%8C&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#select클래스를 이용하여 쉽게 요소들중에서 찾을수있다.</span><br><span class="line">select = Select(driver.find_element_by_class_name(&apos;_select&apos;))</span><br><span class="line"></span><br><span class="line"># select by visible text</span><br><span class="line">select.select_by_visible_text(&apos;CJ대한통운&apos;)</span><br><span class="line"></span><br><span class="line"># select by value</span><br><span class="line">driver.find_element_by_id(&apos;numb&apos;).send_keys(&apos;349159576510&apos;)</span><br><span class="line"></span><br><span class="line">driver.find_element_by_xpath(&apos;//*[@id=&quot;_doorToDoor&quot;]/div[1]/div[2]/input[2]&apos;).click()</span><br><span class="line"></span><br><span class="line">html = driver.page_source</span><br><span class="line">soup = BeautifulSoup(html, &apos;html.parser&apos;)</span><br><span class="line">post_detail = soup.select(&apos;#_doorToDoor &gt; div._output &gt; div.artb &gt; table &gt; tbody &gt; tr&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">post_list = []</span><br><span class="line"></span><br><span class="line">for x in post_detail:</span><br><span class="line">    post_list.append(x.text.strip())</span><br><span class="line"></span><br><span class="line">print(post_list)</span><br></pre></td></tr></table></figure>
+
+<h3 id="실패-원인-1"><a href="#실패-원인-1" class="headerlink" title="실패 원인"></a>실패 원인</h3><p>자동화 프로그램을 네이버가 걸려서 애초에 조회가 불가능하게만듬,</p>
+<h2 id="Crawling으로-구현-2차-시도"><a href="#Crawling으로-구현-2차-시도" class="headerlink" title="Crawling으로 구현(2차 시도)"></a>Crawling으로 구현(2차 시도)</h2><p>각 택배사 홈페이지에 따라 크롤링하는 방법을 선택</p>
+<h3 id="CJ대한통운"><a href="#CJ대한통운" class="headerlink" title="CJ대한통운"></a>CJ대한통운</h3><p>home.html에서 조회</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;form action = &apos;&#123;% url &apos;post:index&apos; %&#125;&apos; accept-charset=&quot;utf-8&quot; name = &quot;post_infor&quot; method = &quot;get&quot;&gt;</span><br><span class="line">&lt;fieldset style = &quot;width:150&quot;&gt;</span><br><span class="line">&lt;legend&gt;택배 조회&lt;/legend&gt;</span><br><span class="line">회사 : &lt;select name=&quot;post_company&quot;&gt;</span><br><span class="line">&lt;option value=&quot;CJ대한통운&quot;&gt; CJ대한통운 &lt;/option&gt;</span><br><span class="line"></span><br><span class="line">&lt;/select&gt;</span><br><span class="line"></span><br><span class="line">운송장번호 : &lt;input type = &quot;text&quot; name = &quot;post_number&quot;/&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">&lt;input type = &quot;submit&quot; value = &quot;조회&quot;/&gt;</span><br><span class="line"></span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>index.html에서 결과 표시</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;form action = &apos;&#123;% url &apos;post:home&apos; %&#125;&apos; accept-charset=&quot;utf-8&quot; name = &quot;post_backtohome&quot; method = &quot;get&quot;&gt;</span><br><span class="line">   &lt;input type = &quot;submit&quot; value = &quot;돌아가기&quot;/&gt;</span><br><span class="line"></span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+
+<p>뷰에서 쓸 크롤링 함수를 따로 utils.py로 뺏다</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def postview(post_company=&apos;CJ대한통운&apos;, post_number=&apos;349159576510&apos;):</span><br><span class="line"></span><br><span class="line">    if post_company == &apos;CJ대한통운&apos;:</span><br><span class="line"></span><br><span class="line">        driver = webdriver.Chrome(&apos;/Users/lostcatbox/myproject/whereMyPost/chromedriver&apos;)</span><br><span class="line">        driver.implicitly_wait(15)</span><br><span class="line">        driver.get(&apos;https://www.cjlogistics.com/ko/tool/parcel/tracking&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        driver.find_element_by_id(&apos;paramInvcNo&apos;).send_keys(post_number)</span><br><span class="line"></span><br><span class="line">        driver.find_element_by_xpath(&apos;//*[@id=&quot;btnSubmit&quot;]&apos;).click()</span><br><span class="line"></span><br><span class="line">        html = driver.page_source</span><br><span class="line">        soup = BeautifulSoup(html, &apos;html.parser&apos;)</span><br><span class="line">        post_detail = soup.select(&apos;#statusDetail &gt; tr&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        post_list = []</span><br><span class="line"></span><br><span class="line">        for x in post_detail:</span><br><span class="line">            post_list.append(x.text.strip())</span><br><span class="line"></span><br><span class="line">        driver.close()</span><br><span class="line"></span><br><span class="line">        print(post_list)</span><br><span class="line">        return post_list</span><br></pre></td></tr></table></figure>
+
+<p>Views.py 구성을 단순하게(앞에 함수를 호출만함으로 간단해짐)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from django.shortcuts import render</span><br><span class="line">from .utils import postview</span><br><span class="line"></span><br><span class="line">def index(request):</span><br><span class="line">    post_company = request.GET[&apos;post_company&apos;]</span><br><span class="line">    post_number = request.GET[&apos;post_number&apos;]</span><br><span class="line">    data = postview(post_company, post_number)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    return render(request, &apos;post/index.html&apos;, &#123;&apos;post&apos;:&apos;고양이&apos;, &apos;post_list&apos;:data&#125;)</span><br><span class="line"># Create your views here.</span><br><span class="line"></span><br><span class="line">def homepage(request):</span><br><span class="line"></span><br><span class="line">    return render(request, &apos;post/home.html&apos;)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>urls.py 생김새</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from django.urls import path, include</span><br><span class="line">from . import views</span><br><span class="line">from . import utils</span><br><span class="line"></span><br><span class="line">app_name=&apos;post&apos;</span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(&apos;result/&apos;, views.index, name=&apos;index&apos;),</span><br><span class="line">    path(&apos;&apos;, views.homepage, name=&apos;home&apos;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="CU-택배조회"><a href="#CU-택배조회" class="headerlink" title="CU 택배조회"></a>CU 택배조회</h3><h4 id="오류"><a href="#오류" class="headerlink" title="오류"></a>오류</h4><p>크롤링 도중 html selector copy를 해도 return 값이 없었다.</p>
+<p>이유는 아래와 같이 택배조회의 결과값이 iframe을 통해 보여주는 것이였다.</p>
+<p>&lt;iframe src=”#” width=”100%” height=”500” scrolling=”no” frameborder=”0” title=”배송상태” class=”mt20”&gt;&lt;/iframe&gt;</p>
+<p>따라서 selenium이 제대로 html을 받아오지 못하였다.</p>
+<h4 id="해결"><a href="#해결" class="headerlink" title="해결"></a>해결</h4><p>iframe안에 html있다고 생각하면 편합니다. 즉, iframe html안에 들어가야 크롤링이가능합니다.</p>
+<p><code>driver.page_source</code>로 selenium이 현재 가져온 정보를 일일히 확인하면서 찾아본 결과 아래와 같이 코드를 짜면 원하는대로 크롤링 가능하였다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># iframe태그가  한개면 리스트 반환이 아니므로 바로 써도됨, 여러개면 리스트로 반환되므로 순서도알아야함</span><br><span class="line">iframe = driver.find_elements_by_tag_name(&apos;iframe&apos;)</span><br><span class="line"></span><br><span class="line">driver.switch_to.frame(iframe[0])</span><br><span class="line"></span><br><span class="line">html = driver.page_source</span><br><span class="line">soup = BeautifulSoup(html, &apos;html.parser&apos;)</span><br><span class="line">post_detail = soup.select(&lt;원하는위치&gt;)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>+ tip:  원래있던 전체 웹 페이지로 나오려면 <code>switch_to_default_content()</code> 함수로 빠저나와야 합니다.</p>
+<h3 id="모든-택배회사가-위에-2사례로-모두-해결가능하엿다"><a href="#모든-택배회사가-위에-2사례로-모두-해결가능하엿다" class="headerlink" title="모든 택배회사가 위에 2사례로 모두 해결가능하엿다"></a>모든 택배회사가 위에 2사례로 모두 해결가능하엿다</h3><h3 id="추후-DHL홈페이지를-반드시-뚫어봐야겠다"><a href="#추후-DHL홈페이지를-반드시-뚫어봐야겠다" class="headerlink" title="추후 DHL홈페이지를 반드시 뚫어봐야겠다.."></a>추후 DHL홈페이지를 반드시 뚫어봐야겠다..</h3><h2 id="카카오-API-기본편-공부중…"><a href="#카카오-API-기본편-공부중…" class="headerlink" title="카카오 API 기본편 공부중…"></a>카카오 API 기본편 공부중…</h2><p> 비니지스 계정으로 전환하는 사유를 잘못보내서 6일넘게 소요되어버렸다,,ㅠㅠ</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 카카오 채널의 한계점</span><br><span class="line"></span><br><span class="line">- 5초 이내로 답변하지 않으면 응답오류가 뜸&gt;&gt;따라서 크롤링으로 데이터를 던저주는것은 너무 힘듬 &gt;&gt;&gt; 각 택배사별로 api를 따와서 해야할듯</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 크롤링포기&gt;api로 전환</span><br><span class="line"></span><br><span class="line">## 회사별 api 정보 가져오기</span><br></pre></td></tr></table></figure>
+<h1 id="import"><a href="#import" class="headerlink" title="import"></a>import</h1><p>import requests</p>
+<h1 id="url"><a href="#url" class="headerlink" title="url"></a>url</h1><p>url = “<a href="http://hacksg.tistory.com&quot;" target="_blank" rel="noopener">http://hacksg.tistory.com&quot;</a></p>
+<h1 id="get"><a href="#get" class="headerlink" title="get"></a>get</h1><p>r = requests.get(url, params={‘id’: ‘ksg’, ‘pw’: ‘password!@#’})</p>
+<p>print r.status</p>
+<p>print r.text</p>
+<h1 id="post"><a href="#post" class="headerlink" title="post"></a>post</h1><p>r = requests.post(url, data={‘id’: ‘ksg’, ‘pw’: ‘password!@#’})</p>
+<p>print r.stats</p>
+<p>print r.text</p>
+<pre><code>
+
+
+
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/08/whereMyPost/" data-id="ck6ddg3og002qkuadanvf5r5c" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Project/" rel="tag">Project</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/basic/" rel="tag">basic</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/3/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/API/">API</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Conference/">Conference</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Django/">Django</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Elastic-Beanstalk/">Elastic Beanstalk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Frontend/">Frontend</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Html/">Html</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Kakao/">Kakao</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Markdown/">Markdown</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Project/">Project</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tip/">Tip</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/API/" rel="tag">API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ajax/" rel="tag">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Basic/" rel="tag">Basic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ClassView/" rel="tag">ClassView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DRF/" rel="tag">DRF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Devfest/" rel="tag">Devfest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django/" rel="tag">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elastic-Beanstalk/" rel="tag">Elastic Beanstalk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Festival/" rel="tag">Festival</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Frontend/" rel="tag">Frontend</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDG/" rel="tag">GDG</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Google/" rel="tag">Google</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Html/" rel="tag">Html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Junior/" rel="tag">Junior</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kakao/" rel="tag">Kakao</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Project/" rel="tag">Project</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tip/" rel="tag">Tip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/basic/" rel="tag">basic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hanbik/" rel="tag">hanbik</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/API/" style="font-size: 18px;">API</a> <a href="/tags/Ajax/" style="font-size: 16px;">Ajax</a> <a href="/tags/Basic/" style="font-size: 20px;">Basic</a> <a href="/tags/ClassView/" style="font-size: 12px;">ClassView</a> <a href="/tags/DRF/" style="font-size: 18px;">DRF</a> <a href="/tags/Devfest/" style="font-size: 12px;">Devfest</a> <a href="/tags/Django/" style="font-size: 20px;">Django</a> <a href="/tags/Elastic-Beanstalk/" style="font-size: 10px;">Elastic Beanstalk</a> <a href="/tags/Festival/" style="font-size: 10px;">Festival</a> <a href="/tags/Frontend/" style="font-size: 16px;">Frontend</a> <a href="/tags/GDG/" style="font-size: 10px;">GDG</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Google/" style="font-size: 10px;">Google</a> <a href="/tags/Html/" style="font-size: 10px;">Html</a> <a href="/tags/Junior/" style="font-size: 10px;">Junior</a> <a href="/tags/Kakao/" style="font-size: 10px;">Kakao</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Project/" style="font-size: 12px;">Project</a> <a href="/tags/Tip/" style="font-size: 14px;">Tip</a> <a href="/tags/basic/" style="font-size: 12px;">basic</a> <a href="/tags/hanbik/" style="font-size: 10px;">hanbik</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/02/06/aws-python/">aws_python</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/28/api14/">api 기본편 14</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/27/missing-note/">실수노트</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/26/api13/">api 기본편 13</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/24/api12/">api 기본편 12</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Seungwon Yang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
 </html>
-
-
