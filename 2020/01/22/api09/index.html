@@ -200,7 +200,7 @@
     
     <!-- 谷歌统计  -->
     
-</head>
+<meta name="generator" content="Hexo 4.2.0"></head>
 
     
         <body class="post-body">
@@ -409,11 +409,11 @@ height:50vh;
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># myapp/models.py</span></span><br><span class="line"><span class="keyword">from</span> django.conf <span class="keyword">import</span> settings  <span class="comment"># 추가</span></span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Post</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">        author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name=<span class="string">'ep08_post_set'</span>)  <span class="comment"># 추가</span></span><br><span class="line">    title = models.CharField(max_length=<span class="number">100</span>)</span><br></pre></td></tr></table></figure>
 
 <p>오류는 이미 ep04에서 ForeignKey이미 똑같이 사용중이므로 여기에서 reverse를 할때 둘중무엇을 돌려줘야할지겹쳐버리게된다. 따라서 <code>related_name=&#39;ep08_post_set&#39;</code>를 지정해주면 ep04에서는 <code>user.post_set.all()</code>  으로 관련 포스트에 대한 쿼리 모두가져올수있고, ep08모델에서는  <code>user.ep08_post_set.all()</code> 으로 관련 포스트에 대한쿼리 모두 가져올수있다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; python3 manage.py makemigrations myapp</span><br><span class="line"></span><br><span class="line">You are trying to add a non-nullable field &apos;author&apos; to post without a default; we can&apos;t do that (the database needs something to populate existing rows).</span><br><span class="line">Please select a fix:</span><br><span class="line"> 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)</span><br><span class="line"> 2) Quit, and let me add a default in models.py</span><br><span class="line">Select an option: 1</span><br><span class="line">Please enter the default value now, as valid Python</span><br><span class="line">The datetime and django.utils.timezone modules are available, so you can do e.g. timezone.now</span><br><span class="line">Type &apos;exit&apos; to exit this prompt</span><br><span class="line">&gt;&gt;&gt; 1</span><br><span class="line"></span><br><span class="line">쉘&gt; python3 manage.py migrate myapp</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; python3 manage.py makemigrations myapp</span><br><span class="line"></span><br><span class="line">You are trying to add a non-nullable field &#39;author&#39; to post without a default; we can&#39;t do that (the database needs something to populate existing rows).</span><br><span class="line">Please select a fix:</span><br><span class="line"> 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)</span><br><span class="line"> 2) Quit, and let me add a default in models.py</span><br><span class="line">Select an option: 1</span><br><span class="line">Please enter the default value now, as valid Python</span><br><span class="line">The datetime and django.utils.timezone modules are available, so you can do e.g. timezone.now</span><br><span class="line">Type &#39;exit&#39; to exit this prompt</span><br><span class="line">&gt;&gt;&gt; 1</span><br><span class="line"></span><br><span class="line">쉘&gt; python3 manage.py migrate myapp</span><br></pre></td></tr></table></figure>
 
 <p>필수필드로서 <code>author</code> 필드를 추가했기 때문에 <code>makemigrations</code> 명령 수행 시에 질문이 나옵니다. 마이그레이션에 대해서 가물가물하신 분은 “<a href="https://nomade.kr/vod/django/9/" target="_blank" rel="noopener">장고 기본편 Migration</a>“ VOD 에피소드를 참고하세요.</p>
 <p>이제 json api 요청을 하면, author부분은 Primary Key값이 지정되어 다음과 같은 응답이 옵니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http GET :8000/1/</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;author&quot;: 1,</span><br><span class="line">    # 중략</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http GET :8000&#x2F;1&#x2F;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;author&quot;: 1,</span><br><span class="line">    # 중략</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="사용자-인증을-처리해봅시다-Authentication"><a href="#사용자-인증을-처리해봅시다-Authentication" class="headerlink" title="사용자 인증을 처리해봅시다. (Authentication)"></a>사용자 인증을 처리해봅시다. (Authentication)</h2><p>지원하는 인증의 종류 (<code>rest_framework/authentication.py</code>)</p>
 <ul>
@@ -456,28 +456,28 @@ height:50vh;
 
 <p><code>perform_create</code> 함수는 <code>rest_framework/mixins.py</code>내 <code>CreateModelMixin</code> 클래스에서 <code>create</code>시에 호출을 하고 있습니다. 원래 구현은 단순히 <code>serializer.save()</code> 이지만, 메소드 오버라이딩을 통해 저장할 필드를 추가로 지정해줬습니다. <code>serializer.save(**kwargs)</code>함수는 <code>kwargs</code> 항목을 통해, 추가로 저장할 필드를 지정할 수 있습니다.</p>
 <p>다음과 같이 요청해보면 500 에러응답을 받습니다. API 요청 시에 인증정보를 제공하지 않았기 때문에 <code>self.request.user</code>에 AnonymouseUser 인스턴스가 할당되어 모델저장에 실패한 것입니다. 외래키에는 “모델 객체”가 아닌 “파이썬 객체”는 할당할 수 없습니다.(로그인이 안되어있다면 userModel 인스턴스가 아니라 AnonymouseUser인스턴스가 할당되므로)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http --form POST :8000 title=t1 content=c1</span><br><span class="line">HTTP/1.0 500 Internal Server Error</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http --form POST :8000 title&#x3D;t1 content&#x3D;c1</span><br><span class="line">HTTP&#x2F;1.0 500 Internal Server Error</span><br></pre></td></tr></table></figure>
 
 <p><code>perform_create</code> 호출 전에 인증여부를 체크하는 것이 필요하겠습니다만, 이는 뒤에서 살펴보겠습니다.</p>
 <p>다음 명령으로 API 요청 시에 <strong>HTTP Basic 인증헤더</strong>를 제공해봅시다. <code>--auth</code> 인자로 웹로그인 아이디/암호를 지정해주세요.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http --auth username:password --form POST :8000 title=t1 content=c1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http --auth username:password --form POST :8000 title&#x3D;t1 content&#x3D;c1</span><br></pre></td></tr></table></figure>
 
 <p><strong>이 요청에서 <code>&quot;username:password&quot;</code> 문자열은 base64로 인코딩되어 Authorization 헤더로 전달되고, 이 헤더를 BasicAuthorization에서 인지하여 인증을 처리합니다.</strong> <code>httpbin.org</code>를 통해 헤더를 확인해봅시다. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http -a username:password --form POST httpbin.org/post</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;args&quot;: &#123;&#125;,</span><br><span class="line">    &quot;data&quot;: &quot;&quot;,</span><br><span class="line">    &quot;files&quot;: &#123;&#125;,</span><br><span class="line">    &quot;form&quot;: &#123;&#125;,</span><br><span class="line">    &quot;headers&quot;: &#123;</span><br><span class="line">        &quot;Accept&quot;: &quot;*/*&quot;,</span><br><span class="line">        &quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;,</span><br><span class="line">        &quot;Authorization&quot;: &quot;Basic dXNlcm5hbWU6cGFzc3dvcmQ=&quot;,</span><br><span class="line">        &quot;Connection&quot;: &quot;close&quot;,</span><br><span class="line">        &quot;Content-Length&quot;: &quot;0&quot;,</span><br><span class="line">        &quot;Content-Type&quot;: &quot;application/x-www-form-urlencoded; charset=utf-8&quot;,</span><br><span class="line">        &quot;Host&quot;: &quot;httpbin.org&quot;,</span><br><span class="line">        &quot;User-Agent&quot;: &quot;HTTPie/0.9.9&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;json&quot;: null,</span><br><span class="line">    &quot;origin&quot;: &quot;221.148.61.230&quot;,</span><br><span class="line">    &quot;url&quot;: &quot;http://httpbin.org/post&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http -a username:password --form POST httpbin.org&#x2F;post</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;args&quot;: &#123;&#125;,</span><br><span class="line">    &quot;data&quot;: &quot;&quot;,</span><br><span class="line">    &quot;files&quot;: &#123;&#125;,</span><br><span class="line">    &quot;form&quot;: &#123;&#125;,</span><br><span class="line">    &quot;headers&quot;: &#123;</span><br><span class="line">        &quot;Accept&quot;: &quot;*&#x2F;*&quot;,</span><br><span class="line">        &quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;,</span><br><span class="line">        &quot;Authorization&quot;: &quot;Basic dXNlcm5hbWU6cGFzc3dvcmQ&#x3D;&quot;,</span><br><span class="line">        &quot;Connection&quot;: &quot;close&quot;,</span><br><span class="line">        &quot;Content-Length&quot;: &quot;0&quot;,</span><br><span class="line">        &quot;Content-Type&quot;: &quot;application&#x2F;x-www-form-urlencoded; charset&#x3D;utf-8&quot;,</span><br><span class="line">        &quot;Host&quot;: &quot;httpbin.org&quot;,</span><br><span class="line">        &quot;User-Agent&quot;: &quot;HTTPie&#x2F;0.9.9&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;json&quot;: null,</span><br><span class="line">    &quot;origin&quot;: &quot;221.148.61.230&quot;,</span><br><span class="line">    &quot;url&quot;: &quot;http:&#x2F;&#x2F;httpbin.org&#x2F;post&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>base64 인코딩은 파이썬에서는 다음과 같이 확인해보실 수 있습니다.</p>
 <p>In [7]:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from base64 import b64encode</span><br><span class="line"></span><br><span class="line">b64encode(b&apos;username:password&apos;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from base64 import b64encode</span><br><span class="line"></span><br><span class="line">b64encode(b&#39;username:password&#39;)</span><br></pre></td></tr></table></figure>
 
 <p>Out[7]:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b&apos;dXNlcm5hbWU6cGFzc3dvcmQ=&apos;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b&#39;dXNlcm5hbWU6cGFzc3dvcmQ&#x3D;&#39;</span><br></pre></td></tr></table></figure>
 
 <p>base64 인코딩된 문자열은 손쉽게 디코딩해서 원본 문자열을 확득할 수 있습니다.</p>
 <p>In [9]:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from base64 import b64decode</span><br><span class="line"></span><br><span class="line">b64decode(b&apos;dXNlcm5hbWU6cGFzc3dvcmQ=&apos;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from base64 import b64decode</span><br><span class="line"></span><br><span class="line">b64decode(b&#39;dXNlcm5hbWU6cGFzc3dvcmQ&#x3D;&#39;)</span><br></pre></td></tr></table></figure>
 
 <p>Out[9]:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b&apos;username:password&apos;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b&#39;username:password&#39;</span><br></pre></td></tr></table></figure>
 
 <h3 id="웹브라우저를-통한-API-접근에서-로그인-로그아웃-지원하기"><a href="#웹브라우저를-통한-API-접근에서-로그인-로그아웃-지원하기" class="headerlink" title="웹브라우저를 통한 API 접근에서 로그인/로그아웃 지원하기"></a>웹브라우저를 통한 API 접근에서 로그인/로그아웃 지원하기</h3><p>django-rest-framework는 웹브라우저를 통한 API 접근도 지원해주기에, 웹브라우저를 통한 로그인/로그아웃도 지원해주고 있습니다. 이는 <code>auth</code>앱의 <code>login</code>/<code>logout</code>뷰를 그대로 활용하고 있으며, 템플릿만 <code>rest_framework/login.html</code>로 변경해서 적용되어있습니다.</p>
 <p>웹브라우저로 <code>http://localhost:8000</code>에 접속해보시면, 화면 우상단에 <code>&#39;Login&#39;</code>버튼이 없습니다. <code>프로젝트/urls.py</code>에 다음과 같이 URLConf 설정을 변경해주세요.</p>
@@ -509,10 +509,10 @@ height:50vh;
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.permissions <span class="keyword">import</span> AllowAny, IsAuthenticated</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(viewsets.ModelViewSet)</span>:</span></span><br><span class="line">    permission_classes = [</span><br><span class="line">        <span class="comment"># AllowAny, # 디폴트값임</span></span><br><span class="line">        IsAuthenticated,</span><br><span class="line">    ]</span><br><span class="line">    <span class="comment"># 생략</span></span><br></pre></td></tr></table></figure>
 
 <p>이제 인증되지 않은 모든 요청에 대해서는 모두 거부 403 Forbidden 응답을 받게됩니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http :8000/1/</span><br><span class="line">HTTP/1.0 403 Forbidden</span><br><span class="line">중략</span><br><span class="line">&#123;</span><br><span class="line">    &quot;detail&quot;: &quot;Authentication credentials were not provided.&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http :8000&#x2F;1&#x2F;</span><br><span class="line">HTTP&#x2F;1.0 403 Forbidden</span><br><span class="line">중략</span><br><span class="line">&#123;</span><br><span class="line">    &quot;detail&quot;: &quot;Authentication credentials were not provided.&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>다음과 같이 인증에 통과하면, 해당 API요청은 정상적으로 처리됩니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http --auth username:password :8000/1/</span><br><span class="line"></span><br><span class="line">HTTP/1.0 200 OK</span><br><span class="line">중략</span><br><span class="line">&#123;</span><br><span class="line">    &quot;content&quot;: &quot;c1&quot;,</span><br><span class="line">    &quot;pk&quot;: 1,</span><br><span class="line">    &quot;title&quot;: &quot;t1&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http --auth username:password :8000&#x2F;1&#x2F;</span><br><span class="line"></span><br><span class="line">HTTP&#x2F;1.0 200 OK</span><br><span class="line">중략</span><br><span class="line">&#123;</span><br><span class="line">    &quot;content&quot;: &quot;c1&quot;,</span><br><span class="line">    &quot;pk&quot;: 1,</span><br><span class="line">    &quot;title&quot;: &quot;t1&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="커스텀-Permission-만들기"><a href="#커스텀-Permission-만들기" class="headerlink" title="커스텀 Permission 만들기"></a>커스텀 Permission 만들기</h3><p><code>django-rest-framework</code>에서 기본 제공해주는 Permission만으로도 대개 충분합니다만, 필요에 의해 커스텀 Permission을 만들고 싶을 수 있습니다.</p>
 <p>모든 Permission 클래스는 다음 2가지 함수를 선택적으로 구현합니다.</p>
@@ -543,7 +543,7 @@ height:50vh;
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> serializers</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Post</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostSerializer</span><span class="params">(serializers.ModelSerializer)</span>:</span></span><br><span class="line">    author_username = serializers.ReadOnlyField(source=<span class="string">'author.username'</span>)  <span class="comment"># 추가 foreignkey로 속성명 가져옴</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">        model = Post</span><br><span class="line">        fields = [<span class="string">'pk'</span>, <span class="string">'author_username'</span>, <span class="string">'title'</span>, <span class="string">'cotnent'</span>]  <span class="comment"># 'author_username' 추가</span></span><br></pre></td></tr></table></figure>
 
 <p>이제 조회해보면 <code>author_username</code> 필드가 조회됨을 확인하실 수 있습니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http :8000/1/</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;author_username&quot;: &quot;askdjango&quot;,</span><br><span class="line">    &quot;content&quot;: &quot;c1&quot;,</span><br><span class="line">    &quot;pk&quot;: 1,</span><br><span class="line">    &quot;title&quot;: &quot;t1&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http :8000&#x2F;1&#x2F;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;author_username&quot;: &quot;askdjango&quot;,</span><br><span class="line">    &quot;content&quot;: &quot;c1&quot;,</span><br><span class="line">    &quot;pk&quot;: 1,</span><br><span class="line">    &quot;title&quot;: &quot;t1&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
     </article>
     <!-- license  -->
     
@@ -592,7 +592,7 @@ height:50vh;
     
         
             
-                <a href="mailto:lostcatbox@gmail.com" target="_blank" rel="noopener" class="iconfont-archer email" title=email ></a>
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
             
         
     
@@ -680,7 +680,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#EP-09-Authentication과-Permissions"><span class="toc-number">1.</span> <span class="toc-text">EP 09 - Authentication과 Permissions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#사용자-인증을-처리해봅시다-Authentication"><span class="toc-number">2.</span> <span class="toc-text">사용자 인증을 처리해봅시다. (Authentication)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#웹브라우저를-통한-API-접근에서-로그인-로그아웃-지원하기"><span class="toc-number">2.1.</span> <span class="toc-text">웹브라우저를 통한 API 접근에서 로그인/로그아웃 지원하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#권한-Permission-시스템-비인증-요청에-한해서-읽기권한만-부여하기"><span class="toc-number">2.2.</span> <span class="toc-text">권한 (Permission) 시스템 - 비인증 요청에 한해서 읽기권한만 부여하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#커스텀-Permission-만들기"><span class="toc-number">2.3.</span> <span class="toc-text">커스텀 Permission 만들기</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#포스팅-작성자에-한해서-수정-삭제-권한-부여해봅시다"><span class="toc-number">2.3.1.</span> <span class="toc-text">포스팅 작성자에 한해서, 수정/삭제 권한 부여해봅시다.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#포스팅-작성자에-한해서-수정-권한은-부여하되-삭제권한은-superuser에게만-부여해봅시다"><span class="toc-number">2.3.2.</span> <span class="toc-text">포스팅 작성자에 한해서, 수정 권한은 부여하되 삭제권한은 superuser에게만 부여해봅시다.</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#포스팅-조회-응답에-작성자-필드를-추가해봅시다"><span class="toc-number">3.</span> <span class="toc-text">포스팅 조회 응답에 작성자 필드를 추가해봅시다.</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#EP-09-Authentication과-Permissions"><span class="toc-number">1.</span> <span class="toc-text">EP 09 - Authentication과 Permissions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#사용자-인증을-처리해봅시다-Authentication"><span class="toc-number">2.</span> <span class="toc-text">사용자 인증을 처리해봅시다. (Authentication)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#웹브라우저를-통한-API-접근에서-로그인-로그아웃-지원하기"><span class="toc-number">2.1.</span> <span class="toc-text">웹브라우저를 통한 API 접근에서 로그인&#x2F;로그아웃 지원하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#권한-Permission-시스템-비인증-요청에-한해서-읽기권한만-부여하기"><span class="toc-number">2.2.</span> <span class="toc-text">권한 (Permission) 시스템 - 비인증 요청에 한해서 읽기권한만 부여하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#커스텀-Permission-만들기"><span class="toc-number">2.3.</span> <span class="toc-text">커스텀 Permission 만들기</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#포스팅-작성자에-한해서-수정-삭제-권한-부여해봅시다"><span class="toc-number">2.3.1.</span> <span class="toc-text">포스팅 작성자에 한해서, 수정&#x2F;삭제 권한 부여해봅시다.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#포스팅-작성자에-한해서-수정-권한은-부여하되-삭제권한은-superuser에게만-부여해봅시다"><span class="toc-number">2.3.2.</span> <span class="toc-text">포스팅 작성자에 한해서, 수정 권한은 부여하되 삭제권한은 superuser에게만 부여해봅시다.</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#포스팅-조회-응답에-작성자-필드를-추가해봅시다"><span class="toc-number">3.</span> <span class="toc-text">포스팅 조회 응답에 작성자 필드를 추가해봅시다.</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -693,10 +693,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
     
     
     
@@ -1349,12 +1345,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
         </li>
     
     
@@ -1395,19 +1391,19 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
-        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
-    
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
-        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1452,17 +1448,17 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
-        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
-    
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
-    
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>

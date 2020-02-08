@@ -200,7 +200,7 @@
     
     <!-- 谷歌统计  -->
     
-</head>
+<meta name="generator" content="Hexo 4.2.0"></head>
 
     
         <body class="post-body">
@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">588</span>Reading time: <span class="post-count reading-time">3 min</span></span>
+                        <span>Word count: <span class="post-count word-count">598</span>Reading time: <span class="post-count reading-time">3 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -410,7 +410,7 @@ height:50vh;
 <p> url(r'^video/', include('video.urls')), 이런 url이 잇다면 192.0.o01/video 하면 video폴더에 urls.py에 url까지쳐야 실행됨<br> (만약 video까지만 치면 404뜸)<br> </pre></p>
 <hr>
 <h1 id="가상환경-설치방법"><a href="#가상환경-설치방법" class="headerlink" title="가상환경 설치방법"></a>가상환경 설치방법</h1><hr>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python3 -m venv myvenv  (가상환경 생성)</span><br><span class="line">source myvenv/bin/activate (가상환경 활성)</span><br><span class="line">deactivate (가상환경 비활성)</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python3 -m venv myvenv  (가상환경 생성)</span><br><span class="line">source myvenv&#x2F;bin&#x2F;activate (가상환경 활성)</span><br><span class="line">deactivate (가상환경 비활성)</span><br></pre></td></tr></table></figure>
 <p> 가상환경 이름 myvenv로 만들기<br> 사용 활성화 source myvenv/bin/activate  #myvenv는 내가 이름 정한걸로 변경 가능<br> 활성화 성공시 맨앞에 myvenv보임</p>
 <p>보통 manage.py옆에 myvenv 폴더 둡니다</p>
 <hr>
@@ -431,10 +431,10 @@ height:50vh;
 
 <hr>
 <h1 id="데이터베이스-생성"><a href="#데이터베이스-생성" class="headerlink" title="데이터베이스 생성"></a>데이터베이스 생성</h1><hr>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(myvenv) ~/djangogirls$ python manage.py migrate  #db.sqlite3생성됨</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(myvenv) ~&#x2F;djangogirls$ python manage.py migrate  #db.sqlite3생성됨</span><br></pre></td></tr></table></figure>
 <hr>
 <h1 id="어플리케이션-추가"><a href="#어플리케이션-추가" class="headerlink" title="어플리케이션 추가"></a>어플리케이션 추가</h1><hr>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(myvenv) ~/djangogirls$ python manage.py startapp video </span><br><span class="line">#애플리케이션 비디오 추가됨 (장고튜브 프로젝트안에) #어플리케이선 video 추가</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(myvenv) ~&#x2F;djangogirls$ python manage.py startapp video </span><br><span class="line">#애플리케이션 비디오 추가됨 (장고튜브 프로젝트안에) #어플리케이선 video 추가</span><br></pre></td></tr></table></figure>
 <p> 어플리케이션을 만들면 이것을 서버한테도 알려줘야한다!<br> <strong>INSTALLED_APPS의 모든 요소 끝에 콤마(,)가 있는지 꼭 확인하세요!</strong><br> #djangotube폴더안이 아니라 밖임 (manage.py 있는곳에서 작업한다라고 기억하자)</p>
  <pre>
  ├── djangotube
@@ -464,7 +464,7 @@ height:50vh;
 <p> 이 변경사항들을 데이터베이스에게 알려주기 위해서는 Migration 이라는 작업<br> makemigrations 명령어를 입력하게 되면 django 에서 자동으로 Migration 파일을 만들어주고,<br> migrate 명령어로 만들어진 Migration 파일을 데이터베이스에 적용하는 작업을 하는 거에요.<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(myvenv) $ python manage.py makemigrations video</span><br><span class="line">(myvenv) $ python manage.py migrate video</span><br></pre></td></tr></table></figure></p>
 <hr>
 <h1 id="비디오-데이터-보여주는-view뷰-추가하기"><a href="#비디오-데이터-보여주는-view뷰-추가하기" class="headerlink" title="비디오 데이터 보여주는 view뷰 추가하기"></a>비디오 데이터 보여주는 view뷰 추가하기</h1><hr>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">video_list = Video.objects.all() (video 객체들을 전부 가져오겠다는다는것)</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">video_list &#x3D; Video.objects.all() (video 객체들을 전부 가져오겠다는다는것)</span><br></pre></td></tr></table></figure>
 <p> 가져오는 video 들은 파이썬의 dic 형태로 template쪽으로 넘겨주게 됩니다<br> 그러면 template 쪽에서 video_list라는 이름으로 해당 리스트를 사용할수있습니다.</p>
 <hr>
 <h1 id="url추가하기"><a href="#url추가하기" class="headerlink" title="url추가하기"></a>url추가하기</h1><hr>
@@ -472,7 +472,7 @@ height:50vh;
 <hr>
 <h1 id="template-추가하기"><a href="#template-추가하기" class="headerlink" title="template 추가하기"></a>template 추가하기</h1><hr>
 <p> 템플릿 엔진이라는 것을 통해서 html에 특별한 구문 을 작성할 수 있습니다.</p>
-<p> 탬플릿 태그라고 부른다 html에서 % url ‘~~’ %라고 사용<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">편리한 기능!&#123;% for video in video_list %&#125;</span><br><span class="line">                &lt;a href=&quot;/video/&#123;&#123; video.id &#125;&#125;&quot;&gt;</span><br><span class="line">                    &lt;h4&gt;&#123;&#123; video.title &#125;&#125;&lt;/h4&gt;</span><br><span class="line">                &lt;/a&gt;</span><br><span class="line">            &#123;% endfor %&#125; #탬플릿 태그 사용시 무조건 닫아줘야함</span><br></pre></td></tr></table></figure></p>
+<p> 탬플릿 태그라고 부른다 html에서 % url ‘~~’ %라고 사용<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">편리한 기능!&#123;% for video in video_list %&#125;</span><br><span class="line">                &lt;a href&#x3D;&quot;&#x2F;video&#x2F;&#123;&#123; video.id &#125;&#125;&quot;&gt;</span><br><span class="line">                    &lt;h4&gt;&#123;&#123; video.title &#125;&#125;&lt;&#x2F;h4&gt;</span><br><span class="line">                &lt;&#x2F;a&gt;</span><br><span class="line">            &#123;% endfor %&#125; #탬플릿 태그 사용시 무조건 닫아줘야함</span><br></pre></td></tr></table></figure></p>
 <p> 탬플릿태그로 파이썬의 for in 구문사용했다. 마지막<br> html에서  이 표현식으로 제목 출력가능</p>
 <hr>
 <h1 id="크롤링중-보안-참고"><a href="#크롤링중-보안-참고" class="headerlink" title="크롤링중 보안 참고"></a>크롤링중 보안 참고</h1><hr>
@@ -527,7 +527,7 @@ height:50vh;
     
         
             
-                <a href="mailto:lostcatbox@gmail.com" target="_blank" rel="noopener" class="iconfont-archer email" title=email ></a>
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
             
         
     
@@ -628,10 +628,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
     
     
     
@@ -1284,12 +1280,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
         </li>
     
     
@@ -1330,19 +1326,19 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
-        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
-    
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
-        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1387,17 +1383,17 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
-        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
-    
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
-    
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>

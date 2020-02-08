@@ -200,7 +200,7 @@
     
     <!-- 谷歌统计  -->
     
-</head>
+<meta name="generator" content="Hexo 4.2.0"></head>
 
     
         <body class="post-body">
@@ -437,7 +437,7 @@ height:50vh;
 <h3 id="혹은-APIView-별로-지정도-할-수-있습니다"><a href="#혹은-APIView-별로-지정도-할-수-있습니다" class="headerlink" title="혹은 APIView 별로 지정도 할 수 있습니다."></a>혹은 APIView 별로 지정도 할 수 있습니다.</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.throttling <span class="keyword">import</span> UserRateThrottle</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(ViewSet)</span>:</span></span><br><span class="line">    throttle_classes = UserRateThrottle</span><br></pre></td></tr></table></figure>
 
 <h3 id="API-요청-시에-제한을-넘어선다면"><a href="#API-요청-시에-제한을-넘어선다면" class="headerlink" title="API 요청 시에 제한을 넘어선다면?"></a>API 요청 시에 제한을 넘어선다면?</h3><p>429 Too Many Requests 응답을 받습니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http :8000</span><br><span class="line"></span><br><span class="line">HTTP/1.0 429 Too Many Requests</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;detail&quot;: &quot;Request wat throttled. Expected available in 86326 seconds.&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http :8000</span><br><span class="line"></span><br><span class="line">HTTP&#x2F;1.0 429 Too Many Requests</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;detail&quot;: &quot;Request wat throttled. Expected available in 86326 seconds.&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>예외 메세지에 API 활용이 가능한 시점을 알려줍니다. 이는 Throttle의 <code>wait</code>멤버함수를 통해 계산합니다.</p>
 <h2 id="Rates-포맷"><a href="#Rates-포맷" class="headerlink" title="Rates 포맷"></a>Rates 포맷</h2><ul>
@@ -513,7 +513,7 @@ height:50vh;
 <h1 id="EP-11-rest-framework-대표적인-디폴트-설정-살펴보기"><a href="#EP-11-rest-framework-대표적인-디폴트-설정-살펴보기" class="headerlink" title="EP 11 rest_framework 대표적인 디폴트 설정 살펴보기"></a>EP 11 rest_framework 대표적인 디폴트 설정 살펴보기</h1><h2 id="이번-시간에는-…"><a href="#이번-시간에는-…" class="headerlink" title="이번 시간에는 …"></a>이번 시간에는 …</h2><p> rest_framework의 디폴트 설정을 살펴봄으로서, DRF의 기본동작에</p>
 <p>대해서 이해해봅시다.<br> 디폴트 설정은 rest_framework/settings.py내 DEFAULTS 사전을</p>
 <p>통해 확인하실 수 있습니다.<br> (버전 3.7.3 기준, 2017년 11월 기준, 최신버전)</p>
-<h2 id="HTTP-최종-응답-생성"><a href="#HTTP-최종-응답-생성" class="headerlink" title="HTTP 최종 응답 생성"></a>HTTP 최종 응답 생성</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS = &#123; </span><br><span class="line">	&apos;DEFAULT_RENDERER_CLASSES&apos;: (</span><br><span class="line">    &apos;rest_framework.renderers.JSONRenderer&apos;, </span><br><span class="line">    &apos;rest_framework.renderers.BrowsableAPIRenderer&apos;,  </span><br><span class="line">    ),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="HTTP-최종-응답-생성"><a href="#HTTP-최종-응답-생성" class="headerlink" title="HTTP 최종 응답 생성"></a>HTTP 최종 응답 생성</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123; </span><br><span class="line">	&#39;DEFAULT_RENDERER_CLASSES&#39;: (</span><br><span class="line">    &#39;rest_framework.renderers.JSONRenderer&#39;, </span><br><span class="line">    &#39;rest_framework.renderers.BrowsableAPIRenderer&#39;,  </span><br><span class="line">    ),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>render란: client가 요청한것을 서버에서 응답을 만들때 render호출</p>
@@ -524,7 +524,7 @@ height:50vh;
 <p>본 설정을 추가/삭제함으로서 응답 지원포맷을 조정할 수 있습니다.</p>
 </li>
 </ul>
-<h2 id="HTTP-요청-내역-처리"><a href="#HTTP-요청-내역-처리" class="headerlink" title="HTTP 요청 내역 처리"></a>HTTP 요청 내역 처리</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS = &#123; </span><br><span class="line">	&apos;DEFAULT_PARSER_CLASSES&apos;: (</span><br><span class="line">    &apos;rest_framework.parsers.JSONParser&apos;</span><br><span class="line">    &apos;rest_framework.parsers.FormParser&apos;,</span><br><span class="line">    &apos;rest_framework.parsers.MultiPartParser&apos;</span><br><span class="line">), &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="HTTP-요청-내역-처리"><a href="#HTTP-요청-내역-처리" class="headerlink" title="HTTP 요청 내역 처리"></a>HTTP 요청 내역 처리</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123; </span><br><span class="line">	&#39;DEFAULT_PARSER_CLASSES&#39;: (</span><br><span class="line">    &#39;rest_framework.parsers.JSONParser&#39;</span><br><span class="line">    &#39;rest_framework.parsers.FormParser&#39;,</span><br><span class="line">    &#39;rest_framework.parsers.MultiPartParser&#39;</span><br><span class="line">), &#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>Parser: client가 서버로 요청한것을 처리할때 호출됨</li>
@@ -532,7 +532,7 @@ height:50vh;
 <li>FormParser : enctype application/x-www-form-urlencoded 요청 처리</li>
 <li>MultiPartParser : encytpe multipart/form-data 요청 처리 <strong>(파일 업로드 지원)</strong></li>
 </ul>
-<h2 id="각-HTTP-요청의-인증"><a href="#각-HTTP-요청의-인증" class="headerlink" title="각 HTTP 요청의 인증"></a><strong>각</strong> HTTP 요청의 인증</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS = &#123; &apos;DEFAULT_AUTHENTICATION_CLASSES&apos;: (</span><br><span class="line">    &apos;rest_framework.authentication.SessionAuthentication&apos;,</span><br><span class="line">    &apos;rest_framework.authentication.BasicAuthentication&apos;</span><br><span class="line">) &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="각-HTTP-요청의-인증"><a href="#각-HTTP-요청의-인증" class="headerlink" title="각 HTTP 요청의 인증"></a><strong>각</strong> HTTP 요청의 인증</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123; &#39;DEFAULT_AUTHENTICATION_CLASSES&#39;: (</span><br><span class="line">    &#39;rest_framework.authentication.SessionAuthentication&#39;,</span><br><span class="line">    &#39;rest_framework.authentication.BasicAuthentication&#39;</span><br><span class="line">) &#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>Id/pw인증지원&gt;&gt; 장고 기본 지원 , Token인증지원&gt;&gt; DRF가 지원해줌</p>
@@ -544,28 +544,28 @@ height:50vh;
 </li>
 </ul>
 <h2 id="각API-호출권한체크"><a href="#각API-호출권한체크" class="headerlink" title="각API 호출권한체크"></a><strong>각</strong>API 호출권한체크</h2><p>디폴트 설정으로 모든 접근을 허용 (<strong>AllowAny</strong>) 합니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">DEFAULTS = &#123; </span><br><span class="line">	&apos;DEFAULT_PERMISSION_CLASSES&apos;: (</span><br><span class="line">		&apos;rest_framework.permissions.AllowAny&apos;, </span><br><span class="line">		),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">DEFAULTS &#x3D; &#123; </span><br><span class="line">	&#39;DEFAULT_PERMISSION_CLASSES&#39;: (</span><br><span class="line">		&#39;rest_framework.permissions.AllowAny&#39;, </span><br><span class="line">		),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="특정-시간-내-최대-요청수-제한-Throttling"><a href="#특정-시간-내-최대-요청수-제한-Throttling" class="headerlink" title="특정 시간 내, 최대 요청수 제한 (Throttling)"></a><strong>특정 시간 내</strong>, <strong>최대 요청수 제한</strong> (Throttling)</h2><p>디폴트로 Throtting 꺼짐</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS = &#123; </span><br><span class="line">	&apos;DEFAULT_THROTTLE_CLASSES&apos;: (),</span><br><span class="line">	&apos;DEFAULT_THROTTLE_RATES&apos;: &#123;</span><br><span class="line">        &apos;user&apos;: None,</span><br><span class="line">        &apos;anon&apos;: None,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123; </span><br><span class="line">	&#39;DEFAULT_THROTTLE_CLASSES&#39;: (),</span><br><span class="line">	&#39;DEFAULT_THROTTLE_RATES&#39;: &#123;</span><br><span class="line">        &#39;user&#39;: None,</span><br><span class="line">        &#39;anon&#39;: None,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>DEFAULT_THROTTLE_CLASSES : 최대 호출를 제한할 로직 (클래스)</li>
 <li>DEFAULT_THROTTLE_RATES : 최대 호출 횟수 지정</li>
 </ul>
 <h2 id="페이징-처리"><a href="#페이징-처리" class="headerlink" title="페이징 처리"></a><strong>페이징 처리</strong></h2><p>디폴트로 페이징 처리 꺼짐</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS = &#123; </span><br><span class="line">	&apos;DEFAULT_PAGINATION_CLASS&apos;: None </span><br><span class="line">	&apos;PAGE_SIZE&apos;: None</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123; </span><br><span class="line">	&#39;DEFAULT_PAGINATION_CLASS&#39;: None </span><br><span class="line">	&#39;PAGE_SIZE&#39;: None</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>DEFAULT_PAGINATION_CLASS : 페이징을 처리할 로직 (클래스)</li>
 <li>PAGE_SIZE : 1페이지 최대 갯수</li>
 </ul>
 <h2 id="필터-문자열-매칭-검색-기능"><a href="#필터-문자열-매칭-검색-기능" class="headerlink" title="필터 (문자열 매칭 검색 기능)"></a><strong>필터</strong> (<strong>문자열 매칭 검색 기능</strong>)</h2><p>디폴트로 필터:꺼짐 DB에서 간단한검색이라고 생각하면됨 (SQL where사용)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS = &#123; </span><br><span class="line">  &apos;DEFAULT_FILTER_BACKENDS&apos;: (), </span><br><span class="line">  &apos;SEARCH_PARAM&apos;: &apos;search&apos;, </span><br><span class="line">  &apos;ORDERING_PARAM&apos;: &apos;ordering&apos;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123; </span><br><span class="line">  &#39;DEFAULT_FILTER_BACKENDS&#39;: (), </span><br><span class="line">  &#39;SEARCH_PARAM&#39;: &#39;search&#39;, </span><br><span class="line">  &#39;ORDERING_PARAM&#39;: &#39;ordering&#39;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="날짜-시간-포맷"><a href="#날짜-시간-포맷" class="headerlink" title="날짜/시간 포맷"></a><strong>날짜</strong>/시간 포맷</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from rest_framework import ISO_8601 # 실제 값은 문자열 &quot;iso-8601&quot;</span><br><span class="line"></span><br><span class="line">DEFAULTS = &#123;</span><br><span class="line">        # Input and output formats</span><br><span class="line">    &apos;DATE_FORMAT&apos;: ISO_8601, </span><br><span class="line">    &apos;DATE_INPUT_FORMATS&apos;: (ISO_8601,),</span><br><span class="line">    </span><br><span class="line">    &apos;DATETIME_FORMAT&apos;: ISO_8601, </span><br><span class="line">    &apos;DATETIME_INPUT_FORMATS&apos;: (ISO_8601,),</span><br><span class="line">    </span><br><span class="line">    &apos;TIME_FORMAT&apos;: ISO_8601,</span><br><span class="line">    &apos;TIME_INPUT_FORMATS&apos;: (ISO_8601,), </span><br><span class="line">&#125;</span><br><span class="line"># 궁금하다면 ISO 8601포맷 찾아보기</span><br></pre></td></tr></table></figure>
+<h2 id="날짜-시간-포맷"><a href="#날짜-시간-포맷" class="headerlink" title="날짜/시간 포맷"></a><strong>날짜</strong>/시간 포맷</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from rest_framework import ISO_8601 # 실제 값은 문자열 &quot;iso-8601&quot;</span><br><span class="line"></span><br><span class="line">DEFAULTS &#x3D; &#123;</span><br><span class="line">        # Input and output formats</span><br><span class="line">    &#39;DATE_FORMAT&#39;: ISO_8601, </span><br><span class="line">    &#39;DATE_INPUT_FORMATS&#39;: (ISO_8601,),</span><br><span class="line">    </span><br><span class="line">    &#39;DATETIME_FORMAT&#39;: ISO_8601, </span><br><span class="line">    &#39;DATETIME_INPUT_FORMATS&#39;: (ISO_8601,),</span><br><span class="line">    </span><br><span class="line">    &#39;TIME_FORMAT&#39;: ISO_8601,</span><br><span class="line">    &#39;TIME_INPUT_FORMATS&#39;: (ISO_8601,), </span><br><span class="line">&#125;</span><br><span class="line"># 궁금하다면 ISO 8601포맷 찾아보기</span><br></pre></td></tr></table></figure>
 
-<h2 id="인코딩"><a href="#인코딩" class="headerlink" title="인코딩"></a>인코딩</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS = &#123;</span><br><span class="line">    &apos;UNICODE_JSON&apos;: True, </span><br><span class="line">    &apos;COMPACT_JSON&apos;: True, </span><br><span class="line">    &apos;STRICT_JSON&apos;: True, </span><br><span class="line">    &apos;COERCE_DECIMAL_TO_STRING&apos;: True, </span><br><span class="line">    &apos;UPLOADED_FILES_USE_URL&apos;: True,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="인코딩"><a href="#인코딩" class="headerlink" title="인코딩"></a>인코딩</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123;</span><br><span class="line">    &#39;UNICODE_JSON&#39;: True, </span><br><span class="line">    &#39;COMPACT_JSON&#39;: True, </span><br><span class="line">    &#39;STRICT_JSON&#39;: True, </span><br><span class="line">    &#39;COERCE_DECIMAL_TO_STRING&#39;: True, </span><br><span class="line">    &#39;UPLOADED_FILES_USE_URL&#39;: True,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>디폴트 UNICODE_JSON = True</p>
@@ -608,7 +608,7 @@ height:50vh;
 </ul>
 </li>
 </ul>
-<h2 id="Browseable-API"><a href="#Browseable-API" class="headerlink" title="Browseable API"></a>Browseable API</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS = &#123;</span><br><span class="line">	&apos;HTML_SELECT_CUTOFF&apos;: 1000,</span><br><span class="line">	&apos;HTML_SELECT_CUTOFF_TEXT&apos;: &quot;More than &#123;count&#125; items...&quot;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Browseable-API"><a href="#Browseable-API" class="headerlink" title="Browseable API"></a>Browseable API</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123;</span><br><span class="line">	&#39;HTML_SELECT_CUTOFF&#39;: 1000,</span><br><span class="line">	&#39;HTML_SELECT_CUTOFF_TEXT&#39;: &quot;More than &#123;count&#125; items...&quot;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>HTML_SELECT_CUTOFF : Choice 옵션에서 Option 최대 허용수</li>
@@ -663,7 +663,7 @@ height:50vh;
     
         
             
-                <a href="mailto:lostcatbox@gmail.com" target="_blank" rel="noopener" class="iconfont-archer email" title=email ></a>
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
             
         
     
@@ -751,7 +751,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-10-Throttling"><span class="toc-number">1.</span> <span class="toc-text">EP 10 - Throttling</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#용어정리"><span class="toc-number">1.1.</span> <span class="toc-text">용어정리</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#기본-제공-Throttle"><span class="toc-number">1.1.1.</span> <span class="toc-text">기본 제공 Throttle</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#APIView에-커스텀-Throttle"><span class="toc-number">1.2.</span> <span class="toc-text">APIView에 커스텀 Throttle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#혹은-APIView-별로-지정도-할-수-있습니다"><span class="toc-number">1.2.1.</span> <span class="toc-text">혹은 APIView 별로 지정도 할 수 있습니다.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#API-요청-시에-제한을-넘어선다면"><span class="toc-number">1.2.2.</span> <span class="toc-text">API 요청 시에 제한을 넘어선다면?</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rates-포맷"><span class="toc-number">1.3.</span> <span class="toc-text">Rates 포맷</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rates-제한-메커니즘"><span class="toc-number">1.4.</span> <span class="toc-text">Rates 제한 메커니즘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#클라이언트-IP"><span class="toc-number">1.5.</span> <span class="toc-text">클라이언트 IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API-별로-서로-다른-Rate-적용하기"><span class="toc-number">1.6.</span> <span class="toc-text">API 별로 서로 다른 Rate 적용하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#유저별로-Rate-다르게-적용하기"><span class="toc-number">1.7.</span> <span class="toc-text">유저별로 Rate 다르게 적용하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cache-휘발성있는-데이터저장시켜줌"><span class="toc-number">1.8.</span> <span class="toc-text">Cache (휘발성있는 데이터저장시켜줌)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-11-rest-framework-대표적인-디폴트-설정-살펴보기"><span class="toc-number">2.</span> <span class="toc-text">EP 11 rest_framework 대표적인 디폴트 설정 살펴보기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#이번-시간에는-…"><span class="toc-number">2.1.</span> <span class="toc-text">이번 시간에는 …</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-최종-응답-생성"><span class="toc-number">2.2.</span> <span class="toc-text">HTTP 최종 응답 생성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-요청-내역-처리"><span class="toc-number">2.3.</span> <span class="toc-text">HTTP 요청 내역 처리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#각-HTTP-요청의-인증"><span class="toc-number">2.4.</span> <span class="toc-text">각 HTTP 요청의 인증</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#각API-호출권한체크"><span class="toc-number">2.5.</span> <span class="toc-text">각API 호출권한체크</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#특정-시간-내-최대-요청수-제한-Throttling"><span class="toc-number">2.6.</span> <span class="toc-text">특정 시간 내, 최대 요청수 제한 (Throttling)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#페이징-처리"><span class="toc-number">2.7.</span> <span class="toc-text">페이징 처리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#필터-문자열-매칭-검색-기능"><span class="toc-number">2.8.</span> <span class="toc-text">필터 (문자열 매칭 검색 기능)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#날짜-시간-포맷"><span class="toc-number">2.9.</span> <span class="toc-text">날짜/시간 포맷</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#인코딩"><span class="toc-number">2.10.</span> <span class="toc-text">인코딩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Browseable-API"><span class="toc-number">2.11.</span> <span class="toc-text">Browseable API</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-10-Throttling"><span class="toc-number">1.</span> <span class="toc-text">EP 10 - Throttling</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#용어정리"><span class="toc-number">1.1.</span> <span class="toc-text">용어정리</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#기본-제공-Throttle"><span class="toc-number">1.1.1.</span> <span class="toc-text">기본 제공 Throttle</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#APIView에-커스텀-Throttle"><span class="toc-number">1.2.</span> <span class="toc-text">APIView에 커스텀 Throttle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#혹은-APIView-별로-지정도-할-수-있습니다"><span class="toc-number">1.2.1.</span> <span class="toc-text">혹은 APIView 별로 지정도 할 수 있습니다.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#API-요청-시에-제한을-넘어선다면"><span class="toc-number">1.2.2.</span> <span class="toc-text">API 요청 시에 제한을 넘어선다면?</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rates-포맷"><span class="toc-number">1.3.</span> <span class="toc-text">Rates 포맷</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rates-제한-메커니즘"><span class="toc-number">1.4.</span> <span class="toc-text">Rates 제한 메커니즘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#클라이언트-IP"><span class="toc-number">1.5.</span> <span class="toc-text">클라이언트 IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API-별로-서로-다른-Rate-적용하기"><span class="toc-number">1.6.</span> <span class="toc-text">API 별로 서로 다른 Rate 적용하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#유저별로-Rate-다르게-적용하기"><span class="toc-number">1.7.</span> <span class="toc-text">유저별로 Rate 다르게 적용하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cache-휘발성있는-데이터저장시켜줌"><span class="toc-number">1.8.</span> <span class="toc-text">Cache (휘발성있는 데이터저장시켜줌)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-11-rest-framework-대표적인-디폴트-설정-살펴보기"><span class="toc-number">2.</span> <span class="toc-text">EP 11 rest_framework 대표적인 디폴트 설정 살펴보기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#이번-시간에는-…"><span class="toc-number">2.1.</span> <span class="toc-text">이번 시간에는 …</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-최종-응답-생성"><span class="toc-number">2.2.</span> <span class="toc-text">HTTP 최종 응답 생성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-요청-내역-처리"><span class="toc-number">2.3.</span> <span class="toc-text">HTTP 요청 내역 처리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#각-HTTP-요청의-인증"><span class="toc-number">2.4.</span> <span class="toc-text">각 HTTP 요청의 인증</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#각API-호출권한체크"><span class="toc-number">2.5.</span> <span class="toc-text">각API 호출권한체크</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#특정-시간-내-최대-요청수-제한-Throttling"><span class="toc-number">2.6.</span> <span class="toc-text">특정 시간 내, 최대 요청수 제한 (Throttling)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#페이징-처리"><span class="toc-number">2.7.</span> <span class="toc-text">페이징 처리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#필터-문자열-매칭-검색-기능"><span class="toc-number">2.8.</span> <span class="toc-text">필터 (문자열 매칭 검색 기능)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#날짜-시간-포맷"><span class="toc-number">2.9.</span> <span class="toc-text">날짜&#x2F;시간 포맷</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#인코딩"><span class="toc-number">2.10.</span> <span class="toc-text">인코딩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Browseable-API"><span class="toc-number">2.11.</span> <span class="toc-text">Browseable API</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -764,10 +764,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
     
     
     
@@ -1420,12 +1416,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
         </li>
     
     
@@ -1466,19 +1462,19 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
-        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
-    
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
-        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1523,17 +1519,17 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
-        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
-    
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
-    
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
