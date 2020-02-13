@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>lostcatbox</title>
+    <title>HTTPie 사용법 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -203,12 +203,23 @@
 <meta name="generator" content="Hexo 4.2.0"></head>
 
     
+        <body class="post-body">
+    
     
 <header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">HTTPie 사용법</a>
+            </div>
+    </div>
     
     <a class="home-link" href=/>LostCatBox</a>
 </header>
@@ -220,24 +231,76 @@
 
 
 
+
+height:50vh;
 ">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+            HTTPie 사용법
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "HTTPie">HTTPie</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "WebBasic">WebBasic</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">836</span>Reading time: <span class="post-count reading-time">5 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/02/13</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -338,51 +401,113 @@
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2020/02/11/SessionAndCookie/" >
-            
-                <span>세션,쿠키와 캐시 (session and cookie)</span>
-        </a>
-        <div class="abstract-content">
-            세션vs 쿠키 vs 캐시세션이란
-세션은 쿠키를 기반 
-하지만 사용자 정보 파일을 브라우저에 저장하는 쿠키와 달리 세션은 서버 메모리에 저장되고 서버 측에서 관리합니다.
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="HTTPie"><a href="#HTTPie" class="headerlink" title="HTTPie"></a>HTTPie</h1><h2 id="기능"><a href="#기능" class="headerlink" title="기능"></a>기능</h2><p><a href="https://github.com/jkbrzt/httpie" target="_blank" rel="noopener">httpie</a> 는 python 으로 개발된 콘솔용 http client 유틸리티로 <a href="https://www.lesstif.com/pages/viewpage.action?pageId=14745703" target="_blank" rel="noopener">curl </a>대신 http 개발 및 디버깅 용도로 사용 가능하며 다음과 같은 특징이 있다.</p>
+<h2 id="왜-사용해야하는가"><a href="#왜-사용해야하는가" class="headerlink" title="왜 사용해야하는가?"></a>왜 사용해야하는가?</h2><ul>
+<li>요청과 응답이 어떻게 들어갔는지 볼수있고 다양한 기능을 내장함</li>
+<li>curl 에 비해 사용이 쉬움</li>
+<li>json 지원 기능 내장</li>
+<li>출력을 포맷팅하여 보여주므로 가독성이 뛰어남</li>
+<li>Form 과 file 업로드가 쉬움</li>
+<li>HTTP 인증 및 커스텀 헤더 설정등</li>
+<li>강력한 세션기능과 인증 기능을 제공함</li>
+</ul>
+<h2 id="설치"><a href="#설치" class="headerlink" title="설치"></a>설치</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install httpie</span><br></pre></td></tr></table></figure>
 
-서버에서는 클라이언트를 구분하기 위해 세션 ID를 부여하며 웹 브라우저가 서버에 접속해서 브라우저를 종료할 때까지 인증상태를 유지합니다.
+<h2 id="기본-사용법"><a href="#기본-사용법" class="headerlink" title="기본 사용법"></a>기본 사용법</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http [flags] [METHOD] URL [ITEM [ITEM]]</span><br></pre></td></tr></table></figure>
 
-물론 접속 시간에 제한을 두어 일정 시간 응답이 없다면 정보가 유지되지 않게 설정이 가능 합니다.
+<ul>
+<li><p>flags : 실행시 전달할 옵션으로 <em>–</em> 로 시작(Ex: <em>–json</em>, –a, –form)</p>
+</li>
+<li><p>METHOD : HTTP 메소드로 생략시 GET.</p>
+</li>
+<li><p>URL: 연결할 url</p>
+</li>
+<li><p>‘=’이면 post인자, ‘==’이면 get인자</p>
+</li>
+<li><p>사용할만한 옵션</p>
+<ul>
+<li><p>–verbose, -v(요청값, 응답값 모두 보여줌)</p>
+<pre><code>Verbose output. Print the whole request as well as the response. Also print</code></pre></li>
+<li><p>–headers, -h(헤더만 보여줌)</p>
+<pre><code>Print only the response headers. Shortcut for --print=h.</code></pre></li>
+<li><p>–json, -j (요청한 내용 json으로 직렬화)</p>
+<pre><code>(default) Data items from the command line are serialized as a JSON object.
+The Content-Type and Accept headers are set to application/json
+(if not specified).</code></pre></li>
+<li><p>–form, -f(요청한 내용 보편화된 type으로 요청, file있으면 multipart로 전환)</p>
+<pre><code>Data items from the command line are serialized as form fields.
 
-사용자에 대한 정보를 서버에 두기 때문에 쿠키보다 보안에 좋지만, 사용자가 많아질수록 서버 메모리를 많이 차지하게 됩니다....
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/02/11</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Web">Web</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Session">Session</a>
-    
-</div>
-            
-        </div>
+The Content-Type is set to application/x-www-form-urlencoded (if not
+specified). The presence of any file fields results in a
+multipart/form-data request.</code></pre></li>
+<li><p>–auth, -a 옵션 뒤에 인증 정보를 전달</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http -a username:password example.org</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>커스텀 HTTP 헤더를 전송하려면 <code>Header:Value</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http httpbin.org&#x2F;headers Accept: User-Agent:</span><br><span class="line"></span><br><span class="line"> http httpbin.org&#x2F;headers &#39;Header;&#39; 이렇게하면 header가 빈값</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="예시"><a href="#예시" class="headerlink" title="예시"></a>예시</h3><p>보낸값</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http --json -v POST  httpbin.org&#x2F;post  body&#x3D;HTTPheart</span><br></pre></td></tr></table></figure>
+
+<p>응답값</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;post HTTP&#x2F;1.1</span><br><span class="line">Accept: application&#x2F;json, *&#x2F;*</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Length: 23</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Host: httpbin.org</span><br><span class="line">User-Agent: HTTPie&#x2F;2.0.0</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;body&quot;: &quot;HTTP :heart&quot;</span><br><span class="line">&#125;</span><br><span class="line">--------------위에가 요청값---------------</span><br><span class="line"></span><br><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">Access-Control-Allow-Credentials: true</span><br><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Length: 502</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Date: Thu, 13 Feb 2020 07:17:24 GMT</span><br><span class="line">Server: gunicorn&#x2F;19.9.0</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;args&quot;: &#123;&#125;,</span><br><span class="line">    &quot;data&quot;: &quot;&#123;\&quot;body\&quot;: \&quot;HTTP :heart\&quot;&#125;&quot;,</span><br><span class="line">    &quot;files&quot;: &#123;&#125;,</span><br><span class="line">    &quot;form&quot;: &#123;&#125;,</span><br><span class="line">    &quot;headers&quot;: &#123;</span><br><span class="line">        &quot;Accept&quot;: &quot;application&#x2F;json, *&#x2F;*&quot;,</span><br><span class="line">        &quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;,</span><br><span class="line">        &quot;Content-Length&quot;: &quot;23&quot;,</span><br><span class="line">        &quot;Content-Type&quot;: &quot;application&#x2F;json&quot;,</span><br><span class="line">        &quot;Host&quot;: &quot;httpbin.org&quot;,</span><br><span class="line">        &quot;User-Agent&quot;: &quot;HTTPie&#x2F;2.0.0&quot;,</span><br><span class="line">        &quot;X-Amzn-Trace-Id&quot;: &quot;Root&#x3D;1-5e44f804-97caa420351ee528e0990858&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;json&quot;: &#123;</span><br><span class="line">        &quot;body&quot;: &quot;HTTP :heart&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;origin&quot;: &quot;221.148.49.27&quot;,</span><br><span class="line">    &quot;url&quot;: &quot;http:&#x2F;&#x2F;httpbin.org&#x2F;post&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="세션-유지하기"><a href="#세션-유지하기" class="headerlink" title="세션 유지하기"></a>세션 유지하기</h2><p>HTTPie를 사용하는 동안 각 요청은 다른 요청과 독립적입니다. 다른 HTTP 요청에 대해 세션을 유지하고 싶은 경우에 대비해 세션을 유지할 수 있습니다. 세션을 유지하려면 다음과 같이 명명된 세션을 만들기만 하면 됩니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http --session&#x3D;roy -a roy:mypass www.myservice.com</span><br></pre></td></tr></table></figure>
+
+<p>위 명령은 세션 이름을 사용해 다른 요청에도 사용할 수 있는 <code>roy</code>라는 세션을 만듭니다. 다음은 <code>roy</code> 세션을 사용하는 예입니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http --session&#x3D;roy www.myservice.com</span><br></pre></td></tr></table></figure>
+
+<p>참고로 이 파일은  <code>~/.httpie/sessions/&lt;host&gt;/&lt;name&gt;.json</code>에 저장됩니다.</p>
+<h3 id="세션-파일-활용가능"><a href="#세션-파일-활용가능" class="headerlink" title="세션 파일 활용가능"></a>세션 파일 활용가능</h3><p>이름 대신 세션 파일의 경로를 직접 지정할 수도 있습니다. 이를 통해 여러 호스트에서 세션을 재사용 할 수 있습니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">http --session &#x3D; &#x2F;tmp&#x2F;session.json example.org</span><br><span class="line">http --session &#x3D; &#x2F;tmp&#x2F;session.json admin.example.org</span><br><span class="line">http --session &#x3D; ~ &#x2F; .httpie &#x2F; sessions &#x2F; another.example.org</span><br><span class="line">http --session-read-only &#x3D; &#x2F;tmp&#x2F;session.json example.org</span><br></pre></td></tr></table></figure>
+
+<h2 id="HTTPie를-통한-Token-획득-및-요청"><a href="#HTTPie를-통한-Token-획득-및-요청" class="headerlink" title="HTTPie를 통한 Token 획득 및 요청"></a>HTTPie<strong>를 통한</strong> Token 획득 및 요청</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http POST http:&#x2F;&#x2F;주소&#x2F;api-token-auth&#x2F; username&#x3D;&quot;유저명&quot; password&#x3D;&quot;암호&quot;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http http:&#x2F;&#x2F;localhost:8000&#x2F;api&#x2F;post&#x2F; &quot;Authorization:Token &lt;TOKEN값입력&gt;&quot;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#환경변수를 설정해서 편하게 이용하자</span><br><span class="line">export HOST&#x3D;&quot;http:&#x2F;&#x2F;localhost:8000&quot;</span><br><span class="line">export TOKEN&#x3D;&quot;d7ec115d8370de00f06c50ec5b61bd519b1038ae&quot; </span><br><span class="line"></span><br><span class="line"># Post List</span><br><span class="line">http $HOST&#x2F;api&#x2F;post&#x2F; &quot;Authorization: Token $TOKEN&quot;</span><br><span class="line"></span><br><span class="line"># Post Create</span><br><span class="line">http POST $HOST&#x2F;api&#x2F;post&#x2F; &quot;Authorization: Token $TOKEN&quot; message&#x3D;&quot;hello&quot; </span><br><span class="line"></span><br><span class="line"># Post Create with Photo</span><br><span class="line">http --form POST $HOST&#x2F;api&#x2F;post&#x2F; &quot;Authorization: Token $TOKEN&quot; message&#x3D;&quot;hello&quot; photo@&quot;f1.jpg&quot;   # httpie 문법임, 현재 프로젝트전체폴에경로에존재하는 사진파일</span><br><span class="line"></span><br><span class="line"># Post#16 Detail</span><br><span class="line">http GET $HOST&#x2F;api&#x2F;post&#x2F;16&#x2F; &quot;Authorization: Token $TOKEN&quot;</span><br><span class="line"></span><br><span class="line"># Post#16 Update</span><br><span class="line">http PATCH $HOST&#x2F;api&#x2F;post&#x2F;16&#x2F; &quot;Authorization: Token $TOKEN&quot; message&#x3D;&quot;patched&quot; </span><br><span class="line"></span><br><span class="line">http PUT $HOST&#x2F;api&#x2F;post&#x2F;16&#x2F; &quot;Authorization: Token $TOKEN&quot; message&#x3D;&quot;updated&quot;</span><br><span class="line"></span><br><span class="line"># Post#16 Delete</span><br><span class="line">http DELETE $HOST&#x2F;api&#x2F;post&#x2F;16&#x2F; &quot;Authorization: Token $TOKEN&quot;</span><br></pre></td></tr></table></figure>
+
+
     </article>
+    <!-- license  -->
     
     <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/02/11/SessionAndCookie/" title= "세션,쿠키와 캐시 (session and cookie)">
+                    <div class="prevTitle">세션,쿠키와 캐시 (session and cookie)</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
     
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
 </main>
             <!-- profile -->
             
@@ -467,6 +592,24 @@
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTPie"><span class="toc-number">1.</span> <span class="toc-text">HTTPie</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#기능"><span class="toc-number">1.1.</span> <span class="toc-text">기능</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#왜-사용해야하는가"><span class="toc-number">1.2.</span> <span class="toc-text">왜 사용해야하는가?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#설치"><span class="toc-number">1.3.</span> <span class="toc-text">설치</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#기본-사용법"><span class="toc-number">1.4.</span> <span class="toc-text">기본 사용법</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#예시"><span class="toc-number">1.4.1.</span> <span class="toc-text">예시</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#세션-유지하기"><span class="toc-number">1.5.</span> <span class="toc-text">세션 유지하기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#세션-파일-활용가능"><span class="toc-number">1.5.1.</span> <span class="toc-text">세션 파일 활용가능</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTPie를-통한-Token-획득-및-요청"><span class="toc-number">1.6.</span> <span class="toc-text">HTTPie를 통한 Token 획득 및 요청</span></a></li></ol></li></ol>
+    </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
@@ -1337,6 +1480,8 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
      
     </body>
 </html>
