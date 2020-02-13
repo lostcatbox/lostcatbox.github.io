@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>api 기본편 5 + 6 + 7 · lostcatbox</title>
+    <title>path_setting · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">api 기본편 5 + 6 + 7</a>
+                <a href="#" class="post-name">path_setting</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            api 기본편 5 + 6 + 7
+            path_setting
             <!-- 404 -->
             
         </h1>
@@ -266,20 +266,20 @@ height:50vh;
                 
                     <div class= post-intro-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "API">API</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "DRF">DRF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Linux">Linux</a>
     
 </div>
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">1.5k</span>Reading time: <span class="post-count reading-time">9 min</span></span>
+                        <span>Word count: <span class="post-count word-count">793</span>Reading time: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2020/01/18</span>
+                    <span class="post-intro-time">2020/02/13</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -403,158 +403,70 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="EP-05-format-인자와-다양한-Renderer"><a href="#EP-05-format-인자와-다양한-Renderer" class="headerlink" title="EP 05 - format 인자와 다양한 Renderer"></a>EP 05 - format 인자와 다양한 Renderer</h1><p><code>rest_framework.response.Response</code>에서는 2가지 타입의 응답을 할 수 있습니다. (response.py에서 Response클래스)</p>
-<p>APIView를 쓸때는 Response()의 인자로 응답을 하게되는데 Response는 Renderer속성을 참조함 &gt;&gt; renderer 기본으로 2가지포맷을만 활성화되어있다.</p>
+        <h1 id="환경-변수"><a href="#환경-변수" class="headerlink" title="환경 변수"></a>환경 변수</h1><p>환경변수에 등록된 경로는, 컴퓨터의 어떤 경로에서라도 접근(=실행) 할 수 있다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">환경변수 확인</span><br><span class="line">$ echo $PATH</span><br><span class="line">별다른 설정이 없다.</span><br><span class="line"></span><br><span class="line">$ echo AAA #AAA에 대한 환경변수값 확인</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$ ls -la</span><br><span class="line">.bash_profile 이라는 숨김 파일이 있는지 확인한다.</span><br><span class="line"></span><br><span class="line">없을경우 생성</span><br><span class="line">$ touch .bash_profile</span><br><span class="line"></span><br><span class="line">있을 경우 파일 오픈</span><br><span class="line">$ vi .bash_profile  -&gt; vi를 통해 오픈</span><br><span class="line">$ open .bash_profile  -&gt; 에디터를 통해 오픈</span><br></pre></td></tr></table></figure>
+
+<h3 id="환경-변수-경로-의미"><a href="#환경-변수-경로-의미" class="headerlink" title="환경 변수 경로 의미"></a>환경 변수 경로 의미</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export PATH&#x3D;$&#123;PATH&#125;  #$앞의 &#123;PATH&#125;의 경우 상위 Path</span><br><span class="line"></span><br><span class="line"># 그리고 그 뒤에 다른 Path가 필요할 경우 &#123;PATH&#125;뒤에 : 적어서 경로를 이어줍니다.</span><br><span class="line">export PATH&#x3D;$&#123;PATH&#125;:&#x2F;Users&#x2F;wefw&#x2F;wgwe&#x2F;erge&#x2F;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>.bash_profile</code><br><code>.bashrc</code><br>에 설정해놓으면 되는데 터미널을 껏다 키면 $PATH 가 초기화되어 계속</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source ~&#x2F;.bash_profile</span><br><span class="line">source ~&#x2F;.bashrc</span><br></pre></td></tr></table></figure>
+
+<p>를 해서 zsh환경에서 실행할때마다 설정해줘야하는 문제가 발생했다</p>
+<blockquote>
+<p>이유:</p>
+<p>YADR 즉 dotfiles는 zsh기반으로 동작하며<br>zsh은 기존 linux, mac 시스템이 사용하는 ~/.bash_profile 파일의 설정을 따르지 않고<br>~/.zshrc 파일의 설정을 따릅니다.<br>따라서 기존 linux, mac 시스템에서 .bash_profile 파일에 등록한것과 같이 아래 형태로 환경변수를 정의하면 됩니다.</p>
+</blockquote>
+<h2 id="oh-my-zsh"><a href="#oh-my-zsh" class="headerlink" title="oh-my-zsh"></a>oh-my-zsh</h2><p>아래 파일들이 zsh가 참고하는 환경변수 파일이다.</p>
+<p>여기에 원하는 환경변수들을 저장하면 항상 사용가능하다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;.zshrc</span><br><span class="line">~&#x2F;.zshenv</span><br><span class="line">~&#x2F;.zprofile</span><br></pre></td></tr></table></figure>
+
+<h3 id="zsh에-bash파일들에-있는-환경변수-자동추가하기"><a href="#zsh에-bash파일들에-있는-환경변수-자동추가하기" class="headerlink" title="zsh에 bash파일들에 있는 환경변수 자동추가하기"></a>zsh에 bash파일들에 있는 환경변수 자동추가하기</h3><p>이미 .bash_profile 과 .bashrc 에 설정해놓은 path를 사용하기위해<br>source ~/.bash_profile<br>source ~/.bashrc<br>를 실행시키도록 설정했다</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi ~&#x2F;.zprofile  #vi에디터로 .zprofile 을 열어 아래 명령을 추가 작성 및 저장</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source ~&#x2F;.bash_profile</span><br><span class="line">source ~&#x2F;.bashrc</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<h1 id="정리-해야할것"><a href="#정리-해야할것" class="headerlink" title="정리 해야할것"></a>정리 해야할것</h1><h2 id="SECRET-KEY-분리하기"><a href="#SECRET-KEY-분리하기" class="headerlink" title="SECRET_KEY 분리하기"></a>SECRET_KEY 분리하기</h2><p>settings.py 파일에서 비밀 값을 분리하는 방법은 여러가지가 있는데 책에서 소개하는 방법은 2가지이다.</p>
 <ul>
-<li><code>api</code> : API Endpoint에 브라우저를 통해 접근할 때, 웹UI로 API를 조회할 수 있습니다.</li>
-<li><code>json</code> : 보통의 API 접근 시</li>
+<li>환경변수패턴 : SECRET_KEY의 값을 환경변수에 저장하여 참고한다.</li>
+<li>비밀파일패턴 : SECRET_KEY의 값을 별도 파일에 저장하여 참고한다.</li>
 </ul>
-<p>API 요청에서는 <code>format=json</code>으로 디폴트 처리되며, 웹브라우저를 통해 요청될 때에는 <code>format=api</code>로 디폴트 처리됩니다.</p>
-<p>APIView에서는 출력포맷을 결정하는 format인자를 다음 3가지 형태로 받을 수 있습니다.</p>
-<ul>
-<li>Accept 헤더</li>
-<li>GET인자 format</li>
-<li>URL끝에 “.포맷”</li>
-</ul>
-<p>지정 예) JSON 응답 요청</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http :8000&#x2F;ep04&#x2F; Accept:application&#x2F;json</span><br><span class="line">http :8000&#x2F;ep04&#x2F;?format&#x3D;json</span><br><span class="line">http :8000&#x2F;ep04&#x2F;.json     #router에서 url</span><br></pre></td></tr></table></figure>
+<h2 id="1-환경변수패턴"><a href="#1-환경변수패턴" class="headerlink" title="1. 환경변수패턴"></a>1. 환경변수패턴</h2><p>환경변수란 프로세스가 컴퓨터에서 동작하는 방식에 영향을 미치는, 동적인 값들의 모임이다.(<a href="https://ko.wikipedia.org/wiki/환경_변수" target="_blank" rel="noopener">위키</a>) 시스템의 실행파일이 놓여 있는 디렉토리의 지정 등 OS 상에서 동작하는 응용소프트웨어가 참조하기 위한 설정이 기록된다. 환경변수를 사용하여 비밀 키를 보관함으로써 걱정 없이 세팅파일을 github 공개 저장소에 추가할 수 있다.</p>
+<p>로컬 개발 환경에서 환경 변수를 세팅하려면 다음 코드를 .bashrc 혹은 .bash_profile, .profile, .zshrc 파일에 추가하면 된다. 어느 종류의 shell을 사용하는지에 따라서 편집하는 파일이 달라진다.(mac 사용자 기준) 나의 경우 <a href="http://ohmyz.sh/" target="_blank" rel="noopener">zsh</a>을 사용하고 있어서 .zshrc에 아래와 같이 환경변수 추가 작업을 진행했다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ vim ~&#x2F;.zshrc # vim을 사용하여 .zshrc 파일을 편집하겠다.</span><br><span class="line"></span><br><span class="line"># .zshrc 파일에 아래 코드를 추가해준다.</span><br><span class="line">export INSTA_SECRET_KEY&#x3D;&#39;b_4(!id8ro!1645n@ub55555hbu93gaia0 본인의 고유 비밀 키 추가&#39;</span><br><span class="line"></span><br><span class="line"># 환경변수 확인 명령</span><br><span class="line">$ echo $INSTA_SECRET_KEY</span><br></pre></td></tr></table></figure>
 
-<p>지정 예) HTML 응답 요청&gt;&gt;이 형태가 브라우저로들어갈때의 rest-framework가 보여주는api</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http :8000&#x2F;ep04&#x2F; Accept:text&#x2F;html</span><br><span class="line">http :8000&#x2F;ep04&#x2F;?format&#x3D;api</span><br><span class="line">http :8000&#x2F;ep04&#x2F;.api      #router에서 url</span><br></pre></td></tr></table></figure>
+<p>추가 완료 후, settings.py 파일을 열어서 SECRET_KEY 의 값을 삭제하고 환경변수로 대체한다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># settings.py</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 환경변수 INSTA_SECRET_KEY 의 값을 참조한다.</span><br><span class="line">SECRET_KEY &#x3D; os.environ[&quot;INSTA_SECRET_KEY&quot;]</span><br></pre></td></tr></table></figure>
 
-<p>헤더와 GET인자를 활용하는 방법은 별도의 URL Conf 설정이 필요없습니다. 하지만 <code>:8000/.json</code>의 경우에는 “인자 Capture”가 필요하므로 별도의 URL Conf 설정이 필요하며 뷰에서도 <code>format</code> 이름의 인자를 받을 수 있어야 합니다.</p>
-<p>Tip: 인자 capture란 url에서 &lt;int:pk&gt;/edit 같이 숫자인자를 capture하는것처럼 추출하는것</p>
-<p>URLConf에서 format인자에 대한 패턴을 직접 정의할 필요는 없습니다. 기존 URL Conf설정을 활용하여 format 인자 지원을 <code>rest_framework</code>에서 도와줍니다. 만약 다음 2가지 URL이 있다면 (router쓰지않고)</p>
-<ul>
-<li><code>/post/</code></li>
-<li><code>/post/1/</code></li>
-</ul>
-<p>다음 URL도 사용토록 도와줍니다.</p>
-<ul>
-<li><code>/post.json</code> : 포스팅 목록 (JSON 포맷)</li>
-<li><code>/post/1.json</code> : 1번 포스팅 (JSON 포맷)</li>
-<li><code>/post.api</code> : 포스팅 목록 (HTML 포맷)</li>
-<li><code>/post/1.api</code> : 1번 포스팅 (HTML 포맷)</li>
-</ul>
-<p>실제 코드를 살펴봅시다.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># myapp/urls.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rest_framework.urlpatterns <span class="keyword">import</span> format_suffix_patterns</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    <span class="comment"># 이미 여러 url pattern이 등록되어있을 것입니다.</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 기존 urlpatterns 끝에 추가합니다. 이를 통해 인자로 넘겨진 urlpatterns에 suffix지원을 추가해줍니다.</span></span><br><span class="line">urlpatterns = format_suffix_patterns(urlpatterns)</span><br></pre></td></tr></table></figure>
+<p>혹은 아래와 같은 예외 처리를 통해서 환경변수가 존재하지 않을 때 원인을 파악하기 쉽도록 할 수 있다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># settings.py</span><br><span class="line">import os</span><br><span class="line">from django.core.exceptions import ImproperlyConfigured</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_env_variable(var_name):</span><br><span class="line">  &quot;&quot;&quot;환경 변수를 가져오거나 예외를 반환한다.&quot;&quot;&quot;</span><br><span class="line">  try:</span><br><span class="line">    return os.environ[var_name]</span><br><span class="line">  except KeyError:</span><br><span class="line">    error_msg &#x3D; &quot;Set the &#123;&#125; environment variable&quot;.format(var_name)</span><br><span class="line">    raise ImproperlyConfigured(error_msg)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SECRET_KEY &#x3D; get_env_variable(&quot;INSTA_SECRET_KEY&quot;)</span><br></pre></td></tr></table></figure>
 
-<p>하지만, <code>DefaultRouter</code>를 사용하고 계시다면, 위 <code>format_suffix_patterns</code>처리를 추가로 하실 필요가 없습니다. <code>DefaultRouter</code>내에서 이미 처리되어있습니다.</p>
-<p><code>ViewSet</code>에서는 별도로 신경써줄 것은 없으며, <code>@api_view</code>장식자를 적용한 함수 뷰에서는 <code>format인자</code>를 받을 수 있도록 <code>Keyword 인자</code>를 필히 지정해줘야합니다. 인자만 받을 수 있도록 할 뿐 추가로 구현해야할 것은 없습니다. <code>api_view</code>와 <code>Response</code>를 통해 <code>format</code>인자가 처리됩니다.</p>
-<p>Tip: url에서 capture해서 keyword agrument로 format이라는 인자로 뷰로 넘겨주는데, 함수뷰에는 format을 받을수있어야하므로 format=none필요 </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># myapp/views.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rest_framework.decorators <span class="keyword">import</span> api_view</span><br><span class="line"></span><br><span class="line"><span class="meta">@api_view(['GET', 'POST'])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">post_list</span><span class="params">(request, format=None)</span>:</span></span><br><span class="line">    <span class="comment"># Response 활용</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@api_view(['GET', 'PUT', 'DELETE'])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">post_detail</span><span class="params">(request, pk, format=None)</span>:</span></span><br><span class="line">    <span class="comment"># Response 활용</span></span><br></pre></td></tr></table></figure>
+<p>쉘에서 python3 manage.py runserver 명령을 입력하니 정상적으로 개발 서버가 구동되는 것을 확인 할 수 있었다. 참고로 실제 운영환경에서 환경변수를 세팅하려면, 각자 사용하는 배포도구에 따라서 변수 지정방법이 달라진다.</p>
+<hr>
+<h2 id="2-비밀파일패턴"><a href="#2-비밀파일패턴" class="headerlink" title="2. 비밀파일패턴"></a>2. 비밀파일패턴</h2><p>환경변수는 경우에 따라 적용되지 않을 수 있다. (아파치를 웹 서버로 이용하는 등) 이럴 경우에는 JSON 파일에 비밀 키 정보를 입력하고, settings.py에서 참고하도록 설정할 수 있다. 우선 아래와 같이 <strong>secrets.json</strong> 파일을 작성한다. (주의 - 이어지는 항목이 없는 경우, 쌍따옴표 뒤에 콤마(,)를 입력해서는 안된다. python git 갱신이력을 깔끔하게 관리하려고 dictionary 마지막 항목에도 콤마를 추가하는 습관이 있어서 그대로 적용했더니 json에서는 오류가 발생했다.)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;SECRET_KEY&quot;: &quot;b_4(!id8ro!1645n@ub55555hbu93gaia0 본인의 고유 비밀 키 추가&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>이제, 다음 URL을 통해 format인자를 지정해보세요.</p>
-<ul>
-<li><code>http :8000/ Accept:application/json</code></li>
-<li><code>http :8000/?format=json</code></li>
-<li><code>http :8000/.json</code></li>
-<li><code>http :8000/ Accept:text/html</code></li>
-<li><code>http :8000/?format=api</code></li>
-<li><code>http :8000/.api</code></li>
-</ul>
-<p>Tip: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http &#39;http:&#x2F;&#x2F;localhost:8000&#x2F;ep04&#x2F;?format&#x3D;api&#39; # ?가 인식이되므로 문자열로 보내줘야실행됨</span><br></pre></td></tr></table></figure>
+<p>작성한 secrets.json 파일은 버전관리 시스템에 저장되지 않도록 <strong>.gitignore</strong> 문서에 추가한다. 그리고 해당 파일을 SECRET_KEY 값으로 참고하기 위해서 다음 코드를 settings.py에 추가한다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># settings.py</span><br><span class="line"></span><br><span class="line">import os, json</span><br><span class="line">from django.core.exceptions import ImproperlyConfigured</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">secret_file &#x3D; os.path.join(BASE_DIR, &#39;secrets.json&#39;) # secrets.json 파일 위치를 명시</span><br><span class="line"></span><br><span class="line">with open(secret_file) as f:</span><br><span class="line">    secrets &#x3D; json.loads(f.read())</span><br><span class="line"></span><br><span class="line">def get_secret(setting, secrets&#x3D;secrets):</span><br><span class="line">    &quot;&quot;&quot;비밀 변수를 가져오거나 명시적 예외를 반환한다.&quot;&quot;&quot;</span><br><span class="line">    try:</span><br><span class="line">        return secrets[setting]</span><br><span class="line">    except KeyError:</span><br><span class="line">        error_msg &#x3D; &quot;Set the &#123;&#125; environment variable&quot;.format(setting)</span><br><span class="line">        raise ImproperlyConfigured(error_msg)</span><br><span class="line"></span><br><span class="line">SECRET_KEY &#x3D; get_secret(&quot;SECRET_KEY&quot;)</span><br></pre></td></tr></table></figure>
 
-<p><strong>즉 내가 어떤 상태에서 어떤 요청을 하냐에따라 다양한 renderer가 사용됨</strong></p>
-<h1 id="기본-지원되는-Renderer-몇-가지-DRF에서"><a href="#기본-지원되는-Renderer-몇-가지-DRF에서" class="headerlink" title="기본 지원되는 Renderer 몇 가지(DRF에서)"></a>기본 지원되는 Renderer 몇 가지(DRF에서)</h1><ul>
-<li><strong><code>JSONRenderer</code></strong> (디폴트 지정) : <code>json.dumps</code>를 통한 JSON 직렬화<ul>
-<li><code>format</code>: <code>json</code></li>
-</ul>
-</li>
-<li><code>BrowsableAPIRenderer</code> (디폴트 지정) : self-document HTML 렌더링<ul>
-<li><code>format</code>: <code>api</code></li>
-</ul>
-</li>
-<li><code>TemplateHTMLRenderer</code> : 지정 템플릿을 통한 렌더링 (api인데 왜 html을부르냐,,차라리 django쓰자)<ul>
-<li><code>format</code>: <code>html</code></li>
-<li><code>template_name</code>: 지정 필요</li>
-<li>템플릿을 찾는 순서<ul>
-<li>Response에서 <code>template_name</code> 찾기 : <code>return Response({}, template_name=&#39;mytempalte.html&#39;)</code></li>
-<li>Renderer에서 <code>template_name</code> 찾기</li>
-<li>뷰 클래스에서 <code>get_template_names</code> 함수 찾기</li>
-<li>뷰 클래스에서 <code>template_name</code> 속성 찾기</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>Tip: json만으로 renderer 응답해주고싶다면 재정의를 이용하여 BrewsableAPIRenderer를 뺴주면됨</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># settings.py </span><br><span class="line"></span><br><span class="line">REST_FRAMEWORK &#x3D; &#123;</span><br><span class="line">    &#39;DEFAULT_RENDERER_CLASSES&#39;: (</span><br><span class="line">        &#39;rest_framework.renderers.JSONRenderer&#39;,</span><br><span class="line">        #&#39;rest_framework.renderers.BrowsableAPIRenderer&#39;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="API를-사용하는-HTML-페이지-만들기"><a href="#API를-사용하는-HTML-페이지-만들기" class="headerlink" title="API를 사용하는 HTML 페이지 만들기"></a>API를 사용하는 HTML 페이지 만들기</h2><p>참고: <a href="http://www.django-rest-framework.org/topics/html-and-forms/" target="_blank" rel="noopener">http://www.django-rest-framework.org/topics/html-and-forms/</a></p>
-<p>Django Form을 사용하지 않고, DRF를 통해 HTML페이지에서; 폼처리를 할 수는 있습니다. 하지만 이 부분은 DRF를 쓰기보다 Django Form을 사용하는 것이 보다 효율적인 듯 해서, 다루진 않겠습니다.</p>
-<p>언젠가 Django Form과 Serializer가 합쳐지는 날이 오지 않을까 싶네요.</p>
-<h1 id="EP-06-필터링"><a href="#EP-06-필터링" class="headerlink" title="EP 06 - 필터링"></a>EP 06 - 필터링</h1><p>목록조회 APIView(<code>ListAPIView</code>)에서는 조건에 따라 QuerySet을 필터링이 필요할 수 있습니다.(특정 유저에게 보여줄것이 다를때 등등) <code>APIView</code>는 <code>View</code>를 상속받은 <code>CBV</code>이므로, <code>CBV</code>에서 하던 대로 필터링을 수행할 수 있습니다.</p>
-<h3 id="필터링에-필요한-인자-획득"><a href="#필터링에-필요한-인자-획득" class="headerlink" title="필터링에 필요한 인자 획득"></a>필터링에 필요한 인자 획득</h3><p><code>self.request</code>를 통해 <code>HttpRequest</code>객체를 참조할 수 있습니다.</p>
-<ul>
-<li><code>self.request.user</code> : 현재 로그인 유저 Instance. 로그아웃 시에는 AnonymousUser(모델클래스가있는 일반 파이썬 클래스이므로 유저 모델 인스턴스에 필터못해, 일반 파이썬 클래스이므로 ???) 인스턴스</li>
-<li><code>self.request.GET</code> : 요청 <code>GET인자</code> (QueryDict타입)</li>
-<li><code>self.request.query_params</code> : <strong><code>GET인자</code>와 동일한 값입니다. <code>rest_framework</code>에서는 보다 가독성높은 이름으로서 이 속성을 지원</strong>하고 있습니다.</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns = [</span><br><span class="line">    url(<span class="string">r'^(?P&lt;username&gt;\w+)/$'</span>, views.PostListAPIView.as_view()),</span><br><span class="line">    url(<span class="string">r'^$'</span>, views.PostListAPIView.as_view()),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<p>그리고,FBV에선 url에서 넘어오는 값을 현재 username으로 인자를 받고 지금은 <code>CBV</code>이기에 <code>self.kwargs</code>를 통해 <code>URL Capture</code>된 인자를 획득할 수 있습니다.(사전형식으로 모두 넘어옴,) 아래와 같이 URL패턴이 정의되어있을 경우, <code>self.kwargs[&#39;username&#39;]</code>으로 해당 값을 참조할 수 있습니다. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.kwargs.get(&#39;username&#39;, &#39;&#39;) #사전에서 지원해주는 동작, 있다면 가져오고 없다면 빈문자열 가져옴</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 상관없는 내용ㅇ foreignkey복습필요, user_model보기</span><br><span class="line">from django.db import models</span><br><span class="line">from django.conf import settings</span><br><span class="line"></span><br><span class="line">class Post(models.Model, on_delete&#x3D;models.CASCADE):</span><br><span class="line">    author &#x3D; models.ForeignKey(settings.AUTH_USER_MODEL)</span><br><span class="line">    title &#x3D; models.CharField(max_length&#x3D;100)</span><br><span class="line">    content &#x3D; models.TextField()</span><br><span class="line">    is_public &#x3D; models.BooleanField(default&#x3D;False)</span><br><span class="line">    created_at &#x3D; models.DateTimeField(auto_now_add&#x3D;True)</span><br><span class="line">    updated_at &#x3D; models.DateTimeField(auto_now&#x3D;True)</span><br></pre></td></tr></table></figure>
-
-<p>foreignkey에 대해서는 django에서 현재 <a href="https://lee-seul.github.io/django/backend/2018/01/28/django-model-on-delete.html" target="_blank" rel="noopener">On_delete</a> 를 반드시 지정해야함</p>
-<h3 id="get-queryset을-통한-쿼리셋-필터링"><a href="#get-queryset을-통한-쿼리셋-필터링" class="headerlink" title="get_queryset을 통한 쿼리셋 필터링"></a>get_queryset을 통한 쿼리셋 필터링</h3><p><code>ListAPIView</code>에는 <code>queryset</code>인자를 지정하고, 상황에 따라 필터링이 필요한 경우에는 <code>get_queryset</code>함수를 재정의해서 구현할 수 있습니다.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> generics</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostListAPIView</span><span class="params">(generics.ListAPIView)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_queryset</span><span class="params">(self)</span>:</span></span><br><span class="line">        qs = super().get_queryset()</span><br><span class="line">        qs = qs.filter(...)  <span class="comment"># 직절히 필터링</span></span><br><span class="line">        <span class="keyword">return</span> qs</span><br></pre></td></tr></table></figure>
-
-<p>예시</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#views.py</span><br><span class="line"></span><br><span class="line">from django.shortcuts import render</span><br><span class="line">from ep04.models import Post</span><br><span class="line">from ep04.serializers import PostSerializer</span><br><span class="line">from rest_framework.viewsets import ModelViewSet</span><br><span class="line"></span><br><span class="line">class PostViewSet(ModelViewSet):</span><br><span class="line">    queryset &#x3D; Post.objects.all()</span><br><span class="line">    serializer_class &#x3D; PostSerializer</span><br><span class="line"></span><br><span class="line">    def get_queryset(self):</span><br><span class="line">        qs &#x3D; super().get_queryset()</span><br><span class="line">        if self.request.user.is_authenticated:  #로그인상태라면</span><br><span class="line">            qs &#x3D; qs.filter(</span><br><span class="line">                author&#x3D;self.request.user</span><br><span class="line">            )</span><br><span class="line">        else:</span><br><span class="line">            qs &#x3D; qs.none() #empty result 나옴</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        return qs</span><br></pre></td></tr></table></figure>
-
-<h2 id="Search-구현-브라우저에서접속하는-api환경에서-ui생성"><a href="#Search-구현-브라우저에서접속하는-api환경에서-ui생성" class="headerlink" title="Search 구현(브라우저에서접속하는 api환경에서 ui생성)"></a>Search 구현(브라우저에서접속하는 api환경에서 ui생성)</h2><p><a href="https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.ModelAdmin.search_fields" target="_blank" rel="noopener">Django Admin의 Search기능</a>(즉, 장고 admin.py에서 search_fields = (‘title’, ‘content’)추가하면 admin환경에서 검색기능 활성화되는것처럼..)과 유사하게 제공합니다. 이는 별도의 검색엔진을 사용하는 것이 아니라, <strong>DBMS의 LIKE/ILIKE 조건절을 활용합니다.</strong> (순수 DB에 query한다)</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.filters <span class="keyword">import</span> SearchFilter</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostListAPIView</span><span class="params">(generics.ListAPIView)</span>:</span></span><br><span class="line">    <span class="comment"># 중략</span></span><br><span class="line"></span><br><span class="line">    filter_backends = [SearchFilter]</span><br><span class="line">    search_fields = [<span class="string">'title'</span>]  <span class="comment"># 검색 키워드를 지정했을 때, 매칭을 시도할 필드</span></span><br></pre></td></tr></table></figure>
-
-<p>검색시</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;ep06&#x2F;post&#x2F;?search&#x3D;%EC%B2%AB%EB%B2%88%EC%A7%B8</span><br><span class="line"></span><br><span class="line">In [6]: &#39;첫번째&#39;.encode(&#39;utf-8&#39;)</span><br><span class="line">Out[6]: b&#39;\xec\xb2\xab\xeb\xb2\x88\xec\xa7\xb8&#39;</span><br></pre></td></tr></table></figure>
-
-<p>요청주소가 나오는데 결국 get인자 search라는 이름으로 ‘첫번째’.encode(‘utf-8’) </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">로그인상태 구별하는것 주석처리후 httpie를 이용하여</span><br><span class="line"> http localhost:8000&#x2F;ep06&#x2F;post&#x2F; search&#x3D;&#x3D;&#39;첫&#39;</span><br><span class="line"> 검색됨</span><br></pre></td></tr></table></figure>
-
-
-
-<p>아래방법은 그냥 기본적인 검색</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">def get_queryset(self):</span><br><span class="line">    qs &#x3D; super().get_queryset()</span><br><span class="line"></span><br><span class="line">    search &#x3D; self.request.GET.get(&#39;search&#39;,&#39;&#39;)</span><br><span class="line"></span><br><span class="line">    if search:</span><br><span class="line">        qs &#x3D; qs.filter(title__icontains&#x3D;search)</span><br><span class="line">    if self.request.user.is_authenticated:  #로그인상태라면</span><br><span class="line">        qs &#x3D; qs.filter(</span><br><span class="line">            author&#x3D;self.request.user</span><br><span class="line">        )</span><br><span class="line">    else:</span><br><span class="line">        qs &#x3D; qs.none() #empty result 나옴</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    return qs</span><br></pre></td></tr></table></figure>
-
-<h1 id="EP-07-Pagination-처리-ep03앱을-이용"><a href="#EP-07-Pagination-처리-ep03앱을-이용" class="headerlink" title="EP 07. Pagination 처리(ep03앱을 이용)"></a>EP 07. Pagination 처리(ep03앱을 이용)</h1><p>레코드 갯수가 많은 경우 목록을 하나의 API 요청만으로 받는 것은 피해야할 것입니다. 이럴 때 여러 페이지에 나눠서 요청을 처리할 수 있겠는 데요. 이에 대해 <code>rest_framework</code>에서는 여러 페이징 기법을 지원해주고 있습니다.</p>
-<ul>
-<li><code>PageNumberPagination</code>:<code>page</code>인자를 통해 페이징 처리 (page는 페이지수, page_size는 page당 post수)<ul>
-<li><code>http://api.example.org/accounts/?page=4</code></li>
-<li><code>http://api.example.org/accounts/?page=4&amp;page_size=100</code></li>
-</ul>
-</li>
-<li><code>LimitOffsetPagination</code>:<code>limit</code>인자를 통한 페이징 처리(offset은 레코드정렬순서기준 400번째부터~, limit 까지, limit만 지정시 처음부터 limit까지)<ul>
-<li><code>http://api.example.org/accounts/?limit=100</code></li>
-<li><code>http://api.example.org/accounts/?offset=400&amp;limit=100</code></li>
-</ul>
-</li>
-</ul>
-<p><code>rest_framework/generics.py</code> 내 <code>GenericAPIView</code>에는 이미 <code>pagination_class = PageNumberPagination</code> 설정이었습니다. 하지만, <code>3.7.0</code>버전부터는 <code>디폴트 None</code>으로 지정으로 변경되었습니다. 현재 (2017년 11월) 최신 버전은 <code>3.7.3</code>버전입니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 버전확인</span><br><span class="line">pip3 freeze | grep djangorestframework</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#models.py 에서 순서 꼭 지정해주기 ordering</span><br><span class="line"></span><br><span class="line">class Post(models.Model):</span><br><span class="line">    title &#x3D; models.CharField(max_length&#x3D;100)</span><br><span class="line">    content &#x3D; models.TextField()ㄴ</span><br><span class="line">    created_at &#x3D; models.DateTimeField(auto_now_add&#x3D;True)</span><br><span class="line">    updated_at &#x3D; models.DateTimeField(auto_now&#x3D;True)</span><br><span class="line"></span><br><span class="line">    class Meta:</span><br><span class="line">        ordering &#x3D; (&#39;-id&#39;,)  #,가 튜플이라는 증거</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Tip: <code>3.7.0</code>버전부터 디폴트 페이징 클래스 설정이 <code>None</code>으로 <a href="https://github.com/encode/django-rest-framework/commit/107e8b3d23a933b8cdc1f14045d7d42742be53a9#diff-f9716c39348a77db61afdaa2ed35cd87R54" target="_blank" rel="noopener">디폴트 설정이 변경</a>되기에, 낮은 버전을 쓰고 계시더라도 다음과 같이 전역설정을 해두시는 것이 좋습니다. ;) 기본 페이징사이즈도 넣어주는게 좋음</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># settings.py</span></span><br><span class="line"></span><br><span class="line">REST_FRAMEWORK = &#123;</span><br><span class="line">    <span class="string">'DEFAULT_PAGINATION_CLASS'</span>: <span class="string">'rest_framework.pagination.PageNumberPagination'</span>,</span><br><span class="line">    <span class="string">'PAGE_SIZE'</span>: <span class="number">3</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="커스텀으로-pagination"><a href="#커스텀으로-pagination" class="headerlink" title="커스텀으로 pagination"></a>커스텀으로 pagination</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.pagination <span class="keyword">import</span> PageNumberPagination</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GenericAPIView</span><span class="params">(ApiView)</span>:</span></span><br><span class="line">    pagination_class = PageNumberPagination  <span class="comment"># 디폴트 지정</span></span><br></pre></td></tr></table></figure>
-
-<p>하지만 디폴트 설정으로 <code>PAGE_SIZE</code>인자가 <code>None</code>으로 설정되어있기 때문에, 리스트 처리에서 페이징처리가 되지 않습니다. 다음과 같이 전역으로 <code>PAGE_SIZE</code>설정을 하셔도 되구요.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 프로젝트&#x2F;settings.py</span><br><span class="line"></span><br><span class="line">REST_FRAMEWORK &#x3D; &#123;</span><br><span class="line">    &#39;PAGE_SIZE&#39;: 20,  # 디폴트 값은 None으로서 페이징 비활성화</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>각 API별로 <code>PAGE_SIZE</code>설정을 다르게 할 수도 있지만, 이는 <code>Pagination</code>의 역할이기에 <code>Pagination</code>을 커스텀하셔야 합니다.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.pagination <span class="keyword">import</span> PageNumberPagination</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostPageNumberPagination</span><span class="params">(PageNumberPagination)</span>:</span></span><br><span class="line">    page_size = <span class="number">20</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(..)</span>:</span></span><br><span class="line">    pagination_class = PostPageNumberPagination</span><br></pre></td></tr></table></figure>
-
+<p>쉘에서 python3 manage.py runserver 명령을 입력하니 이 방법을 사용해도 정상적으로 개발 서버가 구동되는 것을 확인 할 수 있었다.</p>
+<hr>
+<h1 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h1><p>AWS 루트키가 github 공개 저장소에 추가되면 악용되어서 요금폭탄을 맞을 수도 있다는 이야기는 많이 들어보았다. 하지만 settings에 대해서는 비교적 신경을 쓰지 못했다. Django 초보라면 대부분 SECRET_KEY를 본인의 공개 저장소에 올려본 경험은 있지 않을까? 물론 배포 전에 변경하고 분리하는 것이 가능 하지만, 그에 따른 부작용이 발생 할 수 있으니 처음부터 관리하는게 좋겠다. 앞으로 first commit 이전에 SECRET_KEY를 환경변수 혹은 json 파일로 분리하거나, 초반에는 .gitignore 파일에 settings.py 파일을 추가해 놓는 것도 괜찮겠다는 생각을 했다</p>
+<h1 id="출처"><a href="#출처" class="headerlink" title="출처"></a>출처</h1><p><a href="http://blog.naver.com/loverman85/221265795874" target="_blank" rel="noopener">oh-my-zsh 사용시 환경변수 (path) 설정하기</a>|*<em>작성자*</em> <a href="http://blog.naver.com/loverman85" target="_blank" rel="noopener">iCaan</a>**</p>
 
     </article>
     <!-- license  -->
@@ -563,17 +475,12 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href= "/2020/01/21/api08/" title= "api 기본편 8">
-                    <div class="nextTitle">api 기본편 8</div>
-                </a>
-            
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href= "/2020/01/17/api04/" title= "api 기본편 4">
-                    <div class="prevTitle">api 기본편 4</div>
+                <a href= "/2020/02/13/HTTPie/" title= "HTTPie 사용법">
+                    <div class="prevTitle">HTTPie 사용법</div>
                 </a>
             
         </li>
@@ -692,7 +599,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-05-format-인자와-다양한-Renderer"><span class="toc-number">1.</span> <span class="toc-text">EP 05 - format 인자와 다양한 Renderer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#기본-지원되는-Renderer-몇-가지-DRF에서"><span class="toc-number">2.</span> <span class="toc-text">기본 지원되는 Renderer 몇 가지(DRF에서)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#API를-사용하는-HTML-페이지-만들기"><span class="toc-number">2.1.</span> <span class="toc-text">API를 사용하는 HTML 페이지 만들기</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-06-필터링"><span class="toc-number">3.</span> <span class="toc-text">EP 06 - 필터링</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#필터링에-필요한-인자-획득"><span class="toc-number">3.0.1.</span> <span class="toc-text">필터링에 필요한 인자 획득</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get-queryset을-통한-쿼리셋-필터링"><span class="toc-number">3.0.2.</span> <span class="toc-text">get_queryset을 통한 쿼리셋 필터링</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Search-구현-브라우저에서접속하는-api환경에서-ui생성"><span class="toc-number">3.1.</span> <span class="toc-text">Search 구현(브라우저에서접속하는 api환경에서 ui생성)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-07-Pagination-처리-ep03앱을-이용"><span class="toc-number">4.</span> <span class="toc-text">EP 07. Pagination 처리(ep03앱을 이용)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#커스텀으로-pagination"><span class="toc-number">4.1.</span> <span class="toc-text">커스텀으로 pagination</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#환경-변수"><span class="toc-number">1.</span> <span class="toc-text">환경 변수</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#환경-변수-경로-의미"><span class="toc-number">1.0.1.</span> <span class="toc-text">환경 변수 경로 의미</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#oh-my-zsh"><span class="toc-number">1.1.</span> <span class="toc-text">oh-my-zsh</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zsh에-bash파일들에-있는-환경변수-자동추가하기"><span class="toc-number">1.1.1.</span> <span class="toc-text">zsh에 bash파일들에 있는 환경변수 자동추가하기</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#정리-해야할것"><span class="toc-number">2.</span> <span class="toc-text">정리 해야할것</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SECRET-KEY-분리하기"><span class="toc-number">2.1.</span> <span class="toc-text">SECRET_KEY 분리하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-환경변수패턴"><span class="toc-number">2.2.</span> <span class="toc-text">1. 환경변수패턴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-비밀파일패턴"><span class="toc-number">2.3.</span> <span class="toc-text">2. 비밀파일패턴</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#결론"><span class="toc-number">3.</span> <span class="toc-text">결론</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#출처"><span class="toc-number">4.</span> <span class="toc-text">출처</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
