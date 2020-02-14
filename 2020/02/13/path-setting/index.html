@@ -426,19 +426,6 @@ height:50vh;
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source ~&#x2F;.bash_profile</span><br><span class="line">source ~&#x2F;.bashrc</span><br></pre></td></tr></table></figure>
 
-
-
-
-
-
-
-
-
-
-
-
-
-<hr>
 <h1 id="환경변수의-활용"><a href="#환경변수의-활용" class="headerlink" title="환경변수의 활용"></a>환경변수의 활용</h1><p>SECRET_KEY 분리하기</p>
 <p>settings.py 파일에서 비밀 값을 분리하는 방법은 여러가지가 있는데 책에서 소개하는 방법은 2가지이다.</p>
 <ul>
@@ -456,7 +443,6 @@ height:50vh;
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># settings.py</span><br><span class="line">import os</span><br><span class="line">from django.core.exceptions import ImproperlyConfigured</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_env_variable(var_name):</span><br><span class="line">  &quot;&quot;&quot;환경 변수를 가져오거나 예외를 반환한다.&quot;&quot;&quot;</span><br><span class="line">  try:</span><br><span class="line">    return os.environ[var_name]</span><br><span class="line">  except KeyError:</span><br><span class="line">    error_msg &#x3D; &quot;Set the &#123;&#125; environment variable&quot;.format(var_name)</span><br><span class="line">    raise ImproperlyConfigured(error_msg)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SECRET_KEY &#x3D; get_env_variable(&quot;INSTA_SECRET_KEY&quot;)</span><br></pre></td></tr></table></figure>
 
 <p>쉘에서 python3 manage.py runserver 명령을 입력하니 정상적으로 개발 서버가 구동되는 것을 확인 할 수 있었다. 참고로 실제 운영환경에서 환경변수를 세팅하려면, 각자 사용하는 배포도구에 따라서 변수 지정방법이 달라진다.</p>
-<hr>
 <h2 id="비밀파일패턴"><a href="#비밀파일패턴" class="headerlink" title="+비밀파일패턴"></a>+비밀파일패턴</h2><p>환경변수는 경우에 따라 적용되지 않을 수 있다. (아파치를 웹 서버로 이용하는 등) 이럴 경우에는 JSON 파일에 비밀 키 정보를 입력하고, settings.py에서 참고하도록 설정할 수 있다. 우선 아래와 같이 <strong>secrets.json</strong> 파일을 작성한다. (주의 - 이어지는 항목이 없는 경우, 쌍따옴표 뒤에 콤마(,)를 입력해서는 안된다. python git 갱신이력을 깔끔하게 관리하려고 dictionary 마지막 항목에도 콤마를 추가하는 습관이 있어서 그대로 적용했더니 json에서는 오류가 발생했다.)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;SECRET_KEY&quot;: &quot;b_4(!id8ro!1645n@ub55555hbu93gaia0 본인의 고유 비밀 키 추가&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -464,7 +450,6 @@ height:50vh;
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># settings.py</span><br><span class="line"></span><br><span class="line">import os, json</span><br><span class="line">from django.core.exceptions import ImproperlyConfigured</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">secret_file &#x3D; os.path.join(BASE_DIR, &#39;secrets.json&#39;) # secrets.json 파일 위치를 명시</span><br><span class="line"></span><br><span class="line">with open(secret_file) as f:</span><br><span class="line">    secrets &#x3D; json.loads(f.read())</span><br><span class="line"></span><br><span class="line">def get_secret(setting, secrets&#x3D;secrets):</span><br><span class="line">    &quot;&quot;&quot;비밀 변수를 가져오거나 명시적 예외를 반환한다.&quot;&quot;&quot;</span><br><span class="line">    try:</span><br><span class="line">        return secrets[setting]</span><br><span class="line">    except KeyError:</span><br><span class="line">        error_msg &#x3D; &quot;Set the &#123;&#125; environment variable&quot;.format(setting)</span><br><span class="line">        raise ImproperlyConfigured(error_msg)</span><br><span class="line"></span><br><span class="line">SECRET_KEY &#x3D; get_secret(&quot;SECRET_KEY&quot;)</span><br></pre></td></tr></table></figure>
 
 <p>쉘에서 python3 manage.py runserver 명령을 입력하니 이 방법을 사용해도 정상적으로 개발 서버가 구동되는 것을 확인 할 수 있었다.</p>
-<hr>
 <h1 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h1><p>AWS 루트키가 github 공개 저장소에 추가되면 악용되어서 요금폭탄을 맞을 수도 있다는 이야기는 많이 들어보았다. 하지만 settings에 대해서는 비교적 신경을 쓰지 못했다. Django 초보라면 대부분 SECRET_KEY를 본인의 공개 저장소에 올려본 경험은 있지 않을까? 물론 배포 전에 변경하고 분리하는 것이 가능 하지만, 그에 따른 부작용이 발생 할 수 있으니 처음부터 관리하는게 좋겠다. 앞으로 first commit 이전에 SECRET_KEY를 환경변수 혹은 json 파일로 분리하거나, 초반에는 .gitignore 파일에 settings.py 파일을 추가해 놓는 것도 괜찮겠다는 생각을 했다.</p>
 <h1 id="출처"><a href="#출처" class="headerlink" title="출처"></a>출처</h1><p><a href="http://blog.naver.com/loverman85/221265795874" target="_blank" rel="noopener">oh-my-zsh 사용시 환경변수 (path) 설정하기</a>|*<em>작성자*</em> <a href="http://blog.naver.com/loverman85" target="_blank" rel="noopener">iCaan</a>**</p>
 
