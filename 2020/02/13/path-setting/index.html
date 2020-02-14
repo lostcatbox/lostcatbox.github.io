@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">809</span>Reading time: <span class="post-count reading-time">5 min</span></span>
+                        <span>Word count: <span class="post-count word-count">807</span>Reading time: <span class="post-count reading-time">5 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -439,12 +439,13 @@ height:50vh;
 
 
 <hr>
-<h1 id="환경변수의-활용"><a href="#환경변수의-활용" class="headerlink" title="환경변수의 활용"></a>환경변수의 활용</h1><h2 id="SECRET-KEY-분리하기"><a href="#SECRET-KEY-분리하기" class="headerlink" title="SECRET_KEY 분리하기"></a>SECRET_KEY 분리하기</h2><p>settings.py 파일에서 비밀 값을 분리하는 방법은 여러가지가 있는데 책에서 소개하는 방법은 2가지이다.</p>
+<h1 id="환경변수의-활용"><a href="#환경변수의-활용" class="headerlink" title="환경변수의 활용"></a>환경변수의 활용</h1><p>SECRET_KEY 분리하기</p>
+<p>settings.py 파일에서 비밀 값을 분리하는 방법은 여러가지가 있는데 책에서 소개하는 방법은 2가지이다.</p>
 <ul>
 <li>환경변수패턴 : SECRET_KEY의 값을 환경변수에 저장하여 참고한다.</li>
 <li>비밀파일패턴 : SECRET_KEY의 값을 별도 파일에 저장하여 참고한다.</li>
 </ul>
-<h2 id="1-환경변수패턴"><a href="#1-환경변수패턴" class="headerlink" title="1. 환경변수패턴"></a>1. 환경변수패턴</h2><p>환경변수란 프로세스가 컴퓨터에서 동작하는 방식에 영향을 미치는, 동적인 값들의 모임이다.(<a href="https://ko.wikipedia.org/wiki/환경_변수" target="_blank" rel="noopener">위키</a>) 시스템의 실행파일이 놓여 있는 디렉토리의 지정 등 OS 상에서 동작하는 응용소프트웨어가 참조하기 위한 설정이 기록된다. 환경변수를 사용하여 비밀 키를 보관함으로써 걱정 없이 세팅파일을 github 공개 저장소에 추가할 수 있다.</p>
+<h2 id="환경변수패턴"><a href="#환경변수패턴" class="headerlink" title="환경변수패턴"></a>환경변수패턴</h2><p>환경변수란 프로세스가 컴퓨터에서 동작하는 방식에 영향을 미치는, 동적인 값들의 모임이다.(<a href="https://ko.wikipedia.org/wiki/환경_변수" target="_blank" rel="noopener">위키</a>) 시스템의 실행파일이 놓여 있는 디렉토리의 지정 등 OS 상에서 동작하는 응용소프트웨어가 참조하기 위한 설정이 기록된다. 환경변수를 사용하여 비밀 키를 보관함으로써 걱정 없이 세팅파일을 github 공개 저장소에 추가할 수 있다.</p>
 <p>로컬 개발 환경에서 환경 변수를 세팅하려면 다음 코드를 .bashrc 혹은 .bash_profile, .profile, .zshrc 파일에 추가하면 된다. 어느 종류의 shell을 사용하는지에 따라서 편집하는 파일이 달라진다.(mac 사용자 기준) 나의 경우 <a href="http://ohmyz.sh/" target="_blank" rel="noopener">zsh</a>을 사용하고 있어서 .zshrc에 아래와 같이 환경변수 추가 작업을 진행했다.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ vim ~&#x2F;.zshrc # vim을 사용하여 .zshrc 파일을 편집하겠다.</span><br><span class="line"></span><br><span class="line"># .zshrc 파일에 아래 코드를 추가해준다.</span><br><span class="line">export INSTA_SECRET_KEY&#x3D;&#39;b_4(!id8ro!1645n@ub55555hbu93gaia0 본인의 고유 비밀 키 추가&#39;</span><br><span class="line"></span><br><span class="line"># 환경변수 확인 명령</span><br><span class="line">$ echo $INSTA_SECRET_KEY</span><br></pre></td></tr></table></figure>
 
@@ -456,7 +457,7 @@ height:50vh;
 
 <p>쉘에서 python3 manage.py runserver 명령을 입력하니 정상적으로 개발 서버가 구동되는 것을 확인 할 수 있었다. 참고로 실제 운영환경에서 환경변수를 세팅하려면, 각자 사용하는 배포도구에 따라서 변수 지정방법이 달라진다.</p>
 <hr>
-<h2 id="2-비밀파일패턴"><a href="#2-비밀파일패턴" class="headerlink" title="2. 비밀파일패턴"></a>2. 비밀파일패턴</h2><p>환경변수는 경우에 따라 적용되지 않을 수 있다. (아파치를 웹 서버로 이용하는 등) 이럴 경우에는 JSON 파일에 비밀 키 정보를 입력하고, settings.py에서 참고하도록 설정할 수 있다. 우선 아래와 같이 <strong>secrets.json</strong> 파일을 작성한다. (주의 - 이어지는 항목이 없는 경우, 쌍따옴표 뒤에 콤마(,)를 입력해서는 안된다. python git 갱신이력을 깔끔하게 관리하려고 dictionary 마지막 항목에도 콤마를 추가하는 습관이 있어서 그대로 적용했더니 json에서는 오류가 발생했다.)</p>
+<h2 id="비밀파일패턴"><a href="#비밀파일패턴" class="headerlink" title="+비밀파일패턴"></a>+비밀파일패턴</h2><p>환경변수는 경우에 따라 적용되지 않을 수 있다. (아파치를 웹 서버로 이용하는 등) 이럴 경우에는 JSON 파일에 비밀 키 정보를 입력하고, settings.py에서 참고하도록 설정할 수 있다. 우선 아래와 같이 <strong>secrets.json</strong> 파일을 작성한다. (주의 - 이어지는 항목이 없는 경우, 쌍따옴표 뒤에 콤마(,)를 입력해서는 안된다. python git 갱신이력을 깔끔하게 관리하려고 dictionary 마지막 항목에도 콤마를 추가하는 습관이 있어서 그대로 적용했더니 json에서는 오류가 발생했다.)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;SECRET_KEY&quot;: &quot;b_4(!id8ro!1645n@ub55555hbu93gaia0 본인의 고유 비밀 키 추가&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>작성한 secrets.json 파일은 버전관리 시스템에 저장되지 않도록 <strong>.gitignore</strong> 문서에 추가한다. 그리고 해당 파일을 SECRET_KEY 값으로 참고하기 위해서 다음 코드를 settings.py에 추가한다.</p>
@@ -598,7 +599,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#환경-변수"><span class="toc-number">1.</span> <span class="toc-text">환경 변수</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#환경-변수-경로-의미"><span class="toc-number">1.0.1.</span> <span class="toc-text">환경 변수 경로 의미</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#oh-my-zsh"><span class="toc-number">1.1.</span> <span class="toc-text">oh-my-zsh</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zsh에-bash파일들에-있는-환경변수-자동추가하기"><span class="toc-number">1.1.1.</span> <span class="toc-text">zsh에 bash파일들에 있는 환경변수 자동추가하기</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#환경변수의-활용"><span class="toc-number">2.</span> <span class="toc-text">환경변수의 활용</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SECRET-KEY-분리하기"><span class="toc-number">2.1.</span> <span class="toc-text">SECRET_KEY 분리하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-환경변수패턴"><span class="toc-number">2.2.</span> <span class="toc-text">1. 환경변수패턴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-비밀파일패턴"><span class="toc-number">2.3.</span> <span class="toc-text">2. 비밀파일패턴</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#결론"><span class="toc-number">3.</span> <span class="toc-text">결론</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#출처"><span class="toc-number">4.</span> <span class="toc-text">출처</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#환경-변수"><span class="toc-number">1.</span> <span class="toc-text">환경 변수</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#환경-변수-경로-의미"><span class="toc-number">1.0.1.</span> <span class="toc-text">환경 변수 경로 의미</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#oh-my-zsh"><span class="toc-number">1.1.</span> <span class="toc-text">oh-my-zsh</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zsh에-bash파일들에-있는-환경변수-자동추가하기"><span class="toc-number">1.1.1.</span> <span class="toc-text">zsh에 bash파일들에 있는 환경변수 자동추가하기</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#환경변수의-활용"><span class="toc-number">2.</span> <span class="toc-text">환경변수의 활용</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#환경변수패턴"><span class="toc-number">2.1.</span> <span class="toc-text">환경변수패턴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#비밀파일패턴"><span class="toc-number">2.2.</span> <span class="toc-text">+비밀파일패턴</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#결론"><span class="toc-number">3.</span> <span class="toc-text">결론</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#출처"><span class="toc-number">4.</span> <span class="toc-text">출처</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
