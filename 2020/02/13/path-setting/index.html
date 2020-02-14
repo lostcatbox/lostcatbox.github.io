@@ -406,7 +406,7 @@ height:50vh;
         <h1 id="환경-변수"><a href="#환경-변수" class="headerlink" title="환경 변수"></a>환경 변수</h1><p>환경변수에 등록된 경로는, 컴퓨터의 어떤 경로에서라도 접근(=실행) 할 수 있다.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">환경변수 확인</span><br><span class="line">$ echo $PATH   ($변수명 하면 호출됨)</span><br><span class="line"></span><br><span class="line">$ echo AAA #AAA에 대한 환경변수값 확인</span><br><span class="line"></span><br><span class="line">$ ls -la</span><br><span class="line">.bash_profile 이라는 숨김 파일이 있는지 확인한다.</span><br><span class="line"></span><br><span class="line">없을경우 생성</span><br><span class="line">$ touch .bash_profile</span><br><span class="line"></span><br><span class="line">있을 경우 파일 오픈</span><br><span class="line">$ vi .bash_profile  -&gt; vi를 통해 오픈</span><br><span class="line">$ open .bash_profile  -&gt; 에디터를 통해 오픈</span><br></pre></td></tr></table></figure>
 
-<h3 id="환경-변수-경로-의미"><a href="#환경-변수-경로-의미" class="headerlink" title="환경 변수 경로 의미"></a>환경 변수 경로 의미</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export PATH&#x3D;$&#123;PATH&#125;  #$앞의 &#123;PATH&#125;의 경우 상위 Path</span><br><span class="line"></span><br><span class="line"># 그리고 그 뒤에 다른 Path가 필요할 경우 &#123;PATH&#125;뒤에 : 적어서 경로를 이어줍니다.</span><br><span class="line">export PATH&#x3D;&quot;&#x2F;Users&#x2F;wefw&#x2F;wgwe&#x2F;erge&#x2F;:$PATH&quot; #기존의 PATH변수에있던 값들앞에 앞에 쓴 새로운 경로추가함</span><br></pre></td></tr></table></figure>
+<h2 id="환경-변수-경로-의미"><a href="#환경-변수-경로-의미" class="headerlink" title="환경 변수 경로 의미"></a>환경 변수 경로 의미</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export PATH&#x3D;$&#123;PATH&#125;  #$앞의 &#123;PATH&#125;의 경우 상위 Path</span><br><span class="line"></span><br><span class="line"># 그리고 그 뒤에 다른 Path가 필요할 경우 &#123;PATH&#125;뒤에 : 적어서 경로를 이어줍니다.</span><br><span class="line">export PATH&#x3D;&quot;&#x2F;Users&#x2F;wefw&#x2F;wgwe&#x2F;erge&#x2F;:$PATH&quot; #기존의 PATH변수에있던 값들앞에 앞에 쓴 새로운 경로추가함</span><br></pre></td></tr></table></figure>
 
 <p>리눅스 환경은 <code>.bash_profile</code>,<code>.bashrc</code>에 설정해놓으면 되는데 </p>
 <p>zsh를 쓰는 나의 환경에서는 iterms를 껏다 키면 $PATH 가 초기화되어 계속</p>
@@ -443,13 +443,15 @@ height:50vh;
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># settings.py</span><br><span class="line">import os</span><br><span class="line">from django.core.exceptions import ImproperlyConfigured</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_env_variable(var_name):</span><br><span class="line">  &quot;&quot;&quot;환경 변수를 가져오거나 예외를 반환한다.&quot;&quot;&quot;</span><br><span class="line">  try:</span><br><span class="line">    return os.environ[var_name]</span><br><span class="line">  except KeyError:</span><br><span class="line">    error_msg &#x3D; &quot;Set the &#123;&#125; environment variable&quot;.format(var_name)</span><br><span class="line">    raise ImproperlyConfigured(error_msg)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SECRET_KEY &#x3D; get_env_variable(&quot;INSTA_SECRET_KEY&quot;)</span><br></pre></td></tr></table></figure>
 
 <p>쉘에서 python3 manage.py runserver 명령을 입력하니 정상적으로 개발 서버가 구동되는 것을 확인 할 수 있었다. 참고로 실제 운영환경에서 환경변수를 세팅하려면, 각자 사용하는 배포도구에 따라서 변수 지정방법이 달라진다.</p>
-<h2 id="비밀파일패턴"><a href="#비밀파일패턴" class="headerlink" title="+비밀파일패턴"></a>+비밀파일패턴</h2><p>환경변수는 경우에 따라 적용되지 않을 수 있다. (아파치를 웹 서버로 이용하는 등) 이럴 경우에는 JSON 파일에 비밀 키 정보를 입력하고, settings.py에서 참고하도록 설정할 수 있다. 우선 아래와 같이 <strong>secrets.json</strong> 파일을 작성한다. (주의 - 이어지는 항목이 없는 경우, 쌍따옴표 뒤에 콤마(,)를 입력해서는 안된다. python git 갱신이력을 깔끔하게 관리하려고 dictionary 마지막 항목에도 콤마를 추가하는 습관이 있어서 그대로 적용했더니 json에서는 오류가 발생했다.)</p>
+<hr>
+<h2 id="비밀파일패턴"><a href="#비밀파일패턴" class="headerlink" title="비밀파일패턴"></a>비밀파일패턴</h2><p>환경변수는 경우에 따라 적용되지 않을 수 있다. (아파치를 웹 서버로 이용하는 등) 이럴 경우에는 JSON 파일에 비밀 키 정보를 입력하고, settings.py에서 참고하도록 설정할 수 있다. 우선 아래와 같이 <strong>secrets.json</strong> 파일을 작성한다. (주의 - 이어지는 항목이 없는 경우, 쌍따옴표 뒤에 콤마(,)를 입력해서는 안된다. python git 갱신이력을 깔끔하게 관리하려고 dictionary 마지막 항목에도 콤마를 추가하는 습관이 있어서 그대로 적용했더니 json에서는 오류가 발생했다.)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;SECRET_KEY&quot;: &quot;b_4(!id8ro!1645n@ub55555hbu93gaia0 본인의 고유 비밀 키 추가&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>작성한 secrets.json 파일은 버전관리 시스템에 저장되지 않도록 <strong>.gitignore</strong> 문서에 추가한다. 그리고 해당 파일을 SECRET_KEY 값으로 참고하기 위해서 다음 코드를 settings.py에 추가한다.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># settings.py</span><br><span class="line"></span><br><span class="line">import os, json</span><br><span class="line">from django.core.exceptions import ImproperlyConfigured</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">secret_file &#x3D; os.path.join(BASE_DIR, &#39;secrets.json&#39;) # secrets.json 파일 위치를 명시</span><br><span class="line"></span><br><span class="line">with open(secret_file) as f:</span><br><span class="line">    secrets &#x3D; json.loads(f.read())</span><br><span class="line"></span><br><span class="line">def get_secret(setting, secrets&#x3D;secrets):</span><br><span class="line">    &quot;&quot;&quot;비밀 변수를 가져오거나 명시적 예외를 반환한다.&quot;&quot;&quot;</span><br><span class="line">    try:</span><br><span class="line">        return secrets[setting]</span><br><span class="line">    except KeyError:</span><br><span class="line">        error_msg &#x3D; &quot;Set the &#123;&#125; environment variable&quot;.format(setting)</span><br><span class="line">        raise ImproperlyConfigured(error_msg)</span><br><span class="line"></span><br><span class="line">SECRET_KEY &#x3D; get_secret(&quot;SECRET_KEY&quot;)</span><br></pre></td></tr></table></figure>
 
 <p>쉘에서 python3 manage.py runserver 명령을 입력하니 이 방법을 사용해도 정상적으로 개발 서버가 구동되는 것을 확인 할 수 있었다.</p>
+<hr>
 <h1 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h1><p>AWS 루트키가 github 공개 저장소에 추가되면 악용되어서 요금폭탄을 맞을 수도 있다는 이야기는 많이 들어보았다. 하지만 settings에 대해서는 비교적 신경을 쓰지 못했다. Django 초보라면 대부분 SECRET_KEY를 본인의 공개 저장소에 올려본 경험은 있지 않을까? 물론 배포 전에 변경하고 분리하는 것이 가능 하지만, 그에 따른 부작용이 발생 할 수 있으니 처음부터 관리하는게 좋겠다. 앞으로 first commit 이전에 SECRET_KEY를 환경변수 혹은 json 파일로 분리하거나, 초반에는 .gitignore 파일에 settings.py 파일을 추가해 놓는 것도 괜찮겠다는 생각을 했다.</p>
 <h1 id="출처"><a href="#출처" class="headerlink" title="출처"></a>출처</h1><p><a href="http://blog.naver.com/loverman85/221265795874" target="_blank" rel="noopener">oh-my-zsh 사용시 환경변수 (path) 설정하기</a>|*<em>작성자*</em> <a href="http://blog.naver.com/loverman85" target="_blank" rel="noopener">iCaan</a>**</p>
 
@@ -584,7 +586,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#환경-변수"><span class="toc-number">1.</span> <span class="toc-text">환경 변수</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#환경-변수-경로-의미"><span class="toc-number">1.0.1.</span> <span class="toc-text">환경 변수 경로 의미</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#oh-my-zsh"><span class="toc-number">1.1.</span> <span class="toc-text">oh-my-zsh</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zsh에-bash파일들에-있는-환경변수-자동추가하기"><span class="toc-number">1.1.1.</span> <span class="toc-text">zsh에 bash파일들에 있는 환경변수 자동추가하기</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#환경변수의-활용"><span class="toc-number">2.</span> <span class="toc-text">환경변수의 활용</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#환경변수패턴"><span class="toc-number">2.1.</span> <span class="toc-text">환경변수패턴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#비밀파일패턴"><span class="toc-number">2.2.</span> <span class="toc-text">+비밀파일패턴</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#결론"><span class="toc-number">3.</span> <span class="toc-text">결론</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#출처"><span class="toc-number">4.</span> <span class="toc-text">출처</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#환경-변수"><span class="toc-number">1.</span> <span class="toc-text">환경 변수</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#환경-변수-경로-의미"><span class="toc-number">1.1.</span> <span class="toc-text">환경 변수 경로 의미</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#oh-my-zsh"><span class="toc-number">1.2.</span> <span class="toc-text">oh-my-zsh</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zsh에-bash파일들에-있는-환경변수-자동추가하기"><span class="toc-number">1.2.1.</span> <span class="toc-text">zsh에 bash파일들에 있는 환경변수 자동추가하기</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#환경변수의-활용"><span class="toc-number">2.</span> <span class="toc-text">환경변수의 활용</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#환경변수패턴"><span class="toc-number">2.1.</span> <span class="toc-text">환경변수패턴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#비밀파일패턴"><span class="toc-number">2.2.</span> <span class="toc-text">비밀파일패턴</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#결론"><span class="toc-number">3.</span> <span class="toc-text">결론</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#출처"><span class="toc-number">4.</span> <span class="toc-text">출처</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1313,12 +1315,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
         </li>
     
     
@@ -1331,25 +1333,25 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
-    
-        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
-    
         <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
         <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
-        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
-    
-        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
-    
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
         <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
         <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
     
@@ -1359,31 +1361,31 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
         <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
-        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
-    
-        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
-    
-        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
-        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
-    
-        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1418,13 +1420,13 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
-    
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
         <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
-        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
     
         <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
@@ -1432,19 +1434,19 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
-        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
         <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
-        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
         <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
-    
-        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
