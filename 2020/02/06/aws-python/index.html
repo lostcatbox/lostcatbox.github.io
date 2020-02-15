@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">3.2k</span>Reading time: <span class="post-count reading-time">19 min</span></span>
+                        <span>Word count: <span class="post-count word-count">3.4k</span>Reading time: <span class="post-count reading-time">20 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -693,6 +693,19 @@ height:50vh;
 
 </li>
 </ul>
+<h2 id="로드-밸런서-S3와-IP가-바뀜"><a href="#로드-밸런서-S3와-IP가-바뀜" class="headerlink" title="로드 밸런서, S3와 IP가 바뀜"></a>로드 밸런서, S3와 IP가 바뀜</h2><h3 id="해결1"><a href="#해결1" class="headerlink" title="해결1."></a>해결1.</h3><p>지금 만든 서비스가 단일 인스턴스로 해결된다면 구성&gt;용량&gt;로드 밸런스를 단일 인스턴스로 바꾸면 바로 해결됨 </p>
+<p>근본적으로 로드 밸런스가 내부 IP를 이용하여 서버의 상태를 확인하게 되므로 일어나는 문제이므로,,</p>
+<h3 id="해결2"><a href="#해결2" class="headerlink" title="해결2."></a>해결2.</h3><p><a href="https://lhy.kr/elb-healthcheck-for-django?fbclid=IwAR0hJuPy_zomKc18rJWTOyC4Poe3KWXEOIyagPV4L7om9JEwGSNDH4aVC40" target="_blank" rel="noopener">참고</a></p>
+<p><a href="https://sanyambansal.wordpress.com/2017/06/26/how-to-make-djangos-allowed_hosts-work-with-aws-elb-health-checks/?fbclid=IwAR2QZg9eXmQZc574ozolOEVBIQ404JdEDWIArlExwkjdDXU1MPttCWij5Kc" target="_blank" rel="noopener">참고2</a></p>
+<p>EB에서 오토스케일링 하면서 연결된EC2의 IP가 계속 바뀌더라고요 ㅡ 도메인이나 특정 아이피를 EB에 연결하셔야 해요 ㅡ 아니면 Allowed HOST에 *로 해서 테스트 하실수 있지 않나요?</p>
+<p>settings.ALLOWED_HOSTS 부분은 Health Check와는 무관하게,<br>서비스되고 있는 장고의 아이피 혹은 도메인이름을 뜻합니다.<br>현재 서비스가 52.78.86.29 아이피에서 되고 있기에 위 오류가 발생하는 듯 하구요. 서비스하시는 아이피 혹은 도메인을 ALLOWED_HOSTS에 추가하시고 서비스하실 수 있습니다.</p>
+<ul>
+<li><p><a href="https://www.facebook.com/profile.php?id=100004859527644" target="_blank" rel="noopener">김승민</a> <a href="https://www.facebook.com/allieuslee?hc_location=ufi" target="_blank" rel="noopener">이진석</a> 답변감사합니다! 늦게 확인했네요..<br>그런데 말씀하신대로 아이피를 ALLOWED_HOSTS에 추가햇더니 하루정도 문제가 없다가 하루뒤에 새로운 아이피를 또 추가하라고 합니다ㅜ<br>이 아이피가 elastic ip도 아니고, 무엇인지 aws 콘솔에서 인스턴스 관련해서 찾아보려고 해도 안보이네요…<a href="https://www.facebook.com/groups/askdjango/permalink/2370270649655131/#" target="_blank" rel="noopener">더 보기</a></p>
+<p>숨기기 또는 신고</p>
+</li>
+</ul>
+<p>  빈소톡도 EC2를 씁니다.<br>  EC2 내역에서 아이피를 확인해보세요.</p>
+<p>  그리고 서비스 시에는 아이피로 서비스하시기보다, 도메인을 쓰시는 것이 관리상 유리하실 듯 하네요.</p>
 
     </article>
     <!-- license  -->
@@ -830,7 +843,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Elastic-Beanstalk"><span class="toc-number">1.</span> <span class="toc-text">Elastic Beanstalk</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#EB-CLI-명령어-정리"><span class="toc-number">1.1.</span> <span class="toc-text">EB CLI 명령어 정리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#시작하기전"><span class="toc-number">1.2.</span> <span class="toc-text">시작하기전</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Elastic-Beanstalk-개념"><span class="toc-number">1.2.1.</span> <span class="toc-text">Elastic Beanstalk 개념</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#시작하기"><span class="toc-number">1.3.</span> <span class="toc-text">시작하기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Elastic-Beanstalk에-접속-및-만들기"><span class="toc-number">1.3.1.</span> <span class="toc-text">Elastic Beanstalk에 접속 및 만들기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#환경-살펴보기"><span class="toc-number">1.3.2.</span> <span class="toc-text">환경 살펴보기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#새-버전의-애플리케이션-배포"><span class="toc-number">1.3.3.</span> <span class="toc-text">새 버전의 애플리케이션 배포</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#환경-구성"><span class="toc-number">1.3.4.</span> <span class="toc-text">환경 구성</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#구성-변경"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">구성 변경</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Elastic-Beanstalk에서의-사용을-위한-개발-머신-구성"><span class="toc-number">2.</span> <span class="toc-text">Elastic Beanstalk에서의 사용을 위한 개발 머신 구성</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#프로젝트-폴더-만들기"><span class="toc-number">2.1.</span> <span class="toc-text">프로젝트 폴더 만들기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#소스-컨트롤-설정"><span class="toc-number">2.2.</span> <span class="toc-text">소스 컨트롤 설정</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#원격-리포지토리-구성"><span class="toc-number">2.3.</span> <span class="toc-text">원격 리포지토리 구성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EB-CLI-설치"><span class="toc-number">2.4.</span> <span class="toc-text">EB CLI 설치</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Clone-this-repository"><span class="toc-number">2.4.1.</span> <span class="toc-text">Clone this repository</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AWS-CLI-설치"><span class="toc-number">2.5.</span> <span class="toc-text">AWS CLI 설치</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ebignore를-사용하여-파일-무시"><span class="toc-number">2.6.</span> <span class="toc-text">.ebignore를 사용하여 파일 무시</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Python-개발환경-설정"><span class="toc-number">3.</span> <span class="toc-text">Python 개발환경 설정</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Elastic-Beanstalk에-대해-Python-프로젝트-구성"><span class="toc-number">3.1.</span> <span class="toc-text">Elastic Beanstalk에 대해 Python 프로젝트 구성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Django"><span class="toc-number">3.2.</span> <span class="toc-text">Django</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Elastic-Beanstalk에-맞게-Django-애플리케이션-구성"><span class="toc-number">3.3.</span> <span class="toc-text">Elastic Beanstalk에 맞게 Django 애플리케이션 구성</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#EB-CLI를-사용하여-사이트-배포"><span class="toc-number">3.3.1.</span> <span class="toc-text">EB CLI를 사용하여 사이트 배포</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#애플리케이션-업데이트"><span class="toc-number">3.4.</span> <span class="toc-text">애플리케이션 업데이트</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#사이트-설정-수정"><span class="toc-number">3.4.1.</span> <span class="toc-text">사이트 설정 수정</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#사이트-관리자-생성"><span class="toc-number">3.4.2.</span> <span class="toc-text">사이트 관리자 생성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#데이터베이스-마이그레이션-구성-파일-추가"><span class="toc-number">3.4.3.</span> <span class="toc-text">데이터베이스 마이그레이션 구성 파일 추가</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#정리"><span class="toc-number">3.5.</span> <span class="toc-text">정리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#다음-단계"><span class="toc-number">3.6.</span> <span class="toc-text">다음 단계</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#기타-구축-방법-사이트"><span class="toc-number">3.7.</span> <span class="toc-text">기타 구축 방법 사이트</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#오류-모음"><span class="toc-number">4.</span> <span class="toc-text">오류 모음</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sudo"><span class="toc-number">4.1.</span> <span class="toc-text">sudo</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Elastic-Beanstalk"><span class="toc-number">1.</span> <span class="toc-text">Elastic Beanstalk</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#EB-CLI-명령어-정리"><span class="toc-number">1.1.</span> <span class="toc-text">EB CLI 명령어 정리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#시작하기전"><span class="toc-number">1.2.</span> <span class="toc-text">시작하기전</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Elastic-Beanstalk-개념"><span class="toc-number">1.2.1.</span> <span class="toc-text">Elastic Beanstalk 개념</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#시작하기"><span class="toc-number">1.3.</span> <span class="toc-text">시작하기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Elastic-Beanstalk에-접속-및-만들기"><span class="toc-number">1.3.1.</span> <span class="toc-text">Elastic Beanstalk에 접속 및 만들기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#환경-살펴보기"><span class="toc-number">1.3.2.</span> <span class="toc-text">환경 살펴보기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#새-버전의-애플리케이션-배포"><span class="toc-number">1.3.3.</span> <span class="toc-text">새 버전의 애플리케이션 배포</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#환경-구성"><span class="toc-number">1.3.4.</span> <span class="toc-text">환경 구성</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#구성-변경"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">구성 변경</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Elastic-Beanstalk에서의-사용을-위한-개발-머신-구성"><span class="toc-number">2.</span> <span class="toc-text">Elastic Beanstalk에서의 사용을 위한 개발 머신 구성</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#프로젝트-폴더-만들기"><span class="toc-number">2.1.</span> <span class="toc-text">프로젝트 폴더 만들기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#소스-컨트롤-설정"><span class="toc-number">2.2.</span> <span class="toc-text">소스 컨트롤 설정</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#원격-리포지토리-구성"><span class="toc-number">2.3.</span> <span class="toc-text">원격 리포지토리 구성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EB-CLI-설치"><span class="toc-number">2.4.</span> <span class="toc-text">EB CLI 설치</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Clone-this-repository"><span class="toc-number">2.4.1.</span> <span class="toc-text">Clone this repository</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AWS-CLI-설치"><span class="toc-number">2.5.</span> <span class="toc-text">AWS CLI 설치</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ebignore를-사용하여-파일-무시"><span class="toc-number">2.6.</span> <span class="toc-text">.ebignore를 사용하여 파일 무시</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Python-개발환경-설정"><span class="toc-number">3.</span> <span class="toc-text">Python 개발환경 설정</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Elastic-Beanstalk에-대해-Python-프로젝트-구성"><span class="toc-number">3.1.</span> <span class="toc-text">Elastic Beanstalk에 대해 Python 프로젝트 구성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Django"><span class="toc-number">3.2.</span> <span class="toc-text">Django</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Elastic-Beanstalk에-맞게-Django-애플리케이션-구성"><span class="toc-number">3.3.</span> <span class="toc-text">Elastic Beanstalk에 맞게 Django 애플리케이션 구성</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#EB-CLI를-사용하여-사이트-배포"><span class="toc-number">3.3.1.</span> <span class="toc-text">EB CLI를 사용하여 사이트 배포</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#애플리케이션-업데이트"><span class="toc-number">3.4.</span> <span class="toc-text">애플리케이션 업데이트</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#사이트-설정-수정"><span class="toc-number">3.4.1.</span> <span class="toc-text">사이트 설정 수정</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#사이트-관리자-생성"><span class="toc-number">3.4.2.</span> <span class="toc-text">사이트 관리자 생성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#데이터베이스-마이그레이션-구성-파일-추가"><span class="toc-number">3.4.3.</span> <span class="toc-text">데이터베이스 마이그레이션 구성 파일 추가</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#정리"><span class="toc-number">3.5.</span> <span class="toc-text">정리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#다음-단계"><span class="toc-number">3.6.</span> <span class="toc-text">다음 단계</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#기타-구축-방법-사이트"><span class="toc-number">3.7.</span> <span class="toc-text">기타 구축 방법 사이트</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#오류-모음"><span class="toc-number">4.</span> <span class="toc-text">오류 모음</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sudo"><span class="toc-number">4.1.</span> <span class="toc-text">sudo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#로드-밸런서-S3와-IP가-바뀜"><span class="toc-number">4.2.</span> <span class="toc-text">로드 밸런서, S3와 IP가 바뀜</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#해결1"><span class="toc-number">4.2.1.</span> <span class="toc-text">해결1.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#해결2"><span class="toc-number">4.2.2.</span> <span class="toc-text">해결2.</span></a></li></ol></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1352,9 +1365,39 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 39
+        Total : 41
         </div>
         <!-- search  -->
         
@@ -1367,6 +1410,16 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1577,6 +1630,16 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
         <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
@@ -1589,25 +1652,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
-    
-        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
-    
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
-    
-        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
-    
         <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
     
         <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
         <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
     
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
-    
-        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
-    
-        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -1615,21 +1668,23 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
-        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
-    
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
-        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
-    
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1664,13 +1719,13 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
-    
-        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
-    
         <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
         <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
         <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
