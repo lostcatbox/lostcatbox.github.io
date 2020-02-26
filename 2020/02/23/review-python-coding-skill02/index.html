@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">536</span>Reading time: <span class="post-count reading-time">3 min</span></span>
+                        <span>Word count: <span class="post-count word-count">2k</span>Reading time: <span class="post-count reading-time">12 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -447,7 +447,113 @@ height:50vh;
 <p><strong>반드시 특별한 상황을 알릴 떄 None값을 반환하는 대신 예외를 읽으키자, 문서화 되어있다면 호출하는 코드에서 예외를 적절하게 처리할 것이다</strong></p>
 </li>
 </ul>
-<h2 id="클로저가-변수-스코프와-상호-작용하는-방법을-알자"><a href="#클로저가-변수-스코프와-상호-작용하는-방법을-알자" class="headerlink" title="클로저가 변수 스코프와 상호 작용하는 방법을 알자"></a>클로저가 변수 스코프와 상호 작용하는 방법을 알자</h2>
+<h2 id="클로저가-변수-스코프와-상호-작용하는-방법을-알자"><a href="#클로저가-변수-스코프와-상호-작용하는-방법을-알자" class="headerlink" title="클로저가 변수 스코프와 상호 작용하는 방법을 알자(???)"></a>클로저가 변수 스코프와 상호 작용하는 방법을 알자(???)</h2><p>숫자 리스트를 정렬할 때 특정 그룹의 숫자들이 먼저 오도록 우선순위를 매기려고 한다.</p>
+<p>이런 패턴은 사용자 인터페이스를 표현하거나, 다른 것보다 중요한 메세지나 예외 이벤트를 먼저 보여줘야 할 떄 유용하다. </p>
+<p>이렇게 만드는 일반적인 방법은 리스트의  sort 메서드에 헬퍼 함수를 key 인수로 넘기는 것이다. 헬퍼의 반환 값은 리스트에  있는 각 아이템을 정렬하는 값으로 사용된다. 헬퍼는 주어진 아이템이 중요한 그룹에 있는지 확인하고 그에 따라 정렬 키를 다르게 할 수 있다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">def sort_priority(values, group):</span><br><span class="line">    def helper(x):</span><br><span class="line">        if x in group:  #x가 특정한 그룹에있다면</span><br><span class="line">            return (0, x)</span><br><span class="line">        return (1, x)</span><br><span class="line">    values.sort(key&#x3D;helper)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">numbers &#x3D; [8, 3, 1, 2, 5, 4, 7, 6]</span><br><span class="line">group &#x3D; &#123;2, 3, 5, 7&#125;</span><br><span class="line">sort_priority(numbers, group)</span><br><span class="line">print(numbers)</span><br></pre></td></tr></table></figure>
+
+<p>솔직히 아무것도 이해못해서 “아래와 중요한 참고 사항” 다시 정리했다.</p>
+<p>함수가 예상대로 동작한 이유는 세 가지다.</p>
+<ul>
+<li>파이썬은 클로저(closure)를 지원하다. 클로저란 자신이 정의된 범위(스코프)에 있던 변수를 참조하는 함수다. 바로  이 점 덕분에 helper 함수가 sort_priority의 group인수에 접근할 수 있다.(??? 함수안에 함수에서 안에있는 함수가 변수를 쓸수있다는이야기???)</li>
+<li><strong>함수는 파이썬에서 일급 객체(first-class object)다. 이 말은 함수를 직접 참조하고, 변수에 할당하고, 다른 함수의 인수로 전달하고, 표현식과 if 문 등에서 비교할 수 있다는 의미다.</strong> 따라서 sort 메서드에서 클로저 함수를 key인수로 받을 수 있다</li>
+<li>파이썬에서 튜플을 비교하는 특정한 규칙이 있다. 먼저 인덱스 0으로 아이템을 비교하고 그 다음으로 인덱스 1, 다음은 인덱스 2와 같이 진행한다. helper 클로저의 반환 값이 정렬 순서를 분리된 두 그룹으로 나뉘게 한 건이 규칙 떄문이다. (여기서 말하는 인덱스는 튜플 안에 왼쪽부터 인덱스 0라고 부르는듯.)</li>
+</ul>
+<p>함수에서 우선순위가 높은 아이템을 발견했는지 여부를 반환해서 사용자 인터페이스 코드가 그에 따라 동작하게 하면 좋을 것이다.</p>
+<p>이런 동작을 추가하는 일은 쉬워 보인다. 이미 각 숫자가 어느 그룹에 포함되어 있는지 판별하는 클로저 함수가있다.</p>
+<p>우선순위가 높은 아이템을 발견했을때 플래그(아래 예시에서 found객체)를 뒤집는 데도 클로저(현재 자신이 정의된 범위(스코프)에 있던 변수를 참조하는 해서 변경역할하는 함수임)를 사용하는 건 어떨까? 그러면 함수는 클로저가 수정한 플래그 값을 반환할 수 있다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def sort_priority2(numbers, group):</span><br><span class="line">    found &#x3D; False #플래그</span><br><span class="line">    def helper(x): #클로저</span><br><span class="line">        if x in group:</span><br><span class="line">            found &#x3D; True  # Seems simple #클로저의 역할</span><br><span class="line">            return (0, x)</span><br><span class="line">        return (1, x)</span><br><span class="line">    numbers.sort(key&#x3D;helper)</span><br><span class="line">    return found</span><br></pre></td></tr></table></figure>
+
+<p>사용해보자</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">found &#x3D; sort_priority2(numbers, group)</span><br><span class="line">print(&#39;Found:&#39;, found)</span><br><span class="line">print(numbers)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Found: False</span><br><span class="line">[2, 3, 3, 4, 1, 6, 7, 8]</span><br></pre></td></tr></table></figure>
+
+<p><strong>왜 found값이 false가 나와버렸을까?</strong></p>
+<p><strong>표현식에서 변수를 참조할 때</strong> 파이썬 인터프리터는 참조를 해결하려고 다음과 같은 수서로 유효 범위(scope)를 탐색한다.</p>
+<ol>
+<li>현재 함수의 스코프</li>
+<li>(현재 스코프를 담고있는 다른 함수 같은) 감싸고 있는 스코프</li>
+<li>코드를 포함하고 있는 모듈의 스코프(전역 스코프라고도함)</li>
+<li>(len이나 str 같은 함수를 담고 있는) 내장 스코프</li>
+</ol>
+<p>이 주 어느 스코프에도 참조한 이름으로 된 변수가 정의되어 있지 않으면 NameError 예외가 일어난다</p>
+<p><strong>변수에 값을 할당할 때</strong>는 다른 방식으로 동작한다. 변수가 이미 현재 스코프에 정의되어 있다면 새로운 값을 얻는다</p>
+<p>__파이썬은 변수가 현재 스코프에 존재하지 않으면 변수 정의로 취급한다. __</p>
+<p><strong>새로 정의되는 변수의 스코프는 그 할당을 포함하고 있는 함수가 된다.</strong></p>
+<p><strong>(즉, 새로 정의된 변수는 정의되었던 스코프밖을 나가지못함, 지금은 found=True가 helper함수 밖을 나가지 못함 )</strong></p>
+<p>즉, sort_priority2함수의 반환 값이 잘못된이유는 found변수는 helper 클로저에서 True로 할당되도록 설계하려고 햇으나, 실제로 클로저 할당은 sort_priority2에서  일어나느 할당이 아닌 helper함수아 안ㅇ데서 일어나는 새 변수 정의가 되어버렸기때문이다.</p>
+<p>이런 점은 초보자들을 놀라게한다. (‘스코프 버그’라고함)</p>
+<p>하지만 이 동작은 함수의 지역 변수가 자신을 포함하는 모듈을 오염시키는 문제를 막아준다. 그렇지 않았다면 함수 안에서 일어나는 모든 할당이 전역 모듈 스코프에 쓰레기를 넣는 결과로 이어졌을 것이다.</p>
+<p>그렇게 되면 불필요한 할당에 그치지 않고 결과로 만들어지는 전역 변수들의 상호 작용으로 알기 힘든 버그가 생긴다.</p>
+<h3 id="데이터-얻어오기"><a href="#데이터-얻어오기" class="headerlink" title="데이터 얻어오기"></a>데이터 얻어오기</h3><p>파이썬 3에는 클로저에서 &gt;&gt;&gt; 데이터를 얻어오는 특별한 문법이 있다. nonlocal문은 특정 변수 이름에 할당할 때 __스코프 탐색이 일어나야 함을 나타낸다. __(이렇게 하면 탐색후 할당)</p>
+<p>유일한 제약은 nonlocal이 (전역 변수 오염 피하려고) 모듈 수준 스코프까지는 탐색할 수 없다는 점이다.</p>
+<p>다음은 nonlocal을 사용하여 같은 함수를 다시 정의한 예다.</p>
+<p>(nonlocal문을 사용하여 클로저를 감싸는 스코프의 변수를 수정할 수있음을 알린다.)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">def sort_priority3(numbers, group):</span><br><span class="line">    found &#x3D; False</span><br><span class="line">    def helper(x):</span><br><span class="line">        nonlocal found</span><br><span class="line">        if x in group:</span><br><span class="line">            found &#x3D; True  #nonlocal이라고 알려줬기때문에 탐색 먼저진행 후 값 바뀜</span><br><span class="line">            return (0, x)</span><br><span class="line">        return (1, x)</span><br><span class="line">    numbers.sort(key&#x3D;helper)</span><br><span class="line">    return found</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">found &#x3D; sort_priority3(numbers, group)</span><br><span class="line">print(&#39;Found:&#39;, found)</span><br><span class="line">print(numbers)</span><br></pre></td></tr></table></figure>
+
+<p>nonlocal 문은 클로저에서 데이터를 다른 스코프에 할당하는 시점을 알아보기 쉽게 해준다.</p>
+<p>nonlocal문은 변수 할당이 모듈 스코프에 직접 들어가게 하는 global문을 보안한다(모듈 스코프는안됨.)</p>
+<p><strong>하지만 전역 변수의 안티패턴(anti-pattern)과 마찬가지로 간단한 함수 이외에는 nonlocal을 사용하지 않도록 주의해야 한다. nonlocal의 부작용은 알아내니가 상당히 어렵다.</strong></p>
+<p>특히 nonlocal문과 관련 변수에 대한 할당이 멀리 떨어진 긴 함수에서는 이해하기가 더욱 어렵다</p>
+<p>nonlocal을 사용할 때 복잡해지기 시작하면 헬퍼 클래스로 상태를 감싸는 방법을 이용하는 게 낫다.</p>
+<p>이제 nonlocal을 사용할 때와 같은 결과를 얻는 클래스를 정의해 보자</p>
+<p>코드는 약간 더 길지만 이해하기는 훨씬 쉽다(“인터페이스가 간단하면 클래스 대신 함수를 받자”에서 __call__ 이라는 특별한 메서를 자세히 설명한다.) (???)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class Sorter(object):</span><br><span class="line">    def __init__(self, group):</span><br><span class="line">        self.group &#x3D; group</span><br><span class="line">        self.found &#x3D; False</span><br><span class="line"></span><br><span class="line">    def __call__(self, x):</span><br><span class="line">        if x in self.group:</span><br><span class="line">            self.found &#x3D; True</span><br><span class="line">            return (0, x)</span><br><span class="line">        return (1, x)</span><br><span class="line"></span><br><span class="line">sorter &#x3D; Sorter(group)</span><br><span class="line">numbers.sort(key&#x3D;sorter)</span><br><span class="line">assert sorter.found is True</span><br><span class="line">print(&#39;Found:&#39;, found)</span><br><span class="line">print(numbers)</span><br></pre></td></tr></table></figure>
+
+<h3 id="파이썬2의-스코프"><a href="#파이썬2의-스코프" class="headerlink" title="파이썬2의 스코프"></a>파이썬2의 스코프</h3><p>nonlocal지원안함.. pass</p>
+<p>found = [False]로 줘서 수정가능한 helper함수안에 found[0] = Ture를 하면 탐색이 일어나므로 변경은 가능….</p>
+<h3 id="중요한-참고-사항"><a href="#중요한-참고-사항" class="headerlink" title="중요한 참고 사항"></a>중요한 참고 사항</h3><p><a href="https://yes90.tistory.com/50" target="_blank" rel="noopener">클로저 자세히</a></p>
+<h4 id="list-본체-정렬"><a href="#list-본체-정렬" class="headerlink" title="list 본체 정렬"></a>list 본체 정렬</h4><ul>
+<li>reverse : 리스트를 거꾸로 뒤집는다. desc 정렬이 아님</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; a &#x3D; [1, 10, 5, 7, 6]</span><br><span class="line">&gt;&gt;&gt; a.reverse()</span><br><span class="line">&gt;&gt;&gt; a</span><br><span class="line">[6, 7, 5, 10, 1]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>sort : 정렬, 기본값은 오름차순 정렬, reverse옵션 True는 내림차순 정렬</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; a &#x3D; [1, 10, 5, 7, 6]</span><br><span class="line">&gt;&gt;&gt; a.sort()</span><br><span class="line">&gt;&gt;&gt; a</span><br><span class="line">[1, 5, 6, 7, 10]</span><br><span class="line">&gt;&gt;&gt; a &#x3D; [1, 10, 5, 7, 6]</span><br><span class="line">&gt;&gt;&gt; a.sort(reverse&#x3D;True)</span><br><span class="line">&gt;&gt;&gt; a</span><br><span class="line">[10, 7, 6, 5, 1]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>sort의 key 옵션, key 옵션에 지정된 함수의 결과에따라 정렬, 아래는 원소의 길이</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; m &#x3D; &#39;나는 파이썬을 잘하고 싶다&#39;</span><br><span class="line">&gt;&gt;&gt; m &#x3D; m.split()</span><br><span class="line">&gt;&gt;&gt; m</span><br><span class="line">[&#39;나는&#39;, &#39;파이썬을&#39;, &#39;잘하고&#39;, &#39;싶다&#39;]</span><br><span class="line">&gt;&gt;&gt; m.sort(key&#x3D;len)</span><br><span class="line">&gt;&gt;&gt; m</span><br><span class="line">[&#39;나는&#39;, &#39;싶다&#39;, &#39;잘하고&#39;, &#39;파이썬을&#39;]</span><br></pre></td></tr></table></figure>
+
+<h4 id="list-정렬된-결과-반환"><a href="#list-정렬된-결과-반환" class="headerlink" title="list 정렬된 결과 반환"></a>list 정렬된 결과 반환</h4><ul>
+<li>정렬된 결과를 반환하는 함수는 본체는 변형하지 않습니다.</li>
+<li>sorted : 순서대로 정렬, 정렬된 리스트를 반환</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; x &#x3D; [1 ,11, 2, 3]</span><br><span class="line">&gt;&gt;&gt; y &#x3D; sorted(x)</span><br><span class="line">&gt;&gt;&gt; x</span><br><span class="line">[1, 11, 2, 3]</span><br><span class="line">&gt;&gt;&gt; y</span><br><span class="line">[1, 2, 3, 11]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>reversed : 거꾸로 뒤집기, iterable한 객체를 반환, 확인을 위해서는 list로 한번 더 변형 필요</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; x &#x3D; [1 ,11, 2, 3]</span><br><span class="line">&gt;&gt;&gt; y &#x3D; reversed(x)</span><br><span class="line">&gt;&gt;&gt; x</span><br><span class="line">[1, 11, 2, 3]</span><br><span class="line">&gt;&gt;&gt; y</span><br><span class="line">&lt;list_reverseiterator object at 0x1060c9fd0&gt;</span><br><span class="line">&gt;&gt;&gt; list(y)</span><br><span class="line">[3, 2, 11, 1]</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="리스트를-반환하는-대신-제너레이터를-고려하자"><a href="#리스트를-반환하는-대신-제너레이터를-고려하자" class="headerlink" title="리스트를 반환하는 대신 제너레이터를 고려하자"></a>리스트를 반환하는 대신 제너레이터를 고려하자</h2><p>일련의 결과를 생성하는 함수에서 택할 가장 간단한 방법은 아이템의 리스트를 반환하는 것이다. </p>
+<p>예를 들어 문자열에 있는 모든 단어의 인덱스를 출력하고 싶다(띄어쓰기를 기준으로 나누면됨)</p>
+<p>다음 코드에서 append 메서드로 리스트에 결과들을 누적하고 함수가 끝날 때 해당 리스트를 반환한다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">def index_words(text):</span><br><span class="line">    result &#x3D; []</span><br><span class="line">    if text:</span><br><span class="line">        result.append(0)</span><br><span class="line">    for index, letter in enumerate(text):</span><br><span class="line">        if letter &#x3D;&#x3D; &#39; &#39;:</span><br><span class="line">            result.append(index + 1)</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure>
+
+<p>샘플 입력이 몇 개뿐일 때는 함수가 기대한 대로 동작한다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">address &#x3D; &#39;Four score and seven years ago our fathers brought forth on this continent a new nation, conceived in liberty, and dedicated to the proposition that all men are created equal.&#39;</span><br><span class="line">result &#x3D; index_words(address)</span><br><span class="line">print(result[:3])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[0, 5, 11]</span><br></pre></td></tr></table></figure>
+
+<p>하지만 inndex_words 함수에는 두 가지 문제가 있다.</p>
+<ul>
+<li><p>첫 번째 문제는 코드가 약간 복잡하고 깔끔하지 않다는 것이다. 새로운 결과가 나올 때마다 append 메서드를 호출해야 한다. 메서드 호출(result.append)이 많아서 리스트에 주가하는 값(index+1)이 덜 중요해 보인다. 결과 리스트를 생성하는 데 한 줄이 필요하고, 그 값을 반환하는 데도 한 줄이 필요하다. 함수 몸체에 문자가 130개 가량(공백 제외)있지만 그중에서 중요한 문자는 약 75개다</p>
+<p>이 함수를 작성하는 더 좋은 방법은 제너레이터(generator)를 사용하는것이다</p>
+</li>
+</ul>
+<p>  제너레이터는 yield 표현식을 사용하는 함수다. 제너레이터 함수는 호출되면 실제로 실행하지 않고 바로 이터레이터(iterator)를 반환한다. <strong>내장 함수 next를 호출할 때마다 이터레이터는 제너레이터가 다음 yield 표현식으로 진행하게 한다.</strong> 제너레이터에서 yield에 전달한 값을 이터레이터가 호출하는 쪽으로 반환한다.</p>
+<p>  동일결과를 내는 제너레이터 함수</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">def index_words_iter(text):</span><br><span class="line">    if text:</span><br><span class="line">        yield 0</span><br><span class="line">    for index, letter in enumerate(text):</span><br><span class="line">        if letter &#x3D;&#x3D; &#39; &#39;:</span><br><span class="line">            yield index + 1</span><br><span class="line">            </span><br><span class="line">my_result &#x3D; index_words_iter(&quot;고양이 최고 귀엽다&quot;) #1</span><br><span class="line">print my_result # 호출안되고 누군가 값을 물어보기를 기다리는 대기상태 #1</span><br><span class="line">print next(my_result) #이때 호출됨</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;generator object index_words_iter at 0x10c4aa7d0&gt;</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<p>  제너레이터는 자신이 리턴할 모든 값을 메모리에 저장하지 않기 때문에 조금 전 일반 함수의 결과와 같이 한번에 리스트로 보이지 않는 것입니다. <strong>제너레이터는 한 번 호출될때마다 하나의 값만을 전달(yield)합니다.</strong> 즉, 위의 #1까지는 아직 아무런 계산을 하지 않고 누군가가 다음 값에 대해서 물어보기를 기다리고 있는 상태입니다.</p>
+
     </article>
     <!-- license  -->
     
@@ -579,7 +685,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2장-함수"><span class="toc-number">1.</span> <span class="toc-text">2장 - 함수</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#None을-반환하기보다는-예외를-일으키자"><span class="toc-number">1.1.</span> <span class="toc-text">None을 반환하기보다는 예외를 일으키자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#클로저가-변수-스코프와-상호-작용하는-방법을-알자"><span class="toc-number">1.2.</span> <span class="toc-text">클로저가 변수 스코프와 상호 작용하는 방법을 알자</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2장-함수"><span class="toc-number">1.</span> <span class="toc-text">2장 - 함수</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#None을-반환하기보다는-예외를-일으키자"><span class="toc-number">1.1.</span> <span class="toc-text">None을 반환하기보다는 예외를 일으키자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#클로저가-변수-스코프와-상호-작용하는-방법을-알자"><span class="toc-number">1.2.</span> <span class="toc-text">클로저가 변수 스코프와 상호 작용하는 방법을 알자(???)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#데이터-얻어오기"><span class="toc-number">1.2.1.</span> <span class="toc-text">데이터 얻어오기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#파이썬2의-스코프"><span class="toc-number">1.2.2.</span> <span class="toc-text">파이썬2의 스코프</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#중요한-참고-사항"><span class="toc-number">1.2.3.</span> <span class="toc-text">중요한 참고 사항</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#list-본체-정렬"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">list 본체 정렬</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list-정렬된-결과-반환"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">list 정렬된 결과 반환</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#리스트를-반환하는-대신-제너레이터를-고려하자"><span class="toc-number">1.3.</span> <span class="toc-text">리스트를 반환하는 대신 제너레이터를 고려하자</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -592,8 +698,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
     
     
     
@@ -1420,12 +1524,6 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
-        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
-    
-        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
-    
-        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
-    
         <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
@@ -1434,15 +1532,21 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
         <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
     
         <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
     
-        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
-    
         <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
         <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
     
@@ -1462,19 +1566,19 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
-        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
-    
-        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
-    
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
-        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1511,9 +1615,9 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
     
-        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
-    
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
         <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
@@ -1525,19 +1629,19 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
-        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
-    
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
-        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
         <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
