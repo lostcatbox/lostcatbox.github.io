@@ -266,13 +266,15 @@ height:50vh;
                 
                     <div class= post-intro-tags >
     
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Django">Django</a>
+    
         <a class="post-tag" href="javascript:void(0);" data-tags = "Outsourcing">Outsourcing</a>
     
 </div>
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">16</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">429</span>Reading time: <span class="post-count reading-time">2 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -402,7 +404,172 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <h1 id="처음-외주를-시작하며"><a href="#처음-외주를-시작하며" class="headerlink" title="처음 외주를 시작하며"></a>처음 외주를 시작하며</h1><p>인강 사이트를 외주 받으며</p>
-<p>일어났던 오류들, 필요한 기능들을 구성하며 어려웟던 것들을 종합적으로 정리해놓을 겁니다.</p>
+<p>구현에 문제점과 오류을 기록하고</p>
+<p>필요한 기능들, 이를 위해 습득해야될 것들, 나머지 어려웟던 것들을 어떻게 해결했는지를 종합적으로 정리해놓을 겁니다.</p>
+<p><strong>과정</strong> </p>
+<ul>
+<li><p>설계(DB단(UML)과 홈페이지기준으로 두개를 계획후 이어지게함)</p>
+<ul>
+<li><p>DB설계</p>
+<ul>
+<li><p>app&gt;model&gt;field순으로 하나씩 생각하면서 기획서 3번보는것 추천 </p>
+<p>모든것이 구현이 될만한 게 일단 생각하면서 모두 추가해놓기</p>
+</li>
+<li><p>UML 그려보기</p>
+</li>
+</ul>
+</li>
+<li><p>브라우저 페이지 기준 설계</p>
+<ul>
+<li>페이지 별로 GET, POST등등을 어떻게 할것인지 생각</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>나중에 프론트와 연결</p>
+</li>
+</ul>
+<h2 id="구현시-팁"><a href="#구현시-팁" class="headerlink" title="구현시 팁"></a>구현시 팁</h2><ul>
+<li><p>회원가입</p>
+<ul>
+<li>탈퇴 가능</li>
+<li>비번 변경시 이메일로 재설정링크보내기</li>
+</ul>
+</li>
+<li><p>메일 템플릿 구현</p>
+<ul>
+<li>Django 템플릿에서  `{% if %}`  사용하면 페이지에서 생기고 없애기 쉬움</li>
+</ul>
+</li>
+<li><p>메인 구현</p>
+<ul>
+<li>이미지만 구현</li>
+<li>고정 다 없앰</li>
+</ul>
+</li>
+<li><p>클래스 상세 페이지</p>
+<ul>
+<li><p>클래스 상세 페이지에서 (클래스소개, 강사소개, 클래스후기 등등) href태그로 스크롤하기 ‘<a herf=#a>‘ (js 안쓰기위해)</p>
+</li>
+<li><p>클래스후기 등등 더보기 구현 연습해보기(나중에)</p>
+</li>
+</ul>
+</li>
+<li><p>마이페이지</p>
+<ul>
+<li><p>마이페이지에서 강사가 QnA 누르면 해당 강의 페이지 열림</p>
+<p><strong>강사는 자신의 클래스만 답변 가능</strong>(이 클래스를 연 사람인지 확인)</p>
+</li>
+<li><p>나의 클래스의 내가 듣고 있는 강의만 뜸</p>
+</li>
+<li><p>티켓 입력 추가(티켓 입력시 자동으로 해당 클래스 수강가능 회원됨)</p>
+</li>
+</ul>
+</li>
+<li><p>클래스 수강 페이지</p>
+<ul>
+<li>별점 클릭시 리뷰 작성</li>
+<li>커리큘럼, QnA 도 모두 문서로 js안 쓰고 바로 구현</li>
+</ul>
+</li>
+<li><p>관리자 페이지</p>
+<ul>
+<li>메인화면 관리</li>
+<li>클래스 관리<ul>
+<li>강의 추가 (여러개 뜸 or 계속 추가 가능)</li>
+</ul>
+</li>
+<li>티켓관리</li>
+<li>회원관리</li>
+<li>강사관리(내가 임의로 추가)</li>
+<li>후기관리 <ul>
+<li>노출, 비노출 선택가능</li>
+</ul>
+</li>
+<li>QnA 관리<ul>
+<li>노출, 비노출 선택가능</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>DB구성 팁</p>
+<ul>
+<li>강사진 4명, 따로 모델 만듬, 클래스 등록시 강의리스</li>
+</ul>
+</li>
+<li><p>나머지 요구 사항 및 참고 사항</p>
+<ul>
+<li><p>리뷰 작성 페이지에서 modal을 써야하나(쌩JS) 그냥 url로 이동후 다시 와도되나? (후자가 개발속도 빠름)</p>
+</li>
+<li><p>기획서 p.37에서 JS로 답글쓰기 만들어야함(JQuery, Js)</p>
+</li>
+<li><p>수강하기클릭시&gt;와디즈결제url이동&gt;관리자가 정보 알아냄</p>
+<p>&gt; 직접 관리자페이지로 개별등록&gt; 티켓값과 함께 이메일발송(메일템플릿사용) &gt;사용자가 직접입력</p>
+</li>
+<li><p>수강 기록있는지 확인하는 프로세서 필요함 따라서 수강안했던것 표시</p>
+</li>
+<li><p>키보드 반응형 안함, 스크롤 왠만하면 안함, 클래스 예정날짜 모두제거, 휴대폰 번호 기록들 삭제</p>
+</li>
+<li><p>데이터 있고 없을때 django에서 템플릿에서 if문 else 쓰면 편할듯</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="설계"><a href="#설계" class="headerlink" title="설계"></a>설계</h1><h2 id="accounts-app"><a href="#accounts-app" class="headerlink" title="accounts app"></a>accounts app</h2><h3 id="User"><a href="#User" class="headerlink" title="User"></a>User</h3><p>onetoone(student)</p>
+<p>onetoone(teacher)</p>
+<h4 id="student-수강생"><a href="#student-수강생" class="headerlink" title="student(수강생)"></a>student(수강생)</h4><ul>
+<li>name</li>
+<li>email</li>
+<li>phone_number</li>
+<li>secret</li>
+<li>comfirm_secret</li>
+<li>이용약관(boolen)(강제)</li>
+<li>이벤트 및 할인소식(boolen)(choose)</li>
+</ul>
+<h4 id="teacher-강의자"><a href="#teacher-강의자" class="headerlink" title="teacher(강의자)"></a>teacher(강의자)</h4><ul>
+<li>image</li>
+<li>teacher_name</li>
+<li>teacher_sns</li>
+<li>teacher_detail</li>
+</ul>
+<h2 id="수업-app"><a href="#수업-app" class="headerlink" title="수업 app"></a>수업 app</h2><ul>
+<li>이용약관넣기</li>
+</ul>
+<h3 id="Main-Pages-file-m2m"><a href="#Main-Pages-file-m2m" class="headerlink" title="Main Pages(file, m2m???)"></a>Main Pages(file, m2m???)</h3><ul>
+<li>top_image</li>
+<li>top_text</li>
+<li>course(4개까지 클래스 앞에 띄울수있음)(클래스 id 값입력하면 바로 ㄲ)</li>
+</ul>
+<h3 id="Course-클래스를-이렇게치환시킴-클래스-상세페이지내용"><a href="#Course-클래스를-이렇게치환시킴-클래스-상세페이지내용" class="headerlink" title="Course(클래스를 이렇게치환시킴, 클래스 상세페이지내용)"></a>Course(클래스를 이렇게치환시킴, 클래스 상세페이지내용)</h3><ul>
+<li>수강</li>
+</ul>
+<h3 id="Lecture-강의들-각-강의의-구성요소"><a href="#Lecture-강의들-각-강의의-구성요소" class="headerlink" title="Lecture(강의들, 각 강의의 구성요소)"></a>Lecture(강의들, 각 강의의 구성요소)</h3><ul>
+<li>lecture_id()</li>
+<li>lecture_purpose(강의목적)</li>
+<li>foreginKey(Course)</li>
+</ul>
+<h3 id="Course-Comments-후기"><a href="#Course-Comments-후기" class="headerlink" title="Course Comments(후기)"></a>Course Comments(후기)</h3><ul>
+<li>userid</li>
+<li>foreignkey(Course)</li>
+</ul>
+<h3 id="Lecture-Comments"><a href="#Lecture-Comments" class="headerlink" title="Lecture Comments"></a>Lecture Comments</h3><ul>
+<li>foreignkey(Lecture)</li>
+<li>userid</li>
+<li>content</li>
+</ul>
+<h3 id="Course-Review-클래스후기"><a href="#Course-Review-클래스후기" class="headerlink" title="Course Review(클래스후기)"></a>Course Review(클래스후기)</h3><ul>
+<li>userid</li>
+<li>foreignkey(course)</li>
+<li>expose(노출여부 boole </li>
+</ul>
+<h1 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h1><ul>
+<li><p>요즘에는 프론트페이지는 가만히 있고 JS를 이용하여 각 동기적으로 움직이게 하며 요청 응답을 api를 통해 연결해주면</p>
+<p>JSON으로 응답받으면서 계속 표시해주고 반응하는 형태로 넘어가고있다(새 페이지 호출없어도됨)</p>
+</li>
+<li><p>ajax는 비동기 구현하는 방식을 뜻함. 라이브러리이름아님 &gt; 쌩JS보다 Jquery가 ajax더 쓰기쉬움</p>
+</li>
+<li></li>
+</ul>
 
     </article>
     <!-- license  -->
@@ -535,7 +702,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#처음-외주를-시작하며"><span class="toc-number">1.</span> <span class="toc-text">처음 외주를 시작하며</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#처음-외주를-시작하며"><span class="toc-number">1.</span> <span class="toc-text">처음 외주를 시작하며</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#구현시-팁"><span class="toc-number">1.1.</span> <span class="toc-text">구현시 팁</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#설계"><span class="toc-number">2.</span> <span class="toc-text">설계</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#accounts-app"><span class="toc-number">2.1.</span> <span class="toc-text">accounts app</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#User"><span class="toc-number">2.1.1.</span> <span class="toc-text">User</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#student-수강생"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">student(수강생)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#teacher-강의자"><span class="toc-number">2.1.1.2.</span> <span class="toc-text">teacher(강의자)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#수업-app"><span class="toc-number">2.2.</span> <span class="toc-text">수업 app</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Main-Pages-file-m2m"><span class="toc-number">2.2.1.</span> <span class="toc-text">Main Pages(file, m2m???)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Course-클래스를-이렇게치환시킴-클래스-상세페이지내용"><span class="toc-number">2.2.2.</span> <span class="toc-text">Course(클래스를 이렇게치환시킴, 클래스 상세페이지내용)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lecture-강의들-각-강의의-구성요소"><span class="toc-number">2.2.3.</span> <span class="toc-text">Lecture(강의들, 각 강의의 구성요소)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Course-Comments-후기"><span class="toc-number">2.2.4.</span> <span class="toc-text">Course Comments(후기)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lecture-Comments"><span class="toc-number">2.2.5.</span> <span class="toc-text">Lecture Comments</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Course-Review-클래스후기"><span class="toc-number">2.2.6.</span> <span class="toc-text">Course Review(클래스후기)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#결론"><span class="toc-number">3.</span> <span class="toc-text">결론</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
