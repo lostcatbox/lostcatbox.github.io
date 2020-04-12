@@ -266,7 +266,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">76</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">477</span>Reading time: <span class="post-count reading-time">2 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -401,7 +401,32 @@ height:50vh;
 <h2 id="각-R-언어-해석"><a href="#각-R-언어-해석" class="headerlink" title="각 R 언어 해석"></a>각 R 언어 해석</h2><p><a href="https://m.blog.naver.com/PostView.nhn?blogId=dic1224&logNo=80206009323&proxyReferer=https%3A%2F%2Fwww.google.com%2F" target="_blank" rel="noopener">자세히</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#temminal</span><br><span class="line">brew install r     #R 설치</span><br><span class="line"></span><br><span class="line">ruby -e &quot;$(curl -fsSL https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;Homebrew&#x2F;install&#x2F;master&#x2F;install)&quot; &lt; &#x2F;dev&#x2F;null 2&gt; &#x2F;dev&#x2F;null ; brew install caskroom&#x2F;cask&#x2F;brew-cask 2&gt; &#x2F;dev&#x2F;null</span><br><span class="line"></span><br><span class="line">brew cask install rstudio   # rstudio설치</span><br></pre></td></tr></table></figure>
 
+<h2 id="R데이터-속성"><a href="#R데이터-속성" class="headerlink" title="R데이터 속성"></a>R데이터 속성</h2><p>숫자형, 문자형, 논리형, 특수값으로 변수의 자료형타입임, </p>
+<p>Null  정의되어있지 않음을 의미</p>
+<p>NA 결측값(missing value) (데이터가 찾을려고해도 없어!)</p>
+<p>NaN 수학적으로 정의가 불가능한 값(ex sqrt(-3))</p>
+<p>Inf 양의 무한대, -Inf 음의 무한대</p>
+<h2 id="백터의-이해"><a href="#백터의-이해" class="headerlink" title="백터의 이해"></a>백터의 이해</h2><h3 id="백터의-개념"><a href="#백터의-개념" class="headerlink" title="백터의 개념"></a>백터의 개념</h3><ul>
+<li><p>1차원 배열 데이터 (1행에 데이터가있다)(1학년 학생들의 몸무게 자료) </p>
+<p>ex) 몸무게 &gt; 56|67|85|65|56|49</p>
+</li>
+<li><p>2차원 배열 데이터 (행과열이 존재)(국가별 GDP)</p>
+<p>ex) 우리가 익히 아는 엑셀 데이터, DB</p>
+</li>
+</ul>
+<h3 id="백터-변수-만들기"><a href="#백터-변수-만들기" class="headerlink" title="백터 변수 만들기"></a>백터 변수 만들기</h3><p>c()를 사용하여 벡터 변수를 만들수있다</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">x &lt;- c(1,2,3) # 숫자형 벡터</span><br><span class="line">y &lt;- c(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;) # 문자형 벡터</span><br><span class="line">z &lt;- c(TRUE,TRUE, FALSE, TRUE) # 논리형 벡터</span><br><span class="line">x # x에 저장된 값을 출력</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 문자와 숫자는 같은 벡터 변수로 지정될떄, 문자열로 저장을 자동으로함</span><br><span class="line">w &lt;- c(1,2,3, &quot;a&quot;,&quot;b&quot;,&quot;c&quot;)</span><br><span class="line">w</span><br><span class="line"></span><br><span class="line">#연속 숫자 필요하면 c(int:int)쓰기</span><br><span class="line">v1 &lt;- 50:90</span><br><span class="line">v1</span><br><span class="line">v2 &lt;- c(1,2,5, 50:90)</span><br><span class="line">v2</span><br><span class="line"></span><br><span class="line">#연속 숫자인데 간격지정</span><br><span class="line">v3 &lt;- seq(1,101,3)</span><br><span class="line">v3</span><br><span class="line">v4 &lt;- seq(0.1,1.0,0.1)</span><br><span class="line">v4</span><br><span class="line"></span><br><span class="line">#반복 생성</span><br><span class="line">v5 &lt;- rep(1,times&#x3D;5) # 1을 5번 반복</span><br></pre></td></tr></table></figure>
 
+<p>벡터의 원소값에 이름 지정</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">score &#x3D; c(123,243,423,5234)</span><br><span class="line">names(score) &#x3D; c(&#39;3&#39;, &#39;4qjsWO&#39;, &#39;rrr&#39;, &#39;rew&#39;)</span><br><span class="line">score #실행시 이제 header가 names가 들어가고 2행 3열</span><br></pre></td></tr></table></figure>
+
+<p>백터에서 원소 추출</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">d &lt;- c(1,2,3,4,5,6,6,7)</span><br><span class="line">d[1]</span><br><span class="line">d[1:8]</span><br><span class="line">d[seq(1,5,2)]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">d[-2] #주의하자python은 뒤에서부터 새지만, R은 d[2]를 뺴고 출력하라라는 뜻</span><br><span class="line">[1] 1 3 4 5 6 6 7 </span><br><span class="line">&gt; d[-c(3:5)]</span><br><span class="line">[1] 1 2 6 6 7</span><br><span class="line">&gt; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GNP &lt;- c(2090, 2450, 960)</span><br><span class="line">names(GNP) &lt;- c(&quot;Korea&quot;, &quot;Japan&quot;, &quot;Nepal&quot;)</span><br><span class="line">GNP[1]</span><br><span class="line">GNP[&quot;Japan&quot;]</span><br><span class="line">GNP[c(&quot;Korea&quot;, &quot;Nepal&quot;)]</span><br><span class="line"></span><br><span class="line">v1 &lt;- c(1,5,7,8,9) v1</span><br><span class="line">v1[2] &lt;- 3 # v1의 2번째 값을 3으로 변경</span><br><span class="line">v1[c(1,5)] &lt;- c(10,20) # v1의 1, 5번째 값을 각각 10, 20으로 변경</span><br></pre></td></tr></table></figure>
+
+<h3 id="벡터의-연산"><a href="#벡터의-연산" class="headerlink" title="벡터의 연산"></a>벡터의 연산</h3><p>기본적으로 벡터값을 연산은 벡터들의 길이가 같아야함</p>
+<p>하지만 두 객체의 길이가 서로 배수관계가 있으면 짧은 벡터를 반복하여 자동으로 연산 실행됨</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdr1axl1x2j30x00mo7cv.jpg" alt="image-20200412165213190"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sort(d, decreasing &#x3D; FALSE)  # 오름차순 정렬 default값임</span><br><span class="line">sort(d, decreasing &#x3D; TRUE)   #  내림차순 정렬</span><br></pre></td></tr></table></figure>
 
 
     </article>
@@ -540,7 +565,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#각-R-언어-해석"><span class="toc-number">1.</span> <span class="toc-text">각 R 언어 해석</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#각-R-언어-해석"><span class="toc-number">1.</span> <span class="toc-text">각 R 언어 해석</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R데이터-속성"><span class="toc-number">2.</span> <span class="toc-text">R데이터 속성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#백터의-이해"><span class="toc-number">3.</span> <span class="toc-text">백터의 이해</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#백터의-개념"><span class="toc-number">3.1.</span> <span class="toc-text">백터의 개념</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#백터-변수-만들기"><span class="toc-number">3.2.</span> <span class="toc-text">백터 변수 만들기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#벡터의-연산"><span class="toc-number">3.3.</span> <span class="toc-text">벡터의 연산</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
