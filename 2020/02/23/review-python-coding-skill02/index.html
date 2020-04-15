@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>review-python-coding-skill02 · lostcatbox</title>
+    <title>파이썬 코딩의 스킬 리뷰 2 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">review-python-coding-skill02</a>
+                <a href="#" class="post-name">파이썬 코딩의 스킬 리뷰 2</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            review-python-coding-skill02
+            파이썬 코딩의 스킬 리뷰 2
             <!-- 404 -->
             
         </h1>
@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">2k</span>Reading time: <span class="post-count reading-time">12 min</span></span>
+                        <span>Word count: <span class="post-count word-count">2.7k</span>Reading time: <span class="post-count reading-time">16 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -514,7 +514,7 @@ height:50vh;
 <ul>
 <li>sort : 정렬, 기본값은 오름차순 정렬, reverse옵션 True는 내림차순 정렬</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; a &#x3D; [1, 10, 5, 7, 6]</span><br><span class="line">&gt;&gt;&gt; a.sort()</span><br><span class="line">&gt;&gt;&gt; a</span><br><span class="line">[1, 5, 6, 7, 10]</span><br><span class="line">&gt;&gt;&gt; a &#x3D; [1, 10, 5, 7, 6]</span><br><span class="line">&gt;&gt;&gt; a.sort(reverse&#x3D;True)</span><br><span class="line">&gt;&gt;&gt; a</span><br><span class="line">[10, 7, 6, 5, 1]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">1</span>, <span class="number">10</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">6</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.sort()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">1</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">10</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">1</span>, <span class="number">10</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">6</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.sort(reverse=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">10</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><strong>sort의 key 옵션, key 옵션에 지정된 함수의 결과에따라 정렬, 아래는 원소의 길이</strong></li>
@@ -534,25 +534,87 @@ height:50vh;
 
 
 
-<h2 id="리스트를-반환하는-대신-제너레이터를-고려하자"><a href="#리스트를-반환하는-대신-제너레이터를-고려하자" class="headerlink" title="리스트를 반환하는 대신 제너레이터를 고려하자"></a>리스트를 반환하는 대신 제너레이터를 고려하자</h2><p>일련의 결과를 생성하는 함수에서 택할 가장 간단한 방법은 아이템의 리스트를 반환하는 것이다. </p>
+<h2 id="리스트를-반환하는-대신-제너레이터를-고려하자-B16"><a href="#리스트를-반환하는-대신-제너레이터를-고려하자-B16" class="headerlink" title="리스트를 반환하는 대신 제너레이터를 고려하자(B16)"></a>리스트를 반환하는 대신 제너레이터를 고려하자(B16)</h2><p>일련의 결과를 생성하는 함수에서 택할 가장 간단한 방법은 아이템의 리스트를 반환하는 것이다. </p>
 <p>예를 들어 문자열에 있는 모든 단어의 인덱스를 출력하고 싶다(띄어쓰기를 기준으로 나누면됨)</p>
 <p>다음 코드에서 append 메서드로 리스트에 결과들을 누적하고 함수가 끝날 때 해당 리스트를 반환한다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">def index_words(text):</span><br><span class="line">    result &#x3D; []</span><br><span class="line">    if text:</span><br><span class="line">        result.append(0)</span><br><span class="line">    for index, letter in enumerate(text):</span><br><span class="line">        if letter &#x3D;&#x3D; &#39; &#39;:</span><br><span class="line">            result.append(index + 1)</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index_words</span><span class="params">(text)</span>:</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">if</span> text:</span><br><span class="line">        result.append(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">for</span> index, letter <span class="keyword">in</span> enumerate(text):</span><br><span class="line">        <span class="keyword">if</span> letter == <span class="string">' '</span>:</span><br><span class="line">            result.append(index + <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
 
 <p>샘플 입력이 몇 개뿐일 때는 함수가 기대한 대로 동작한다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">address &#x3D; &#39;Four score and seven years ago our fathers brought forth on this continent a new nation, conceived in liberty, and dedicated to the proposition that all men are created equal.&#39;</span><br><span class="line">result &#x3D; index_words(address)</span><br><span class="line">print(result[:3])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[0, 5, 11]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">address = <span class="string">'Four score and seven years ago our fathers brought forth on this continent a new nation, conceived in liberty, and dedicated to the proposition that all men are created equal.'</span></span><br><span class="line">result = index_words(address)</span><br><span class="line">print(result[:<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[<span class="number">0</span>, <span class="number">5</span>, <span class="number">11</span>]</span><br></pre></td></tr></table></figure>
 
-<p>하지만 inndex_words 함수에는 두 가지 문제가 있다.</p>
+<p>하지만 index_words 함수에는 두 가지 문제가 있다.</p>
 <ul>
-<li><p>첫 번째 문제는 코드가 약간 복잡하고 깔끔하지 않다는 것이다. 새로운 결과가 나올 때마다 append 메서드를 호출해야 한다. 메서드 호출(result.append)이 많아서 리스트에 주가하는 값(index+1)이 덜 중요해 보인다. 결과 리스트를 생성하는 데 한 줄이 필요하고, 그 값을 반환하는 데도 한 줄이 필요하다. 함수 몸체에 문자가 130개 가량(공백 제외)있지만 그중에서 중요한 문자는 약 75개다</p>
+<li><p>첫 번째 문제는 코드가 약간 복잡하고 깔끔하지 않다는 것이다. 새로운 결과가 나올 때마다 append 메서드를 호출해야 한다. 메서드 호출(result.append)이 많아서 리스트에 가하는 값(index+1)이 덜 중요해 보인다. 결과 리스트를 생성하는 데 한 줄이 필요하고, 그 값을 반환하는 데도 한 줄이 필요하다. 함수 몸체에 문자가 130개 가량(공백 제외)있지만 그중에서 중요한 문자는 약 75개다</p>
 <p>이 함수를 작성하는 더 좋은 방법은 제너레이터(generator)를 사용하는것이다</p>
 </li>
 </ul>
-<p>  제너레이터는 yield 표현식을 사용하는 함수다. 제너레이터 함수는 호출되면 실제로 실행하지 않고 바로 이터레이터(iterator)를 반환한다. <strong>내장 함수 next를 호출할 때마다 이터레이터는 제너레이터가 다음 yield 표현식으로 진행하게 한다.</strong> 제너레이터에서 yield에 전달한 값을 이터레이터가 호출하는 쪽으로 반환한다.</p>
+<p>  <strong>제너레이터는 yield 표현식을 사용하는 함수다.</strong> </p>
+<p>  __제너레이터 함수는 호출되면 실제로 실행하지 않고 바로 이터레이터(iterator)를 반환한다. __</p>
+<p>  <strong>내장 함수 next를 호출할 때마다 이터레이터는 제너레이터가 다음 yield 표현식으로 진행하게 한다.</strong></p>
+<p>   제너레이터에서 yield에 전달한 값을 이터레이터가 호출하는 쪽으로 반환한다.</p>
 <p>  동일결과를 내는 제너레이터 함수</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">def index_words_iter(text):</span><br><span class="line">    if text:</span><br><span class="line">        yield 0</span><br><span class="line">    for index, letter in enumerate(text):</span><br><span class="line">        if letter &#x3D;&#x3D; &#39; &#39;:</span><br><span class="line">            yield index + 1</span><br><span class="line">            </span><br><span class="line">my_result &#x3D; index_words_iter(&quot;고양이 최고 귀엽다&quot;) #1</span><br><span class="line">print my_result # 호출안되고 누군가 값을 물어보기를 기다리는 대기상태 #1</span><br><span class="line">print next(my_result) #이때 호출됨</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;generator object index_words_iter at 0x10c4aa7d0&gt;</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">index_words_iter</span><span class="params">(text)</span>:</span></span><br><span class="line">      <span class="keyword">if</span> text:</span><br><span class="line">          <span class="keyword">yield</span> <span class="number">0</span></span><br><span class="line">      <span class="keyword">for</span> index, letter <span class="keyword">in</span> enumerate(text):</span><br><span class="line">          <span class="keyword">if</span> letter == <span class="string">' '</span>:</span><br><span class="line">              <span class="keyword">yield</span> index + <span class="number">1</span></span><br><span class="line">              </span><br><span class="line">  my_result = index_words_iter(<span class="string">"고양이 최고 귀엽다"</span>) <span class="comment">#1</span></span><br><span class="line">  <span class="keyword">print</span> my_result <span class="comment"># 호출안되고 누군가 값을 물어보기를 기다리는 대기상태 #1</span></span><br><span class="line"><span class="keyword">print</span> next(my_result) <span class="comment">#이때 호출됨</span></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  &lt;generator object index_words_iter at <span class="number">0x10c4aa7d0</span>&gt;</span><br><span class="line">  <span class="number">0</span></span><br></pre></td></tr></table></figure>
 
 <p>  제너레이터는 자신이 리턴할 모든 값을 메모리에 저장하지 않기 때문에 조금 전 일반 함수의 결과와 같이 한번에 리스트로 보이지 않는 것입니다. <strong>제너레이터는 한 번 호출될때마다 하나의 값만을 전달(yield)합니다.</strong> 즉, 위의 #1까지는 아직 아무런 계산을 하지 않고 누군가가 다음 값에 대해서 물어보기를 기다리고 있는 상태입니다.</p>
+<p>  결과 리스트와 연동하는 부분이 사라져서 훨씬 이해하기 쉽다. 결과는 리스트가 아닌 yield 표현식으로 전달된다.</p>
+<p>  제너레이터 호출로 반환되는 이터레이터를 내장 함수 list에 전달하면 손쉽게 리스트로 변환할 수 있다.(B9 참조)</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myresult=list(index_words_iter(<span class="string">'rhdiddlsms 최고다 rhddd'</span>))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>두번째 문제는</p>
+<p>반환하기 전에 모든 결과를 리스트에 저장해야한다는 점이다. 입력이 매우 많다면 프로그램 실행 중에 메모리가 고갈되어 동작을 멈추는 원인이 된다. 반면 <strong>제너레이터로 작성한 버전은 다양한 길이의 입력에도 쉽게 이용가능</strong></p>
+</li>
+</ul>
+<p>다른 예시로 또 차이를 보자</p>
+<p>아래 함수는 파일에서 입력을 한 번에 한 줄씩 읽어서 한 번에 한 단어씩 출력을 내어주는 제너레이터다. 이 함수가 동작할 때 사용하는 메모리는 입력 한 줄의 최대 길이까지다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">def index_file(handle):</span><br><span class="line">    offset &#x3D; 0</span><br><span class="line">    for line in handle:</span><br><span class="line">        if line:</span><br><span class="line">            yield offset</span><br><span class="line">        for letter in line:</span><br><span class="line">            offset +&#x3D; 1</span><br><span class="line">            if letter &#x3D;&#x3D; &#39; &#39;:</span><br><span class="line">                yield offset</span><br><span class="line">                </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">from itertools import islice</span><br><span class="line">with open (&#39;파일경로&#x2F;rhdiddl.txt&#39;, &#39;r&#39;) as f:</span><br><span class="line">    re&#x3D;islice(index_file(f),0,3)              </span><br><span class="line">    print(list(re))</span><br><span class="line">    </span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">[0, 11, 15]</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>islice는 이터레이너 객체가 반환하는 제너레이터를 처음(0), 마지막(3)으로  슬라이스침</p>
+<p>이터레이터는 반복가능한 객체를 말한다(next()가 가능한 객체)</p>
+<p>제너레이터(반복가능한 객체를 만들어주는 행위)</p>
+<p>yield(제너레이터에서의 return과 동일한 역할을 수행,, )</p>
+</blockquote>
+<p>이와 같이 제너레이터를 정의할 때 알아둬야 할 단 하나는 반환되는 이터레이터에 상태가 있고 재사용할 수 없다는 사실을 호출하는 쪽에서 알아야 한다는 점이다(B17 참조)</p>
+<h3 id="정리"><a href="#정리" class="headerlink" title="정리"></a>정리</h3><ul>
+<li>제너레이터에서 반환한 이터레이터는 제너레이터 함수의 본문에 있는 yield 표현식에 전달된 값들의 집합이다.(???)</li>
+<li>제너레이터는 모든 입력과 출력을 메모리에 저장하지 않으므로 입력값의 양을 알기 어려울 때도 연속된 출력을 만들 수 있다.</li>
+</ul>
+<h2 id="인수를-순회할-때는-방어적으로-하자-B17"><a href="#인수를-순회할-때는-방어적으로-하자-B17" class="headerlink" title="인수를 순회할 때는 방어적으로 하자(B17)"></a>인수를 순회할 때는 방어적으로 하자(B17)</h2><p>파라미터로 객체의 리스트를 받는 함수에서 리스트를 여러 번 순회해야 할 때가 종종있다.</p>
+<p>예를 들어 미국 텍사스주의 여행자 수를 분석하자</p>
+<p>데이터 집합은 각 도시의 방문자수라고 하자</p>
+<p>각 도시에서 전체 여행자 중 몇 퍼센트를 받아들이는지 알고 싶을 것이다</p>
+<p>이런 작업을 하려면 정규화 함수가 필요하다. 정규화 함수에서는 입력을 합산해서 연도별 총 여행자 수를 구한다.</p>
+<p>그러고 나서 각 도시의 방문자 수를 전체 방문자 수로 나누어 각 도시가 전체에서 차지하는 비중을 알아낸다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def normalize(numbers):</span><br><span class="line">    total &#x3D; sum(numbers)</span><br><span class="line">    result &#x3D; []</span><br><span class="line">    for value in numbers:</span><br><span class="line">        percent &#x3D; 100 * value &#x2F; total</span><br><span class="line">        result.append(percent)</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure>
+
+<p>방문 리스트를 확대하려면 모든 도시가 들어 있는 파일에서 데이터를 읽어야한다.</p>
+<p>모든 데이터의 리스트를 메모리에 넣는건 무리..</p>
+<p>나중에 같은 함수를 재사용하여 더 큰 데이터 세트인 전 세계의 여행자 수를 계산할 수 있기 때문에 리스트보다 제너레이터로구현한다</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def read_visits(data_path):</span><br><span class="line">    with open(data_path) as f:</span><br><span class="line">        for line in f:</span><br><span class="line">            yield int(line)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">it &#x3D; read_visits(&#39;my_numbers.txt&#39;)</span><br><span class="line">percentages &#x3D; normalize(it)</span><br><span class="line">print(percentages)</span><br></pre></td></tr></table></figure>
+
+<p>위 함수를 해보면 안된다. 그 이유는 이터레이터가 결과를 한 번만 생성하기 때문이다</p>
+<p>이미 StopIteration 예외를 일으킨 이터레이터나 제너레이터를 순회하면 어떤 결과도 얻을수없다. 아래 참조하자</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">it &#x3D; read_visits(&#39;my_numbers.txt&#39;)</span><br><span class="line">print(list(it))   #정상 데이터리스트</span><br><span class="line">print(list(it))  #결과는 빈 리스트가 나와버림</span><br></pre></td></tr></table></figure>
+
+<p>이를 해결하려면 입력 이터레이터를 명시적으로 소진하고 전체 콘텐츠의 복사본을 리스트에 저장해야 한다.</p>
+<p>(없어지는 값을 일단 복사)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">def normalize_copy(numbers):</span><br><span class="line">    numbers &#x3D; list(numbers)  # Copy the iterator</span><br><span class="line">    total &#x3D; sum(numbers)</span><br><span class="line">    result &#x3D; []</span><br><span class="line">    for value in numbers:</span><br><span class="line">        percent &#x3D; 100 * value &#x2F; total</span><br><span class="line">        result.append(percent)</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure>
+
+<p>이 방법의 문제점은 입력받은 이터레이터 콘텐츠의 복사본이 클 수도 있다는 점이다</p>
+<p>이런 이터레이터를 복사하면 프로그램의 메모리가 고갈되어 동작을 멈출 수도있다.</p>
+<p>이런 문제를 피하는 한가지 방법은 호출될 떄마다 새 이터레이터를 반환하는 함수를 받게 만드는 것이다</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def normalize_func(get_iter):</span><br><span class="line">    total &#x3D; sum(get_iter())   # New iterator</span><br><span class="line">    result &#x3D; []</span><br><span class="line">    for value in get_iter():  # New iterator</span><br><span class="line">        percent &#x3D; 100 * value &#x2F; total</span><br><span class="line">        result.append(percent)</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure>
+
+<p><code>normalize_func</code> 을 사용하려면 제너레이터를 호출해서 매번 새 이터레이터를 생성하는 람다 표현식을 넘겨주면 된다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">percentages &#x3D; normalize_func(lambda: read_visits(path))</span><br><span class="line">print(percentages)</span><br></pre></td></tr></table></figure>
+
+<p>코드가 잘 동작하긴 하지만, 이렇게 람다 함수를 넘겨주는 방법은 세련되지 못하다. 같은 결과를 얻는 더 좋은 방법은 이터레이터 프로토콜을 구현한 새 컨테이너 클래스를 제공하는 것이다.</p>
+<p>이터레이터 프로토콜은 파이썬의 for 루프와 관련 표현식이 컨테이너 타입의 콘텐츠를 탐색하는 방법을 나타낸다</p>
+<p>파이썬은 <code>for x in foo</code>  같은 문장을 만나면 실제로는 iter(foo)를 호출한다. 그러면 내장 함수 iter는 특별한 메서드인 foo.__iter__ 를 호출한다.  __iter__ 메서드는 (__next__ 라는 특별한 메서드를 구현하는) 이터레이터 객체를 반환해야 한다. 마지막으로 for 루프는 이터레이터를 모두 소진할 때까지 (그래서 StopIteration 예외가 발생할 때까지) 이터레이터 객체에 내장 함수 <code>next</code> 를 계속 호출한다.</p>
+<p>(???)</p>
 <p>(작성중)</p>
 
     </article>
@@ -691,7 +753,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2장-함수"><span class="toc-number">1.</span> <span class="toc-text">2장 - 함수</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#None을-반환하기보다는-예외를-일으키자"><span class="toc-number">1.1.</span> <span class="toc-text">None을 반환하기보다는 예외를 일으키자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#클로저가-변수-스코프와-상호-작용하는-방법을-알자"><span class="toc-number">1.2.</span> <span class="toc-text">클로저가 변수 스코프와 상호 작용하는 방법을 알자(???)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#데이터-얻어오기"><span class="toc-number">1.2.1.</span> <span class="toc-text">데이터 얻어오기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#파이썬2의-스코프"><span class="toc-number">1.2.2.</span> <span class="toc-text">파이썬2의 스코프</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#중요한-참고-사항"><span class="toc-number">1.2.3.</span> <span class="toc-text">중요한 참고 사항</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#list-본체-정렬"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">list 본체 정렬</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list-정렬된-결과-반환"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">list 정렬된 결과 반환</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#리스트를-반환하는-대신-제너레이터를-고려하자"><span class="toc-number">1.3.</span> <span class="toc-text">리스트를 반환하는 대신 제너레이터를 고려하자</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2장-함수"><span class="toc-number">1.</span> <span class="toc-text">2장 - 함수</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#None을-반환하기보다는-예외를-일으키자"><span class="toc-number">1.1.</span> <span class="toc-text">None을 반환하기보다는 예외를 일으키자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#클로저가-변수-스코프와-상호-작용하는-방법을-알자"><span class="toc-number">1.2.</span> <span class="toc-text">클로저가 변수 스코프와 상호 작용하는 방법을 알자(???)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#데이터-얻어오기"><span class="toc-number">1.2.1.</span> <span class="toc-text">데이터 얻어오기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#파이썬2의-스코프"><span class="toc-number">1.2.2.</span> <span class="toc-text">파이썬2의 스코프</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#중요한-참고-사항"><span class="toc-number">1.2.3.</span> <span class="toc-text">중요한 참고 사항</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#list-본체-정렬"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">list 본체 정렬</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list-정렬된-결과-반환"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">list 정렬된 결과 반환</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#리스트를-반환하는-대신-제너레이터를-고려하자-B16"><span class="toc-number">1.3.</span> <span class="toc-text">리스트를 반환하는 대신 제너레이터를 고려하자(B16)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정리"><span class="toc-number">1.3.1.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#인수를-순회할-때는-방어적으로-하자-B17"><span class="toc-number">1.4.</span> <span class="toc-text">인수를 순회할 때는 방어적으로 하자(B17)</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -704,12 +766,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
-    
-    
     
     
     
@@ -1341,7 +1397,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >review-python-coding-skill02</a>
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
         </li>
     
     
@@ -1568,41 +1624,41 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
-    
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
-    
-        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
-    
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
         <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
         <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
     
         <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
         <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
     
-        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
-    
-        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
-    
-        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
-    
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
         <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -1610,27 +1666,27 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
         <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
-    
-        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
-        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
-    
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
         <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
-    
-        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1665,25 +1721,25 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
-    
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
-        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
     
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
     
         <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
-        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
     
-        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
     
-        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
     
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
@@ -1691,13 +1747,13 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
-        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
-    
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
-        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
         <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
