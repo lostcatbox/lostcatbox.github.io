@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">1.3k</span>Reading time: <span class="post-count reading-time">8 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.7k</span>Reading time: <span class="post-count reading-time">10 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -484,6 +484,26 @@ height:50vh;
 <li>정식 클래스의 유연성이 필요 없다면 가벼운 불변 데이터 컨테이너에는 namedtuple을 사용하자</li>
 <li>내부 상태를 관리하는 딕셔너리가 복잡해지면 여러 헬퍼 클래스를 사용하는 방식으로 관리 코드를 바꾸자</li>
 </ul>
+<h2 id="인터페이스가-간단하면-클래스-대신-함수를-받자-B23"><a href="#인터페이스가-간단하면-클래스-대신-함수를-받자-B23" class="headerlink" title="인터페이스가 간단하면 클래스 대신 함수를 받자 (B23)"></a>인터페이스가 간단하면 클래스 대신 함수를 받자 (B23)</h2><p>파이썬 내장 API의 상당수에는 함수를 넘겨서 동작을 사용자화하는 기능이 있다. API는 이런 후크(hook)를 이용해서 여러분의 작성한 코드를 실행 중에 호출한다. </p>
+<p>예를 들어 list타입의 sort메서드는 정렬에 필요한 각 인덱스의 값을 결정하는 선택적인 key인수를 받는다. 다음코드에서는 lambda 표현식을 key후크로 넘겨서 이름 리스트를 길이로 정렬한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">names = [<span class="string">'Socrates'</span>, <span class="string">'Archimedes'</span>, <span class="string">'Plato'</span>, <span class="string">'Aristotle'</span>]</span><br><span class="line">names.sort(key=<span class="keyword">lambda</span> x: len(x))</span><br><span class="line">print(names)</span><br></pre></td></tr></table></figure>
+
+<p>다른 언어레서라면 후크를 추상 클래스로 정의할 것이라고 예상할 수있다. 하지만 파이썬의 후크 중 상당수는 인수와 반환 값을 잘 정의해놓은 단순히 상태가 없는 함수다. 함수는 클래스보다 설명하기 쉽고 정의하기도 간단해서 후크로 쓰기에 이상적이다. 함수가 후크로 동작하는 이유는 파이썬이 일급 함수(firse-class function)을 갖췄기 때문이다. 다시 말해, 언어에서 함수와 메서드를 다른 값처럼 전달하고 참조할 수 있기 때문이다.</p>
+<p>예를 들어 defaultdict 클래스의 동작을 사용자화한다고 해보자(B46참조)</p>
+<p>이 자료 구조는 찾을 수 없는 키에 접근할 때마다 호출될 함수를 받는다. defaultdict에 넘길 함수는 딕셔너리에서 찾을 수 없는 키에 대응할 기본값을 반환해야 한다. 다음은 키를 찾을 수 없을 때마다 로그를 남기고 기본값으로 0을 반환하는 후크를 정의한 코드다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log_missing</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'Key added'</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>초깃값을 담은 딕셔너리와 원하는 증가 값 리스트로 log_missing 함수를 두번(각각 ‘red’와 ‘orange’일때)실행하여 로그를 출력하게 해보자</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">current = &#123;<span class="string">'green'</span>: <span class="number">12</span>, <span class="string">'blue'</span>: <span class="number">3</span>&#125;</span><br><span class="line">increments = [</span><br><span class="line">    (<span class="string">'red'</span>, <span class="number">5</span>),</span><br><span class="line">    (<span class="string">'blue'</span>, <span class="number">17</span>),</span><br><span class="line">    (<span class="string">'orange'</span>, <span class="number">9</span>),</span><br><span class="line">]</span><br><span class="line">result = defaultdict(log_missing, current)</span><br><span class="line">print(<span class="string">'Before:'</span>, dict(result))</span><br><span class="line"><span class="keyword">for</span> key, amount <span class="keyword">in</span> increments:</span><br><span class="line">    result[key] += amount</span><br><span class="line">print(<span class="string">'After: '</span>, dict(result))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">Before: &#123;<span class="string">'green'</span>: <span class="number">12</span>, <span class="string">'blue'</span>: <span class="number">3</span>&#125;</span><br><span class="line">Key added</span><br><span class="line">Key added</span><br><span class="line">After:  &#123;<span class="string">'green'</span>: <span class="number">12</span>, <span class="string">'blue'</span>: <span class="number">20</span>, <span class="string">'red'</span>: <span class="number">5</span>, <span class="string">'orange'</span>: <span class="number">9</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>log_missing같은 함수를 넘기면 결정 동작과 부작용을 분리하므로 API를 쉽게 구축하고 테스트할 수 있다.</p>
+<p>예를 들어 기본값 후크를 defaultdict에 넘겨서 찾을 수 없는 키의 총 개수를 센다고 해보자. 이렇게 만드는 한 가지 방법은 상태 보존 클로저(B15)를 사용하는 것이다. 다음은 상태 보존 클러저를 기본값 후크로 사용하는 헬퍼 함수다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">increment_with_report</span><span class="params">(current, increments)</span>:</span></span><br><span class="line">    added_count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">missing</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">nonlocal</span> added_count  <span class="comment"># 상태 보존 클로저</span></span><br><span class="line">        added_count += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    result = defaultdict(missing, current)</span><br><span class="line">    <span class="keyword">for</span> key, amount <span class="keyword">in</span> increments:</span><br><span class="line">        result[key] += amount</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result, added_count</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>nonlocal + 변수 를 설정하면 지금 함수 밖에서 정의된 변수를 변경할수있다.(현재 위치에서 가장 가까운 지역변수불러옴)</p>
+</blockquote>
+<p>(작성중)</p>
 <p>(작성중)</p>
 
     </article>
@@ -617,7 +637,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#클래스와-상속"><span class="toc-number">1.</span> <span class="toc-text">클래스와 상속</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#딕셔너리와-튜플보다는-헬퍼-클래스로-관리하자-B22"><span class="toc-number">1.1.</span> <span class="toc-text">딕셔너리와 튜플보다는 헬퍼 클래스로 관리하자 (B22)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#클래스-리팩토링"><span class="toc-number">1.1.1.</span> <span class="toc-text">클래스 리팩토링</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#정리"><span class="toc-number">1.1.2.</span> <span class="toc-text">정리</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#클래스와-상속"><span class="toc-number">1.</span> <span class="toc-text">클래스와 상속</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#딕셔너리와-튜플보다는-헬퍼-클래스로-관리하자-B22"><span class="toc-number">1.1.</span> <span class="toc-text">딕셔너리와 튜플보다는 헬퍼 클래스로 관리하자 (B22)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#클래스-리팩토링"><span class="toc-number">1.1.1.</span> <span class="toc-text">클래스 리팩토링</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#정리"><span class="toc-number">1.1.2.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#인터페이스가-간단하면-클래스-대신-함수를-받자-B23"><span class="toc-number">1.2.</span> <span class="toc-text">인터페이스가 간단하면 클래스 대신 함수를 받자 (B23)</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -630,6 +650,8 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
     
     
     
@@ -1540,21 +1562,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
         <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
-    
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
-    
-        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
-    
-        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
-    
-        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
         <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
     
@@ -1562,9 +1578,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
         <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
     
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
@@ -1582,21 +1604,21 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
-        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
-    
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
-    
-        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
-    
         <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
@@ -1637,13 +1659,13 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
-        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
     
-        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
-    
         <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
     
@@ -1651,19 +1673,19 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
-        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
-    
-        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
-    
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
-        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
-        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
         <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
