@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>datamining · lostcatbox</title>
+    <title>회귀선형모형 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">datamining</a>
+                <a href="#" class="post-name">회귀선형모형</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            datamining
+            회귀선형모형
             <!-- 404 -->
             
         </h1>
@@ -264,9 +264,17 @@ height:50vh;
             <div class="post-intros">
                 <!-- 文章页标签  -->
                 
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Univ">Univ</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Dataminging">Dataminging</a>
+    
+</div>
+                
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">31</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.1k</span>Reading time: <span class="post-count reading-time">7 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -395,12 +403,50 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdvrv47qvyj30vi0rijwl.jpg" alt="스크린샷 2020-04-16 오후 7.11.41"></p>
+        <h1 id="선형-회귀-분석"><a href="#선형-회귀-분석" class="headerlink" title="선형 회귀 분석?"></a>선형 회귀 분석?</h1><h2 id="기본-통계학적-개념"><a href="#기본-통계학적-개념" class="headerlink" title="기본 통계학적 개념"></a>기본 통계학적 개념</h2><p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gdvrv47qvyj30vi0rijwl.jpg" alt="스크린샷 2020-04-16 오후 7.11.41"></p>
 <ol>
 <li>평균(mean, average): 주어진 수의 합을 측정개수로 나눈 값으로, 대표값 중 하나이다</li>
 <li>분산(Variance): 편차의 제 곱의 평균값으로, 변량들이 퍼져있는 정도를 의미한다.</li>
 <li>표준편차(standard deviation): 분산의 양의 제곱근으로, 분산보다 많이 쓰인다.</li>
 </ol>
+<h2 id="더미변수"><a href="#더미변수" class="headerlink" title="더미변수"></a>더미변수</h2><ul>
+<li><p><strong>0 또는 1만으로 표현되는 값!</strong></p>
+</li>
+<li><p>카테고리 값을 그냥 정수로 쓰면 회귀 분석 모형은 이 값을 크기를 가진 숫자로 인식하므로 더미변수의 형태로 변환 필요</p>
+<p>예를 들면 1<del>12 월이 있는데 이것을 spring,summer,fall,winder로 0 or 1을 가진 변수로 바꿔주던가 아니면 mon1</del>mon12로 0 or 1을 가진 변수를 바꿔줘야만한다.</p>
+</li>
+</ul>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geasxe5si7j310r0gidhv.jpg" alt="CE8D740B-FCB7-461D-AADA-F031E370DF8D_1_105_c"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1geasxh635pj30yx0hdwgu.jpg" alt="D4805572-E335-4F4F-8A9E-86DEA5742A6F_1_105_c"></p>
+<h1 id="선형-회귀-분석-해보기"><a href="#선형-회귀-분석-해보기" class="headerlink" title="선형 회귀 분석 해보기"></a>선형 회귀 분석 해보기</h1><h2 id="데이터를-파일-또는-웹에서-가져오기"><a href="#데이터를-파일-또는-웹에서-가져오기" class="headerlink" title="데이터를 파일 또는 웹에서 가져오기"></a>데이터를 파일 또는 웹에서 가져오기</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rd&lt;-read.csv(“/User/”, header=<span class="literal">T</span>) <span class="comment">#파일 (csv 형태): </span></span><br><span class="line">rd &lt;- read.table(<span class="string">"http://사이트주소"</span>, header = <span class="literal">T</span>, stringsAsFactors = <span class="literal">FALSE</span>) <span class="comment">#웹 (txt 형태), stringsAsFactors는 데이터안에 문자열로되어있는것을 범주형factors로 인식해버림을 방지</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="산점도를-통한-두-변수간-관계-확인-관계성-유효한지-눈치보기"><a href="#산점도를-통한-두-변수간-관계-확인-관계성-유효한지-눈치보기" class="headerlink" title="산점도를 통한 두 변수간 관계 확인(관계성 유효한지 눈치보기)"></a>산점도를 통한 두 변수간 관계 확인(관계성 유효한지 눈치보기)</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plot(x=a, y=b, xlim=c(<span class="number">0</span>,<span class="number">10</span>), ylim=c(<span class="number">0</span>,<span class="number">10</span>), main=“points“) <span class="comment">#xlim, ylim은 값범위를 나타냄</span></span><br><span class="line">par(mfrom=c(<span class="number">2</span>,<span class="number">1</span>));plat(x1,y);plot(x2,y) <span class="comment">#;는 다른선언문이라고 표현</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="필요한-변수-생성-및-모으기-질적변수-gt-gt-양적변수처럼-만드는-더미변수"><a href="#필요한-변수-생성-및-모으기-질적변수-gt-gt-양적변수처럼-만드는-더미변수" class="headerlink" title="필요한 변수 생성 및 모으기(질적변수&gt;&gt;양적변수처럼 만드는 더미변수)"></a>필요한 변수 생성 및 모으기(질적변수&gt;&gt;양적변수처럼 만드는 더미변수)</h2><h3 id="일괄적-더미변수-생성"><a href="#일괄적-더미변수-생성" class="headerlink" title="일괄적 더미변수 생성"></a>일괄적 더미변수 생성</h3><p>마지막에는 cbind로 dummy데이터 합쳐놔야함</p>
+<p>A변수는 다 썻으면 없애기</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">drd &lt;- data.frame(fac=factor(rd$A));<span class="comment">#rd$A변수를 범주형 변수로 바꾼다음, 데이터프레임으로 저장후,  </span></span><br><span class="line">dummy &lt;- model.matrix(~fac-<span class="number">1</span>, drd) <span class="comment">#~fac을 더미변수로 변형됨,  -1은모든 0으로 되있는변수는 생성하지않고</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="조건별-더미변수-생성"><a href="#조건별-더미변수-생성" class="headerlink" title="조건별 더미변수 생성"></a>조건별 더미변수 생성</h3><p>특정조건에 해당하면 1, 아니면 0</p>
+<p>A변수는 끝났으면 삭제, 아래는 기존 데이터에 추가되므로 cbind필요없다</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">newdata &lt;- transform(rd, dum1 = ifelse(A &gt;= <span class="number">1</span> &amp; A &lt; <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>), dum2 = ifelse(A &gt;= <span class="number">3</span> &amp; Month &lt;<span class="number">4</span>, <span class="number">1</span>, <span class="number">0</span>)) <span class="comment">#더미변수 생성</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="회귀분석-돌리기"><a href="#회귀분석-돌리기" class="headerlink" title="회귀분석 돌리기"></a>회귀분석 돌리기</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">reg &lt;- lm(y ~ x1+x2, data=rd)</span><br><span class="line"><span class="comment"># reg &lt;- lm(y ~ ., data=rd) ; summary(reg) #이것도 사용가능, 하지만 .을 사용하므로 A변수를 제거하고, 여분의 변수들 역시 제거 완료된 데이터여야함</span></span><br><span class="line">reg1&lt;-step(reg, trace=<span class="literal">F</span>) <span class="comment">#유효한 변수들만 걸러내기 step활용</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="등분산성-정규성-독립성-체크하기"><a href="#등분산성-정규성-독립성-체크하기" class="headerlink" title="등분산성, 정규성, 독립성 체크하기"></a>등분산성, 정규성, 독립성 체크하기</h2><h3 id="잔차의-등분산성-–-잔차와-독립변수의-산점도"><a href="#잔차의-등분산성-–-잔차와-독립변수의-산점도" class="headerlink" title="잔차의 등분산성 – 잔차와 독립변수의 산점도"></a>잔차의 등분산성 – 잔차와 독립변수의 산점도</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plot(newdata$A, residuals(reg1), xlab=<span class="string">"residuals"</span>, ylab=<span class="string">"이름 넣기"</span>) <span class="comment">#residuals는 잔차가져오는 함수</span></span><br><span class="line">abline(h=<span class="number">0</span>, col=<span class="string">"red"</span>, lty=<span class="number">2</span>) <span class="comment">#선 긋기</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="잔차의-정규성-–-잔차의-정규확률그림-normal-Q-Q-plot"><a href="#잔차의-정규성-–-잔차의-정규확률그림-normal-Q-Q-plot" class="headerlink" title="잔차의 정규성 – 잔차의 정규확률그림(normal Q-Q plot)"></a>잔차의 정규성 – 잔차의 정규확률그림(normal Q-Q plot)</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">qqnorm(residuals(reg1), main=<span class="string">"그래프이름"</span>)</span><br><span class="line">qqline(residuals(reg1), lty=<span class="number">2</span>, col=<span class="string">"red"</span>)</span><br><span class="line"><span class="comment">#qqnorm의심될때, 잔차분석 – Shapiro-Wilk의 정규성 검정 (귀무가설: 정규분포에서 추출된 표본이다.)</span></span><br><span class="line">shapiro.test(residuals(reg1))</span><br></pre></td></tr></table></figure>
+
+<h3 id="독립변수들-간의-독립성-–-분산확대인자"><a href="#독립변수들-간의-독립성-–-분산확대인자" class="headerlink" title="독립변수들 간의 독립성 – 분산확대인자"></a>독립변수들 간의 독립성 – 분산확대인자</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vif(reg1)   <span class="comment">#vif의 10이하면 독립성이 성립!</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="최종모형-선택-amp-작성"><a href="#최종모형-선택-amp-작성" class="headerlink" title="최종모형 선택 &amp; 작성"></a>최종모형 선택 &amp; 작성</h2><h3 id="최종모형의-타당성-검증-R-2-Adj-R-2-확인"><a href="#최종모형의-타당성-검증-R-2-Adj-R-2-확인" class="headerlink" title="최종모형의 타당성 검증 R^2, Adj.R^2 확인"></a>최종모형의 타당성 검증 R^2, Adj.R^2 확인</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#회귀식 y_hat= beta0+beta1*x1+..........+beta(p+1)*d(p+1) +... #d는 더미변수들</span></span><br><span class="line"><span class="comment">#R2 &amp; Adjusted R2</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 분산분석표 – SSE, SSR, MSE, MSR 등을 확인할 수 있음</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="실습해보기"><a href="#실습해보기" class="headerlink" title="실습해보기"></a>실습해보기</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line">install.packages(<span class="string">"car"</span>)</span><br><span class="line"><span class="keyword">library</span>(car)</span><br><span class="line"></span><br><span class="line">rd &lt;- read.csv(<span class="string">"/Users/lostcatbox/uinv_lecture/data_mining/Lec6_dummy.csv"</span>, header=<span class="literal">T</span>)</span><br><span class="line">str(rd)</span><br><span class="line"><span class="comment">#month변수는 우리가 볼때는 범주형 변수지만 R에서는 일단 연속형으로보고있다</span></span><br><span class="line"><span class="comment">#즉, 더미 변수로 변환해줘야함</span></span><br><span class="line">drd &lt;- data.frame(mon=factor(rd$Month)) <span class="comment">#일단 범주형인식후  mon변수로 가져옴</span></span><br><span class="line">str(drd)</span><br><span class="line">dummy_month &lt;- model.matrix(~mon-<span class="number">1</span>,drd) <span class="comment">#더미를 생성함, mon변수에서 -1를 한이유는 0으로만 이루어진 interupt을 없애고 출력하겠음. 0만 나오는건 출력안함</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#아래는 봄여름가을겨울 계절 변수 만들기</span></span><br><span class="line">season &lt;- transform(rd, spring = ifelse(Month&gt;=<span class="number">3</span>&amp;Month&lt;<span class="number">6</span>,<span class="number">1</span>,<span class="number">0</span>), summer = ifelse(Month&gt;=<span class="number">6</span>&amp;Month&lt;<span class="number">9</span>,<span class="number">1</span>,<span class="number">0</span>), </span><br><span class="line">                    fall = ifelse(Month&gt;=<span class="number">9</span>&amp;Month&lt;<span class="number">12</span>,<span class="number">1</span>,<span class="number">0</span>), winter=ifelse(Month==<span class="number">12</span>|Month&lt;=<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>)) <span class="comment">#일단 계절에 해당하는 변수 4개 생성</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#1 dummy 없이 회귀분석 돌려보기</span></span><br><span class="line">par(mfrow=c(<span class="number">2</span>,<span class="number">2</span>))</span><br><span class="line">plot(x=rd$temp,y=rd$beer)</span><br><span class="line">plot(x=rd$pay,y=rd$beer)</span><br><span class="line">plot(x=rd$unemp,y=rd$beer)</span><br><span class="line">plot(x=rd$index,y=rd$beer)</span><br><span class="line"></span><br><span class="line"><span class="comment">#더미없는것으로</span></span><br><span class="line">reg_nodummy &lt;- lm(beer~temp+pay+unemp+index, data=rd)</span><br><span class="line"></span><br><span class="line"><span class="comment">#스텝function을 이용해서 관련없는 변수들 제거</span></span><br><span class="line">reg_nodummy1 &lt;-  step(reg_nodummy, trace=<span class="literal">F</span>)</span><br><span class="line">summary(reg_nodummy1)</span><br><span class="line"><span class="comment">#결과에서 index변수가 빠진것을 볼수있다., 이 회기모형에서 예측력이 도움이 되지 않음으로 판단됨</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#beer_hat = 14.139 +0.137*temp + 1.249*pay -0.615*unemp</span></span><br><span class="line"><span class="comment">#                    (p&gt;0.001)      (p=0.039)   (p&lt;0.001) #모두 유의미하게 y에 영향줌</span></span><br><span class="line"><span class="comment">#R^2 = 0.692</span></span><br><span class="line"><span class="comment">#Adj. R^2 = 0.671 다중회기에서 꼭!!적기 #x변수들이 y변수들이 설명하는데 67%정도 설명가능함</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#다음 잔차의 등분산성, 정규성, 독립성 봐야함</span></span><br><span class="line"><span class="comment">#잔차의 등분산성(x변수각각 잔차와 비교함)</span></span><br><span class="line"><span class="comment">#다들 퍼져있고 갈수록 증가 감소안보임</span></span><br><span class="line">par(mfrow=c(<span class="number">3</span>,<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">plot(rd$temp, residuals(reg_nodummy1))</span><br><span class="line">abline(h=<span class="number">0</span>,col=<span class="string">'red'</span>,lty=<span class="number">2</span>)</span><br><span class="line">plot(rd$pay, residuals(reg_nodummy1))</span><br><span class="line">abline(h=<span class="number">0</span>,col=<span class="string">'red'</span>,lty=<span class="number">2</span>)</span><br><span class="line">plot(rd$unemp, residuals(reg_nodummy1))</span><br><span class="line">abline(h=<span class="number">0</span>,col=<span class="string">'red'</span>,lty=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#잔차의 정규성</span></span><br><span class="line"></span><br><span class="line">par(mfrow=c(<span class="number">2</span>,<span class="number">1</span>))</span><br><span class="line">qqnorm(residuals(reg_nodummy1))</span><br><span class="line">qqline(residuals(reg_nodummy1), col=<span class="string">"red"</span>, lty=<span class="number">2</span>)<span class="comment">#기준선</span></span><br><span class="line"><span class="comment">#끝쪽이 기준선에서 벋어나는것을 보임</span></span><br><span class="line">shapiro.test(residuals(reg_nodummy1))</span><br><span class="line"><span class="comment">#w=.976, p=0.420 #잔차가 정규성을 뜰라면 기무가설이 증명되어야 좋은거임0.05에비해 엄청큼, 정규성 성립</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># x변수들간의 독립성</span></span><br><span class="line"><span class="comment">#다중공선성이란, x변수(입력변수)들간에 상관관계가 존재해버리는것 (데이터 분석시 부정적인 영향을 미치는 현상, 분산이 엄청 커져버림, 회기계수를 믿을수없게됨)</span></span><br><span class="line">vif(reg_nodummy1) <span class="comment">#최종 회기모형넣어줘야함</span></span><br><span class="line">vif(reg_nodummy1) &gt;<span class="number">10</span> <span class="comment">#True, False값만 보기</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#2 mon dummy 추가하여 회귀분석 돌리기.</span></span><br><span class="line"><span class="comment">#산점도 그려서 보는것은 생략</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#기존에 있던 rd에 month변수와 값들 추가하기</span></span><br><span class="line"><span class="comment">#cbind는 행을 기준으로 두 데이터를 합치는 함수(두 데이터의 열의 개수가 동일해야함)</span></span><br><span class="line"><span class="comment">#rbind는 열을 기준으로 두 데이터를 합치는 함수(두 데이터의 행의 개수가 동일해야함))</span></span><br><span class="line">rd_month &lt;- cbind(rd, dummy_month)</span><br><span class="line"><span class="comment">#더미변수는 범주의 갯수 -1 해야되므로 12달중에 1달 뺴야함.</span></span><br><span class="line"><span class="comment">#우리는 mon1을 빼겠음 + month는 이미 더미변수로 만들었기때문에 뺴도됨.</span></span><br><span class="line"><span class="comment">#첫번째 방법</span></span><br><span class="line">rd_month1 &lt;-rd_month[,c(-<span class="number">1</span>, -<span class="number">7</span>)] <span class="comment">#행은 다 가져오고 1열, 7열 제외한 모든 열 가져옴</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#두번째 방법(함수이용)</span></span><br><span class="line">rd_month2 &lt;- subset(rd_month,select = c(-Month,-mon1))  <span class="comment">#subset은 부분집합 이라는 뜻</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#따라서 데이터 프레임 만들었음 &gt;회귀분석 돌리기</span></span><br><span class="line"></span><br><span class="line">reg_month &lt;- lm(beer~., data=rd_month1)<span class="comment">#상관없는 인자빼서 ~.으로 가능(종속변수선택, 나머지 독립변수) #기준이 1월임&gt;&gt;beta_0가 1월</span></span><br><span class="line">reg_month1 &lt;- step(reg_month,trace=<span class="literal">F</span>)</span><br><span class="line">summary(reg_month1)</span><br><span class="line"></span><br><span class="line"><span class="comment">#beer_hat = 18.356 + 0.120temp - 0.881unemp - 1.580mon4 -1.165mon10 - 2.274mon11</span></span><br><span class="line"><span class="comment">#                    (p&lt;0.001)    (p&lt;0.001)    (p=0.027)   (p=0.10142)  (p=0.003) #mon10은 R^2값을 설명하느데는 도움됨</span></span><br><span class="line"><span class="comment">#R^2 = 0.753</span></span><br><span class="line"><span class="comment"># Adj. R^2 = 0.7235 </span></span><br><span class="line"><span class="comment">#해석은 4, 11이 판매량 감소고 다른 달은 판매량이 동일함. 10월도 판매량 동일, 11월달이 가장적다. </span></span><br><span class="line"><span class="comment">#72.4%정도 모든 x들이 종속변수를 설명함.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#잔차의 등분산성(유효한 연속형 변수에만 하면됨)</span></span><br><span class="line">par(mflow=c(<span class="number">2</span>,<span class="number">1</span>))</span><br><span class="line">plot(rd_month1$temp, residuals(reg_month1))</span><br><span class="line">abline(h=<span class="number">0</span>, col=<span class="string">"red"</span>, lty=<span class="number">2</span>)</span><br><span class="line">plot(rd_month1$unemp, residuals(reg_month1))</span><br><span class="line">abline(h=<span class="number">0</span>, col=<span class="string">"red"</span>, lty=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#잔차의 정규성</span></span><br><span class="line">par(mflow=c(<span class="number">1</span>,<span class="number">1</span>))</span><br><span class="line">qqnorm(residuals(reg_month1))</span><br><span class="line">qqline(residuals(reg_month1), col=<span class="string">"red"</span>, lty=<span class="number">2</span>)</span><br><span class="line"><span class="comment"># 벗어난것 보이므로 shapiro</span></span><br><span class="line">shapiro.test(residuals(reg_month1))</span><br><span class="line"><span class="comment"># W = 0.95681, p-value = 0.07503 5%유의수준에서는 귀무가설이 기각되지 못하므로 정규성이 성립하지만</span></span><br><span class="line"><span class="comment">#10%유의수준에서는 귀무가설이 기각된다, 정규성이 성립하지 못한다.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#독립변수들 간의 독립성</span></span><br><span class="line">vif(reg_month1)</span><br><span class="line"><span class="comment">#모든 변수가 10 미만이므로 독립적임</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#따라서 3가지 성질이 모두 확립되므로 회귀모형이 유효함</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># season 데이터를 사용하여 회기분석하기 #month 변수 제거후 사용해야함</span></span><br></pre></td></tr></table></figure>
+
+
+
 
     </article>
     <!-- license  -->
@@ -538,7 +584,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#선형-회귀-분석"><span class="toc-number">1.</span> <span class="toc-text">선형 회귀 분석?</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#기본-통계학적-개념"><span class="toc-number">1.1.</span> <span class="toc-text">기본 통계학적 개념</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#더미변수"><span class="toc-number">1.2.</span> <span class="toc-text">더미변수</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#선형-회귀-분석-해보기"><span class="toc-number">2.</span> <span class="toc-text">선형 회귀 분석 해보기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#데이터를-파일-또는-웹에서-가져오기"><span class="toc-number">2.1.</span> <span class="toc-text">데이터를 파일 또는 웹에서 가져오기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#산점도를-통한-두-변수간-관계-확인-관계성-유효한지-눈치보기"><span class="toc-number">2.2.</span> <span class="toc-text">산점도를 통한 두 변수간 관계 확인(관계성 유효한지 눈치보기)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#필요한-변수-생성-및-모으기-질적변수-gt-gt-양적변수처럼-만드는-더미변수"><span class="toc-number">2.3.</span> <span class="toc-text">필요한 변수 생성 및 모으기(질적변수&gt;&gt;양적변수처럼 만드는 더미변수)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#일괄적-더미변수-생성"><span class="toc-number">2.3.1.</span> <span class="toc-text">일괄적 더미변수 생성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#조건별-더미변수-생성"><span class="toc-number">2.3.2.</span> <span class="toc-text">조건별 더미변수 생성</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#회귀분석-돌리기"><span class="toc-number">2.4.</span> <span class="toc-text">회귀분석 돌리기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#등분산성-정규성-독립성-체크하기"><span class="toc-number">2.5.</span> <span class="toc-text">등분산성, 정규성, 독립성 체크하기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#잔차의-등분산성-–-잔차와-독립변수의-산점도"><span class="toc-number">2.5.1.</span> <span class="toc-text">잔차의 등분산성 – 잔차와 독립변수의 산점도</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#잔차의-정규성-–-잔차의-정규확률그림-normal-Q-Q-plot"><span class="toc-number">2.5.2.</span> <span class="toc-text">잔차의 정규성 – 잔차의 정규확률그림(normal Q-Q plot)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#독립변수들-간의-독립성-–-분산확대인자"><span class="toc-number">2.5.3.</span> <span class="toc-text">독립변수들 간의 독립성 – 분산확대인자</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#최종모형-선택-amp-작성"><span class="toc-number">2.6.</span> <span class="toc-text">최종모형 선택 &amp; 작성</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#최종모형의-타당성-검증-R-2-Adj-R-2-확인"><span class="toc-number">2.6.1.</span> <span class="toc-text">최종모형의 타당성 검증 R^2, Adj.R^2 확인</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#실습해보기"><span class="toc-number">2.7.</span> <span class="toc-text">실습해보기</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -551,6 +597,10 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
     
     
     
@@ -1217,7 +1267,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >datamining</a>
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >회귀선형모형</a>
         </li>
     
     
@@ -1441,12 +1491,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
         </li>
     
     
@@ -1459,15 +1509,13 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
         <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
-    
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
-    
-        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
@@ -1475,23 +1523,29 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
-        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
         <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
     
-        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
-    
-        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
     
         <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
         <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
     
         <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
     
@@ -1505,9 +1559,9 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
-        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
-    
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
@@ -1558,11 +1612,11 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
-        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
-    
         <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
     
         <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
     
@@ -1572,13 +1626,15 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
     
+        <span class="sidebar-category-name" data-categories="Dataminging"><span class="iconfont-archer">&#xe60a;</span>Dataminging</span>
+    
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
-        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
-        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
         <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
