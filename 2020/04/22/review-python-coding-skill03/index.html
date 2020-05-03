@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">4.1k</span>Reading time: <span class="post-count reading-time">25 min</span></span>
+                        <span>Word count: <span class="post-count word-count">4.4k</span>Reading time: <span class="post-count reading-time">27 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -644,7 +644,27 @@ height:50vh;
 <li>파이썬의 표준 메서드 해석 순서(MRO)는 슈퍼클래스의 초기화 순서와 다이아몬드 상속 문제를 해결한다.</li>
 <li>항상 내장 함수 super로 부모 클래스를 초기화하자.</li>
 </ul>
-<h2 id="믹스인-유틸리티-클래스에만-다중-상속을-사용하자-B26"><a href="#믹스인-유틸리티-클래스에만-다중-상속을-사용하자-B26" class="headerlink" title="믹스인 유틸리티 클래스에만 다중 상속을 사용하자 (B26)"></a>믹스인 유틸리티 클래스에만 다중 상속을 사용하자 (B26)</h2><p>(작성중)</p>
+<h2 id="믹스인-유틸리티-클래스에만-다중-상속을-사용하자-B26"><a href="#믹스인-유틸리티-클래스에만-다중-상속을-사용하자-B26" class="headerlink" title="믹스인 유틸리티 클래스에만 다중 상속을 사용하자 (B26)"></a>믹스인 유틸리티 클래스에만 다중 상속을 사용하자 (B26)</h2><p>파이썬은 다중 상속을 다루기 쉽게 하는 기능을 내장한 객체 지향 언어다(B25). 하지만 다중 상속은 아예 안 하는  게 좋다.</p>
+<p>다중 상속으로 얻는 편리함과 캡슐화가 필요하다면 대신 믹스인(mix-in)을 작성하는 방안을 고려하자. 믹스인이란 클래스에서 제공해야 하는 추가적인 메서드만 정의하는 작은 클래스를 말한다. 믹스인 클래스는 자체의 인스턴스 속성(attribute)을 정의하지 않으며  __init__ 생성자를 호출하도록 요구하지도 않는다.</p>
+<p>파이썬에서는 타입과 상관없이 객체의 현재 상태를 간단하게 조사할 수 있어서 믹스인을 쉽게 작성할 수있다. 동적 조사(dynamic inspection)를 이용하면 많은 클래스에 적용할 수 있는 범용 기능을 믹스인에 한 번만 작성하면 된다. 믹스인들을 조합하고 계층으로 구성하면 반복 코드를 최소화하고 재사용성을 극대화할 수 있다.</p>
+<p>예를 들어 파이썬 객체를 메모리 내부 표현에서 직렬화(serialization)용 딕셔너리로 변환하는 기능이 필요하다고 해보자. 이 기능을 모든 클래스에서 사용할 수 있게 범용으로 작성하는 건 어떨까?</p>
+<p>다음은 상속받는 모든 클래스에 추가될 새 공개 메서드로 이 기능을 구현하는 믹스인이다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ToDictMixin</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">to_dict</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._traverse_dict(self.__dict__)</span><br></pre></td></tr></table></figure>
+
+<p>세부 구현은 직관적이며 hasattr을 사용한 동적 속성 접근, isinstance를 사용한 동적 타입 검사, 인스턴스 딕셔너리 __dict__를 이용한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#위에 클래스 안에 이어서   </span></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">_traverse_dict</span><span class="params">(self, instance_dict)</span>:</span></span><br><span class="line">        output = &#123;&#125;</span><br><span class="line">        <span class="keyword">for</span> key, value <span class="keyword">in</span> instance_dict.items():</span><br><span class="line">            output[key] = self._traverse(key, value)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_traverse</span><span class="params">(self, key, value)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> isinstance(value, ToDictMixin):</span><br><span class="line">            <span class="keyword">return</span> value.to_dict()</span><br><span class="line">        <span class="keyword">elif</span> isinstance(value, dict):</span><br><span class="line">            <span class="keyword">return</span> self._traverse_dict(value)</span><br><span class="line">        <span class="keyword">elif</span> isinstance(value, list):</span><br><span class="line">            <span class="keyword">return</span> [self._traverse(key, i) <span class="keyword">for</span> i <span class="keyword">in</span> value]</span><br><span class="line">        <span class="keyword">elif</span> hasattr(value, <span class="string">'__dict__'</span>):</span><br><span class="line">            <span class="keyword">return</span> self._traverse_dict(value.__dict__)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> value</span><br></pre></td></tr></table></figure>
+
+<p>다음은 바이너리 트리(binary tree)를 딕셔너리로 표현하려고 믹스인을 사용하는 예제 클래스다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BinaryTree</span><span class="params">(ToDictMixin)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, value, left=None, right=None)</span>:</span></span><br><span class="line">        self.value = value</span><br><span class="line">        self.left = left</span><br><span class="line">        self.right = right</span><br></pre></td></tr></table></figure>
+
+<p>이제 수많은 관련 파이썬 객체를 딕셔너리로 손쉽게 변환할 수 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tree = BinaryTree(<span class="number">10</span>,</span><br><span class="line">    left=BinaryTree(<span class="number">7</span>, right=BinaryTree(<span class="number">9</span>)),</span><br><span class="line">    right=BinaryTree(<span class="number">13</span>, left=BinaryTree(<span class="number">11</span>)))</span><br><span class="line">orig_print = <span class="keyword">print</span></span><br><span class="line"><span class="keyword">print</span> = pprint</span><br><span class="line">print(tree.to_dict())</span><br><span class="line"><span class="keyword">print</span> = orig_print</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>(작성중)</p>
 
     </article>
     <!-- license  -->
