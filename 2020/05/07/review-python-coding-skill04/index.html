@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">457</span>Reading time: <span class="post-count reading-time">2 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.3k</span>Reading time: <span class="post-count reading-time">8 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -424,12 +424,63 @@ height:50vh;
 <p>이렇게 하면 즉성에서 증가시키는 연산은 자연스럽고 명확해지는 것이다.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r1.ohms += <span class="number">5e3</span></span><br></pre></td></tr></table></figure>
 
-<p>나중에 속성을 설정할 때 특별한 동작이 일어나야 하면 @property 데코레이터(decorator)와 이에 대응하는 setter 속성을 사용하는 방법으로 바꿀 수 있다. 여기서는 Resistor의 새 서브클래스를 정의하여 voltage 프로퍼티(property)를 할당하면 current 값이 바뀌게 해본다. 제대로 동작하려면 세터와 게터 메서드의 이름이 의도한 프로퍼티 이름과 일치해야 한다.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VoltageResistance</span><span class="params">(Resistor)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, ohms)</span>:</span></span><br><span class="line">        super().__init__(ohms)</span><br><span class="line">        self._voltage = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property    #getter 역할 (세터와 게터 메서드의 이름이 의도한 프로퍼티 이름과 일치해야 한다.)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">voltage</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._voltage</span><br><span class="line"></span><br><span class="line"><span class="meta">    @voltage.setter  #setter 역할(세터와 게터 메서드의 이름이 의도한 프로퍼티 이름과 일치해야 한다.)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">voltage</span><span class="params">(self, voltage)</span>:</span></span><br><span class="line">        self._voltage = voltage</span><br><span class="line">        self.current = self._voltage / self.ohms</span><br></pre></td></tr></table></figure>
+<p><strong>나중에 속성을 설정할 때 특별한 동작이 일어나야 하면 @property 데코레이터(decorator)와 이에 대응하는 setter 속성을 사용하는 방법으로 바꿀 수 있다.</strong> 여기서는 Resistor의 새 서브클래스를 정의하여 voltage 프로퍼티(property)를 할당하면 current 값이 바뀌게 해본다. 제대로 동작하려면 세터와 게터 메서드의 이름이 의도한 프로퍼티 이름과 일치해야 한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VoltageResistance</span><span class="params">(Resistor)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, ohms)</span>:</span></span><br><span class="line">        super().__init__(ohms)</span><br><span class="line">        self._voltage = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property    #getter 역할 (세터와 게터 메서드의 이름이 의도한 프로퍼티 이름과 일치해야 한다.)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">voltage</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._voltage</span><br><span class="line"></span><br><span class="line"><span class="meta">    @voltage.setter  #메서드이름.setter 역할(게터 메서드와 세터 메서드의 이름이 지금 의도한 프로퍼티 이름과 일치해야한다.)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">voltage</span><span class="params">(self, voltage)</span>:</span></span><br><span class="line">        self._voltage = voltage</span><br><span class="line">        self.current = self._voltage / self.ohms</span><br></pre></td></tr></table></figure>
 
 <p>이제 voltage 프로퍼티에 할당하면 voltage 세터 메서드가 실행되어 voltage에 맞게 객체의 current 프로퍼티를 업데이트할 것이다.(아래는 입력해서 self._voltage가 바뀌고 /self.ohms로 나눴으므로 self.current값 바로 바뀜)</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">r2 = VoltageResistance(<span class="number">1e3</span>)</span><br><span class="line">print(<span class="string">'Before: %5r amps'</span> % r2.current)</span><br><span class="line">r2.voltage = <span class="number">10</span></span><br><span class="line">print(<span class="string">'After:  %5r amps'</span> % r2.current)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">r2 = VoltageResistance(<span class="number">1e3</span>)</span><br><span class="line">print(<span class="string">'Before: %5r amps'</span> % r2.current)</span><br><span class="line">r2.voltage = <span class="number">10</span>  <span class="comment">#값을 줘서 객체 값 변환하는법 확인</span></span><br><span class="line">print(<span class="string">'After:  %5r amps'</span> % r2.current)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">Before:     <span class="number">0</span> amps</span><br><span class="line">After:   <span class="number">0.01</span> amps</span><br></pre></td></tr></table></figure>
 
+<p>프로퍼티에 setter를 설정하면 클래스에 전달된 값들의 타입을 체크하고 값을 검증할 수도 있다. 다음은 모든 저항값이 0옴보다 큼을 보장하는 클래스를 정의한 것이다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BoundedResistance</span><span class="params">(Resistor)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, ohms)</span>:</span></span><br><span class="line">        super().__init__(ohms)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @property </span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ohms</span><span class="params">(self)</span>:</span>    <span class="comment">#property를 쓰면 self._ohms = ohms가 생성됨 (???), 이건 ohms가 생성되는 이유는 아마, ohms.setter가있기때문.</span></span><br><span class="line">        <span class="keyword">return</span> self._ohms</span><br><span class="line"></span><br><span class="line"><span class="meta">    @ohms.setter  #이 속성에 대해 검사한다고 생각?</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ohms</span><span class="params">(self, ohms)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> ohms &lt;= <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'%f ohms must be &gt; 0'</span> % ohms)</span><br><span class="line">        self._ohms = ohms</span><br></pre></td></tr></table></figure>
+
+<p>속성에 올바르지 않은 저항값을 할당하면 예외가 일어난다. (저항값은 ohms..옴이니까)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">r3 = BoundedResistance(<span class="number">23323</span>)</span><br><span class="line">print(r3.ohms)</span><br><span class="line">r3.ohms=<span class="number">0</span></span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">ValueError: <span class="number">0.000000</span> ohms must be &gt; <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>생성자에 올바르지 않은 값을 넘겨도 예외가 일어난다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BoundedResistance(<span class="number">-5</span>)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">ValueError: <span class="number">-5.000000</span> ohms must be &gt; <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>이 예외는 BoundedResistance.__init__가 self.ohms = -5를 할당하는 Resistor.__init__를 호출하기 때문에 일어난다. 이 할당문으로 BoundedResistance의 @ohms.setter 메서드가 호출되어 객체 생성이 완료되기도 전에 곧장 검증 코드가 실행된다.</strong> (???)</p>
+<p>부모 클래스의 속성을 불변(immutable)으로 만드는 데도 @property를 사용할 수 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FixedResistance</span><span class="params">(Resistor)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, ohms)</span>:</span></span><br><span class="line">        super().__init__(ohms)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @property  #property를 쓰면 self._ohms = ohms가 생성됨 (???), 이건 ohms가 생성되는 이유는 아마, ohms.setter가있기때문.</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ohms</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._ohms <span class="comment">#이것과 상관없다.</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @ohms.setter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ohms</span><span class="params">(self, ohms)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> hasattr(self, <span class="string">'_ohms'</span>):</span><br><span class="line">            <span class="keyword">raise</span> AttributeError(<span class="string">"Can't set attribute"</span>)</span><br><span class="line">        self._ohms = ohms</span><br></pre></td></tr></table></figure>
+
+<p>이 객체를 생성하고 나서 프로퍼티에 할당하려고 하면 예외가 일어난다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">r4 = FixedResistance(<span class="number">1e3</span>)</span><br><span class="line">r4.ohms = <span class="number">2e3</span> </span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">AttributeError: Can<span class="string">'t set attribute</span></span><br></pre></td></tr></table></figure>
+
+<p>@property의 가장 큰 단점은 속성에 대응하는 메서드를 서브클래스에서만 공유할수 있다는 점이다. 서로 관련이 없는 클래스는 같은 구현을 공유하지 못한다. 하지만 파이썬은 재사용 가능한 프로퍼티 로직을 비롯해 다른 많은 쓰임새를 가능하게 하는 디스크립터(descriptor)도 지원한다.(B31 참조)</p>
+<p>마지막으로 @property 메서드로 세터와 게터를 구현할 때 예상과 다르게 동작하지 않게 해야 한다. 예를 들면 게터 프로퍼티 메서드에서 다른 속성을 설정하지 말아야 한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MysteriousResistor</span><span class="params">(Resistor)</span>:</span></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ohms</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.voltage = self._ohms * self.current</span><br><span class="line">        <span class="keyword">return</span> self._ohms</span><br><span class="line"></span><br><span class="line"><span class="meta">    @ohms.setter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ohms</span><span class="params">(self, ohms)</span>:</span></span><br><span class="line">        self._ohms = ohms</span><br></pre></td></tr></table></figure>
+
+<p>이와 같은 코드는 아주 이상한 동작을 만든다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">r7 = MysteriousResistor(<span class="number">10</span>)</span><br><span class="line">r7.current = <span class="number">0.01</span></span><br><span class="line"><span class="comment">#여기에 r7.ohms를 호출하면 정상작동.. 왜? </span></span><br><span class="line">print(<span class="string">'Before: %5r'</span> % r7.voltage)</span><br><span class="line">r7.ohms</span><br><span class="line">print(<span class="string">'After:  %5r'</span> % r7.voltage)</span><br></pre></td></tr></table></figure>
+
+<p><strong>최선의 정책은 @property.setter 메서드에서만 관련 객체의 상태를 수정하는 것이다.</strong> 모듈을 동적으로 임포트하건, 느린 헬퍼 함수를 실행하거나, 비용이 많이 드는 데이터베이스 쿼리를 수행하는 일처럼 호출하는 쪽이 객체에서 일어날 것이라고 예측하지 못할 만한 다른 부작용은 모두 피해야 한다. 사용자는 다른 파이썬 객체가 그렇듯이 클래스의 속성이 빠르고 쉬울 거라고 기대할 것이다. 더 복잡하거나 느린 작업은 일반 메서드로 하자.</p>
+<h3 id="정리"><a href="#정리" class="headerlink" title="정리"></a>정리</h3><ul>
+<li>간단한 공개 속성을 사용하여 새 클래스 인터페이스를 정의하고 세터와 게터 메서드는 사용하지 말자.</li>
+<li>객체의 속성에 접근할 때 특별한 동작을 정의하려면 @property를 사용하자.</li>
+<li>@property 메서드에서 최소 놀람 규칙(rule of least surprise)을 따르고 이상한 부작용은 피하자</li>
+<li>@property 메서드가 빠르게 동작하도록 만들자. 느리거나 복잡한 작업은 일반 메서드로 하자.</li>
+</ul>
+<h2 id="속성을-리팩토링하는-대신-property를-고려하자"><a href="#속성을-리팩토링하는-대신-property를-고려하자" class="headerlink" title="속성을 리팩토링하는 대신 @property를 고려하자"></a>속성을 리팩토링하는 대신 @property를 고려하자</h2><p>내장 @property 데코레이터(decorator)를 이용하면 더 간결한 방식으로 인스턴스의 속성에 접근하게 할 수 있다(B29 참조). 고급 기법이지만 흔히 사용하는 @property 사용법 중 하나는 단순 숫자 속성을 즉석에서 계산하는 방식으로 변경하는 것이다. 호출하는 쪽을 변경하지 않고도 기존에 클래스를 사용한 곳이 새로운 동작을 하게 해주므로 매우 유용한 기법이다. 또한 시간이 지나면서 인터페이스를 개선할 때 중요한 임시방편이 된다. </p>
+<p>예를 들어 구멍 난 양동이의 할당량을 일반 파이썬 객체를 구현하려한다고 해보자. 다음 Bucket 클래스는 남은 할당량과 이 할당량을 이용할 수 있는 기간을 표현한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bucket</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, period)</span>:</span></span><br><span class="line">        self.period_delta = timedelta(seconds=period)</span><br><span class="line">        self.reset_time = datetime.now()</span><br><span class="line">        self.quota = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">'Bucket(quota=%d)'</span> % self.quota</span><br><span class="line"></span><br><span class="line">bucket = Bucket(<span class="number">60</span>)</span><br><span class="line">print(bucket)</span><br></pre></td></tr></table></figure>
+
+<p>구멍 난 양동이(leaky bucket) 알고리즘은 양동이를 채울 때마다 할당량이 다음 기간으로 넘어가지 않게 하는 식으로 동작한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fill</span><span class="params">(bucket, amount)</span>:</span></span><br><span class="line">    now = datetime.now()</span><br><span class="line">    <span class="keyword">if</span> now - bucket.reset_time &gt; bucket.period_delta:</span><br><span class="line">        bucket.quota = <span class="number">0</span></span><br><span class="line">        bucket.reset_time = now</span><br><span class="line">    bucket.quota += amount</span><br></pre></td></tr></table></figure>
+
+<p>할당량을 소비하는 쪽에서는 매번 사용할 양을 뺄 수 있는지부터 확인해야 한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">deduct</span><span class="params">(bucket, amount)</span>:</span></span><br><span class="line">    now = datetime.now()</span><br><span class="line">    <span class="keyword">if</span> now - bucket.reset_time &gt; bucket.period_delta:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">if</span> bucket.quota - amount &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    bucket.quota -= amount</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<p>이 클래스를 사용하기 위해 먼저 양동이를 채워보자</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bucket = Bucket(<span class="number">60</span>)</span><br><span class="line">fill(bucket, <span class="number">100</span>)</span><br><span class="line">print(bucket)</span><br></pre></td></tr></table></figure>
+
+<p>그러고 나서 필요한 만큼 양을 빼보자</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> deduct(bucket, <span class="number">99</span>):</span><br><span class="line">    print(<span class="string">'Had 99 quota'</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'Not enough for 99 quota'</span>)</span><br><span class="line">print(bucket)</span><br></pre></td></tr></table></figure>
+
+<p>그 결과 이용할 수 있는 양보다 많이 빼려고 해서 진행이 중단되었다. 이 경우 양동이의 할당량은 그대로 남는다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> deduct(bucket, <span class="number">3</span>):</span><br><span class="line">    print(<span class="string">'Had 3 quota'</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'Not enough for 3 quota'</span>)</span><br><span class="line">print(bucket)</span><br></pre></td></tr></table></figure>
+
+<p>이 구현에서 문제는 양동이의 할당량이 어떤 수준에서 시작하는지 모른다는 점이다. 양동이는 0이 될 때까지 진행 기간 동안 할당량이 줄어든다. 0이 되면 deduct가 항상 False를 반환한다. 이때 deduct를 호출하는 쪽이 중단된 이유가 Bucket의 할당량이 소진되어서인지 아니면 처음부터 Bucket에 할당량이 없어서인지 알 수 있다면 좋을 것이다.</p>
+<p>문제를 해결하려면 클래스에서 기간 동안 발생한 max_quota와 quota_consumed의 변경을 추적하도록 수정하면 된다.</p>
 
     </article>
     <!-- license  -->
@@ -567,7 +618,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#메타클래스와-속성"><span class="toc-number">1.</span> <span class="toc-text">메타클래스와 속성</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#게터와-세터-메서드-대신-일반-속성을-사용하자-B29"><span class="toc-number">1.1.</span> <span class="toc-text">게터와 세터 메서드 대신 일반 속성을 사용하자 (B29)</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#메타클래스와-속성"><span class="toc-number">1.</span> <span class="toc-text">메타클래스와 속성</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#게터와-세터-메서드-대신-일반-속성을-사용하자-B29"><span class="toc-number">1.1.</span> <span class="toc-text">게터와 세터 메서드 대신 일반 속성을 사용하자 (B29)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정리"><span class="toc-number">1.1.1.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#속성을-리팩토링하는-대신-property를-고려하자"><span class="toc-number">1.2.</span> <span class="toc-text">속성을 리팩토링하는 대신 @property를 고려하자</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -580,16 +631,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -1516,12 +1557,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
         </li>
     
     
@@ -1534,9 +1575,11 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
-        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
@@ -1544,35 +1587,33 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
-        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
     
-        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
-    
-        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
-    
-        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
-    
-        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
-    
-        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
-    
-        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
-    
-        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
-    
-        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
         <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
-        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
     
         <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
     
-        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -1584,15 +1625,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
-        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
-    
-        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
-    
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
@@ -1637,13 +1678,13 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
         <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
-        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
     
-        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
     
         <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
     
@@ -1651,21 +1692,21 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
     
-        <span class="sidebar-category-name" data-categories="Dataminging"><span class="iconfont-archer">&#xe60a;</span>Dataminging</span>
-    
         <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
     
+        <span class="sidebar-category-name" data-categories="Dataminging"><span class="iconfont-archer">&#xe60a;</span>Dataminging</span>
+    
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
-        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
-    
-        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
-    
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
         <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
