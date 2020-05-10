@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">1.7k</span>Reading time: <span class="post-count reading-time">10 min</span></span>
+                        <span>Word count: <span class="post-count word-count">2.6k</span>Reading time: <span class="post-count reading-time">16 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -500,7 +500,60 @@ height:50vh;
 <li>@property를 사용하면 점점 나은 데이터 모델로 발전시키자</li>
 <li>@property를 너무 많이 사용한다면 클래스와 이를 호출하는 모든 곳을 리팩토링하는 방안을 고려하자</li>
 </ul>
-<h2 id="재사용-가능한-property-메서드에는-디스크랩터를-사용하자"><a href="#재사용-가능한-property-메서드에는-디스크랩터를-사용하자" class="headerlink" title="재사용 가능한 @property 메서드에는 디스크랩터를 사용하자"></a>재사용 가능한 @property 메서드에는 디스크랩터를 사용하자</h2>
+<h2 id="재사용-가능한-property-메서드에는-디스크랩터를-사용하자-B31"><a href="#재사용-가능한-property-메서드에는-디스크랩터를-사용하자-B31" class="headerlink" title="재사용 가능한 @property 메서드에는 디스크랩터를 사용하자(B31)"></a>재사용 가능한 @property 메서드에는 디스크랩터를 사용하자(B31)</h2><p>파이썬에 내장된 @property의 큰 문제점은 재사용성이다.(B29 참조)</p>
+<p>즉, @property로 데코레이트하는 메서드를 같은 클래스에 속한 여러 속성에 사용하지 못한다. 또한 관련 없는 클래스에서도 재사용할 수 없다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Homework</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._grade = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">grade</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._grade</span><br><span class="line"></span><br><span class="line"><span class="meta">    @grade.setter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">grade</span><span class="params">(self, value)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> (<span class="number">0</span> &lt;= value &lt;= <span class="number">100</span>):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'Grade must be between 0 and 100'</span>)</span><br><span class="line">        self._grade = value</span><br></pre></td></tr></table></figure>
+
+<p>@property를 사용하면 이 클래스를 쉽게 사용할 수 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">galileo = Homework()</span><br><span class="line">galileo.grade = <span class="number">95</span></span><br><span class="line">print(galileo.grade)</span><br></pre></td></tr></table></figure>
+
+<p>학생들의 시험 성적을 매긴다고 해보자. 시험은 여러 과목으로 구성되어 있고 과목별로 점수가 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Exam</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._writing_grade = <span class="number">0</span></span><br><span class="line">        self._math_grade = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_check_grade</span><span class="params">(value)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> (<span class="number">0</span> &lt;= value &lt;= <span class="number">100</span>):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'Grade must be between 0 and 100'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>이 코드는 금방 장황해진다. 시험 영역마다 새 @property와 관련 검증이 필요하다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@property</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">writing_grade</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> self._writing_grade</span><br><span class="line"></span><br><span class="line"><span class="meta">@writing_grade.setter</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">writing_grade</span><span class="params">(self, value)</span>:</span></span><br><span class="line">    self._check_grade(value)</span><br><span class="line">    self._writing_grade = value</span><br><span class="line"></span><br><span class="line"><span class="meta">@property</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">math_grade</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> self._math_grade</span><br><span class="line"></span><br><span class="line"><span class="meta">@math_grade.setter</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">math_grade</span><span class="params">(self, value)</span>:</span></span><br><span class="line">    self._check_grade(value)</span><br><span class="line">    self._math_grade = value</span><br></pre></td></tr></table></figure>
+
+<p>이런 방법은 범용으로 사용하기에도 좋지 않다. 과제와 시험 이외의 항목에도 이 백분율 검증을 재사용하고 싶다면 @property와 _check_grade를 반복적으로 작성해야 한다.(당연히 각각 속성값을 세팅하는데 그 속성을 검사하려면 위와같은 과정말곤없다)</p>
+<blockquote>
+<p><a href="https://hamait.tistory.com/635" target="_blank" rel="noopener">@staticmethod와 @classmethod 차이 구별</a> 해야함</p>
+<p>@staticmethod를 하면 클래스에서 공통으로 쓰는것을 목표로 함수 파라미터에서 self를 쓰지 않아도됨</p>
+</blockquote>
+<p>파이썬에서 이런 작업을 할 때 더 좋은 방법은 디스크립터를 사용하는 것이다. 디스크립터 프로토콜(descriptor protocol)은 속성에 대한 접근을 언어에서 해석할 방법을 정의한다. 디스크립터 클래스는 반복 코드 없이도 성적 검증 동작을 재사용할 수 있게 해주는 __get__ 과 _\set__ 메서드를 제공할 수 있다. 이런 목적으로는 디스크립터가 믹스인(B26 참조)보다도 좋은 방법이다. 디스크립터를 이용하면 한 클랫의 서로 다른 많은 속성에 같은 로직을 재사용할 수 있기 때문이다.</p>
+<p>이번에는 Grade 인스턴스를 클래스 속성으로 포함하는 새로운 Exam 클래스를 정의한다. Grade 클래스는 디스크립터 프로토콜을 구현한다. Grade 클래스의 동작원리를 설명하기 전에 코드에서 Exam 인스턴스에 있는 이런 디스크립터 속성에 접근할 때 파이썬이 무슨 일이 하는지 이해해야 한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Grade</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__set__</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Exam</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="comment"># Class attributes</span></span><br><span class="line">    math_grade = Grade()</span><br><span class="line">    writing_grade = Grade()</span><br><span class="line">    science_grade = Grade()</span><br></pre></td></tr></table></figure>
+
+<p>다음과 같이 프로퍼티를 할당한다고 하자</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">exam = Exam()</span><br><span class="line">exam.writing_grade = <span class="number">40</span></span><br></pre></td></tr></table></figure>
+
+<p>위의 코드는 다음과 같이 해석된다</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#위의 코드는 다음과 같이 해석된다</span></span><br><span class="line">Exam.__dict__[<span class="string">'writing_grade'</span>].__set__(exam, <span class="number">40</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#이번에는 다음과 같이 프로퍼티를 얻어온다고 하자</span></span><br><span class="line">print(exam.writing_grade)</span><br><span class="line"></span><br><span class="line"><span class="comment">#위의 코드는 다음과 같이 해석된다.</span></span><br><span class="line">print(Exam.__dict__[<span class="string">'writing_grade'</span>].__get__(exam, Exam))</span><br></pre></td></tr></table></figure>
+
+<p>이렇게 동작하게 만드는 건 object의 __getattribute__ 메서드다(B32 참조).  간단히 말하면 Exam인스턴스에 writing_grade 속성이 없으면 파이썬은 대신 Exam 클래스의 속성을 이용한다. 이 클래스의 속성이 __get__ 과 __set__ 메서드를 갖춘 객체라면 파이썬은 디스크립터 프로토콜을 따른다고 가정한다.</p>
+<p>다음은 이런 동작과 Homework 클래스에서 @property를 성적 검증에 사용한 방법을 이해하고 Grade 디스크립터를 그럴듯하게 구현해본 첫 번째 시도다</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Grade</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._value = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self, instance, instance_type)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._value</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__set__</span><span class="params">(self, instance, value)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> (<span class="number">0</span> &lt;= value &lt;= <span class="number">100</span>):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'Grade must be between 0 and 100'</span>)</span><br><span class="line">        self._value = value</span><br></pre></td></tr></table></figure>
+
+<p>불행히도 위의 코드는 잘못 구현되어 있어서 제대로 동작하지 않을 것이다. 한 Exam 인스턴스에 있는 여러 속성에 접근하는 것은 기대한 대로 동작한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Exam</span><span class="params">(object)</span>:</span></span><br><span class="line">    math_grade = Grade()</span><br><span class="line">    writing_grade = Grade()</span><br><span class="line">    science_grade = Grade()</span><br><span class="line">    </span><br><span class="line">first_exam = Exam()</span><br><span class="line">first_exam.writing_grade = <span class="number">82</span></span><br><span class="line">first_exam.science_grade = <span class="number">99</span></span><br><span class="line">print(<span class="string">'Writing'</span>, first_exam.writing_grade)</span><br><span class="line">print(<span class="string">'Science'</span>, first_exam.science_grade)</span><br><span class="line">    </span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">Writing <span class="number">82</span></span><br><span class="line">Science <span class="number">99</span></span><br></pre></td></tr></table></figure>
+
+<p>하지만 여러 Exam 인스턴스의 이런 속성에 접근하면 기대하지 않은 동작을 하게 된다</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">second_exam = Exam()</span><br><span class="line">second_exam.writing_grade = <span class="number">75</span></span><br><span class="line">print(<span class="string">'Second'</span>, second_exam.writing_grade, <span class="string">'is right'</span>)</span><br><span class="line">print(<span class="string">'First '</span>, first_exam.writing_grade, <span class="string">'is wrong'</span>)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">Second <span class="number">75</span> <span class="keyword">is</span> right</span><br><span class="line">First <span class="number">75</span> <span class="keyword">is</span> wrong</span><br></pre></td></tr></table></figure>
+
+<p>이 문제를 해결하려면 각 Exam 인스턴스별로 값을 추적하는 Grade 클래스가 필요하다. 여기서는 딕셔너리에 각 인스턴스의 상태를 저장하는 방법으로 값을 추적한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Grade</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._values = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self, instance, instance_type)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> instance <span class="keyword">is</span> <span class="literal">None</span>: <span class="keyword">return</span> self</span><br><span class="line">        <span class="keyword">return</span> self._values.get(instance, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__set__</span><span class="params">(self, instance, value)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> (<span class="number">0</span> &lt;= value &lt;= <span class="number">100</span>):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'Grade must be between 0 and 100'</span>)</span><br><span class="line">        self._values[instance] = value</span><br></pre></td></tr></table></figure>
+
+<p>이 구현은 간단하면서도 잘 동작하지만 여전히 문제점이 하나 남아있다. 바로 메모리 누수다. _values 딕셔너리는 프로그램의 수명 동안 __set__ 에 전달된 모든 Exam 인스턴스의 참조를 저장하낟. 결국 인스턴스의 참조 개수가 절대로 0이 되지 않아 가비지 컬렉터가 정리하지 못하게 한다</p>
+<p>파이썬의 내장 모듈 weakref를 사용하면 이 문제를 해결할 수 있다. 이 모듈은 _values에 사용한 간단한 딕셔너리를 대체할 수 있는 WeakKeyDictionary라는 특별한 클래스를 제공한다. WeakKeyDictionary 클래스 고유의 동작은 런타임에 마지막으로 남은 Exam인스턴스의 참조를 갖고 있다는 사실을 알면 키 집합에서 Exam 인스턴스를 제거하는 것이다. 파이썬이 대신 참조를 관리해주고 모든 Exam 인스턴스가 더는 사용되지 않으면 _values 딕셔너리가 비어있게 한다</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> weakref <span class="keyword">import</span> WeakKeyDictionary</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Grade</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._values = WeakKeyDictionary()</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self, instance, instance_type)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> instance <span class="keyword">is</span> <span class="literal">None</span>: <span class="keyword">return</span> self</span><br><span class="line">        <span class="keyword">return</span> self._values.get(instance, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__set__</span><span class="params">(self, instance, value)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> (<span class="number">0</span> &lt;= value &lt;= <span class="number">100</span>):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'Grade must be between 0 and 100'</span>)</span><br><span class="line">        self._values[instance] = value</span><br></pre></td></tr></table></figure>
+
+<p>다음과 같은 Grade 디스크립터 구현을 사용하면 모두 기대한 대로 동작한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Exam</span><span class="params">(object)</span>:</span></span><br><span class="line">    math_grade = Grade()</span><br><span class="line">    writing_grade = Grade()</span><br><span class="line">    science_grade = Grade()</span><br><span class="line"></span><br><span class="line">first_exam = Exam()</span><br><span class="line">first_exam.writing_grade = <span class="number">82</span></span><br><span class="line">second_exam = Exam()</span><br><span class="line">second_exam.writing_grade = <span class="number">75</span></span><br><span class="line">print(<span class="string">'First '</span>, first_exam.writing_grade, <span class="string">'is right'</span>)</span><br><span class="line">print(<span class="string">'Second'</span>, second_exam.writing_grade, <span class="string">'is right'</span>)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">First <span class="number">82</span> <span class="keyword">is</span> right</span><br><span class="line">Second <span class="number">75</span> <span class="keyword">is</span> right</span><br></pre></td></tr></table></figure>
+
+<h3 id="정리-2"><a href="#정리-2" class="headerlink" title="정리"></a>정리</h3><ul>
+<li>직접 디스크립터 클래스를 정의하여 @property 메서드의 동작과 검증을 재사용하자</li>
+<li>WeakKeyDictionary를 사용하여 디스크립터 클래스가 메모리 누수를 일으키지 않게 하자</li>
+<li>__getattribute__ 가 디스크립터 프로토콜을 사용하여 속성을 얻어오고 설정하는 원리를 정확히 이해하려는 함정에 빠지지 말자.</li>
+</ul>
+<h2 id="지연-속성에는-getattr-getattribute-setattr-을-사용하자-B-32"><a href="#지연-속성에는-getattr-getattribute-setattr-을-사용하자-B-32" class="headerlink" title="지연 속성에는 __getattr__, __getattribute__, __setattr__을 사용하자 (B 32)"></a>지연 속성에는 __getattr__, __getattribute__, __setattr__을 사용하자 (B 32)</h2>
     </article>
     <!-- license  -->
     
@@ -637,7 +690,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#메타클래스와-속성"><span class="toc-number">1.</span> <span class="toc-text">메타클래스와 속성</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#게터와-세터-메서드-대신-일반-속성을-사용하자-B29"><span class="toc-number">1.1.</span> <span class="toc-text">게터와 세터 메서드 대신 일반 속성을 사용하자 (B29)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정리"><span class="toc-number">1.1.1.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#속성을-리팩토링하는-대신-property를-고려하자-B30"><span class="toc-number">1.2.</span> <span class="toc-text">속성을 리팩토링하는 대신 @property를 고려하자 (B30)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정리-1"><span class="toc-number">1.2.1.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#재사용-가능한-property-메서드에는-디스크랩터를-사용하자"><span class="toc-number">1.3.</span> <span class="toc-text">재사용 가능한 @property 메서드에는 디스크랩터를 사용하자</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#메타클래스와-속성"><span class="toc-number">1.</span> <span class="toc-text">메타클래스와 속성</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#게터와-세터-메서드-대신-일반-속성을-사용하자-B29"><span class="toc-number">1.1.</span> <span class="toc-text">게터와 세터 메서드 대신 일반 속성을 사용하자 (B29)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정리"><span class="toc-number">1.1.1.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#속성을-리팩토링하는-대신-property를-고려하자-B30"><span class="toc-number">1.2.</span> <span class="toc-text">속성을 리팩토링하는 대신 @property를 고려하자 (B30)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정리-1"><span class="toc-number">1.2.1.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#재사용-가능한-property-메서드에는-디스크랩터를-사용하자-B31"><span class="toc-number">1.3.</span> <span class="toc-text">재사용 가능한 @property 메서드에는 디스크랩터를 사용하자(B31)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정리-2"><span class="toc-number">1.3.1.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#지연-속성에는-getattr-getattribute-setattr-을-사용하자-B-32"><span class="toc-number">1.4.</span> <span class="toc-text">지연 속성에는 __getattr__, __getattribute__, __setattr__을 사용하자 (B 32)</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1594,31 +1647,31 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
         <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
         <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
     
         <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
-    
-        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
-    
         <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
-    
-        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
-    
-        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
-    
-        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
     
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
@@ -1628,11 +1681,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
         <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
     
         <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
-    
-        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -1697,23 +1750,23 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
-    
-        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
-    
         <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
     
-        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
         <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
     
-        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
-    
         <span class="sidebar-category-name" data-categories="Dataminging"><span class="iconfont-archer">&#xe60a;</span>Dataminging</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
@@ -1721,9 +1774,9 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
-        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
-    
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
         <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
