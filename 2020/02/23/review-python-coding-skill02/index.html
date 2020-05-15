@@ -534,7 +534,9 @@ height:50vh;
 
 
 
-<h2 id="리스트를-반환하는-대신-제너레이터를-고려하자-B16"><a href="#리스트를-반환하는-대신-제너레이터를-고려하자-B16" class="headerlink" title="리스트를 반환하는 대신 제너레이터를 고려하자(B16)"></a>리스트를 반환하는 대신 제너레이터를 고려하자(B16)</h2><p>일련의 결과를 생성하는 함수에서 택할 가장 간단한 방법은 아이템의 리스트를 반환하는 것이다. </p>
+<h2 id="리스트를-반환하는-대신-제너레이터를-고려하자-B16"><a href="#리스트를-반환하는-대신-제너레이터를-고려하자-B16" class="headerlink" title="리스트를 반환하는 대신 제너레이터를 고려하자(B16)"></a>리스트를 반환하는 대신 제너레이터를 고려하자(B16)</h2><blockquote>
+<p>일련의 결과를 생성하는 함수에서 택할 가장 간단한 방법은 아이템의 리스트를 반환하는 것이다. </p>
+</blockquote>
 <p>예를 들어 문자열에 있는 모든 단어의 인덱스를 출력하고 싶다(띄어쓰기를 기준으로 나누면됨)</p>
 <p>다음 코드에서 append 메서드로 리스트에 결과들을 누적하고 함수가 끝날 때 해당 리스트를 반환한다.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index_words</span><span class="params">(text)</span>:</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">if</span> text:</span><br><span class="line">        result.append(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">for</span> index, letter <span class="keyword">in</span> enumerate(text):</span><br><span class="line">        <span class="keyword">if</span> letter == <span class="string">' '</span>:</span><br><span class="line">            result.append(index + <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
