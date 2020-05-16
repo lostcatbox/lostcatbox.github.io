@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">4.4k</span>Reading time: <span class="post-count reading-time">27 min</span></span>
+                        <span>Word count: <span class="post-count word-count">4.5k</span>Reading time: <span class="post-count reading-time">28 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -576,7 +576,19 @@ height:50vh;
 <p>슬라이싱하고 stride하면 데이터의 얕은 복사본이 추가로 생긴다(메모리사용하게됨)</p>
 <p>메모리 줄이고 싶다면 “내장 알고리즘과 자료 구조를 사용하자” 참조하자 </p>
 <p>(참조 내용 중 islice메서드는 start, end stride에 음수 값을 허용하지 않는다)</p>
-<h2 id="map과-filter-대신-리스트-컴프리헨션을-사용하자"><a href="#map과-filter-대신-리스트-컴프리헨션을-사용하자" class="headerlink" title="map과 filter 대신 리스트 컴프리헨션을 사용하자"></a>map과 filter 대신 리스트 컴프리헨션을 사용하자</h2><p>파이썬에는 한 리스트에서 다른 리스트를 만들어내는 간결한 문법 존재!</p>
+<h2 id="map과-filter-대신-리스트-컴프리헨션을-사용하자"><a href="#map과-filter-대신-리스트-컴프리헨션을-사용하자" class="headerlink" title="map과 filter 대신 리스트 컴프리헨션을 사용하자"></a>map과 filter 대신 리스트 컴프리헨션을 사용하자</h2><blockquote>
+<p>map(함수, 리스트)</p>
+<p>map(함수, filter(함수, 리스트)) #filter에서 if x%==0처럼 가능</p>
+<p>[ x for sebset in matrix for x in sebset]  #sebset은 먼저써버리면 오류, sebset은 정의가 되어있지않음 + 다중 if문도 맨뒤에 쓰면 가능</p>
+<p>[[x**2 for x in sebset] for sebset in matrix] #리스트 컴프리헨션에서 변수에  리스크컴프리헨션있으므로 가능</p>
+<p>{name: time for time, name in dict.items()} #이렇게 딕셔너리 컴프리헨션도 가능</p>
+<p>다음 단원에 나오는것 미리 연습</p>
+<p>roots = ((x, x**0.5) for x in it) #it은 이터레이터</p>
+<p>처음 ( )는 제너레이터 표현식이다. 따라서 roots는 제너레이터</p>
+<p>output은 (7, 2.6457513110645907)이런식으로 나옴.</p>
+<p>즉 두번째 ( )는 튜플</p>
+</blockquote>
+<p>파이썬에는 한 리스트에서 다른 리스트를 만들어내는 간결한 문법 존재!</p>
 <p>이를 <strong>list comprehension</strong> 이라고한다</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]</span><br><span class="line">squares = [x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> a]</span><br><span class="line">print(squares)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">[<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>, <span class="number">100</span>]</span><br></pre></td></tr></table></figure>
 
@@ -641,7 +653,7 @@ height:50vh;
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">value = [len(x) <span class="keyword">for</span> x <span class="keyword">in</span> open(<span class="string">'/~/~/cats.txt'</span>)]</span><br><span class="line">print(value)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">[<span class="number">100</span>,<span class="number">57</span>, <span class="number">15</span>, <span class="number">1</span>, <span class="number">12</span>, <span class="number">75</span>, <span class="number">5</span>, <span class="number">86</span>, <span class="number">89</span>, <span class="number">11</span>]</span><br></pre></td></tr></table></figure>
 
 <p>파이썬은 이 문제를 해결하려고 리스트 컴프리헨션과 제너레이터를 일반화한 제너레이터 표현식을 제공한다. (generator expression)</p>
-<p>제너레이터 표현식은 실행될 떄 출력 시퀀스를 모두 구체화(여기서는 메모리에 로딩)하지 않는다. 대신에 표현식에서 한 번에 한 하이템을 내주는 이터레이터(iterator)로 평가된다.</p>
+<p>제너레이터 표현식은 실행될 때 출력 시퀀스를 모두 구체화(여기서는 메모리에 로딩)하지 않는다. 대신에 표현식에서 한 번에 한 아이템을 내주는 이터레이터(iterator)로 평가된다.</p>
 <p>제너레이터 표현식은 () 문자 사이에 리스트 컴프리헨션과 비슷한 문법을 사용하여 생성한다.</p>
 <p>위에 예제와 비슷하지만 제너레이터 표현식은 즉시 이터레이터로 평가되므로 더는 진행되지 않는다</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">it = (len(x) <span class="keyword">for</span> x <span class="keyword">in</span> open(<span class="string">'/~/~/cats.txt'</span>))</span><br><span class="line">print(it)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">&lt;generator object &lt;genexpr&gt; at <span class="number">0x10f625e10</span>&gt;</span><br></pre></td></tr></table></figure>
@@ -660,19 +672,26 @@ height:50vh;
 
 <p>이처럼 만약 큰 입력 스트림에 동작하는 기능을 결합하는 방법을 찾을 때는 제너레이터 표현식이 최선의 도구다. </p>
 <p>제너레이터 표현식은 서로 연결되어 있을 때 매우 빠르게 실행된다.</p>
-<p>단, 제너레이터 표현식이 반환한 이터레이터에는 상태가 있으므로 이터레이터를 한 번 넘게 사용하지 않도록 주의해야 한다. </p>
+<p>단, 제너레이터 표현식이 반환한 이터레이터에는 상태가 있으므로 이터레이터를 한 번 넘게 사용하지 않도록 주의해야 한다. (따로 복사를 해놔야할지도,,)</p>
 <p>(“인수를 순회할 때는 방어적으로 하자” 참조)</p>
-<h2 id="range보다는-enumerate를-사용하자"><a href="#range보다는-enumerate를-사용하자" class="headerlink" title="range보다는 enumerate를 사용하자"></a>range보다는 enumerate를 사용하자</h2><p>내장 함수 range는 정수 집합을 순회(iterate)하는 루프를 실행할 때 유용하다.</p>
+<h2 id="range보다는-enumerate를-사용하자"><a href="#range보다는-enumerate를-사용하자" class="headerlink" title="range보다는 enumerate를 사용하자"></a>range보다는 enumerate를 사용하자</h2><blockquote>
+<p>enumerate또한 제너레이터로 만들어주는 함수이다.</p>
+<p>x = enumerate(flavor_list)</p>
+<p>next(x)하면 동작가능</p>
+<p>tip: enumerate의 두번째 파라미터는 세기 시작할 숫자를 지정할 수 있다.</p>
+<p>예시: for i, flavor in enumerate(flavor_list, 1)</p>
+</blockquote>
+<p>내장 함수 range는 정수 집합을 순회(iterate)하는 루프를 실행할 때 유용하다.</p>
 <p>이는 리스트에서 현재 아이템의 인덱스(위치)를 알고 싶은 경우가 있을 때 range을 사용하면 편리하다.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">flavor_list = [<span class="string">'vanilla'</span>, <span class="string">'chocolate'</span>, <span class="string">'pecan'</span>, <span class="string">'strawberry'</span>]</span><br><span class="line"><span class="keyword">for</span> flavor <span class="keyword">in</span> flavor_list:</span><br><span class="line">    print(<span class="string">'%s is delicious'</span> % flavor)</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">vanilla <span class="keyword">is</span> delicious</span><br><span class="line">chocolate <span class="keyword">is</span> delicious</span><br><span class="line">pecan <span class="keyword">is</span> delicious</span><br><span class="line">strawberry <span class="keyword">is</span> delicious</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(flavor_list)):</span><br><span class="line">    flavor = flavor_list[i]</span><br><span class="line">    print(<span class="string">'%d: %s'</span> % (i + <span class="number">1</span>, flavor))</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="number">1</span>: vanilla</span><br><span class="line"><span class="number">2</span>: chocolate</span><br><span class="line"><span class="number">3</span>: pecan</span><br><span class="line"><span class="number">4</span>: strawberry</span><br></pre></td></tr></table></figure>
 
 <p>하지만 위에 코드는 세련되지 못하다. 리스트길이정보와 배열을 인덱스로 접근해야 하며, 읽기 불편하다.</p>
 <p>파이썬은 이런 상황을 처리하려고 내장함수 enumerate를 제공한다.</p>
-<p>enumerate는 지연 제너레이터(lazy generator)로 이터레이터를 감싼다. (???)</p>
+<p>enumerate는 지연 제너레이터(lazy generator)로 이터레이터를 감싼다.</p>
 <p>이 제너레이터는 이터레이터에서 루프 인덱스와 다음 값을 한쌍으로 가져와 넘겨준다.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i, flavor <span class="keyword">in</span> enumerate(flavor_list):</span><br><span class="line">    print(<span class="string">'%d: %s'</span> % (i + <span class="number">1</span>, flavor))</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="number">1</span>: vanilla</span><br><span class="line"><span class="number">2</span>: chocolate</span><br><span class="line"><span class="number">3</span>: pecan</span><br><span class="line"><span class="number">4</span>: strawberry</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i, flavor <span class="keyword">in</span> enumerate(flavor_list, <span class="number">1</span>):   <span class="comment">#세기 시작숫자는 1부터 시작할꺼다!! 분명 0번째지만 i는 1로받음</span></span><br><span class="line">    print(<span class="string">'%d: %s'</span> % (i, flavor))</span><br></pre></td></tr></table></figure>
 
-<p>즉, enumerate는 이터레이터를 순회하면서 이터레이터에서 각 아이템의 인덱스를 얻어오는 간결한 문법을 제공하낟.</p>
+<p>즉, enumerate는 이터레이터를 순회하면서 이터레이터에서 각 아이템의 인덱스를 얻어오는 간결한 문법을 제공한다.</p>
 <p>tip: enumerate의 두번째 파라미터는 세기 시작할 숫자를 지정할 수 있다.</p>
 <h2 id="이터레이터를-병렬로-처리하려면-zip을-사용하자"><a href="#이터레이터를-병렬로-처리하려면-zip을-사용하자" class="headerlink" title="이터레이터를 병렬로 처리하려면 zip을 사용하자"></a>이터레이터를 병렬로 처리하려면 zip을 사용하자</h2><p>파이썬에서 관련 객체로 구성된 리스트를 많이 사용한다.</p>
 <p>리스트 컴프로헨션을 사용하여 소스 리스트(source list)에 표현식을 적용하여 파생 리스트(derived list)를 쉽게 얻을수있다</p>
@@ -703,14 +722,16 @@ height:50vh;
 </li>
 </ul>
 <h2 id="for와-while-루프-뒤에는-else블록을-쓰지말자"><a href="#for와-while-루프-뒤에는-else블록을-쓰지말자" class="headerlink" title="for와 while 루프 뒤에는 else블록을 쓰지말자"></a>for와 while 루프 뒤에는 else블록을 쓰지말자</h2><p>파이썬의 루프에는 다른 프로그래밍 언어에는 없는 추가적인 기능이 있다. 루프에서 반복되는 내부 블록 바로 다음에 else 블로을 둘 수 있는 기능이다.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">    print(<span class="string">'Loop %d'</span> % i)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'Else block!'</span>)</span><br></pre></td></tr></table></figure>
-
-<p>for구문이 종료되면 else가 실행되는것처럼보인다.(if/else구문에서 if블록이 실행되지 않으면 else블록이 실행된다는 느낌)</p>
 <blockquote>
+<p>for루프를 성공적으로 다돌았다면 else문 동작</p>
+<p>while 루프에서는 false가 뜨는 순간 else문 동작</p>
 <p>try/exept 문에서는 except도  ‘이전블록에서 실패하면 이 블록이 실행된다’ 는 의미</p>
 <p>try/except/else는 ‘이전 블록이 실패하지 않으면 실행해라’는 의미</p>
 <p>try/finally 는 ‘이전 블록을 실행하고 항상 마지막에 실행하라’는 의미</p>
 </blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">    print(<span class="string">'Loop %d'</span> % i)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'Else block!'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>for구문이 종료되면 else가 실행되는것처럼보인다.(if/else구문에서 if블록이 실행되지 않으면 else블록이 실행된다는 느낌)</p>
 <p>처음 접하면 for/else에서 for문이 실행되지 않으면 else가 실행된다고 생각할텐데 이 생각은 틀렸다</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">    print(<span class="string">'Loop %d'</span> % i)</span><br><span class="line">    <span class="keyword">if</span> i == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'Else block!'</span>)</span><br><span class="line">    </span><br><span class="line">   </span><br><span class="line">  </span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">Loop <span class="number">0</span></span><br><span class="line">Loop <span class="number">1</span></span><br></pre></td></tr></table></figure>
 
@@ -720,8 +741,7 @@ height:50vh;
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">4</span></span><br><span class="line">b = <span class="number">9</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>, min(a, b) + <span class="number">1</span>):   <span class="comment">#python 내장함수 min은 최소값을 반환한다.</span></span><br><span class="line">    print(<span class="string">'Testing'</span>, i)</span><br><span class="line">    <span class="keyword">if</span> a % i == <span class="number">0</span> <span class="keyword">and</span> b % i == <span class="number">0</span>:</span><br><span class="line">        print(<span class="string">'Not coprime'</span>)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'Coprime'</span>)   <span class="comment">#for을 다 돌았는데도 없다면 a,b는 최소 서로소</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">Testing <span class="number">2</span></span><br><span class="line">Testing <span class="number">3</span></span><br><span class="line">Testing <span class="number">4</span></span><br><span class="line">Coprime</span><br></pre></td></tr></table></figure>
 
 <p>실제로 이런 코드를 작성하면 안된다. 대신에 이런 계산을 하는 헬퍼 함수를 작성하는 게 좋다</p>
-<p>이런 헬퍼 함수는 두가지 일반적인 스타일로 작성한다</p>
-<ul>
+<h3 id="이런-헬퍼-함수는-두가지-일반적인-스타일로-작성한다"><a href="#이런-헬퍼-함수는-두가지-일반적인-스타일로-작성한다" class="headerlink" title="이런 헬퍼 함수는 두가지 일반적인 스타일로 작성한다(!!!)"></a><strong>이런 헬퍼 함수는 두가지 일반적인 스타일로 작성한다</strong>(!!!)</h3><ul>
 <li><p>첫 번째 방법은 찾으려는 조건을 찾았을 때 바로 반환</p>
 <p>루프가 실패로 끝나면 기본 결과(True)반환한다</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">coprime</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>, min(a, b) + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">if</span> a % i == <span class="number">0</span> <span class="keyword">and</span> b % i == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">print(coprime(<span class="number">4</span>, <span class="number">9</span>))</span><br><span class="line">print(coprime(<span class="number">3</span>, <span class="number">6</span>))</span><br></pre></td></tr></table></figure>
@@ -734,8 +754,8 @@ height:50vh;
 </ul>
 <p>이 두 가지 방법을 적용하면 낯선 코드를 접하는 개발자들이 코드를 휠씬 쉽게 이해할 수 있다.</p>
 <p><strong>루프 뒤에는 절대 else블록 쓰지 말자</strong></p>
-<h2 id="try-except-else-finally-에서-각-블록의-장점을-이용하자-중요"><a href="#try-except-else-finally-에서-각-블록의-장점을-이용하자-중요" class="headerlink" title="try/except/else/finally 에서 각 블록의 장점을 이용하자(중요)"></a>try/except/else/finally 에서 각 블록의 장점을 이용하자(중요)</h2><p>파이썬에는 예외 처리 과정에서 동작을 넣을 수 있는 네 번의 구분되는 시점이 있다. </p>
-<p>__try, except, else, finally 블록 기능으로 각 시점을 처리한다. </p>
+<h2 id="try-except-else-finally-에서-각-블록의-장점을-이용하자"><a href="#try-except-else-finally-에서-각-블록의-장점을-이용하자" class="headerlink" title="try/except/else/finally 에서 각 블록의 장점을 이용하자(!!!)"></a>try/except/else/finally 에서 각 블록의 장점을 이용하자(!!!)</h2><p>파이썬에는 예외 처리 과정에서 동작을 넣을 수 있는 네 번의 구분되는 시점이 있다. </p>
+<p><strong>try, except, else, finally 블록 기능으로 각 시점을 처리한다.</strong></p>
 <p>각 블록은 복합문에서 독자적인 목적이 있으며, 이 블록들을 다양하게 조합하면 유용하다.</p>
 <p>(“루트 Exception을 정의해서 API로부터 호출자를 보호하자” 참조)</p>
 <h3 id="finally-블록"><a href="#finally-블록" class="headerlink" title="finally 블록"></a>finally 블록</h3><p>에외를 전달하고 싶지만, 예외가 발생해도 정리 코드를 실행하고 싶을 때</p>
@@ -755,13 +775,13 @@ height:50vh;
 <p>데이터가 올바른 JSON이 아니라면 json.loads로 디코드할때 ValueError가 일어난다.</p>
 <p> 이 예외는 except블록에서 발견되어 처리된다</p>
 <p>디코딩이 성공하면 else블록에서 키를 찾는다. </p>
-<p>키를 찾을 때 에외가 일어나면 그 예외는 try블록 밖에 있으므로 호출 코드까지 전달된다.(터미널에 에러코드가 뜬다는말인듯???)</p>
+<p>키를 찾을 때 에외가 일어나면 그 예외는 try블록 밖에 있으므로 호출 코드까지 전달된다.(터미널에 에러코드가 뜬다는말인듯)</p>
 <p>else절은 try/except 다음에 나오는 처리를 시각적으로 except블록과 구분해준다. 그래서 예외 전달 행위를 명확하게 한다.</p>
-<h2 id="모두-함께-사용하기-json정리후-다시읽어보기"><a href="#모두-함께-사용하기-json정리후-다시읽어보기" class="headerlink" title="모두 함께 사용하기(??? json정리후 다시읽어보기)"></a>모두 함께 사용하기(??? json정리후 다시읽어보기)</h2><p>복합문 하나로 모든 것을 처리하고 싶다면 <strong>try/except/else/finally</strong> 를 사용하면 된다.</p>
+<h2 id="모두-함께-사용하기-json정리후-다시읽어보기"><a href="#모두-함께-사용하기-json정리후-다시읽어보기" class="headerlink" title="모두 함께 사용하기(json정리후 다시읽어보기)(???)"></a>모두 함께 사용하기(json정리후 다시읽어보기)(???)</h2><p>복합문 하나로 모든 것을 처리하고 싶다면 <strong>try/except/else/finally</strong> 를 사용하면 된다.</p>
 <p>예를 들어 파일에서 수행할 작업 설명을 읽고 처리한 후 즉석에서 파일을 업데이트한다고 하자.</p>
 <p>여기서 try 블록은 파일을 읽고 처리하는데 사용한다.</p>
 <p>except 블록은 try 블록에서 일어난 예외를 처리하는데 사용한다.</p>
-<p>else 블록은 파일을 즉석에서 업데이트하고 이와 관련한 예회가 전달되게 하는 데 사용한다.</p>
+<p>else 블록은 파일을 즉석에서 업데이트하고 이와 관련한 예외가 전달되게 하는 데 사용한다.</p>
 <p>finally블록은 파일 핸들을 정리하는 데 사용한다.</p>
 <p><a href="https://docs.python.org/ko/3/library/json.html" target="_blank" rel="noopener">참고</a></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line">UNDEFINED = object()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">divide_json</span><span class="params">(path)</span>:</span></span><br><span class="line">    handle = open(path, <span class="string">'r+'</span>)   <span class="comment"># May raise IOError</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        data = handle.read()    <span class="comment"># May raise UnicodeDecodeError</span></span><br><span class="line">        op = json.loads(data)   <span class="comment"># May raise ValueError</span></span><br><span class="line">        value = (</span><br><span class="line">            op[<span class="string">'numerator'</span>] /</span><br><span class="line">            op[<span class="string">'denominator'</span>])  <span class="comment"># May raise ZeroDivisionError</span></span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> UNDEFINED</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        op[<span class="string">'result'</span>] = value</span><br><span class="line">        result = json.dumps(op)</span><br><span class="line">        handle.seek(<span class="number">0</span>)</span><br><span class="line">        handle.write(result)    <span class="comment"># May raise IOError</span></span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        handle.close()          <span class="comment"># Always runs</span></span><br></pre></td></tr></table></figure>
@@ -907,7 +927,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜-읽는가"><span class="toc-number">1.</span> <span class="toc-text">왜 읽는가?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#목표"><span class="toc-number">2.</span> <span class="toc-text">목표</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1장-파이썬다운-생각"><span class="toc-number">3.</span> <span class="toc-text">1장 - 파이썬다운 생각</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#사용중인-파이썬-버전알기"><span class="toc-number">3.1.</span> <span class="toc-text">사용중인 파이썬 버전알기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PEP8-스타일-가이드를-따르자"><span class="toc-number">3.2.</span> <span class="toc-text">PEP8 스타일 가이드를 따르자</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#화이트-스페이스"><span class="toc-number">3.2.1.</span> <span class="toc-text">화이트 스페이스</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#명명"><span class="toc-number">3.2.2.</span> <span class="toc-text">명명</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#표현식과-문장"><span class="toc-number">3.2.3.</span> <span class="toc-text">표현식과 문장</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bytes-str-unicode의-차이점을-알자"><span class="toc-number">3.2.4.</span> <span class="toc-text">bytes, str, unicode의 차이점을 알자</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#복잡한-표현식-대신-헬퍼-함수를-작성하자"><span class="toc-number">3.3.</span> <span class="toc-text">복잡한 표현식 대신 헬퍼 함수를 작성하자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#시퀀스를-슬라이스하는-방법을-알자"><span class="toc-number">3.4.</span> <span class="toc-text">시퀀스를 슬라이스하는 방법을 알자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#한-슬라이스에-start-end-stride를-함께-쓰지-말자"><span class="toc-number">3.5.</span> <span class="toc-text">한 슬라이스에 start, end, stride를 함께 쓰지 말자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#map과-filter-대신-리스트-컴프리헨션을-사용하자"><span class="toc-number">3.6.</span> <span class="toc-text">map과 filter 대신 리스트 컴프리헨션을 사용하자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#리스트-컴프리헨션에서-표현식을-두개-넘게-쓰지-말자"><span class="toc-number">3.7.</span> <span class="toc-text">리스트 컴프리헨션에서 표현식을 두개 넘게 쓰지 말자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#컴프리헨션이-클-때는-제너레이터-표현식을-고려하자"><span class="toc-number">3.8.</span> <span class="toc-text">컴프리헨션이 클 때는 제너레이터 표현식을 고려하자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#range보다는-enumerate를-사용하자"><span class="toc-number">3.9.</span> <span class="toc-text">range보다는 enumerate를 사용하자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#이터레이터를-병렬로-처리하려면-zip을-사용하자"><span class="toc-number">3.10.</span> <span class="toc-text">이터레이터를 병렬로 처리하려면 zip을 사용하자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#for와-while-루프-뒤에는-else블록을-쓰지말자"><span class="toc-number">3.11.</span> <span class="toc-text">for와 while 루프 뒤에는 else블록을 쓰지말자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#try-except-else-finally-에서-각-블록의-장점을-이용하자-중요"><span class="toc-number">3.12.</span> <span class="toc-text">try&#x2F;except&#x2F;else&#x2F;finally 에서 각 블록의 장점을 이용하자(중요)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#finally-블록"><span class="toc-number">3.12.1.</span> <span class="toc-text">finally 블록</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#else-블록"><span class="toc-number">3.12.2.</span> <span class="toc-text">else 블록</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#모두-함께-사용하기-json정리후-다시읽어보기"><span class="toc-number">3.13.</span> <span class="toc-text">모두 함께 사용하기(??? json정리후 다시읽어보기)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#출처"><span class="toc-number">4.</span> <span class="toc-text">출처</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜-읽는가"><span class="toc-number">1.</span> <span class="toc-text">왜 읽는가?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#목표"><span class="toc-number">2.</span> <span class="toc-text">목표</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1장-파이썬다운-생각"><span class="toc-number">3.</span> <span class="toc-text">1장 - 파이썬다운 생각</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#사용중인-파이썬-버전알기"><span class="toc-number">3.1.</span> <span class="toc-text">사용중인 파이썬 버전알기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PEP8-스타일-가이드를-따르자"><span class="toc-number">3.2.</span> <span class="toc-text">PEP8 스타일 가이드를 따르자</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#화이트-스페이스"><span class="toc-number">3.2.1.</span> <span class="toc-text">화이트 스페이스</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#명명"><span class="toc-number">3.2.2.</span> <span class="toc-text">명명</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#표현식과-문장"><span class="toc-number">3.2.3.</span> <span class="toc-text">표현식과 문장</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bytes-str-unicode의-차이점을-알자"><span class="toc-number">3.2.4.</span> <span class="toc-text">bytes, str, unicode의 차이점을 알자</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#복잡한-표현식-대신-헬퍼-함수를-작성하자"><span class="toc-number">3.3.</span> <span class="toc-text">복잡한 표현식 대신 헬퍼 함수를 작성하자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#시퀀스를-슬라이스하는-방법을-알자"><span class="toc-number">3.4.</span> <span class="toc-text">시퀀스를 슬라이스하는 방법을 알자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#한-슬라이스에-start-end-stride를-함께-쓰지-말자"><span class="toc-number">3.5.</span> <span class="toc-text">한 슬라이스에 start, end, stride를 함께 쓰지 말자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#map과-filter-대신-리스트-컴프리헨션을-사용하자"><span class="toc-number">3.6.</span> <span class="toc-text">map과 filter 대신 리스트 컴프리헨션을 사용하자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#리스트-컴프리헨션에서-표현식을-두개-넘게-쓰지-말자"><span class="toc-number">3.7.</span> <span class="toc-text">리스트 컴프리헨션에서 표현식을 두개 넘게 쓰지 말자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#컴프리헨션이-클-때는-제너레이터-표현식을-고려하자"><span class="toc-number">3.8.</span> <span class="toc-text">컴프리헨션이 클 때는 제너레이터 표현식을 고려하자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#range보다는-enumerate를-사용하자"><span class="toc-number">3.9.</span> <span class="toc-text">range보다는 enumerate를 사용하자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#이터레이터를-병렬로-처리하려면-zip을-사용하자"><span class="toc-number">3.10.</span> <span class="toc-text">이터레이터를 병렬로 처리하려면 zip을 사용하자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#for와-while-루프-뒤에는-else블록을-쓰지말자"><span class="toc-number">3.11.</span> <span class="toc-text">for와 while 루프 뒤에는 else블록을 쓰지말자</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#이런-헬퍼-함수는-두가지-일반적인-스타일로-작성한다"><span class="toc-number">3.11.1.</span> <span class="toc-text">이런 헬퍼 함수는 두가지 일반적인 스타일로 작성한다(!!!)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#try-except-else-finally-에서-각-블록의-장점을-이용하자"><span class="toc-number">3.12.</span> <span class="toc-text">try&#x2F;except&#x2F;else&#x2F;finally 에서 각 블록의 장점을 이용하자(!!!)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#finally-블록"><span class="toc-number">3.12.1.</span> <span class="toc-text">finally 블록</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#else-블록"><span class="toc-number">3.12.2.</span> <span class="toc-text">else 블록</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#모두-함께-사용하기-json정리후-다시읽어보기"><span class="toc-number">3.13.</span> <span class="toc-text">모두 함께 사용하기(json정리후 다시읽어보기)(???)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#출처"><span class="toc-number">4.</span> <span class="toc-text">출처</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -920,6 +940,10 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
     
     
     
@@ -1918,19 +1942,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
     
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
-    
-        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
-    
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
         <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
     
-        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
@@ -1938,15 +1958,19 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
         <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
-    
-        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
-    
-        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
@@ -1968,21 +1992,21 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
-        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
-    
-        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
-        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
     
-        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
     
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
@@ -2019,13 +2043,13 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
-    
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
-        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
     
         <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
     
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
     
@@ -2041,19 +2065,19 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
-        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
     
         <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
-        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
-    
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
