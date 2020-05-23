@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>환경변수 활용법 · lostcatbox</title>
+    <title>환경변수 사용법 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">환경변수 활용법</a>
+                <a href="#" class="post-name">환경변수 사용법</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            환경변수 활용법
+            환경변수 사용법
             <!-- 404 -->
             
         </h1>
@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">805</span>Reading time: <span class="post-count reading-time">5 min</span></span>
+                        <span>Word count: <span class="post-count word-count">855</span>Reading time: <span class="post-count reading-time">5 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -404,13 +404,17 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <h1 id="환경-변수"><a href="#환경-변수" class="headerlink" title="환경 변수"></a>환경 변수</h1><p>환경변수에 등록된 경로는, 컴퓨터의 어떤 경로에서라도 접근(=실행) 할 수 있다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">환경변수 확인</span><br><span class="line">$ echo $PATH   ($변수명 하면 호출됨)</span><br><span class="line"></span><br><span class="line">$ echo AAA #AAA에 대한 환경변수값 확인</span><br><span class="line"></span><br><span class="line">$ ls -la</span><br><span class="line">.bash_profile 이라는 숨김 파일이 있는지 확인한다.</span><br><span class="line"></span><br><span class="line">없을경우 생성</span><br><span class="line">$ touch .bash_profile</span><br><span class="line"></span><br><span class="line">있을 경우 파일 오픈</span><br><span class="line">$ vi .bash_profile  -&gt; vi를 통해 오픈</span><br><span class="line">$ open .bash_profile  -&gt; 에디터를 통해 오픈</span><br></pre></td></tr></table></figure>
+<p>[~~]에서 [ ]은 위치를 알려줌, 실제 입력시에는 해당값만을 입력.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#현재위치 절대 경로 출력</span></span><br><span class="line">pwd</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 환경변수 확인</span></span><br><span class="line">echo $[PATH]   ($변수명 하면 호출됨)  <span class="comment">#echo는 문자열 print로 생각하자.</span></span><br><span class="line"></span><br><span class="line">echo [AAA] <span class="comment">#AAA에 대한 환경변수값 확인</span></span><br><span class="line"></span><br><span class="line">ls -la  <span class="comment">#권한도 확인.</span></span><br><span class="line">.bash_profile 이라는 숨김 파일이 있는지 확인한다.</span><br><span class="line"></span><br><span class="line">없을경우 생성</span><br><span class="line">touch .bash_profile</span><br><span class="line"></span><br><span class="line">있을 경우 파일 오픈</span><br><span class="line">vi .bash_profile  -&gt; vi를 통해 오픈</span><br><span class="line">open .bash_profile  -&gt; 에디터를 통해 오픈</span><br></pre></td></tr></table></figure>
 
-<h2 id="환경-변수-경로-의미"><a href="#환경-변수-경로-의미" class="headerlink" title="환경 변수 경로 의미"></a>환경 변수 경로 의미</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export PATH&#x3D;$&#123;PATH&#125;  #$앞의 &#123;PATH&#125;의 경우 상위 Path</span><br><span class="line"></span><br><span class="line"># 그리고 그 뒤에 다른 Path가 필요할 경우 &#123;PATH&#125;뒤에 : 적어서 경로를 이어줍니다.</span><br><span class="line">export PATH&#x3D;&quot;&#x2F;Users&#x2F;wefw&#x2F;wgwe&#x2F;erge&#x2F;:$PATH&quot; #기존의 PATH변수에있던 값들앞에 앞에 쓴 새로운 경로추가함</span><br></pre></td></tr></table></figure>
+<h2 id="전역-환경-변수-경로-추가-export"><a href="#전역-환경-변수-경로-추가-export" class="headerlink" title="전역 환경 변수 경로 추가(export)"></a>전역 환경 변수 경로 추가(export)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export [환경변수] = [환경변수내용] </span><br><span class="line"></span><br><span class="line">export PATH=/추가할 경로<span class="number">1</span>:/추가할 경로<span class="number">2</span>:/경로<span class="number">3</span>:$PATH  <span class="comment"># :로 구분하며 계속 추가가능, 또한 $PATH가 마지막에 붙은 이유는 기존에 앞에있던 $PATH변수명으로 지정되었던 값들도 유지해주는것, 여기서 마지막에 :$PATH가 붙지않았다면 기존에 있던 $PATH값은 유지되지않음 </span></span><br><span class="line">export PATH=$PATH:/Users/lostcatbox <span class="comment">#예시</span></span><br><span class="line">  </span><br><span class="line">export PATH=<span class="string">"/Users/wefw/wgwe/erge/:$PATH"</span> <span class="comment">#기존의 PATH변수에있던 값들앞에 앞에 쓴 새로운 경로추가함</span></span><br></pre></td></tr></table></figure>
+
+<p>위에 예시처럼 PATH에다가 추가하면 셀은 항상 저기 경로에 있는 파일들을 현재 경로와 상관없이 실행할수있도록되어있다</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 # 하면 파이썬 실행되는것처럼</span><br></pre></td></tr></table></figure>
 
 <p>리눅스 환경은 <code>.bash_profile</code>,<code>.bashrc</code>에 설정해놓으면 되는데 </p>
 <p>zsh를 쓰는 나의 환경에서는 iterms를 껏다 키면 $PATH 가 초기화되어 계속</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source ~&#x2F;.bash_profile</span><br><span class="line">source ~&#x2F;.bashrc</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bash_profile</span><br><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
 
 <p>를 해서 zsh환경에서 실행할때마다 설정해줘야하는 문제가 발생했다</p>
 <blockquote>
@@ -421,7 +425,7 @@ height:50vh;
 <p>여기에 원하는 환경변수들을 저장하면 항상 사용가능하다.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;.zshrc</span><br><span class="line">~&#x2F;.zshenv</span><br><span class="line">~&#x2F;.zprofile</span><br></pre></td></tr></table></figure>
 
-<h3 id="zsh에-bash파일들에-있는-환경변수-자동추가하기"><a href="#zsh에-bash파일들에-있는-환경변수-자동추가하기" class="headerlink" title="zsh에 bash파일들에 있는 환경변수 자동추가하기"></a>zsh에 bash파일들에 있는 환경변수 자동추가하기</h3><p>이미 .bash_profile 과 .bashrc 에 설정해놓은 path를 사용하기위해<br>source ~/.bash_profile<br>source ~/.bashrc<br>를 실행시키도록 설정했다</p>
+<h3 id="zsh에-bash파일들에-있는-환경변수-자동추가하기"><a href="#zsh에-bash파일들에-있는-환경변수-자동추가하기" class="headerlink" title="zsh에 bash파일들에 있는 환경변수 자동추가하기"></a>zsh에 bash파일들에 있는 환경변수 자동추가하기</h3><p>이미 .bash_profile 과 .bashrc 에 설정해놓은 path를 사용하기위해<br><code>source ~/.bash_profile</code><br><code>source ~/.bashrc</code><br>를 실행시키도록 설정했다</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi ~&#x2F;.zprofile  #vi에디터로 .zprofile 을 열어 아래 명령을 추가 작성 및 저장</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source ~&#x2F;.bash_profile</span><br><span class="line">source ~&#x2F;.bashrc</span><br></pre></td></tr></table></figure>
@@ -591,7 +595,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#환경-변수"><span class="toc-number">1.</span> <span class="toc-text">환경 변수</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#환경-변수-경로-의미"><span class="toc-number">1.1.</span> <span class="toc-text">환경 변수 경로 의미</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#oh-my-zsh"><span class="toc-number">1.2.</span> <span class="toc-text">oh-my-zsh</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zsh에-bash파일들에-있는-환경변수-자동추가하기"><span class="toc-number">1.2.1.</span> <span class="toc-text">zsh에 bash파일들에 있는 환경변수 자동추가하기</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#환경변수의-활용"><span class="toc-number">2.</span> <span class="toc-text">환경변수의 활용</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#환경변수패턴"><span class="toc-number">2.1.</span> <span class="toc-text">환경변수패턴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#비밀파일패턴"><span class="toc-number">2.2.</span> <span class="toc-text">비밀파일패턴</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#결론"><span class="toc-number">3.</span> <span class="toc-text">결론</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#출처"><span class="toc-number">4.</span> <span class="toc-text">출처</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#환경-변수"><span class="toc-number">1.</span> <span class="toc-text">환경 변수</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#전역-환경-변수-경로-추가-export"><span class="toc-number">1.1.</span> <span class="toc-text">전역 환경 변수 경로 추가(export)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#oh-my-zsh"><span class="toc-number">1.2.</span> <span class="toc-text">oh-my-zsh</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zsh에-bash파일들에-있는-환경변수-자동추가하기"><span class="toc-number">1.2.1.</span> <span class="toc-text">zsh에 bash파일들에 있는 환경변수 자동추가하기</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#환경변수의-활용"><span class="toc-number">2.</span> <span class="toc-text">환경변수의 활용</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#환경변수패턴"><span class="toc-number">2.1.</span> <span class="toc-text">환경변수패턴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#비밀파일패턴"><span class="toc-number">2.2.</span> <span class="toc-text">비밀파일패턴</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#결론"><span class="toc-number">3.</span> <span class="toc-text">결론</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#출처"><span class="toc-number">4.</span> <span class="toc-text">출처</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -604,8 +608,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
     
     
     
@@ -1453,7 +1455,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/path-setting/" >환경변수 활용법</a>
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/path-setting/" >환경변수 사용법</a>
         </li>
     
     
@@ -1670,35 +1672,35 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
-    
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
         <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
     
         <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
-        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
-    
-        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
-    
-        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
-    
-        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
     
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
         <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
     
-        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
-        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
     
         <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
     
-        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -1706,33 +1708,33 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
         <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
-        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
-    
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
     
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
-    
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
         <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
     
-        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
-    
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
-    
-        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1771,43 +1773,43 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
-        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
-    
         <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
-    
-        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
     
         <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Dataminging"><span class="iconfont-archer">&#xe60a;</span>Dataminging</span>
     
         <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
     
-        <span class="sidebar-category-name" data-categories="Dataminging"><span class="iconfont-archer">&#xe60a;</span>Dataminging</span>
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
-        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
-    
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
-        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
     
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
         <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
-        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
-    
         <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
-        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
-        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
