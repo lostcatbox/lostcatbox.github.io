@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>networkbasic · lostcatbox</title>
+    <title>네트워크 기본지식 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">networkbasic</a>
+                <a href="#" class="post-name">네트워크 기본지식</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            networkbasic
+            네트워크 기본지식
             <!-- 404 -->
             
         </h1>
@@ -272,11 +272,13 @@ height:50vh;
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "Network">Network</a>
     
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Server">Server</a>
+    
 </div>
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">111</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">500</span>Reading time: <span class="post-count reading-time">3 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -405,13 +407,55 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <p>네트워크는 기기간, 기기와 서버간 통신</p>
-<p>http, https는 통신 규격으로서 애플리케이션 단에서 풀리고 압축됨. 또한 application(가장 추상적) 에서 통신을 위해서 01010바이너리데이터로 BIT까지 내려가야됨. 그와중에 TCP/IP들의 양식을 통해 Network Data Link Layer에서 요청과 응답간의 통신이 어디로 향해야하는지 정확히 도착했는지에 대한 정보가 다 들어가있다. </p>
+        <h1 id="네트워크"><a href="#네트워크" class="headerlink" title="네트워크"></a>네트워크</h1><p><a href="https://jwprogramming.tistory.com/31?category=680194" target="_blank" rel="noopener">자세히</a></p>
+<h2 id="OSI-계층-구조"><a href="#OSI-계층-구조" class="headerlink" title="OSI 계층 구조"></a>OSI 계층 구조</h2><p>네트워크는 기기간, 기기와 서버간 통신</p>
 <p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gejqy66v23j310k0smkh6.jpg" alt="스크린샷 2020-05-07 오후 12.50.45"></p>
+<h3 id="데이터-단위"><a href="#데이터-단위" class="headerlink" title="데이터 단위"></a>데이터 단위</h3><ul>
+<li><strong>PDU(Protocol Data Unit)</strong>는 동일 계층 간에 교환되는 정보의 단위</li>
+<li><strong>SDU(Service Data Unit)</strong>은 상,하위 계층끼리 주고 받는 정보의 단위</li>
+</ul>
+<h3 id="각-계층별-기능"><a href="#각-계층별-기능" class="headerlink" title="각 계층별 기능"></a>각 계층별 기능</h3><ul>
+<li><p><strong>Physical Layer(물리계층)</strong></p>
+<p>실제, 전기적 특성에 대한 규칙을 정의, 물리적 전송 매체와 전송 신호 방식 정의</p>
+</li>
+<li><p><strong>Data Link Layer(데이터 링크 계층)</strong></p>
+<p>두 개의 인접한 개방 시스템들 간에 신뢰성 있고 효율적인 정보 전송을 할수 있도록함.</p>
+</li>
+<li><p><strong>네트워크 계층(Network Layer, 망 계층)</strong></p>
+<p>개방 시스템들 간의 네트워크 연결을 관리하는 기능과 데이터의 교환 및 중계 기능</p>
+<p>이 계층은 경로를 선택하고 주소를 정하고 경로에 따라 패킷을 전달해주는 것이 이 계층의 역할이다. </p>
+<ul>
+<li>IP패킷의 전달 및 라우팅을 담당하고 패킷을 목적지까지 전달하는 역할하는 IP계층도 네트워크 계층의포함됨.</li>
+</ul>
+</li>
+<li><p><strong>전송 계층(Transport Layer)</strong></p>
+<p>종단 시스템(End-to-End)간에 투명한 데이터 전송을 가능하게 합니다.</p>
+<p>TCP, UDP  등의 표준이 존재함</p>
+<p><strong>패킷 생성(Assembly/Sequencing/Deassembly/Error detection/Request repeat/Flow control) 및 전송</strong> 담당 계층(상위계층안봐도 전송 계층이 유효한지만 판단하면되도록 설계됨.)</p>
+<blockquote>
+<p>네트워크 상에서는 무수히 많은 데이터가 오고가고, 그에 따라 트래픽 혹은 여러가지 기타 이유로 인하여 패킷이 손실할 수 있는 가능성이 많습니다. 이러한 패킷손실에 대하여 TCP는 신뢰적인 데이터 전송 메카니즘을 가지고 있습니다.</p>
+<p>UDP 프로토콜의 경우에는 비신뢰적인 네트워크 통신방식이므로 에러를 검출해낼 수 없습니다. </p>
+<p>TCP 프로토콜이 신뢰적인 통신 연결방법이므로 이 TCP통신에서 데이터가 전송 될 때 패킷이 깨질 수 있는 가정으로 두어야 합니다.</p>
+</blockquote>
+</li>
+<li><p><strong>세션 계층(Session Layer)</strong></p>
+<p>애플리케이션 간에 세션을 구축하고 관리하면 종료시키는 역할을 합니다.</p>
+</li>
+<li><p><strong>표현 계층(Presentation Layer)</strong></p>
+<p>응용 계층으로부터 받은 데이터를 세션 계층에 보내기 전에 통신에 적당한 형태로 변환하고, 세션 계층에서 받은 데이터를 응용 계층에 맞게 변환하는 기능을 담당합니다.</p>
+</li>
+<li><p><strong>응용 계층(Application Layer)</strong></p>
+<p>사용자가 OSI 환경에 접근할 수 있도록 서비스를 제공합니다.</p>
+</li>
+</ul>
+<h1 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h1><p>네트워크 주소 변환(Network Address Translation, 줄여서 NAT)은 IP 패킷의 TCP/UDP 포트 숫자와 소스 및 목적지의 IP 주소 등을 재기록하면서 라우터를 통해 네트워크 트래픽을 주고 받는 기술을 말합니다.</p>
+<p>패킷에 변화가 생기기 때문에 IP나 TCP/UDP의 체크섬(checksum)도 다시 계산되어 재기록해야 합니다. NAT를 이용하는 이유는 대개 사설 네트워크에 속한 여러 개의 호스트가 하나의 공인 IP 주소를 사용하여 인터넷에 접속하기 위함입니다.</p>
+<h1 id="DHCP"><a href="#DHCP" class="headerlink" title="DHCP"></a>DHCP</h1><p>DHCP란 호스트의 IP주소와 각종 TCP/IP 프로토콜의 기본 설정을 클라이언트에게 자동적으로 제공해주는 프로토콜을 말합니다. DHCP에 대한 표준은 RFC문서에 정의되어 있으며, DHCP는 네트워크에 사용되는 IP주소를 DHCP서버가 중앙집중식으로 관리하는 클라이언트/서버 모델을 사용하게 됩니다. DHCP지원 클라이언트는 네트워크 부팅과정에서 DHCP서버에 IP주소를 요청하고 이를 얻을 수 있습니다.</p>
+<p>네트워크 안에 컴퓨터에 자동으로 네임 서버 주소, IP주소, 게이트웨이 주소를 할당해주는 것을 의미하고, 해당 클라이언트에게 일정 기간 임대를 하는 동적 주소 할당 프로토콜입니다.</p>
+<h1 id="HTTP-UDP-etc"><a href="#HTTP-UDP-etc" class="headerlink" title="HTTP, UDP etc.."></a>HTTP, UDP etc..</h1><p>http, https는 통신 규격으로서 애플리케이션 단에서 풀리고 압축됨. 또한 application(가장 추상적) 에서 통신을 위해서 01010바이너리데이터로 BIT까지 내려가야됨. 그와중에 TCP/IP들의 양식을 통해 Network Data Link Layer에서 요청과 응답간의 통신이 어디로 향해야하는지 정확히 도착했는지에 대한 정보가 다 들어가있다. </p>
 <p>하지만 UDP/IP(최근 추세)로 http/3로 점점 진화중인데 구글아 부탁해</p>
 <p>하여튼 양파처럼 생각하면된다. application에서 밖으로 통신에 필요한 정보들을 layer규격으로 하나씩 감싸고 서버에서는 어디로 보내야할지 알아야하므로 Network layer까지 풀었다가 다시 압축해서 통신을 보낸다. </p>
 <p>라우터와 루트 등의 개념도 들어감</p>
-<h1 id="개인서버-구축-관련"><a href="#개인서버-구축-관련" class="headerlink" title="개인서버 구축 관련"></a>개인서버 구축 관련</h1><p>HYPERVISOR를 이용하여 윈도우 서버, 우분투, 도커 각자 깔고 필요시 미크로틱을 이용하여 VPN사용하여 포트번호로 포워드 시키자</p>
 
     </article>
     <!-- license  -->
@@ -549,7 +593,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#개인서버-구축-관련"><span class="toc-number">1.</span> <span class="toc-text">개인서버 구축 관련</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#네트워크"><span class="toc-number">1.</span> <span class="toc-text">네트워크</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#OSI-계층-구조"><span class="toc-number">1.1.</span> <span class="toc-text">OSI 계층 구조</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#데이터-단위"><span class="toc-number">1.1.1.</span> <span class="toc-text">데이터 단위</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#각-계층별-기능"><span class="toc-number">1.1.2.</span> <span class="toc-text">각 계층별 기능</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#NAT"><span class="toc-number">2.</span> <span class="toc-text">NAT</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP"><span class="toc-number">3.</span> <span class="toc-text">DHCP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-UDP-etc"><span class="toc-number">4.</span> <span class="toc-text">HTTP, UDP etc..</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1297,9 +1341,43 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 53
+        Total : 55
         </div>
         <!-- search  -->
         
@@ -1312,6 +1390,16 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu/" >우분투</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >개인서버 만들기</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1335,7 +1423,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >networkbasic</a>
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 기본지식</a>
         </li>
     
     
@@ -1666,6 +1754,10 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -1740,6 +1832,10 @@ jsonContent:
         <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
