@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>개인서버 만들기 · lostcatbox</title>
+    <title>무제 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">개인서버 만들기</a>
+                <a href="#" class="post-name">무제</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            개인서버 만들기
+            무제
             <!-- 404 -->
             
         </h1>
@@ -264,26 +264,14 @@ height:50vh;
             <div class="post-intros">
                 <!-- 文章页标签  -->
                 
-                    <div class= post-intro-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Tip">Tip</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Network">Network</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Server">Server</a>
-    
-</div>
-                
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">797</span>Reading time: <span class="post-count reading-time">4 min</span></span>
+                        <span>Word count: <span class="post-count word-count">0</span>Reading time: <span class="post-count reading-time">1 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2020/05/26</span>
+                    <span class="post-intro-time">2020/06/17</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -407,83 +395,7 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>개인서버로 내가 원하는 프로젝트를 운영할 수 있다면 얼마나 좋을까? </p>
-<p>전기값만 들고 , 개발서버와 실서비스 서버를 분리하여 내 마음대로 설계, 구축이 가능해진다.</p>
-<p>그래서 현재 개인서버를 구축하는 중이다</p>
-<p>단기목표는 서버&gt;hypervisor&gt;우분투,window server를 설치 후 우분투 내부에 도커를 설치하여(2020.05.27 구현성공)</p>
-<p>지금까지 만든 프로젝트의 api를 aws서버에서 내 개인서버로 운영하는 것이 목적이다.</p>
-<p>하지만 목표를 달성하려면 ip, dns, 이런 개념도 알아야됨은 물론이고 보안 이슈도 해결을 해야하므로 상당한 공부가 필요해졌다.</p>
-<p>+ 중장기 목표는 서버에 대해서 누구에게 기본적인 원리는 부담없이 설명해주고싶었다.</p>
-<p>전부 혼자하신분.. <a href="[https://www.popit.kr/%EC%8A%A4%ED%83%80%ED%8A%B8%EC%97%85-%EA%B0%9C%EB%B0%9C%EC%9E%90-%ED%98%BC%EC%9E%90-%EB%B9%A0%EB%A5%B4%EA%B2%8C-%EC%8B%B8%EA%B2%8C-%EC%84%9C%EB%B2%84-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0-1%ED%8E%B8/](https://www.popit.kr/스타트업-개발자-혼자-빠르게-싸게-서버-구축하기-1편/)">자세히</a></p>
-<h1 id="서버"><a href="#서버" class="headerlink" title="서버"></a>서버</h1><h2 id="인증"><a href="#인증" class="headerlink" title="인증"></a>인증</h2><p>요즘 아마존 AWS나 여러 클라우드에 접속할 때에는 기존의 ID/PW 방식의 인증보다는 RSA공개키 암호를 사용해서 해당 서버에 공개키를 저장해두고, 본인은 개인키를 가지고서 접속하는 방식을 많이 사용한다.</p>
-<p>간단한 사용법.</p>
-<p>본인의 PC(macOS 또는 리눅스)에서 ssh-keygen을 사용한다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -f ~&#x2F;.ssh&#x2F;&lt;저장할파일명&gt;  -C  &lt;계정아이디&gt;@\&lt;서버주소:포트\&gt;</span><br></pre></td></tr></table></figure>
-
-<p>이제 ~/.ssh/ 디렉토리에는 luneos 라는 개인키(private key)파일과, luneos.pub라는 공개키(public key) 파일이 생성되어 있다.</p>
-<p>원칙적으로 공개키 파일은 외부에 공개하는 용도이고, 개인키 파일만 잘 간직하면 된다. 어차피 본인만 사용할 것이라면, 둘다 어딘가에 숨겨놔도 크게 상관은 없다. </p>
-<p>이제 해당 서버에 직접 접속을 하던지, 아니면 관리자에게 요청을하던지 해서</p>
-<p>좀전에 생성한 luneos.pub 파일을 그 서버 안에 저장해두어야 한다.</p>
-<p>luneos.pub 파일의 내용을 클립보드에 복사해두었다가, 해당 서버의 home 디렉토리에 .ssh 을 생성하고 그 안에 authorized_keys라는 파일을 만든다. (이미 생성되어 있다면 append)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@qemux86:~# root@qemux86:~# pwd </span><br><span class="line">&#x2F;home&#x2F;root root@qemux86:~# mkdir .ssh </span><br><span class="line">root@qemux86:~# cd .ssh </span><br><span class="line">root@qemux86:~&#x2F;.ssh# echo &#39;&lt;값을 넣어&gt;&#39;</span><br></pre></td></tr></table></figure>
-
-<p>그럼 이제부터는 ssh 접속할 때 별도로 ID 와 패스워드를 입력할 필요 없이 아래와 같이 접속하면 된다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i &lt;개인키경로&gt; -p 5522 root@&lt;서버ip&gt;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>간단히 원리를 보면 (public키로 메세지를 암호화하면 쌍이되는 private만 해석할수있다.)</p>
-<ol>
-<li>클라이언트가 서버에 SSH 연결을 요청한다.</li>
-<li>서버는 랜덤 챌린지(랜덤 데이터 스트링)를 생성해 클라이언트에게 보낸다.</li>
-<li>클라이언트는 서버로 부터 받은 챌린지(C)를 자신이 가지고 있는 private 키로 암호화해서 암호화 된 메시지를 서버로 보낸다.</li>
-<li>서버는 클라이언트에서 받은 암호화 된 메시지를 public 키로 해석한 후 그 결과를 2단계에서 자신이 클라이언트에게 보낸 랜덤 챌린지와 일치하는지 확인한다. (public 키로 해석할 수 있는 메시지는 그 쌍이 되는 private 키를 가진 사람만이 만들 수 있기 때문) 일치하면 클라이언트가 인증된 것이다.</li>
-</ol>
-</blockquote>
-<h2 id="기본-구조"><a href="#기본-구조" class="headerlink" title="기본 구조"></a>기본 구조</h2><p><a href="https://www.2cpu.co.kr/lec/2350?&sfl=wr_subject&stx=Esxi&sop=and" target="_blank" rel="noopener">자세히</a></p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gf65023px0j30u20u0jwy.jpg" alt="스크린샷 2020-05-26 오후 9.43.49"></p>
-<h3 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h3><p>최초의 클라이언트로부터 요청 발생&gt; 네이트워크 장비로 수신</p>
-<h3 id="Modem"><a href="#Modem" class="headerlink" title="Modem"></a>Modem</h3><p>가장 먼저 네트워크 패킷(요청할주소, 내용이 적혀있는 택배와 유사)을 받는 것이다.</p>
-<p>통신사로부터 가장 먼저 연결되는 장비</p>
-<h3 id="공유기-Cable-DSL-Router"><a href="#공유기-Cable-DSL-Router" class="headerlink" title="공유기(Cable/DSL Router)"></a>공유기(Cable/DSL Router)</h3><p>두번째로 네트워크 패킷을 전달 받는 것은 공유기로 보통 iptime, 미크로틱 같은 것</p>
-<p>패킷은 공유기에 등록된 Port Forwarding 또는 DMZ 같은 Role에 의해 지정된 단말기에 전달된다.</p>
-<blockquote>
-<p>클라이언트(외부)&gt;모뎀&gt;공유기로 요청전달됨(응답은 반대겠지…)</p>
-</blockquote>
-<h2 id="서버-1"><a href="#서버-1" class="headerlink" title="서버"></a>서버</h2><p>위의 과정을 통해 페킷이 서버에 전달된다.</p>
-<h3 id="ESXI"><a href="#ESXI" class="headerlink" title="ESXI"></a>ESXI</h3><p>서버 가상화 아키텍처인 <ESXi>는 물리적인 서버에 OS처럼 직접 설치하여, 여러 가상머신(Virtual Machine)으로 파티셔닝할 수 있는 &lt;베어메탈&gt; 하이퍼바이저 입니다.</p>
-<p>즉, ESXI위에 올리면 윈도우, 우분투가 각각 가상머신으로 가상화 서버가 됨.</p>
-<p>맨위의 그림에서 Virtualazation Server이하는 모두 논리적인 구성이므로, 이 위에다가 바로 linux 서버, window서버를 설치하면, 그림에서 Control, Firewall, Proxy, 가상 NAT같은 구성은 사라짐(매우위험함)</p>
-<p>즉, 하나가 뚤리면 내부 서버나 단말기들도 공격당할 가능성이 매우 높아지는 구성임</p>
-<h3 id="NAT-Proxy-etc…-Server"><a href="#NAT-Proxy-etc…-Server" class="headerlink" title="NAT, Proxy, etc… + Server"></a>NAT, Proxy, etc… + Server</h3><p>즉, 가상화 서버 구축후 내부적으로도 Router, 방화벽 등을 구축할 수 있고 구축된 가상화 서버로부터 전달 받은 네트워크 패킷을 Router, Firewall을 거쳐 내부의 네트워크 망으로 전달하게 된다.</p>
-<p>따라서 pfSense라는 방화벽이자, 가상의 라우팅 서버를 구성하여 논리적 망분리를 구성할 것이다.</p>
-<p>이렇게 되면 “외부&gt;모뎀&gt;공유기&gt;가상화서버&gt;pfSense”순으로 요청 페킷이 통과하게되겠지.</p>
-<h4 id="NAT-Network-Address-Translation"><a href="#NAT-Network-Address-Translation" class="headerlink" title="NAT(Network Address Translation)"></a>NAT(Network Address Translation)</h4><p>NAT구성 = 내부 네트워크, 사설망임</p>
-<p>위의 그림에서는 개발 NAT, 실서비스 NAT으로 나눠놓음</p>
-<p>논리적 망분리가 이뤄지지 않은 네트워크면, 하나 서버가 해킹당하면 다른곳도 접근가능해서 위험.(논리적 망분리를 하고 있는 상위개체가 해킹당하지 않는 이상..)</p>
-<p>가상화 서버를 통해 구성된 NAT은 구성하기에 따라 논리적인 망분리를 구축하는 것도 가능한데 가상화 서버 또는 가상화 서버 내 Router또는 Firewall로 부터 전달받은 패킷을 목적지 네트워크가 수신하게 된다.</p>
-<h4 id="Proxy-프록시"><a href="#Proxy-프록시" class="headerlink" title="Proxy(프록시)"></a>Proxy(프록시)</h4><p>내부적인 망분리를 구축한 경우 내/외부의 통신을 위해 프록시 서버를 구축할 수 있다. </p>
-<p>보통 웹 서비스를 제공하는 경우 리버스 프록시(Reverse Proxy)환경을 구축하기도한다</p>
-<blockquote>
-<p>포워드 프록시는 요청자들이 요청할때 프록시 서버에서 모아서 해당하는 사이트 접근</p>
-<p>리버스 프록시는 요청들이 직접 서버에 들어오는 것이아니라 리버스 프록시 서버가 먼저 요청을 받고 해당하는 내부 서버에 다시 요청.(보안!!)(외부에서 직접 해당서버 접속 불가)</p>
-</blockquote>
-<p> 모든 망을 경유하는 하나의 서버를 만들어 볼 예정입니다. 바로 Reverse Proxy 서버를 구축해 볼 예정, </p>
-<p>이 Reverse Proxy 는 논리적 망분리가 이루어진 모든 NAT에 다리를 거치고 있어 외부에서 요청된 Domain 등에 따라 접근처리를 해 줄 것이고, 웹 서버가 받는 요청 부하를 줄여줄 수 있도록 고려할 것입니다.</p>
-<h4 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h4><p>모든 네트워크구간을 정상적으로 통과한 요청은 목적지에 도달해 처리가 되고, 발생된 응답 결과는 역순으로&gt; 클라이언트까지 응답반환</p>
-<blockquote>
-<p>나머지는 NAT수를 늘리고</p>
-<p>pfSense의 Role 정의는 필요에 따라 커스터마이징 하셔서 자신이 원하는 환경을 구축하시면 되겠습니다.</p>
-</blockquote>
-<h1 id="라우터"><a href="#라우터" class="headerlink" title="라우터"></a>라우터</h1><p><a href="https://studyforus.tistory.com/27" target="_blank" rel="noopener">자세히</a></p>
-<p>외부에서 접속할 수 있는 방법은 3가지</p>
-<ul>
-<li>포트포워드</li>
-<li>DMZ</li>
-<li>Twin IP</li>
-</ul>
-<h1 id="IP주소는-한개일때-서버-여러대"><a href="#IP주소는-한개일때-서버-여러대" class="headerlink" title="IP주소는 한개일때 서버 여러대"></a>IP주소는 한개일때 서버 여러대</h1><p><a href="http://www.2cpu.co.kr/bbs/board.php?bo_table=QnA&wr_id=559051" target="_blank" rel="noopener">자세히</a></p>
-<p>위의구성 참고하기</p>
-
+        
     </article>
     <!-- license  -->
     
@@ -491,17 +403,12 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href= "/2020/05/27/ubuntu/" title= "우분투">
-                    <div class="nextTitle">우분투</div>
-                </a>
-            
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href= "/2020/05/21/docker/" title= "docker">
-                    <div class="prevTitle">docker</div>
+                <a href= "/2020/05/27/ubuntu/" title= "우분투">
+                    <div class="prevTitle">우분투</div>
                 </a>
             
         </li>
@@ -620,7 +527,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#서버"><span class="toc-number">2.</span> <span class="toc-text">서버</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#인증"><span class="toc-number">2.1.</span> <span class="toc-text">인증</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#기본-구조"><span class="toc-number">2.2.</span> <span class="toc-text">기본 구조</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Client"><span class="toc-number">2.2.1.</span> <span class="toc-text">Client</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Modem"><span class="toc-number">2.2.2.</span> <span class="toc-text">Modem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#공유기-Cable-DSL-Router"><span class="toc-number">2.2.3.</span> <span class="toc-text">공유기(Cable&#x2F;DSL Router)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#서버-1"><span class="toc-number">2.3.</span> <span class="toc-text">서버</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ESXI"><span class="toc-number">2.3.1.</span> <span class="toc-text">ESXI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT-Proxy-etc…-Server"><span class="toc-number">2.3.2.</span> <span class="toc-text">NAT, Proxy, etc… + Server</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#NAT-Network-Address-Translation"><span class="toc-number">2.3.2.1.</span> <span class="toc-text">NAT(Network Address Translation)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Proxy-프록시"><span class="toc-number">2.3.2.2.</span> <span class="toc-text">Proxy(프록시)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server"><span class="toc-number">2.3.2.3.</span> <span class="toc-text">Server</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#라우터"><span class="toc-number">3.</span> <span class="toc-text">라우터</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IP주소는-한개일때-서버-여러대"><span class="toc-number">4.</span> <span class="toc-text">IP주소는 한개일때 서버 여러대</span></a></li></ol>
+        
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
