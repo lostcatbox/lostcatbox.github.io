@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">1k</span>Reading time: <span class="post-count reading-time">6 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.5k</span>Reading time: <span class="post-count reading-time">9 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -486,6 +486,71 @@ height:50vh;
 
 <h1 id="오류"><a href="#오류" class="headerlink" title="오류"></a>오류</h1><p>머지중에 conflict </p>
 <p><a href="https://stackoverflow.com/questions/42174485/git-how-dangerous-is-deleted-by-us-conflict" target="_blank" rel="noopener">https://stackoverflow.com/questions/42174485/git-how-dangerous-is-deleted-by-us-conflict</a></p>
+<h2 id="git-develop-gt-gt-develop-발생이유"><a href="#git-develop-gt-gt-develop-발생이유" class="headerlink" title="git develop &gt;&gt;develop 발생이유"></a>git develop &gt;&gt;develop 발생이유</h2><p><a href="https://stackoverflow.com/questions/31463025/why-does-git-merge-a-branch-into-itself" target="_blank" rel="noopener">자세히</a></p>
+<p><code>Merge branch &#39;develop&#39; of https://bitbucket.org/abc/xyz into develop</code></p>
+<h3 id="분석"><a href="#분석" class="headerlink" title="분석"></a>분석</h3><p>remote repository의  develop 가 내 로컬  develop와 현재 다르기 때문에 일어난 현상이다. 다음을 반드시 기억하자</p>
+<ul>
+<li><code>develop</code> = The branch he/she is currently working on. The new commits go here.(로컬기준 develop)</li>
+<li><code>origin/develop</code> = This is essentially a snapshot that the current repository holds about the state of the <code>develop</code> branch on the remote server. It gets updated with the remote changes when you do <code>fetch</code> or <code>pull</code>, and with the local changes after a successful <code>push</code>.(로컬에 있는 리모트 리포지토리의 develop와 연동된 곳)(git fetch, git pull할때 업뎃해줌.)</li>
+</ul>
+<p>이제 git pull을 하게된다면 fetch와 merge를 순차적으로 실행한다.</p>
+<ul>
+<li><p><code>fetch</code> - brings all new commits (if any) from the remote repository to the local <code>origin/develop</code> branch.(로컬에 리모트 관련 모든 브랜치를 최신 커밋으로 업뎃)</p>
+</li>
+<li><p><code>merge</code> - takes the new commits and applies them to the local working <code>develop branch</code>. This can happen in one of two ways:</p>
+<p>(상황에 따라 2가지)</p>
+<ul>
+<li><p>로컬 워킹 브랜치에 분기 히스토리(리모트가 알지 못하는 새로운 커밋)이 포함되어있지 않은 경우, develop브랜치 포인터를 앞으로 진행 시켜 최신 커밋을 가리킵니다(fast-forwarding merge)</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg4fk2frnxj30e404gwex.jpg" alt="스크린샷 2020-06-25 오후 1.38.20"></p>
+<blockquote>
+<p>A가 origin/develop에 있는 커밋기록이고</p>
+<p>B가 로컬 워킹 브랜치이며 히스토리에는 A가 포함되어있음</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>개발자가 리모트 저장소에 없어서 <code>origin/develop</code>브랜치에 없는 새로운 커밋이있는 경우 regular 병합이 수행되므로 두 가지의 변경 사항이 모두 포함 된 새로운 커밋이 생성된다. (no fast-forwarding 관계)</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg4flk4ztkj30f0048mxo.jpg" alt="스크린샷 2020-06-25 오후 1.39.50"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg4frp4qdaj30r409q3zs.jpg" alt="스크린샷 2020-06-25 오후 1.45.41"></p>
+<p>“merge에 대한 기록이 커밋으로 남으므로 편하다”</p>
+<blockquote>
+<p>fast-forwarding관계여도 </p>
+<p>git merge –no-ff &lt;branch name&gt;을 하면 가능하다</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="해결"><a href="#해결" class="headerlink" title="해결"></a>해결</h3><p>계속해서 저런일이 발생할 환경(협업에서 자주일어남)이라면 매우 복잡한 커밋 기록 그래프가 만들어지므로 방지를 할려면 rebase를 추천한다</p>
+<p>따라서 rebase를 사용한다면 해결될수있다</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch;git rebase <span class="comment">#첫번째 방법</span></span><br><span class="line">git pull --rebase <span class="comment">#두번째 방법</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="git-Merge-와-Rebase"><a href="#git-Merge-와-Rebase" class="headerlink" title="git Merge 와 Rebase"></a>git Merge 와 Rebase</h3><h4 id="Merge"><a href="#Merge" class="headerlink" title="Merge"></a>Merge</h4><p><code>merge</code> - takes the new commits and applies them to the local working <code>develop branch</code>. This can happen in one of two ways:</p>
+<p>(상황에 따라 2가지)</p>
+<ul>
+<li><p>로컬 워킹 브랜치에 분기 히스토리(리모트가 알지 못하는 새로운 커밋)이 포함되어있지 않은 경우, develop브랜치 포인터를 앞으로 진행 시켜 최신 커밋을 가리킵니다(fast-forwarding merge)</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg4fk2frnxj30e404gwex.jpg" alt="스크린샷 2020-06-25 오후 1.38.20"></p>
+<blockquote>
+<p>A가 origin/develop에 있는 커밋기록이고</p>
+<p>B가 로컬 워킹 브랜치이며 히스토리에는 A가 포함되어있음</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>개발자가 리모트 저장소에 없어서 <code>origin/develop</code>브랜치에 없는 새로운 커밋이있는 경우 regular 병합이 수행되므로 두 가지의 변경 사항이 모두 포함 된 새로운 커밋이 생성된다. (no fast-forwarding 관계)</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg4flk4ztkj30f0048mxo.jpg" alt="스크린샷 2020-06-25 오후 1.39.50"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg4frp4qdaj30r409q3zs.jpg" alt="스크린샷 2020-06-25 오후 1.45.41"></p>
+<p>“merge에 대한 기록이 커밋으로 남으므로 편하다”</p>
+<blockquote>
+<p>fast-forwarding관계여도 </p>
+<p>git merge –no-ff &lt;branch name&gt;을 하면 가능하다</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="Rebase"><a href="#Rebase" class="headerlink" title="Rebase"></a>Rebase</h4><p>base란 branch가 처음 master(다른가지가될수도있음)에서 나온 지점을 말한다.</p>
+<p>![스크린샷 2020-06-25 오후 2.00.52](/Users/lostcatbox/Library/Application Support/typora-user-images/스크린샷 2020-06-25 오후 2.00.52.png)</p>
+<p>rebase 를 통해서 가지의 처음 시작점이 바뀌고 거기서부터 가지를 만들었던것처럼 변한다</p>
+<p>(git merge가 branch들이 많아서 merge를 할때마다 그림이 복잡해 지는것을 막을수있다.)</p>
 
     </article>
     <!-- license  -->
@@ -623,7 +688,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Git-Hub"><span class="toc-number">1.</span> <span class="toc-text">Git Hub</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#git의-관리받는-저장소만들기"><span class="toc-number">1.1.</span> <span class="toc-text">git의 관리받는 저장소만들기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#저장소-받아오기"><span class="toc-number">1.2.</span> <span class="toc-text">저장소 받아오기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#원격-서버의-저장소를-복제"><span class="toc-number">1.3.</span> <span class="toc-text">원격 서버의 저장소를 복제</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#원격-저장소-주소-추가-삭제"><span class="toc-number">1.4.</span> <span class="toc-text">원격 저장소 주소 추가 삭제</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#리모트-저장소를-Pull-하거나-Fetch-하기"><span class="toc-number">1.5.</span> <span class="toc-text">리모트 저장소를 Pull 하거나 Fetch 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#저장소-commit-되돌리기-rollback"><span class="toc-number">1.6.</span> <span class="toc-text">저장소 commit 되돌리기 (rollback)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Git-의-구성"><span class="toc-number">1.7.</span> <span class="toc-text">Git 의 구성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#관련-설명"><span class="toc-number">1.8.</span> <span class="toc-text">관련 설명</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#현재상태확인"><span class="toc-number">1.9.</span> <span class="toc-text">현재상태확인</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#파일추가-및-확정"><span class="toc-number">1.10.</span> <span class="toc-text">파일추가 및 확정.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#변경-내용-발행하기"><span class="toc-number">1.11.</span> <span class="toc-text">변경 내용 발행하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#서버주소-입력해주자"><span class="toc-number">1.12.</span> <span class="toc-text">서버주소 입력해주자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#가지-branch"><span class="toc-number">1.13.</span> <span class="toc-text">가지 (branch)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#갱신과-병합"><span class="toc-number">1.14.</span> <span class="toc-text">갱신과 병합</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#만약-충돌일어나면"><span class="toc-number">1.14.1.</span> <span class="toc-text">만약 충돌일어나면?</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#로컬-변경-내용-되돌리기"><span class="toc-number">1.15.</span> <span class="toc-text">로컬 변경 내용 되돌리기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#로컬-포기"><span class="toc-number">1.16.</span> <span class="toc-text">로컬 포기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-add한-걸-취소하고싶을떄"><span class="toc-number">1.17.</span> <span class="toc-text">git add한 걸 취소하고싶을떄</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#그외-기능들"><span class="toc-number">1.18.</span> <span class="toc-text">그외 기능들</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#git-graph-보기"><span class="toc-number">1.18.1.</span> <span class="toc-text">git graph 보기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git에-올릴필요없는파일들"><span class="toc-number">1.18.2.</span> <span class="toc-text">git에 올릴필요없는파일들</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git의-내장-GUI"><span class="toc-number">1.18.3.</span> <span class="toc-text">git의 내장 GUI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#콘솔에서-git-output을-컬러로-출력하기"><span class="toc-number">1.18.4.</span> <span class="toc-text">콘솔에서 git output을 컬러로 출력하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#이력-log-에서-확정본-1개를-딱-한-줄로만-표시하기"><span class="toc-number">1.18.5.</span> <span class="toc-text">이력(log)에서 확정본 1개를 딱 한 줄로만 표시하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#파일을-추가할-때-대화식으로-추가하기"><span class="toc-number">1.18.6.</span> <span class="toc-text">파일을 추가할 때 대화식으로 추가하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#어떤상황에서-나가는-방법"><span class="toc-number">1.18.7.</span> <span class="toc-text">어떤상황에서 나가는 방법</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#심화"><span class="toc-number">2.</span> <span class="toc-text">심화</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Conflict-대부분-해결방법"><span class="toc-number">2.1.</span> <span class="toc-text">Conflict 대부분 해결방법</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Clone-으로-받은-저장소에-브랜치로-이동하기"><span class="toc-number">2.2.</span> <span class="toc-text">Clone 으로 받은 저장소에 브랜치로 이동하기</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#오류"><span class="toc-number">3.</span> <span class="toc-text">오류</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Git-Hub"><span class="toc-number">1.</span> <span class="toc-text">Git Hub</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#git의-관리받는-저장소만들기"><span class="toc-number">1.1.</span> <span class="toc-text">git의 관리받는 저장소만들기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#저장소-받아오기"><span class="toc-number">1.2.</span> <span class="toc-text">저장소 받아오기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#원격-서버의-저장소를-복제"><span class="toc-number">1.3.</span> <span class="toc-text">원격 서버의 저장소를 복제</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#원격-저장소-주소-추가-삭제"><span class="toc-number">1.4.</span> <span class="toc-text">원격 저장소 주소 추가 삭제</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#리모트-저장소를-Pull-하거나-Fetch-하기"><span class="toc-number">1.5.</span> <span class="toc-text">리모트 저장소를 Pull 하거나 Fetch 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#저장소-commit-되돌리기-rollback"><span class="toc-number">1.6.</span> <span class="toc-text">저장소 commit 되돌리기 (rollback)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Git-의-구성"><span class="toc-number">1.7.</span> <span class="toc-text">Git 의 구성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#관련-설명"><span class="toc-number">1.8.</span> <span class="toc-text">관련 설명</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#현재상태확인"><span class="toc-number">1.9.</span> <span class="toc-text">현재상태확인</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#파일추가-및-확정"><span class="toc-number">1.10.</span> <span class="toc-text">파일추가 및 확정.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#변경-내용-발행하기"><span class="toc-number">1.11.</span> <span class="toc-text">변경 내용 발행하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#서버주소-입력해주자"><span class="toc-number">1.12.</span> <span class="toc-text">서버주소 입력해주자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#가지-branch"><span class="toc-number">1.13.</span> <span class="toc-text">가지 (branch)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#갱신과-병합"><span class="toc-number">1.14.</span> <span class="toc-text">갱신과 병합</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#만약-충돌일어나면"><span class="toc-number">1.14.1.</span> <span class="toc-text">만약 충돌일어나면?</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#로컬-변경-내용-되돌리기"><span class="toc-number">1.15.</span> <span class="toc-text">로컬 변경 내용 되돌리기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#로컬-포기"><span class="toc-number">1.16.</span> <span class="toc-text">로컬 포기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-add한-걸-취소하고싶을떄"><span class="toc-number">1.17.</span> <span class="toc-text">git add한 걸 취소하고싶을떄</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#그외-기능들"><span class="toc-number">1.18.</span> <span class="toc-text">그외 기능들</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#git-graph-보기"><span class="toc-number">1.18.1.</span> <span class="toc-text">git graph 보기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git에-올릴필요없는파일들"><span class="toc-number">1.18.2.</span> <span class="toc-text">git에 올릴필요없는파일들</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git의-내장-GUI"><span class="toc-number">1.18.3.</span> <span class="toc-text">git의 내장 GUI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#콘솔에서-git-output을-컬러로-출력하기"><span class="toc-number">1.18.4.</span> <span class="toc-text">콘솔에서 git output을 컬러로 출력하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#이력-log-에서-확정본-1개를-딱-한-줄로만-표시하기"><span class="toc-number">1.18.5.</span> <span class="toc-text">이력(log)에서 확정본 1개를 딱 한 줄로만 표시하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#파일을-추가할-때-대화식으로-추가하기"><span class="toc-number">1.18.6.</span> <span class="toc-text">파일을 추가할 때 대화식으로 추가하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#어떤상황에서-나가는-방법"><span class="toc-number">1.18.7.</span> <span class="toc-text">어떤상황에서 나가는 방법</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#심화"><span class="toc-number">2.</span> <span class="toc-text">심화</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Conflict-대부분-해결방법"><span class="toc-number">2.1.</span> <span class="toc-text">Conflict 대부분 해결방법</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Clone-으로-받은-저장소에-브랜치로-이동하기"><span class="toc-number">2.2.</span> <span class="toc-text">Clone 으로 받은 저장소에 브랜치로 이동하기</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#오류"><span class="toc-number">3.</span> <span class="toc-text">오류</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#git-develop-gt-gt-develop-발생이유"><span class="toc-number">3.1.</span> <span class="toc-text">git develop &gt;&gt;develop 발생이유</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#분석"><span class="toc-number">3.1.1.</span> <span class="toc-text">분석</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#해결"><span class="toc-number">3.1.2.</span> <span class="toc-text">해결</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git-Merge-와-Rebase"><span class="toc-number">3.1.3.</span> <span class="toc-text">git Merge 와 Rebase</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Merge"><span class="toc-number">3.1.3.1.</span> <span class="toc-text">Merge</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Rebase"><span class="toc-number">3.1.3.2.</span> <span class="toc-text">Rebase</span></a></li></ol></li></ol></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1390,30 +1455,9 @@ top:50vh;
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 55
+        Total : 54
         </div>
         <!-- search  -->
         
@@ -1430,11 +1474,6 @@ top:50vh;
     
         <li class="archive-post-item">
             <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/2020/06/17/%E1%84%86%E1%85%AE%E1%84%8C%E1%85%A6/" >무제</a>
         </li>
     
     
@@ -1718,8 +1757,6 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
-    
         <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
     
         <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
@@ -1730,25 +1767,27 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
         <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
     
         <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
         <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
-        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
-    
-        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
-    
-        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
-    
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
-        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
-    
         <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -1756,15 +1795,13 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
         <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
-    
-        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
-    
-        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
@@ -1776,6 +1813,8 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
     
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
@@ -1784,11 +1823,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
     
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
         <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
     
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
-    
-        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1827,23 +1866,21 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
         <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
-    
-        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
     
         <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
     
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
-    
-        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
-    
-        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
@@ -1851,21 +1888,23 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
         <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
         <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
-    
-        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
     
         <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
         <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
     
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
         <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
-    
-        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
