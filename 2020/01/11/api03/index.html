@@ -530,15 +530,39 @@ height:50vh;
 <p>아래는 만들것</p>
 <ol>
 <li><p>하나의 Class Based View이므로, 한 URL에 대해서만 처리할 수 있습니다.</p>
+<p><code>/post/</code>에 대한 CBV일 경우</p>
 <ul>
-<li><pre><code>/post/
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">  에 대한 CBV일 경우</span><br><span class="line"></span><br><span class="line">  - get요청 : 포스팅 목록 요청</span><br><span class="line">  - post요청 : 새 포스팅 등록 요청</span><br><span class="line"></span><br><span class="line">-</span><br></pre></td></tr></table></figure>
-/post/10/
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">     에 대한 CBV일 경우</span><br><span class="line"></span><br><span class="line">     - get요청 : 10번 포스팅 내용 요청</span><br><span class="line">     - put요청 : 10번 포스팅 수정 요청</span><br><span class="line">     - delete요청 : 10번 포스팅 삭제 요청</span><br><span class="line"></span><br><span class="line">2. 요청 method에 맞게 멤버함수를 정의하면, 해당 method 요청이 들어올 때 호출이 됩니다.</span><br><span class="line"></span><br><span class="line">   - &#96;def get(self, request)&#96;</span><br><span class="line">   - &#96;def post(self, request)&#96;</span><br><span class="line">   - &#96;def put(self, request)&#96;</span><br><span class="line">   - &#96;def delete(self, request)&#96;</span><br><span class="line"></span><br><span class="line">3. 각 method가 호출될 때, 다음 처리가 이뤄집니다.</span><br><span class="line"></span><br><span class="line">   - 직렬화&#x2F;비직렬화</span><br><span class="line">   - 인증 처리 : 인증 체크</span><br><span class="line">   - 사용량 제한 체크 : 호출 허용량 범위인지 체크</span><br><span class="line">   - 권한 클래스 지정 : 비인증유저&#x2F;인증유저에 대해 해당 API 호출을 허용할 것인지를 결정</span><br><span class="line">   - 요청된 API 버전 문자열을 탐지하여 &#96;request.version&#96;에 저장</span><br><span class="line"></span><br><span class="line">Slide Type-SlideSub-SlideFragmentSkipNotes</span><br><span class="line"></span><br><span class="line">APIView 클래스를 활용하여, 다음과 같이 글목록응답&#x2F;새글등록을 처리해주는 CBV를 만들어보겠습니다.</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;python</span><br><span class="line">from rest_framework.response import Response</span><br><span class="line">from rest_framework.views import APIView</span><br><span class="line">from .models import Post</span><br><span class="line">from .serializers import PostSerializer</span><br><span class="line"></span><br><span class="line">class PostListAPIView(APIView):</span><br><span class="line">    def get(self, request):</span><br><span class="line">        # 모델 serializer에서는 queryset또는 model인스턴스 넣을수있는데 queryset이면 many&#x3D;True를 해줘야함</span><br><span class="line">        serializer &#x3D; PostSerializer(Post.objects.all(), many&#x3D;True) </span><br><span class="line">        return Response(serializer.data)</span><br><span class="line"></span><br><span class="line">    def post(self, request):</span><br><span class="line">        serializer &#x3D; PostSerializer(data&#x3D;request.data)</span><br><span class="line">        if serializer.is_valid():</span><br><span class="line">            serializer.save()</span><br><span class="line">            return Response(serializer.data, status&#x3D;201)</span><br><span class="line">        return Response(serializer.errors, status&#x3D;400)</span><br></pre></td></tr></table></figure>
-</code></pre></li>
+<li>get요청 : 포스팅 목록 요청</li>
+<li>post요청 : 새 포스팅 등록 요청</li>
+</ul>
+<p><code>/post/10/</code>에 대한 CBV일 경우</p>
+<ul>
+<li>get요청 : 10번 포스팅 내용 요청</li>
+<li>put요청 : 10번 포스팅 수정 요청</li>
+<li>delete요청 : 10번 포스팅 삭제 요청</li>
+</ul>
+</li>
+<li><p>요청 method에 맞게 멤버함수를 정의하면, 해당 method 요청이 들어올 때 호출이 됩니다.</p>
+<ul>
+<li><code>def get(self, request)</code></li>
+<li><code>def post(self, request)</code></li>
+<li><code>def put(self, request)</code></li>
+<li><code>def delete(self, request)</code></li>
+</ul>
+</li>
+<li><p>각 method가 호출될 때, 다음 처리가 이뤄집니다.</p>
+<ul>
+<li>직렬화/비직렬화</li>
+<li>인증 처리 : 인증 체크</li>
+<li>사용량 제한 체크 : 호출 허용량 범위인지 체크</li>
+<li>권한 클래스 지정 : 비인증유저/인증유저에 대해 해당 API 호출을 허용할 것인지를 결정</li>
+<li>요청된 API 버전 문자열을 탐지하여 <code>request.version</code>에 저장</li>
 </ul>
 </li>
 </ol>
+<p>APIView 클래스를 활용하여, 다음과 같이 글목록응답/새글등록을 처리해주는 CBV를 만들어보겠습니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.response <span class="keyword">import</span> Response</span><br><span class="line"><span class="keyword">from</span> rest_framework.views <span class="keyword">import</span> APIView</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Post</span><br><span class="line"><span class="keyword">from</span> .serializers <span class="keyword">import</span> PostSerializer</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostListAPIView</span><span class="params">(APIView)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request)</span>:</span></span><br><span class="line">        <span class="comment"># 모델 serializer에서는 queryset또는 model인스턴스 넣을수있는데 queryset이면 many=True를 해줘야함</span></span><br><span class="line">        serializer = PostSerializer(Post.objects.all(), many=<span class="literal">True</span>) </span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, request)</span>:</span></span><br><span class="line">        serializer = PostSerializer(data=request.data)</span><br><span class="line">        <span class="keyword">if</span> serializer.is_valid():</span><br><span class="line">            serializer.save()</span><br><span class="line">            <span class="keyword">return</span> Response(serializer.data, status=<span class="number">201</span>)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.errors, status=<span class="number">400</span>)</span><br></pre></td></tr></table></figure>
+
 <p>새글 터미널에서 생성해보기(httpie이용)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http --form http:&#x2F;&#x2F;localhost:8000&#x2F;ep03&#x2F;post&#x2F; title&#x3D;&#39;제목&#39; content&#x3D;&#39;내용&#39;</span><br></pre></td></tr></table></figure>
 
