@@ -490,8 +490,8 @@ height:50vh;
 <p><code>PostViewSet</code>에 다음 2개 API를 추가해봅시다. 아래 예시는 Post모델에 <code>is_public=models.BooleanField()</code>가 있음을 가정한 코드입니다.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#views.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rest_framework.decorators <span class="keyword">import</span> list_route, detail_route</span><br><span class="line"><span class="keyword">from</span> rest_framework.response <span class="keyword">import</span> Response</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(ModelViewSet)</span>:</span></span><br><span class="line">    queryset = PostViewSet.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># /ep04/post/ =&gt; list() 함수</span></span><br><span class="line">    <span class="comment"># /ep04/post/public_list/ =&gt; public_list() 함수  # 즉 함수명으로 url뒤에붙음</span></span><br><span class="line"><span class="meta">    @action(detail=False)  # 목록 단위로 적용할 API이기에, list_route 장식자 사용</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">public_list</span><span class="params">(self, request)</span>:</span></span><br><span class="line">        qs = self.queryset.filter(is_public=<span class="literal">True</span>)  <span class="comment"># Post모델에 is_public 필드가 있을 경우</span></span><br><span class="line">        <span class="comment">#serializer = self.serializer(qs, many=True) 써도되지만 viewset에 구현되어있는 함수 get_serializer를 이용했음</span></span><br><span class="line">        serializer = self.get_serializer(qs, many=<span class="literal">True</span>)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data)</span><br><span class="line">      </span><br><span class="line">    <span class="comment"># /ep04/post/10/ =&gt; retrieve() 함수가 호출</span></span><br><span class="line">    <span class="comment"># /ep04/post/10/set_public/ =&gt; set_public()함수가 호출</span></span><br><span class="line"><span class="meta">    @action(methods=['patch'], detail=True)  # Record 단위로 적용할 API이기에, detail_route 장식자 사용</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_public</span><span class="params">(self, request, pk)</span>:</span></span><br><span class="line">        <span class="comment">#viewset에는 이미 get_object_or_404(Post, pk=pk)가 이미구현된 get_object()함수가 존재</span></span><br><span class="line">        instance = self.get_object()</span><br><span class="line">        instance.is_public = <span class="literal">True</span></span><br><span class="line">        instance.save()</span><br><span class="line">        serializer = self.get_serializer(instance)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data)</span><br></pre></td></tr></table></figure>
 
-<h2 id="PostViewSet의-public-list-API"><a href="#PostViewSet의-public-list-API" class="headerlink" title="PostViewSet의 public_list API"></a><code>PostViewSet</code>의 <code>public_list</code> API</h2><ul>
-<li>URL 매핑은 <code>/prefix/함수명/</code>으로서 <code>/post/public_list/</code>가 됩니다.</li>
+<h2 id="PostViewSet의-public-list-API"><a href="#PostViewSet의-public-list-API" class="headerlink" title="PostViewSet의 public_list API"></a>PostViewSet의 public_list API</h2><ul>
+<li>URL 매핑은 <code>/prefix/함수명/</code>으로서 <code>/post/public_list/</code>가 됩니다.(기본 get으로 응답)</li>
 <li>methods가 지정되지 않았으므로 GET요청에 응답합니다. 이는 <code>list_route/detail_route</code>의 디폴트 처리입니다.</li>
 <li>함수명이 <code>public_list</code>이므로, URL Reverse 이름은 <code>모델명-함수명</code>으로서 <code>post-public-list</code>가 됩니다. 언더바(<code>_</code>)는 하이픈(<code>-</code>)으로 변경하여 처리됩니다.</li>
 </ul>
@@ -500,7 +500,7 @@ height:50vh;
 
 <h2 id="PostViewSet의-set-public-API"><a href="#PostViewSet의-set-public-API" class="headerlink" title="PostViewSet의 set_public API"></a>PostViewSet의 set_public API</h2><ul>
 <li>URL 매핑은 <code>/prefix/{pk}/함수명/</code>으로서 <code>/post/{pk}/set_public/</code>이 됩니다.</li>
-<li>methods이 patch로 지정되었으므로, patch 요청에 응답합니다.</li>
+<li>methods이 patch로 지정되었으므로, patch 요청에 응답합니다.(GET요청못받음)</li>
 <li>함수명이 <code>set_public</code>이므로, URL Reverse 이름은 <code>모델명-함수명</code>으로서 <code>post-set-public</code>이 됩니다. 언더바(<code>_</code>)는 하이픈(<code>-</code>)으로 변경하여 처리됩니다.</li>
 </ul>
 <p>요청 예시</p>
@@ -664,8 +664,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
     
     
     
@@ -1742,7 +1740,9 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
@@ -1754,31 +1754,23 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
-        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
-    
-        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
-    
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
-    
-        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
-    
-        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
         <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
     
-        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
-        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
         <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
     
-        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
-    
-        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
-    
-        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
     
         <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
     
@@ -1786,9 +1778,19 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
         <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
@@ -1796,25 +1798,21 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
     
-        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
-    
-        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
-    
         <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
     
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
-    
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
         <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
-    
-        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
         <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
     
@@ -1855,11 +1853,11 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
         <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
-    
-        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
     
@@ -1877,21 +1875,21 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
-        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
-    
         <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
     
         <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
     
-        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
-    
         <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
         <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
-        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
-    
         <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
     
         <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
     
