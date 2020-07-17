@@ -417,6 +417,10 @@ height:50vh;
 <p><a href="https://twpower.github.io/41-connect-nginx-uwsgi-django" target="_blank" rel="noopener">자세히2</a></p>
 <p><a href="https://twpower.github.io/38-install-pyenv-and-virtualenv-on-ubuntu" target="_blank" rel="noopener">pyenv</a> (가상환경구성가능, 파이썬버전에 따라 가상환경 구성가능!)</p>
 <h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>서버를 구성하고 웹서버환경을 구축하려면 nginx가 필요하다. 이를 DRF와 연결까지하여 실제로 JSON을 주고 받아보자</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -i ~&#x2F;.ssh&#x2F;[private_key] ubuntu@ip</span><br></pre></td></tr></table></figure>
+
+
+
 <h1 id="웹서버-구조"><a href="#웹서버-구조" class="headerlink" title="웹서버 구조"></a>웹서버 구조</h1><p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ggu2fr84f3j30yy0bq79u.jpg" alt="스크린샷 2020-07-17 오후 5.48.19"></p>
 <h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><h2 id="Nginx-설치"><a href="#Nginx-설치" class="headerlink" title="Nginx 설치"></a>Nginx 설치</h2><p>nginx를 설치하는 방법에는 apt-get을 통한 방식과 직접 소스코드를 내려받아서 컴파일하는 2가지 방식이 있습니다. 더 편하고 빠른 방식은 package를 통한 방식이라 apt-get을 이용해서 설치하겠습니다.</p>
 <blockquote>
@@ -528,7 +532,7 @@ height:50vh;
 <li>프로젝트 이름과 가상환경 사용할 port에 따라서 설정 파일이 다를수도 있습니다! (당연한 이야기)</li>
 </ul>
 <p><em>linku_backend_nginx.conf</em></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"># linku_backend_nginx.conf</span><br><span class="line"></span><br><span class="line"># upstream(proxy) 설정</span><br><span class="line">upstream django&#123;</span><br><span class="line">    #1 uWSGI를 이용한 django 서버가 listening 할 ip주소와 port 번호를 적어주시면 됩니다. upstream에 다른 외부 서버를 연결할수도 있지만 여기서는 로컬에 있는 django에 보내니 주소가 127.0.0.1이고 포트는 8001로 설정하였습니다.</span><br><span class="line">    server 127.0.0.1:8001;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># configuration of the server</span><br><span class="line">server &#123;</span><br><span class="line">    #2 django가 아니라 외부에서 어떤 port를 listening 할지 정해줍니다.</span><br><span class="line">    listen      [Port Number];</span><br><span class="line">    #3 실행하는 서버의 IP주소 혹은 Domain을 적어주시면 됩니다.</span><br><span class="line">    #4 이 server_name을 여러개 만들어서 subdomain도 각각 다르게 처리 가능합니다.</span><br><span class="line">    server_name [IP Address];</span><br><span class="line">    charset     utf-8;</span><br><span class="line"></span><br><span class="line">    # max upload size</span><br><span class="line">    client_max_body_size 75M;   # adjust to taste</span><br><span class="line"></span><br><span class="line">    #5 Django media파일 경로</span><br><span class="line">    location &#x2F;media  &#123;</span><br><span class="line">        alias &#x2F;home&#x2F;linku&#x2F;LinkU&#x2F;linku_backend&#x2F;media;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #6 Django static파일 경로</span><br><span class="line">    location &#x2F;static &#123;</span><br><span class="line">        alias &#x2F;home&#x2F;linku&#x2F;LinkU&#x2F;linku_backend&#x2F;static;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #7 media와 static을 제외한 모든 요청을 upstream으로 보냅니다.</span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        #8 uwsgi_pass [upstream name] (위에 upstream으로 설정한 block의 이름)</span><br><span class="line">        uwsgi_pass  django;</span><br><span class="line">        #9 uwsgi_params의 경로</span><br><span class="line">        include &#x2F;home&#x2F;linku&#x2F;LinkU&#x2F;linku_backend&#x2F;uwsgi_params;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"># linku_backend_nginx.conf</span><br><span class="line"></span><br><span class="line"># upstream(proxy) 설정</span><br><span class="line">upstream django&#123;</span><br><span class="line">    #1 uWSGI를 이용한 django 서버가 listening 할 ip주소와 port 번호를 적어주시면 됩니다. upstream에 다른 외부 서버를 연결할수도 있지만 여기서는 로컬에 있는 django에 보내니 주소가 127.0.0.1이고 포트는 8001로 설정하였습니다.</span><br><span class="line">    server 127.0.0.1:8001;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># configuration of the server</span><br><span class="line">server &#123;</span><br><span class="line">    #2 django가 아니라 외부에서 어떤 port를 listening 할지 정해줍니다.</span><br><span class="line">    listen      [Port Number];</span><br><span class="line">    #3 실행하는 서버의 IP주소 혹은 Domain을 적어주시면 됩니다.</span><br><span class="line">    #4 이 server_name을 여러개 만들어서 subdomain도 각각 다르게 처리 가능합니다.</span><br><span class="line">    server_name [IP Address];</span><br><span class="line">    charset     utf-8;</span><br><span class="line"></span><br><span class="line">    # max upload size</span><br><span class="line">    client_max_body_size 75M;   # adjust to taste</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    #(추가, favicon.ico관해서 설정..)</span><br><span class="line">    location &#x3D; &#x2F;favicon.ico &#123; access_log off; log_not_found off; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    #5 Django media파일 경로</span><br><span class="line">    location &#x2F;media  &#123;</span><br><span class="line">        alias &#x2F;home&#x2F;linku&#x2F;LinkU&#x2F;linku_backend&#x2F;media;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #6 Django static파일 경로</span><br><span class="line">    location &#x2F;static &#123;</span><br><span class="line">        alias &#x2F;home&#x2F;linku&#x2F;LinkU&#x2F;linku_backend&#x2F;static;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #7 media와 static을 제외한 모든 요청을 upstream으로 보냅니다.</span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        #8 uwsgi_pass [upstream name] (위에 upstream으로 설정한 block의 이름)</span><br><span class="line">        uwsgi_pass  django;</span><br><span class="line">        #9 uwsgi_params의 경로</span><br><span class="line">        include &#x2F;home&#x2F;linku&#x2F;LinkU&#x2F;linku_backend&#x2F;uwsgi_params;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>[]로 만들어 놓은 부분은 개인의 작성하시는 분에 따라서 직접 넣어주셔야 합니다.</li>
@@ -565,13 +569,9 @@ height:50vh;
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(LinkU)$ uwsgi --socket :8001 --module linku.wsgi</span><br></pre></td></tr></table></figure>
 
-
-
 <p>이제 도메인을 통해서 domain.com:port를 통해서 접속하면 <code>여기서의 Port는 위에 conf파일에 있는 server 블록에 있는 Port번호 입니다.</code> 장고에서 해당하는 응답을 보여줌을 확인 할 수 있습니다.</p>
 <h4 id="uWSGI가-실행이-되지-않는다면"><a href="#uWSGI가-실행이-되지-않는다면" class="headerlink" title="uWSGI가 실행이 되지 않는다면"></a>uWSGI가 실행이 되지 않는다면</h4><p>nginx error log(/var/log/nginx/error.log)를 확인해서 아래와 같은 오류가 나온다면</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">connect() to unix:&#x2F;&#x2F;&#x2F;path&#x2F;to&#x2F;your&#x2F;mysite&#x2F;mysite.sock failed (13: Permission denied)</span><br></pre></td></tr></table></figure>
-
-
 
 <p>다음 아래 두 명령어중에 하나를 시도해보시면 됩니다. 권한 떄문에 생기는 문제인데 nginx의 사용자 그룹에 현재 접속한 유저를 추가해주셔야 됩니다.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uwsgi --socket mysite.sock --wsgi-file test.py --chmod-socket&#x3D;666 # (very permissive)</span><br></pre></td></tr></table></figure>
@@ -728,6 +728,12 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
     
     
     
@@ -1864,9 +1870,9 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
     
-        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
@@ -1874,31 +1880,31 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
-    
-        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
-    
-        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
-    
-        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
-    
-        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
-    
-        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
-    
-        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
-    
-        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
         <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
     
         <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
         <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
     
-        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
-    
         <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -1906,11 +1912,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
-        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
-    
         <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
     
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
@@ -1928,15 +1934,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
     
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
         <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
-    
-        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
-    
-        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
@@ -1987,9 +1993,11 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
-        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
     
@@ -1997,15 +2005,13 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
     
-        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
-    
         <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
     
         <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
     
-        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
-    
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
     
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
