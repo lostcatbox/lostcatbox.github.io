@@ -499,7 +499,7 @@ height:50vh;
 
 <p>다. 빌드 컨텍스트는 빌드를 실행할 때 사용할 파일 집합이다. docker build 명령어는 도커 데몬에 빌드 컨텍스트를 전송한다. 빌드 컨텍스트는 빌드 명령을 실행하는 디렉토리와 그 하위 디렉토리에 포함된 전체 파일이다.</p>
 <p>빌드 컨텍스트에는 COPY나 ADD에서 사용하지 않는 파일도 포함되므로 빌드 컨텍스트에는 필요한 파일만 포함해야 한다. 부득이하게 빌드 과정에서 사용하지 않는 파일이 존재할 경우 .dockerignore 파일을 만들어 컨텍스트에서 제외할 대상을 지정하면 된다.</p>
-<h2 id="dockerfile언어"><a href="#dockerfile언어" class="headerlink" title="dockerfile언어"></a>dockerfile언어</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">FROM # 이미지를 생성할 때 사용할 기반 이미지를 지정한다.</span><br><span class="line"></span><br><span class="line">RUN # 이미지를 생성할 때 실행할 코드를 지정한다. bash 쉘에서 입력하는것과 동일하다고 생각하면 된다.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">WORKDIR #작업 디렉토리를 지정한다. 해당 디렉토리가 없으면 새로 생성한다. 작업 디렉토리를 지정하면 그 이후 명령어는 해당 디렉토리를 기준으로 동작한다. </span><br><span class="line"></span><br><span class="line">ADD # build 명령 중간에 호스트의 파일 시스템으로부터 파일을 가져오는 것이다. 말 그대로 이미지에 파일을 더한다(ADD)., COPY명령어와 매우 유사하나 몇가지 추가 기능이 있습니다. src에 파일 대신 URL을 입력할 수 있고 src에 압축 파일을 입력하는 경우 자동으로 압축을 해제하면서 복사됩니다.</span><br><span class="line"></span><br><span class="line">COPY # 파일이나 폴더를 이미지에 복사한다.첫번째를 두번째로 복사</span><br><span class="line"></span><br><span class="line">ENV # 이미지에서 사용할 환경 변수 값을 지정한다. </span><br><span class="line"></span><br><span class="line">ENTRYPOINT &quot;실행명령어&quot;, &quot;인자1&quot;, &quot;인자2&quot;, ... ] # 컨테이너를 구동할 때 실행할 명령어를 지정한다. 배열에서 첫 번째는 실행할 명령어이다. 두 번째부터는 명령어의 인자로 전달된다.</span><br><span class="line"></span><br><span class="line">CMD #도커 컨테이너가 실행되었을 때 실행되는 명령어를 정의합니다. 여러 개의 CMD가 존재할 경우 가장 마지막 CMD만 실행됩니다</span><br><span class="line"></span><br><span class="line">EXPOSE # 도커 컨테이너가 실행되었을 때 요청을 기다리고 있는(Listen) 포트를 지정합니다. 여러개의 포트를 지정할 수 있습니다.</span><br><span class="line"></span><br><span class="line">VOLUME  #컨테이너 외부에 파일시스템을 마운트 할 때 사용합니다. 반드시 지정하지 않아도 마운트 할 수 있지만, 기본적으로 지정하는 것이 좋습니다.</span><br></pre></td></tr></table></figure>
+<h2 id="dockerfile언어"><a href="#dockerfile언어" class="headerlink" title="dockerfile언어"></a>dockerfile언어</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">FROM # 이미지를 생성할 때 사용할 기반 이미지를 지정한다.</span><br><span class="line"></span><br><span class="line">RUN # 이미지를 생성할 때 실행할 코드를 지정한다. bash 쉘에서 입력하는것과 동일하다고 생각하면 된다.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">WORKDIR #작업 디렉토리를 지정한다. 해당 디렉토리가 없으면 새로 생성한다. 작업 디렉토리를 지정하면 그 이후 명령어는 해당 디렉토리를 기준으로 동작한다. (ADD, COPY는 절대경로적기)</span><br><span class="line"></span><br><span class="line">ADD # build 명령 중간에 호스트의 파일 시스템으로부터 파일을 가져오는 것이다. 말 그대로 이미지에 파일을 더한다(ADD)., COPY명령어와 매우 유사하나 몇가지 추가 기능이 있습니다. src에 파일 대신 URL을 입력할 수 있고 src에 압축 파일을 입력하는 경우 자동으로 압축을 해제하면서 복사됩니다.</span><br><span class="line"></span><br><span class="line">COPY # 파일이나 폴더를 이미지에 복사한다.첫번째를 두번째로 복사</span><br><span class="line"></span><br><span class="line">ENV # 이미지에서 사용할 환경 변수 값을 지정한다. </span><br><span class="line"></span><br><span class="line">ENTRYPOINT &quot;실행명령어&quot;, &quot;인자1&quot;, &quot;인자2&quot;, ... ] # 컨테이너를 구동할 때 실행할 명령어를 지정한다. 배열에서 첫 번째는 실행할 명령어이다. 두 번째부터는 명령어의 인자로 전달된다.</span><br><span class="line"></span><br><span class="line">CMD #도커 컨테이너가 실행되었을 때 실행되는 명령어를 정의합니다. 여러 개의 CMD가 존재할 경우 가장 마지막 CMD만 실행됩니다</span><br><span class="line"></span><br><span class="line">EXPOSE # 도커 컨테이너가 실행되었을 때 요청을 기다리고 있는(Listen) 포트를 지정합니다. 여러개의 포트를 지정할 수 있습니다.</span><br><span class="line"></span><br><span class="line">VOLUME  #컨테이너 외부에 파일시스템을 마운트 할 때 사용합니다. 반드시 지정하지 않아도 마운트 할 수 있지만, 기본적으로 지정하는 것이 좋습니다.</span><br></pre></td></tr></table></figure>
 
 
 
@@ -1548,9 +1548,26 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 60
+        Total : 61
         </div>
         <!-- search  -->
         
@@ -1563,6 +1580,11 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
     
     
         <li class="archive-post-item">
