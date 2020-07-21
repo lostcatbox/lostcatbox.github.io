@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">214</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">526</span>Reading time: <span class="post-count reading-time">3 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -406,7 +406,9 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <p><a href="https://blog.cloud66.com/how-to-get-code-into-a-docker-container/" target="_blank" rel="noopener">자세히</a></p>
-<h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>도커는 이미지와 컨테이너로 굉장히 많은 일을 기록하여 다음에는 단순화 할수있다.</p>
+<p><a href="https://siner308.github.io/2019/02/25/django-docker-custom-image/" target="_blank" rel="noopener">자세히</a></p>
+<p><a href="https://www.slideshare.net/raccoonyy/django-164557454" target="_blank" rel="noopener">자세히</a></p>
+<h1 id="왜-작성중"><a href="#왜-작성중" class="headerlink" title="왜? (작성중)"></a>왜? (작성중)</h1><p>도커는 이미지와 컨테이너로 굉장히 많은 일을 기록하여 다음에는 단순화 할수있다.</p>
 <p>특히 이미지를 가져와 내가 원하는 구성을 안에 넣고 필요한 명령어(<code>pip install -r requirements.txt</code>,<code>python manage.py makemigrations</code>,<code>python manage.py migrate</code>,<code>python manage.py runserver</code>까지 실행을 하도록 기록해놓고 이를 이미지로 생성한다. </p>
 <p>그럼다음부터는 해당 이미지만 실행하면 모든것이 기록한대로 동작한 결과가 컨테이너로 동작한다.</p>
 <p>그렇다면 이 위에 이미지들을 다양하게 써서 전체 그림을 구성하여 모두를 각각의 컨테이너로 만들어주는 것도 있다.(한번의 명령으로DB, django를 각 컨테이너로 구성하여 연결하여 바로 서비스가 가능하도록!)</p>
@@ -414,12 +416,41 @@ height:50vh;
 <p>현재 컨테이너에 업데이트, 배포 관리하려고 여러가지 방법을 찾던 중 개발서버에서 유용한 volume으로 컨테이너에 외부폴더를 마운트 할수있다는 것을 알았다. 즉 git에 해당하는 파일들을 push, pull하면서 컨테이너에 반영할수있도록 하였다.</p>
 <p>하지만 위와 같은방법은 코드 버전을 표시할수없으므로</p>
 <p>프로덕션 환경에서는 공유 볼륨을 사용하는 것이 아닌 Docker 이미지 내에 발생시켜야 맞다.</p>
-<h1 id="Docker-v"><a href="#Docker-v" class="headerlink" title="Docker -v"></a>Docker -v</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -P --name &lt;name of your container&gt; -v &#x2F;path&#x2F;to&#x2F;local&#x2F;directory:&#x2F;path&#x2F;to&#x2F;container&#x2F;directory &lt;image name&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="Dockerfiles"><a href="#Dockerfiles" class="headerlink" title="Dockerfiles"></a>Dockerfiles</h1><p>서버에서 준비해야할 모든 작업을 나열한 파일</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">FROM python:3.6</span><br><span class="line"></span><br><span class="line">COPY . &#x2F;app  # 나의 Django 코드를 컨테이너에 복사합니다.</span><br><span class="line">RUN pip install -r &#x2F;app&#x2F;requirements.txt  # requirements.txt에 적혀있는 pip 패키지들을 설치합니다.</span><br><span class="line">RUN chmod +x &#x2F;app&#x2F;start  # start 파일을 실행 가능권한변경</span><br><span class="line">WORKDIR &#x2F;app  # 워킹디렉토리를 &#x2F;app으로 합니다.</span><br><span class="line">EXPOSE 8000  # 8000번 포트를 expose합니다.</span><br><span class="line"></span><br><span class="line">ENTRYPOINT [&quot;&#x2F;app&#x2F;start&quot;]  # &#x2F;app&#x2F;start 파일을 실행시킵니다.</span><br></pre></td></tr></table></figure>
+
+<p><code>ENTRYPOINT</code>는 Dockerfile 하나에 <code>한번밖에</code> 호출할 수 없는데, 파일을 사용함으로써 여러 명령어를 한번에 실행시킬 수 있게 합니다.(아래는 start파일내용)</p>
+<p>위와 같이 명령 스크립트를 따로 둘경우 수정이 필요할때 Dockerfiles파일을 건드리지 않아도 수정가능해서 편해진다</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash   #shebang 반드시 필요.유닉스 계열 운영 체제에서 셔뱅이 있는 스크립트는 프로그램으로서 실행</span><br><span class="line"></span><br><span class="line">python manage.py makemigrations</span><br><span class="line">python manage.py migrate</span><br><span class="line"></span><br><span class="line">python manage.py runserver 0.0.0.0:8000 #반드시 0.0.0.0</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>0.0.0.0인 이유는 컨테이너 외부 요청을 듣기위해서다</p>
+<p>127.0.0.1 이면 컨테이너 내부요청만 받겠다는 의미이므로 컨테이너 외부의 요청은 듣지않는다.</p>
+<p><a href="https://stackoverflow.com/questions/59179831/docker-app-server-ip-address-127-0-0-1-difference-of-0-0-0-0-ip" target="_blank" rel="noopener">자세히</a></p>
+</blockquote>
+<h2 id="주의하기"><a href="#주의하기" class="headerlink" title="주의하기"></a><strong>주의하기</strong></h2><blockquote>
+<p>docker-compose.yml를 사용할때는 dockerfiles에서 마지막CDM <code>python manage.py runserver</code> 부분은 docker-compose.yml의 command부분으로 빼자. </p>
+<p>이유는 docker-compose에서 volumes: - .:/app 을 해놨는데 이는 </p>
+<p>dockerfiles의 CMD runserver 다음에 일어남으로 오류가 나타났다.</p>
+<p>따라서 마운트된후 runserver가 일어나야하므로 docker-compose.yml 에서 command: <code>python manage.py runserver</code> 해주자</p>
+<blockquote>
+<p>참고 Dockerfile의 cmd,entrypoint와 거의 같습니다. 하지만 Dockerfile의 entrypoint보다 docker-compose의 entrypoint가 우선 순위가 높습니다. (나는 compose에 entrypoint가없어서 일어난 문제)</p>
+</blockquote>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#dockerfile</span><br><span class="line">FROM python:3.7.6</span><br><span class="line"></span><br><span class="line">COPY . &#x2F;app</span><br><span class="line">RUN pip install -r &#x2F;app&#x2F;requirements.txt</span><br><span class="line">WORKDIR &#x2F;app</span><br><span class="line"></span><br><span class="line">EXPOSE 8000</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#docker-compose.yml</span><br><span class="line">version: &#39;3&#39;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">        drf:</span><br><span class="line">                build: .</span><br><span class="line">                command: python manage.py runserver 0.0.0.0:8000</span><br><span class="line">                ports:</span><br><span class="line">                        - &quot;8000:8000&quot;</span><br><span class="line">                volumes:</span><br><span class="line">                        - .:&#x2F;app</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Docker-v"><a href="#Docker-v" class="headerlink" title="Docker -v"></a>Docker -v</h1><p>DB컨테이너가 없어져도 DB의 정보는 살아있어야하므로 volume을 반드시이용하자.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -P --name &lt;name of your container&gt; -v &#x2F;path&#x2F;to&#x2F;local&#x2F;directory:&#x2F;path&#x2F;to&#x2F;container&#x2F;directory &lt;image name&gt;</span><br></pre></td></tr></table></figure>
 
 <p>만약에 <code>python manage.py runserver</code> 와 같은 명령에서 manage.py 파일이 -v가 되어지는 로컬쪽에 있다해도 run을 수행하며 마운트가 먼저일어나고  이미지가 실행되기때문에  이미지안에 <code>python manage.py</code>runserver  는 로컬의 파일로 정상수행된다.</p>
 <p>-v의 기본은 읽기/쓰기 모두 가능하다.</p>
 <h1 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h1><p><a href="https://docker-compose.tistory.com/1" target="_blank" rel="noopener">실습</a></p>
 <p><a href="https://docker-compose.tistory.com/1" target="_blank" rel="noopener">실습2</a></p>
+<p><a href="https://www.daleseo.com/docker-compose-django/" target="_blank" rel="noopener">실습3</a></p>
 
     </article>
     <!-- license  -->
@@ -552,7 +583,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-v"><span class="toc-number">2.</span> <span class="toc-text">Docker -v</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#docker-compose"><span class="toc-number">3.</span> <span class="toc-text">docker-compose</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜-작성중"><span class="toc-number">1.</span> <span class="toc-text">왜? (작성중)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Dockerfiles"><span class="toc-number">2.</span> <span class="toc-text">Dockerfiles</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#주의하기"><span class="toc-number">2.1.</span> <span class="toc-text">주의하기</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-v"><span class="toc-number">3.</span> <span class="toc-text">Docker -v</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#docker-compose"><span class="toc-number">4.</span> <span class="toc-text">docker-compose</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
