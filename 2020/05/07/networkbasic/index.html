@@ -784,6 +784,7 @@ height:50vh;
 <p>2) Destination IP가 Router 자기 자신의 어느 interface에 설정 된 IP와 동일 LAN(subnet, network)에 속하는 IP일 경우, 직접 전달한다. 직접 전달한다는 의미는 Routing Table에 directly connected로 등록되어 있는 interface의 ARP Table을 확인하고, ARP Table에 목적지 IP에 대한 Entry가 있으면 destination MAC에 해당 MAC을 달고, source MAC에는 자기 interface MAC을 달고 전송한다. ARP Table에 entry가 없으면 ARP Requst를 보내고, ARP Reply를 받으면 destination MAC에 수신된 해당 MAC을 달고 패킷을 보낸다. ARP Reply를 받지 못하면, 패킷은 폐기(Discard) 한다. (직접 전달)</p>
 <p>3) Destination IP가 Router 자기 자신의 어느 interface에 설정 된 IP와 동일 LAN(subnet, network)에 속하는 IP가 아닐 경우, 다른 router로 전달하기 위해서 Routing Table을 검색한다. Routing Table에 Entry가 있거나, Entry는 없지만 default route가 있을 경우 next hop interface로 패킷을 전달한다. (간접 전달). Routing Table에 Entry도 없고, default route도 없는 경우, 해당 패킷은 폐기(Discard)한다.</p>
 <p>상기 열거한 항목 중에서 항목 1)은 라우터 자신에게 온 패킷의 경우이고, 항목 2), 3)은 라우터의 본래 기능인 라우팅 기능을 통해서 다른 LAN으로 routing 되기 위해 수신 된 패킷입니다. Destination IP가 자기 interface에 설정된 IP가 아닌 경우가 Routing을 위해서 수신된 IP 패킷입니다. 서로 다른 LAN(subnet, network)간 통신을 위해서는 Router 기능이 필수적으로 필요합니다. 전통적인 Router 이외에 L3 switch나 routing 기능이 있는 L4~L7 스위치 장비도 서로 다른 LAN간 통신에 이용될 수 있습니다. 그렇게 Routing 기능을 수행할 수 있는 장비들은 모두 한결같이 Routing Table과 ARP Table을 가지고있습니다</p>
+<p>![스크린샷 2020-07-30 오후 3.53.32](/Users/lostcatbox/Desktop/스크린샷 2020-07-30 오후 3.53.32.png)</p>
 <blockquote>
 <p>간단히 요약해서  pc0-router0-router1-router2-server0순으로 연결되어있다면 처음통신할때 pc0에서 arp request를 router0에 보내며 응답으로 router0의 맥주소를 알게된다</p>
 <p>pc0는 sever0의 목적지 IP를 가지며 source MAC을 자신의것, 목적지 MAC을 router0의것으로한 프레임 만들어 전송</p>
@@ -1822,9 +1823,26 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 61
+        Total : 62
         </div>
         <!-- search  -->
         
@@ -1837,6 +1855,11 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >chattingbasic</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -2247,6 +2270,8 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
     
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -2327,6 +2352,8 @@ jsonContent:
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Chattingbasic"><span class="iconfont-archer">&#xe60a;</span>Chattingbasic</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
