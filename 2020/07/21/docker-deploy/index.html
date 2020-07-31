@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">714</span>Reading time: <span class="post-count reading-time">4 min</span></span>
+                        <span>Word count: <span class="post-count word-count">935</span>Reading time: <span class="post-count reading-time">5 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -408,6 +408,7 @@ height:50vh;
         <p><a href="https://blog.cloud66.com/how-to-get-code-into-a-docker-container/" target="_blank" rel="noopener">자세히</a></p>
 <p><a href="https://siner308.github.io/2019/02/25/django-docker-custom-image/" target="_blank" rel="noopener">자세히</a></p>
 <p><a href="https://www.slideshare.net/raccoonyy/django-164557454" target="_blank" rel="noopener">자세히</a></p>
+<p><a href="[https://youngmind.tistory.com/entry/%EB%8F%84%EC%BB%A4-%EA%B0%95%EC%A2%8C-3-%EB%8F%84%EC%BB%A4-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-1](https://youngmind.tistory.com/entry/도커-강좌-3-도커-네트워크-1)">도커 네트워크 구성</a></p>
 <h1 id="왜-작성중"><a href="#왜-작성중" class="headerlink" title="왜? (작성중)"></a>왜? (작성중)</h1><p>도커는 이미지와 컨테이너로 굉장히 많은 일을 기록하여 다음에는 단순화 할수있다.</p>
 <p>특히 이미지를 가져와 내가 원하는 구성을 안에 넣고 필요한 명령어(<code>pip install -r requirements.txt</code>,<code>python manage.py makemigrations</code>,<code>python manage.py migrate</code>,<code>python manage.py runserver</code>까지 실행을 하도록 기록해놓고 이를 이미지로 생성한다. </p>
 <p>그럼다음부터는 해당 이미지만 실행하면 모든것이 기록한대로 동작한 결과가 컨테이너로 동작한다.</p>
@@ -459,7 +460,30 @@ height:50vh;
 <p>아래와 같이 연결가능</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#  settings.py의 일부분</span><br><span class="line">DATABASES &#x3D; &#123;</span><br><span class="line">    &#39;default&#39;: &#123;</span><br><span class="line">        &#39;ENGINE&#39;: &#39;django.db.backends.mysql&#39;,</span><br><span class="line">        &#39;NAME&#39;: &#39;test_db&#39;,</span><br><span class="line">        &#39;USER&#39;: &#39;root&#39;,</span><br><span class="line">        &#39;PASSWORD&#39;: &#39;password&#39;,</span><br><span class="line">        &#39;HOST&#39;: &#39;db&#39;,</span><br><span class="line">        &#39;PORT&#39;: 3306,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p>docker-compose 가 모두 구성이 되었다면</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker-compose build</span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
 
+
+
+<h1 id="Docker-Network"><a href="#Docker-Network" class="headerlink" title="Docker Network"></a>Docker Network</h1><p><a href="https://nirsa.tistory.com/80" target="_blank" rel="noopener">자세히</a></p>
+<p><a href="https://www.daleseo.com/docker-networks/" target="_blank" rel="noopener">자세히</a></p>
+<p><a href="https://www.ctl.io/developers/blog/post/docker-networking-rules" target="_blank" rel="noopener">자세히</a></p>
+<p><a href="https://jungwoon.github.io/docker/2019/01/13/Docker-4/" target="_blank" rel="noopener">자세히</a></p>
+<p>컨테이너 끼리 통신하려면 docker-compose를 사용하거나</p>
+<p>network를 만들어서 같은 network에 넣어주면 가능하다.</p>
+<p>--link는 도커에서 추천하지 않는방법이며</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run --name db2 -d --network django_network -e MYSQL_ROOT_PASSWORD&#x3D;password -p 3308:3306 mysql:5.7</span><br><span class="line"></span><br><span class="line">docker run --name django -d -p 7999:8000 --network django_network 494</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker  network create --driver bridge django_network</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#setting.py</span><br><span class="line"></span><br><span class="line">DATABASES &#x3D; &#123;</span><br><span class="line">    &#39;default&#39;: &#123;</span><br><span class="line">        &#39;ENGINE&#39;: &#39;django.db.backends.mysql&#39;,</span><br><span class="line">        &#39;NAME&#39;: &#39;my_app_db&#39;,</span><br><span class="line">        &#39;USER&#39;: &#39;root&#39;,</span><br><span class="line">        &#39;PASSWORD&#39;: &#39;password&#39;,</span><br><span class="line">        &#39;HOST&#39;: &#39;db2&#39;,</span><br><span class="line">        &#39;PORT&#39;: 3306,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>의문점은 필자의 의도는 setting.py에서 포트를 3308로 요청해야 db2에서 처리를 하는지 알았는데, 그것이 아니고 3306으로 요청주면 응답하였다. 이유는 다음과같다.</p>
+<p>-p 로 지정하는  ports는 호스트OS와 컨테이너의 포트를 바인딩 시켜줍니다. 즉, 호스트OS에 등록하는것!</p>
+<p>expose는 mysql은 기본적으로  3306으로 되어있고 이것은  호스트 OS에 포트를 공개하지 않고, 링크등으로 연결된 컨테이너-컨테이너간의 통신만이 필요한 경우로 사용된다. 같은 네트워크에 속해있고 db2로 요청하면 바로 맥주소를 반환하므로 호스트 OS와 상관없이 통신한다.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker inspect &lt;컨테이너이름&gt;|&lt;컨테이너id&gt; #해당 컨테이너 네트워크 detail 조회</span><br><span class="line">docker network ls #docker에 현재 망 조회</span><br></pre></td></tr></table></figure>
 
 
     </article>
@@ -593,7 +617,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜-작성중"><span class="toc-number">1.</span> <span class="toc-text">왜? (작성중)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Dockerfiles"><span class="toc-number">2.</span> <span class="toc-text">Dockerfiles</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#주의하기"><span class="toc-number">2.1.</span> <span class="toc-text">주의하기</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-v"><span class="toc-number">3.</span> <span class="toc-text">Docker -v</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#docker-compose"><span class="toc-number">4.</span> <span class="toc-text">docker-compose</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜-작성중"><span class="toc-number">1.</span> <span class="toc-text">왜? (작성중)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Dockerfiles"><span class="toc-number">2.</span> <span class="toc-text">Dockerfiles</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#주의하기"><span class="toc-number">2.1.</span> <span class="toc-text">주의하기</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-v"><span class="toc-number">3.</span> <span class="toc-text">Docker -v</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#docker-compose"><span class="toc-number">4.</span> <span class="toc-text">docker-compose</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-Network"><span class="toc-number">5.</span> <span class="toc-text">Docker Network</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>

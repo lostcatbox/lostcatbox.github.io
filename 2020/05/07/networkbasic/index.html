@@ -278,7 +278,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">3.2k</span>Reading time: <span class="post-count reading-time">20 min</span></span>
+                        <span>Word count: <span class="post-count word-count">4.2k</span>Reading time: <span class="post-count reading-time">26 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -407,7 +407,7 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="네트워크-기본"><a href="#네트워크-기본" class="headerlink" title="네트워크 기본"></a>네트워크 기본</h1><p><a href="https://aaasssddd25.tistory.com/9?category=617816" target="_blank" rel="noopener">자세히</a></p>
+        <h1 id="네트워크-지식-01"><a href="#네트워크-지식-01" class="headerlink" title="네트워크 지식 01"></a>네트워크 지식 01</h1><p><a href="https://aaasssddd25.tistory.com/9?category=617816" target="_blank" rel="noopener">자세히</a></p>
 <h2 id="상식"><a href="#상식" class="headerlink" title="상식"></a>상식</h2><ul>
 <li><p>LAN  - Local &gt;어느 한정된 공간에서 네트워크를 구성하는것 (사무실 네트워크구성)</p>
 </li>
@@ -517,13 +517,6 @@ height:50vh;
 </li>
 </ul>
 </li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
 </ul>
 <h1 id="OSI-계층-구조"><a href="#OSI-계층-구조" class="headerlink" title="OSI 계층 구조"></a>OSI 계층 구조</h1><p><a href="https://jwprogramming.tistory.com/31?category=680194" target="_blank" rel="noopener">자세히</a></p>
 <p>네트워크는 기기간, 기기와 서버간 통신</p>
@@ -759,6 +752,47 @@ height:50vh;
 <p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg7w1z48sqj31vu0jcalq.jpg" alt="스크린샷 2020-06-28 오후 1.25.26"></p>
 <p>Wireshark를 통해 패킷을 분석결과</p>
 <p>sequence number, acknowledgment number 를 확인하였고, 3way확인가능, 그리고 연결통로 확보 후 GET HTTP/1.1 요청후  GET HTTP/1.1 200  응답받는것을 확인가능 필요한 정보들을 패킷으로 연속적으로 받아오는것을 확인할수있다.<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg7yrw5bfyj30xc0mudou.jpg" alt="스크린샷 2020-06-28 오후 2.59.51"></p>
+<h1 id="네트워크-통신-메커니즘"><a href="#네트워크-통신-메커니즘" class="headerlink" title="네트워크  통신 메커니즘"></a>네트워크  통신 메커니즘</h1><p><a href="https://blog.naver.com/PostView.nhn?blogId=goduck2&logNo=220111709554&parentCategoryNo=&categoryNo=73&viewDate=&isShowPopularPosts=false&from=postView" target="_blank" rel="noopener">자세히</a></p>
+<blockquote>
+<p>MAC Table:  switch,bridge만 가지고있으며 맥주소와 포트정보가 매칭된 정보</p>
+<p>Routing Table: 호스트가 가지고있으며 목적지에 따라 어떤 인터페이스, 게이트웨이등을 매칭해놓음(ip통신하는 모든장비가가짐)</p>
+<p>ARP Table: 여기에는 ARP를 하면 MAC과 IP를 기록해놓음(정적, 동적 정보있음)(ip통신하는 모든장비가가짐)</p>
+</blockquote>
+<p>pc0,switch,pc1 이 연결되어있는 상태(처음연결)</p>
+<h2 id="Bridge-LAN환경에서-PC0가-PC1에게-요청-응답을-받는상황이라면-어떻게-통신할까"><a href="#Bridge-LAN환경에서-PC0가-PC1에게-요청-응답을-받는상황이라면-어떻게-통신할까" class="headerlink" title="Bridge+LAN환경에서 PC0가 PC1에게 요청 응답을 받는상황이라면 어떻게 통신할까?"></a>Bridge+LAN환경에서 PC0가 PC1에게 요청 응답을 받는상황이라면 어떻게 통신할까?</h2><ol>
+<li>PC0에서 통신할 상대방 PC1에 IP주소를 알아낸다</li>
+<li>PC0에서 요청을 보낸다</li>
+<li>PC0의 Routing Table에서 PC1의 IP주소로 가려면, 어떤 interface로 나가야 하고, next hop ip(목적지 네트워크를 가기 위한 다음 장치를 Next Hop이라고 한다)가 무엇인지 찾는다</li>
+<li>이 next hop ip의 MAC address가 ARP Table에 등록되어있는지 찾는다</li>
+<li>ARP Table에 Next hop IP의  MAC address 가 없다면 MAC address를 알아오기 위해서 ARP request메시지를 전송한다.</li>
+<li>Switch는 ARP request 메시지를 수신하면  source MAC address를 보고, PC0의 MAC Table entry를 만든다.(PC0의 MAC address와 Frame이 수신된 port번호를 MAC Table에 기록한다.)</li>
+<li>Switch는 ARP request 메세지를 모든 LAN port로 브로드캐스트한다. (ARP 패킷은 LAN구간 끝까지 어디든 날아간다.)</li>
+<li>ARP request를 수신한 PC1은 자신의  ARP Table에 PC0의 IP와 MAC address를 등록하고 ARP reply 메시지를 전송한다.(PC1의 ARP Table에는 ARP request메시지를 받으면서 이미 PC0의  MAC address가 등록되어 있다.)(만약 다른 장비도 ARP request를 수신했다면 ARP reply안하고 ARP Table에는 등록할수도있고 안할수도있다.)</li>
+<li>Swtich는 ARP reply 메시지를 수신하면, source MAC address를 보고, PC1의 MAC Table entry를 만든다.</li>
+<li>PC0은 ARP reply 메시지를 수신하면, ARP Table에 PC1의 IP와 MAC address를 등록하고, PC1으로 전송되어야 할 패킷의  Destination MAC에 PC1의 MAC address를 부착하고 메시지를 전송한다.</li>
+<li>Switch는 PC0가 전송한 Ethernet Frame을 수신하면, Desitnation MAC address가 MAC Table에 존재하는지 찾는다.</li>
+<li>Switch는 MAC Table에 PC1의 정보가 등록되어 있으므로 PC1이 연결되어 있는 port로 메시지를 전송(Unicast)한다.</li>
+<li>PC1은 Destination MAC address가 자신의 NIC MAC address와 동일하므로 메시지를 수신하여 IP layer로 전달하고,</li>
+</ol>
+<h2 id="Router의-통신"><a href="#Router의-통신" class="headerlink" title="Router의 통신"></a>Router의 통신</h2><p>스위치는 NIC에 MAC address가 있지만 Promiscuous mode로 설정이 되어 있어서 MAC address와 상관없이 모든 프레임을 수신한다고 했었습니다. 스위치와는 달리 라우터는 NIC에 MAC address가 있고, IP도 설정이 되어 있습니다. Router의 각 interface는 그림 6과 같이 각각 서로 다른 LAN에 속하게 됩니다. 라우터는 각 NIC(Network Interface Card)는 일반적인 IP 장비의 NIC와 동일하게 아래와 같은 경우에 이너넷 프레임을 수신하여 상위 Layer로 전달합니다.</p>
+<p>1) Destination(목적지) MAC address가 자기 interface의 MAC address와 같을 경우</p>
+<p>2) Destination(목적지) MAC address가 Broadcast MAC address인 경우</p>
+<p>3) Destination(목적지) MAC address가 Multicast MAC address인 경우</p>
+<p>이때 Router는 Routing Table을 보고 Routing을 한다</p>
+<p>Router의 IP Layer에서는 MAC Layer로부터 수신된 IP 패킷에 대하여 아래와 같이 처리합니다. 모든 경우를 열거하는 것은 아니며, 일부 대표적인 경우만 설명함을 알아 주시기 바랍니다.</p>
+<p>1) Destination IP가 Router 자기 자신의 어느 interface(Loopback, serial, ethernet, frame relay, ATM, etc)에 설정 된 IP일 경우, Router 자신의 CPU로 패킷을 전달한다.</p>
+<p>2) Destination IP가 Router 자기 자신의 어느 interface에 설정 된 IP와 동일 LAN(subnet, network)에 속하는 IP일 경우, 직접 전달한다. 직접 전달한다는 의미는 Routing Table에 directly connected로 등록되어 있는 interface의 ARP Table을 확인하고, ARP Table에 목적지 IP에 대한 Entry가 있으면 destination MAC에 해당 MAC을 달고, source MAC에는 자기 interface MAC을 달고 전송한다. ARP Table에 entry가 없으면 ARP Requst를 보내고, ARP Reply를 받으면 destination MAC에 수신된 해당 MAC을 달고 패킷을 보낸다. ARP Reply를 받지 못하면, 패킷은 폐기(Discard) 한다. (직접 전달)</p>
+<p>3) Destination IP가 Router 자기 자신의 어느 interface에 설정 된 IP와 동일 LAN(subnet, network)에 속하는 IP가 아닐 경우, 다른 router로 전달하기 위해서 Routing Table을 검색한다. Routing Table에 Entry가 있거나, Entry는 없지만 default route가 있을 경우 next hop interface로 패킷을 전달한다. (간접 전달). Routing Table에 Entry도 없고, default route도 없는 경우, 해당 패킷은 폐기(Discard)한다.</p>
+<p>상기 열거한 항목 중에서 항목 1)은 라우터 자신에게 온 패킷의 경우이고, 항목 2), 3)은 라우터의 본래 기능인 라우팅 기능을 통해서 다른 LAN으로 routing 되기 위해 수신 된 패킷입니다. Destination IP가 자기 interface에 설정된 IP가 아닌 경우가 Routing을 위해서 수신된 IP 패킷입니다. 서로 다른 LAN(subnet, network)간 통신을 위해서는 Router 기능이 필수적으로 필요합니다. 전통적인 Router 이외에 L3 switch나 routing 기능이 있는 L4~L7 스위치 장비도 서로 다른 LAN간 통신에 이용될 수 있습니다. 그렇게 Routing 기능을 수행할 수 있는 장비들은 모두 한결같이 Routing Table과 ARP Table을 가지고있습니다</p>
+<blockquote>
+<p>간단히 요약해서  pc0-router0-router1-router2-server0순으로 연결되어있다면 처음통신할때 pc0에서 arp request를 router0에 보내며 응답으로 router0의 맥주소를 알게된다</p>
+<p>pc0는 sever0의 목적지 IP를 가지며 source MAC을 자신의것, 목적지 MAC을 router0의것으로한 프레임 만들어 전송</p>
+<p>router0에서는 자신에게 직접 연결된 LAN에서 해당 목적지 IP가 없으므로 Routing Table을 참조 후에 default 주소로 보낸다. ARP table에 MAC 주소가 존재하지않으므로  ARP request를 router1에게 보낸다.</p>
+<p>source MAC을 router0의것, 목적지 MAC을 router1의것으로한 프레임 만들어 전송</p>
+<p>router1의 Routing Table에서 default route는 다른 라우터로 나가게 되어있으므로 Routing Table에  해당 목적지 IP이면 server0가 속하는 router2의 주소를 줘야함. 설정되었다면, Routing  Table을 기준으로 router2에게 ARP request를 보내며 MAC 주소를 알아내고.. 앞에과정똑같다</p>
+<p>마지막으로 router2에서는 server0와 직접적으로 연결되어있으므로  router2가 직접적으로 server0에게 ARP request를 보내며 MAC주소를 알아내고.. 앞에 과정과 똑같이 프레임 전송한다.</p>
+<p>이제 모든 기기가 ARP table에 해당 IP에 대한 MAC주소가 기록되어있으므로 보다 간결한 방식으로 통신이 가능하게된다.</p>
+</blockquote>
 
     </article>
     <!-- license  -->
@@ -896,7 +930,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#네트워크-기본"><span class="toc-number">1.</span> <span class="toc-text">네트워크 기본</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#상식"><span class="toc-number">1.1.</span> <span class="toc-text">상식</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#OSI-계층-구조"><span class="toc-number">2.</span> <span class="toc-text">OSI 계층 구조</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#데이터-단위"><span class="toc-number">2.1.</span> <span class="toc-text">데이터 단위</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#각-계층별-기능"><span class="toc-number">2.2.</span> <span class="toc-text">각 계층별 기능</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP-IP"><span class="toc-number">3.</span> <span class="toc-text">TCP&#x2F;IP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-IP-4계층에-의한-데이타-전송"><span class="toc-number">3.0.1.</span> <span class="toc-text">TCP&#x2F;IP 4계층에 의한 데이타 전송</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#NAT"><span class="toc-number">4.</span> <span class="toc-text">NAT</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP"><span class="toc-number">5.</span> <span class="toc-text">DHCP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-UDP-etc"><span class="toc-number">6.</span> <span class="toc-text">HTTP, UDP etc..</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#네트워킹을-위한-도구"><span class="toc-number">7.</span> <span class="toc-text">네트워킹을 위한 도구</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#허브"><span class="toc-number">7.1.</span> <span class="toc-text">허브</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#브릿지-스위치-라우터"><span class="toc-number">7.2.</span> <span class="toc-text">브릿지, 스위치, 라우터</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#브릿지와-스위치"><span class="toc-number">7.2.1.</span> <span class="toc-text">브릿지와 스위치</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#브릿지-스위치-기능"><span class="toc-number">7.2.2.</span> <span class="toc-text">브릿지, 스위치 기능</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#라우터"><span class="toc-number">7.2.3.</span> <span class="toc-text">라우터</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#공유기"><span class="toc-number">7.3.</span> <span class="toc-text">공유기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#라우터-L3"><span class="toc-number">7.4.</span> <span class="toc-text">라우터(L3)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#실습"><span class="toc-number">8.</span> <span class="toc-text">실습</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-연결지향"><span class="toc-number">8.1.</span> <span class="toc-text">TCP 연결지향</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#네트워크-지식-01"><span class="toc-number">1.</span> <span class="toc-text">네트워크 지식 01</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#상식"><span class="toc-number">1.1.</span> <span class="toc-text">상식</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#OSI-계층-구조"><span class="toc-number">2.</span> <span class="toc-text">OSI 계층 구조</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#데이터-단위"><span class="toc-number">2.1.</span> <span class="toc-text">데이터 단위</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#각-계층별-기능"><span class="toc-number">2.2.</span> <span class="toc-text">각 계층별 기능</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP-IP"><span class="toc-number">3.</span> <span class="toc-text">TCP&#x2F;IP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-IP-4계층에-의한-데이타-전송"><span class="toc-number">3.0.1.</span> <span class="toc-text">TCP&#x2F;IP 4계층에 의한 데이타 전송</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#NAT"><span class="toc-number">4.</span> <span class="toc-text">NAT</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP"><span class="toc-number">5.</span> <span class="toc-text">DHCP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-UDP-etc"><span class="toc-number">6.</span> <span class="toc-text">HTTP, UDP etc..</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#네트워킹을-위한-도구"><span class="toc-number">7.</span> <span class="toc-text">네트워킹을 위한 도구</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#허브"><span class="toc-number">7.1.</span> <span class="toc-text">허브</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#브릿지-스위치-라우터"><span class="toc-number">7.2.</span> <span class="toc-text">브릿지, 스위치, 라우터</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#브릿지와-스위치"><span class="toc-number">7.2.1.</span> <span class="toc-text">브릿지와 스위치</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#브릿지-스위치-기능"><span class="toc-number">7.2.2.</span> <span class="toc-text">브릿지, 스위치 기능</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#라우터"><span class="toc-number">7.2.3.</span> <span class="toc-text">라우터</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#공유기"><span class="toc-number">7.3.</span> <span class="toc-text">공유기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#라우터-L3"><span class="toc-number">7.4.</span> <span class="toc-text">라우터(L3)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#실습"><span class="toc-number">8.</span> <span class="toc-text">실습</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-연결지향"><span class="toc-number">8.1.</span> <span class="toc-text">TCP 연결지향</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#네트워크-통신-메커니즘"><span class="toc-number">9.</span> <span class="toc-text">네트워크  통신 메커니즘</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bridge-LAN환경에서-PC0가-PC1에게-요청-응답을-받는상황이라면-어떻게-통신할까"><span class="toc-number">9.1.</span> <span class="toc-text">Bridge+LAN환경에서 PC0가 PC1에게 요청 응답을 받는상황이라면 어떻게 통신할까?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Router의-통신"><span class="toc-number">9.2.</span> <span class="toc-text">Router의 통신</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
