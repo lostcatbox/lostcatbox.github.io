@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>lostcatbox</title>
+    <title>소켓을 이용한 실시간 채팅 만들기 (심화편) · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -203,12 +203,23 @@
 <meta name="generator" content="Hexo 4.2.0"></head>
 
     
+        <body class="post-body">
+    
     
 <header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">소켓을 이용한 실시간 채팅 만들기 (심화편)</a>
+            </div>
+    </div>
     
     <a class="home-link" href=/>LostCatBox</a>
 </header>
@@ -220,24 +231,78 @@
 
 
 
+
+height:50vh;
 ">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+            소켓을 이용한 실시간 채팅 만들기 (심화편)
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Network">Network</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Socket">Socket</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Threading">Threading</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">615</span>Reading time: <span class="post-count reading-time">3 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/08/04</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -338,241 +403,67 @@
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/11/26/django6/" >
-            
-                <span>Django 기본 여섯번째이야기</span>
-        </a>
-        <div class="abstract-content">
-            User Authentication Custom회원가입 UserCreationForm 커스텀
-case 1) 기존 username/password만 입력. email 추가 입력받기
+            <main class="main post-page">
+    <article class="article-entry">
+        <p><a href="https://lidron.tistory.com/44" target="_blank" rel="noopener">실시간 채팅 구현 참조</a></p>
+<p><a href="https://python.flowdas.com/library/socketserver.html" target="_blank" rel="noopener">serversocket문서</a></p>
+<h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>채팅을 소켓을 통해 만들었지만, 실시간으로 방을 참여하고, 많은 사람들이 채팅을 할 수있게 만들고싶었다.</p>
+<p>위에 해당하는 구현이 끝난다면, 이제 url을 연결하여 id값을 접속할때마다 부여하며 채팅방을 만들고, 그 url을 원하는 사람들에게 공유하고 유저들이 접속한다면 원하는 사람들만 일회용으로 간단히 사용할수있지 않을까 생각하였다.</p>
+<h1 id="실시간-채팅-구현"><a href="#실시간-채팅-구현" class="headerlink" title="실시간 채팅 구현"></a>실시간 채팅 구현</h1><h2 id="서버"><a href="#서버" class="headerlink" title="서버"></a>서버</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socketserver</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">HOST = <span class="string">''</span></span><br><span class="line">PORT = <span class="number">9009</span></span><br><span class="line">lock = threading.Lock()  <span class="comment"># syncronized 동기화 진행하는 스레드 생성, 즉, 단 하나의 프로세스나, 스레드만 접근해서 데이터를 수정함!</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserManager</span>:</span>  <span class="comment"># 사용자관리 및 채팅 메세지 전송을 담당하는 클래스</span></span><br><span class="line">    <span class="comment"># ① 채팅 서버로 입장한 사용자의 등록</span></span><br><span class="line">    <span class="comment"># ② 채팅을 종료하는 사용자의 퇴장 관리</span></span><br><span class="line">    <span class="comment"># ③ 사용자가 입장하고 퇴장하는 관리</span></span><br><span class="line">    <span class="comment"># ④ 사용자가 입력한 메세지를 채팅 서버에 접속한 모두에게 전송</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.users = &#123;&#125;  <span class="comment"># 사용자의 등록 정보를 담을 사전 &#123;사용자 이름:(소켓,주소),...&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">addUser</span><span class="params">(self, username, conn, addr)</span>:</span>  <span class="comment"># 사용자 ID를 self.users에 추가하는 함수</span></span><br><span class="line">        <span class="keyword">if</span> username <span class="keyword">in</span> self.users:  <span class="comment"># 이미 등록된 사용자라면</span></span><br><span class="line">            conn.send(<span class="string">'이미 등록된 사용자입니다.\n'</span>.encode())</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 새로운 사용자를 등록함</span></span><br><span class="line">        lock.acquire()  <span class="comment"># 스레드 동기화를 막기위한 락</span></span><br><span class="line">        self.users[username] = (conn, addr)</span><br><span class="line">        lock.release()  <span class="comment"># 업데이트 후 락 해제</span></span><br><span class="line"></span><br><span class="line">        self.sendMessageToAll(<span class="string">'[%s]님이 입장했습니다.'</span> % username)</span><br><span class="line">        print(<span class="string">'+++ 대화 참여자 수 [%d]'</span> % len(self.users))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> username</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">removeUser</span><span class="params">(self, username)</span>:</span>  <span class="comment"># 사용자를 제거하는 함수</span></span><br><span class="line">        <span class="keyword">if</span> username <span class="keyword">not</span> <span class="keyword">in</span> self.users:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        lock.acquire()</span><br><span class="line">        <span class="keyword">del</span> self.users[username]</span><br><span class="line">        lock.release()</span><br><span class="line"></span><br><span class="line">        self.sendMessageToAll(<span class="string">'[%s]님이 퇴장했습니다.'</span> % username)</span><br><span class="line">        print(<span class="string">'--- 대화 참여자 수 [%d]'</span> % len(self.users))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">messageHandler</span><span class="params">(self, username, msg)</span>:</span>  <span class="comment"># 전송한 msg를 처리하는 부분</span></span><br><span class="line">        <span class="keyword">if</span> msg[<span class="number">0</span>] != <span class="string">'/'</span>:  <span class="comment"># 보낸 메세지의 첫문자가 '/'가 아니면</span></span><br><span class="line">            self.sendMessageToAll(<span class="string">'[%s] %s'</span> % (username, msg))</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> msg.strip() == <span class="string">'/quit'</span>:  <span class="comment"># 보낸 메세지가 'quit'이면</span></span><br><span class="line">            self.removeUser(username)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sendMessageToAll</span><span class="params">(self, msg)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> conn, addr <span class="keyword">in</span> self.users.values():</span><br><span class="line">            conn.send(msg.encode())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyTcpHandler</span><span class="params">(socketserver.BaseRequestHandler)</span>:</span><span class="comment">#접속시 일어나는것들, self.request로 socket instance접근가능</span></span><br><span class="line">    userman = UserManager() <span class="comment">#이렇게 정의하면 self.userman으로 클래스접근가능</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle</span><span class="params">(self)</span>:</span>  <span class="comment"># 클라이언트가 접속시 클라이언트 주소 출력</span></span><br><span class="line">        print(<span class="string">'[%s] 연결됨'</span> % self.client_address[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            username = self.registerUsername()</span><br><span class="line">            msg = self.request.recv(<span class="number">1024</span>)</span><br><span class="line">            <span class="keyword">while</span> msg:</span><br><span class="line">                print(msg.decode())</span><br><span class="line">                <span class="keyword">if</span> self.userman.messageHandler(username, msg.decode()) == <span class="number">-1</span>:</span><br><span class="line">                    self.request.close()</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                msg = self.request.recv(<span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            print(e)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'[%s] 접속종료'</span> % self.client_address[<span class="number">0</span>])</span><br><span class="line">        self.userman.removeUser(username)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">registerUsername</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            self.request.send(<span class="string">'로그인ID:'</span>.encode())</span><br><span class="line">            username = self.request.recv(<span class="number">1024</span>)</span><br><span class="line">            username = username.decode().strip()</span><br><span class="line">            <span class="keyword">if</span> self.userman.addUser(username, self.request, self.client_address):</span><br><span class="line">                <span class="keyword">return</span> username</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChatingServer</span><span class="params">(socketserver.ThreadingMixIn, socketserver.TCPServer)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">runServer</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'+++ 채팅 서버를 시작합니다.'</span>)</span><br><span class="line">    print(<span class="string">'+++ 채텅 서버를 끝내려면 Ctrl-C를 누르세요.'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        server = ChatingServer((HOST, PORT), MyTcpHandler)</span><br><span class="line">        server.serve_forever()</span><br><span class="line">    <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">        print(<span class="string">'--- 채팅 서버를 종료합니다.'</span>)</span><br><span class="line">        server.shutdown()</span><br><span class="line">        server.server_close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">runServer()</span><br></pre></td></tr></table></figure>
 
-123456# accounts&#x2F;forms.pyfrom django import formsfrom django.contrib.auth.forms import UserCreationFormclass SignupForm(UserCreationForm): 	class Meta(UserCreationForm.Meta): 			fields &#x3D;...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/11/26</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Django">Django</a>
-    
-</div>
-            
-        </div>
+<h3 id="의문점"><a href="#의문점" class="headerlink" title="의문점"></a>의문점</h3><p><strong>스레딩을 위한 코드가 보이지 않는다.서버와 클라이언트가 있을때 서버는 스레드로 관리해야하는것아닌가(병렬처리..)</strong></p>
+<blockquote>
+<p>스레딩을 하기위해 <code>ChatingServer(socketserver.ThreadingMixIn, socketserver.TCPServer)</code> 상속을 사용하였다.메서드를 재정의하므로, 믹스인 클래스가 먼저 옵니다. 다양한 어트리뷰트를 설정하면 하부 서버 메커니즘의 동작도 변경됩니다.</p>
+<p>MRO에 따르면 클래스 상속의 순서는 뒤에서부터가 먼저임</p>
+</blockquote>
+<p><strong>Break조건을 두면 함수까지 탈출하나?</strong></p>
+<blockquote>
+<ol>
+<li><p>python 에서 함수안에서 return이 되면 그 즉시 함수끝</p>
+</li>
+<li><p>while True조건에서는 계속 반복하다가 break조건만나면 바로 탈출</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cat</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        cat = input(<span class="string">'&gt;&gt;&gt;'</span>)</span><br><span class="line">        print(cat)</span><br><span class="line">        <span class="keyword">if</span> cat == <span class="string">'/quit'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"rhdiddl"</span></span><br><span class="line">catest =cat()</span><br><span class="line">print(catest)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+</blockquote>
+<p><strong>서버 코드에서 self.request가  socket 인스턴스와 같이 사용되는이유?</strong></p>
+<p>request.send()가 가능한이유는 TCPServer에서 <code>request, client_address = self.get_request()</code> connect_socket을 request로 받음</p>
+<h2 id="클라이언트"><a href="#클라이언트" class="headerlink" title="클라이언트"></a>클라이언트</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> Thread</span><br><span class="line"></span><br><span class="line">HOST = <span class="string">'localhost'</span></span><br><span class="line">PORT = <span class="number">9009</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rcvMsg</span><span class="params">(sock)</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            data = sock.recv(<span class="number">1024</span>)</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> data:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            print(data.decode())</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">runChat</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">with</span> socket.socket(socket.AF_INET, socket.SOCK_STREAM) <span class="keyword">as</span> sock:</span><br><span class="line">        sock.connect((HOST, PORT))</span><br><span class="line">        t = Thread(target=rcvMsg, args=(sock,))</span><br><span class="line">        t.daemon = <span class="literal">True</span></span><br><span class="line">        t.start()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            msg = input()</span><br><span class="line">            <span class="keyword">if</span> msg == <span class="string">'/quit'</span>:</span><br><span class="line">                sock.send(msg.encode())</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            sock.send(msg.encode())</span><br><span class="line">            </span><br><span class="line">            </span><br><span class="line">runChat()</span><br></pre></td></tr></table></figure>
+
+<h1 id="웹소켓을-지난-활용"><a href="#웹소켓을-지난-활용" class="headerlink" title="웹소켓을 지난 활용"></a>웹소켓을 지난 활용</h1><p>지금까지 한 것들은 모두 로컬에서 서비스를 하고, </p>
+
     </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/11/25/django5/" >
-            
-                <span>Django 기본 다섯번째이야기</span>
-        </a>
-        <div class="abstract-content">
-            User Authentication
-django.contrib.auth 앱을 통한 회원가입/로그인/로그아웃
-
-관련 디폴트 settings1234567891011121314151617# 기본 로그인 페이지 URL 을 지정# login_required 장식자 등에 의해서 사용LOGIN_URL &#x3D; &#39;&#x2F;accounts&#x2F;login&#x2F;&#39;# 로그인 완료 후에 next 인자가 지정되면 해당 URL 로 페이지 이동# next 인자가 없으면 본 URL 로 이동LOGIN_REDIRECT_URL &#...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/11/25</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Django">Django</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/11/21/django04/" >
-            
-                <span>Django 기본 네번째이야기</span>
-        </a>
-        <div class="abstract-content">
-            Messages Framework
-1회성 메세지를 담는 용도(한명의 유저에게만)
-HttpRequest 인스턴스를 통해 메세지를 남길 수 있음
-메세지는 1회 노출이 되고, 사라집니다. 새로고침하면 보여지지 않음.
-Ex) “저장되었습니다”, “로그인되었습니다”
-
-Messages Framework는 세션에 저장되는데 이것은 DB에 저장이됨. 이때 세션을 관리하기위해서는 HttpRequest 인스턴스가 필요함(???)
-
-
-##Message levels를 통한 메세지 분류
-
-메세지를 남길때 내용+레벨을 지정해야함
-
-파이썬 로깅 모듈과 ...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/11/21</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Django">Django</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/11/15/django03/" >
-            
-                <span>Django 기본 세번째이야기</span>
-        </a>
-        <div class="abstract-content">
-            Bootstrap3 CSS Style TemplateCSS OpenSource Framework
-웹프론트엔드 UI를 일관된 모습으로 편하게 구성 가능
-
-Bootstrap, Material Design for Bootstrap, Material-UI, BULMA , Semantic UI, Pure.css , Zurb Foundation , UIkit
-
-
-Twitter Bootstrap3
-원래 이름은 Twitter Blueprint로 Mark Otto와 Jacob Thornton이 만들 었다. 
-12칸 Grid System
-다양한...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/11/15</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Django">Django</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/11/05/django02/" >
-            
-                <span>Django 기본 두번째이야기</span>
-        </a>
-        <div class="abstract-content">
-            HTTP Status Code웹서버는 적절한 상태코드로서 응답해야합니다. 대표적 HTTP 응답 상태 코드
-• 200 : 성공. 서버가 요청을 잘 처리했다. (OK)
-• 302 : 임시 URL로 이동했다. (Redirect) 
-• 404 : 서버가 요청한 페이지를 찾을 수 없음. (Not Found)
-• 500 : 서버 오류 발생 (Server Error)
-#   아래 3종류가 200받는 형식 
-12345678910111213from django.http import HttpResponse, JsonResponse from dj...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/11/05</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Django">Django</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/11/01/django01/" >
-            
-                <span>Django 기본 첫번째이야기</span>
-        </a>
-        <div class="abstract-content">
-            장고웹서비스 기본구조
-백엔드개발(django) -focus!
-프론트엔드 개발
-백엔드 서버 운영: 다양한 클라우드
-앱개발
-
-웹 애플리케이션 기본 구조
-클라이언트단: 웹브라우저 - 웹서버(django) - 데이터베이스서버(MySQL)
-클라이언트가 웹서버에 요청
-장고에서 URL(URLConf)을 기준(미리 URL별로 호출할 함수 등록해둠)&gt; 뷰(함수)- return &gt;URL&gt;웹브라우져
-뷰에서 DB가 필요할 경우 모델(파이썬코드로 데이터베이스처리함) 통해서 가져옴!!
-웹브라우저는 html을 요구함. 템플릿(HTML응답...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/11/01</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Django">Django</a>
-    
-</div>
-            
-        </div>
-    </article>
+    <!-- license  -->
     
     <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/08/01/websocket/" title= "HTTP,Ajax,Websocket">
+                    <div class="prevTitle">HTTP,Ajax,Websocket</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
     
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
 </main>
             <!-- profile -->
             
@@ -657,6 +548,24 @@ Twitter Bootstrap3
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#실시간-채팅-구현"><span class="toc-number">2.</span> <span class="toc-text">실시간 채팅 구현</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#서버"><span class="toc-number">2.1.</span> <span class="toc-text">서버</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#의문점"><span class="toc-number">2.1.1.</span> <span class="toc-text">의문점</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#클라이언트"><span class="toc-number">2.2.</span> <span class="toc-text">클라이언트</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#웹소켓을-지난-활용"><span class="toc-number">3.</span> <span class="toc-text">웹소켓을 지난 활용</span></a></li></ol>
+    </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
@@ -2161,6 +2070,8 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
      
     </body>
 </html>
