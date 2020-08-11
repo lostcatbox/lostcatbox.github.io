@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">957</span>Reading time: <span class="post-count reading-time">5 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.1k</span>Reading time: <span class="post-count reading-time">7 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -421,6 +421,7 @@ height:50vh;
 <h1 id="asyncio"><a href="#asyncio" class="headerlink" title="asyncio"></a>asyncio</h1><p><a href="https://sjquant.tistory.com/14" target="_blank" rel="noopener">자세히</a></p>
 <p><a href="https://dojang.io/mod/page/view.php?id=2469" target="_blank" rel="noopener">자세히</a></p>
 <p><a href="https://docs.python.org/ko/3/library/asyncio-eventloop.html" target="_blank" rel="noopener">자세히</a></p>
+<p><a href="https://docs.python.org/ko/3/library/asyncio-future.html#asyncio.ensure_future" target="_blank" rel="noopener">공식문서</a></p>
 <p>파이썬에서 비동기를 사용하기 위해서 필요한 라이브러리</p>
 <p>프로그래밍에서는 특히 데이터를 요청하고 응답을 기다리는 네트워크 IO에 큰 성능 상향을 기대할수있다.</p>
 <h2 id="들어가기전"><a href="#들어가기전" class="headerlink" title="들어가기전"></a>들어가기전</h2><p>이벤트 루프, 코루틴을 이해해야 완벽히 활용가능하다</p>
@@ -430,9 +431,15 @@ height:50vh;
 </li>
 <li><p>코루틴(Coroutine)</p>
 <p>이때, 이러한 작업은 파이썬에서 <strong>코루틴(Coroutine)</strong>으로 이루어져 있습니다. <strong>코루틴은 응답이 지연되는 부분에서 이벤트 루프에 통제권을 줄 수 있으며, 응답이 완료되었을 때 멈추었던 부분부터 기존의 상태를 유지한 채 남은 작업을 완료할 수 있는 함수</strong>를 의미합니다. 파이썬에서 코루틴이 아닌 일반적인 함수는 <code>서브루틴(Subroutine)</code>이라고 합니다.</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghmvhn66fxj30m80vqmyo.jpg" alt="0_s1GH0YO9ZNdEEDxo"></p>
+</li>
+<li><p>task,  future 객체관계는 task클래스가 future의 서브 클래스이다.</p>
+<p>코루틴을 Task로 도입하고싶다면 <code>asyncio.create_task()</code> (Python 3.6 이전은 <code>asyncio.ensure_future()</code>) 함수를 사용해서 Task로 만들 수 있다. Task로 만들어지는 과정에서 코루틴은 런루프에 등록되어 스케줄링되고, (언젠지는 모르지만) 실행 가능한 시점이 오면 실행을 시작할 수 있다.</p>
+</li>
+<li><p><code>asyncio.gather()</code>는 코루틴인 경우는 자동으로 자동으로 작업으로 예약된다. 나머지 awaitable 객체면 작업을 진행후 처음 받은 들어온 obj 순서에  맞춰서 결과값을 list에 반환한다.</p>
+<p>만약 task나  future객체를 받을경우는 이미  loop에 작업이 등록되어있으므로 결과값만 기다린다.</p>
 </li>
 </ul>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghmvhn66fxj30m80vqmyo.jpg" alt="0_s1GH0YO9ZNdEEDxo"></p>
 <h2 id="연습"><a href="#연습" class="headerlink" title="연습"></a>연습</h2><p>함수앞에 <code>async</code>를 붙이면 코루틴을 만들수있다</p>
 <p>병목이 발생해서 다른 작업으로 통제권을 넘겨줄 필요가 있는 부분에서 <code>await</code> 쓴다</p>
 <p>이때 <code>await</code>뒤에 오는 함수도 코루틴으로 작성되어 있어야 합니다.</p>
@@ -458,7 +465,20 @@ height:50vh;
 <p><strong>모두 비동기 구성이 된 함수들로 구성됨</strong>(asyncio.sleep은 코루틴이므로 컨텍스트스위치 비용안듬)</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">sleep</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># asyncio.sleep은 아무리 많아져도 비동기적으로 잘 돌아간다.</span></span><br><span class="line">    futures = [</span><br><span class="line">        asyncio.ensure_future(sleep()) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000</span>)</span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">await</span> asyncio.gather(*futures)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    start = time.time()</span><br><span class="line">    asyncio.run(main())</span><br><span class="line">    end = time.time()</span><br><span class="line">    print(<span class="string">f'<span class="subst">&#123;end-start&#125;</span>'</span>)</span><br></pre></td></tr></table></figure>
 
+<blockquote>
+<p>asyncio.ensure_future(obj,*,loop=None) 함수는</p>
+<ul>
+<li><em>obj*가 <a href="https://docs.python.org/ko/3/library/asyncio-future.html#asyncio.Future" target="_blank" rel="noopener"><code>Future</code></a>, <a href="https://docs.python.org/ko/3/library/asyncio-task.html#asyncio.Task" target="_blank" rel="noopener"><code>Task</code></a> 또는 퓨처류 객체면, *obj</em> 인자를 있는 그대로 (<a href="https://docs.python.org/ko/3/library/asyncio-future.html#asyncio.isfuture" target="_blank" rel="noopener"><code>isfuture()</code></a>로 검사합니다.)</li>
+<li><em>obj</em>가 코루틴이면, <em>obj</em>를 감싸는 <a href="https://docs.python.org/ko/3/library/asyncio-task.html#asyncio.Task" target="_blank" rel="noopener"><code>Task</code></a> 객체 (<a href="https://docs.python.org/ko/3/library/asyncio-task.html#asyncio.iscoroutine" target="_blank" rel="noopener"><code>iscoroutine()</code></a>로 검사합니다); 이 경우 코루틴은 <code>ensure_future()</code>로 예약됩니다.</li>
+<li><em>obj</em>가 어웨이터블이면, <em>obj</em>를 기다릴 <a href="https://docs.python.org/ko/3/library/asyncio-task.html#asyncio.Task" target="_blank" rel="noopener"><code>Task</code></a> 객체 (<a href="https://docs.python.org/ko/3/library/inspect.html#inspect.isawaitable" target="_blank" rel="noopener"><code>inspect.isawaitable()</code></a>로 검사합니다.)</li>
+</ul>
+<p>따라서  obj가 코루틴이거나, future, task객체여야한다. task 객체는 asyncio.create_task() 로 만들수있다.</p>
+</blockquote>
 <h2 id="실습"><a href="#실습" class="headerlink" title="실습"></a>실습</h2><p><a href="https://sjquant.tistory.com/15?category=797018" target="_blank" rel="noopener">자세히</a></p>
+<blockquote>
+<p>lock.acquire() 를 사용하면 shared resource에 오직 하나만 접근하는 것을 보증할수있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;lock = asyncio.Lock()</span><br><span class="line"></span><br><span class="line">&gt;<span class="keyword">await</span> lock.acquire()</span><br><span class="line">&gt;<span class="keyword">try</span>:</span><br><span class="line">   self.users[username] = (conn, addr)</span><br><span class="line">&gt;<span class="keyword">finally</span>:</span><br><span class="line">   lock.release()</span><br></pre></td></tr></table></figure>
+</blockquote>
 
     </article>
     <!-- license  -->
@@ -604,6 +624,18 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -1898,9 +1930,9 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
-    
         <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
@@ -1916,41 +1948,45 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
         <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
     
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
         <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
     
-        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
     
-        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
     
         <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
     
         <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
     
-        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
-    
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
-        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
-    
-        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
     
         <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
     
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
         <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
         <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
-    
-        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
-    
-        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
@@ -1966,15 +2002,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
     
-        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
-    
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
-        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
         <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
     
@@ -1984,21 +2020,17 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
     
-        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
     
         <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
     
-        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
     
         <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
     
         <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
-    
-        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
-    
-        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
-    
-        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -2043,13 +2075,15 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
         <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
     
-        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
-    
         <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
     
         <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
     
@@ -2057,33 +2091,31 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
         <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
     
         <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
     
         <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
-        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
-    
-        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
-    
         <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
-    
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
         <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
-    
-        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
-    
-        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
     
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
-        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
