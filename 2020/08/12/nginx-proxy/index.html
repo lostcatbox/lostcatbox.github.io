@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">656</span>Reading time: <span class="post-count reading-time">4 min</span></span>
+                        <span>Word count: <span class="post-count word-count">757</span>Reading time: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -409,6 +409,12 @@ height:50vh;
 <p><a href="https://velog.io/@minholee_93/Nginx-Overview-Install" target="_blank" rel="noopener">nginx기초부터하고싶다면</a></p>
 <p><a href="https://velog.io/@jeff0720/2018-11-18-2111-%EC%9E%91%EC%84%B1%EB%90%A8-iojomvsf0n" target="_blank" rel="noopener">프록시 구성</a></p>
 <p><a href="http://nginx.org/en/docs/http/ngx_http_upstream_module.html" target="_blank" rel="noopener">nginx공식문서</a></p>
+<p><a href="https://github.com/nginx-proxy/docker-letsencrypt-nginx-proxy-companion" target="_blank" rel="noopener">참고하면 좋은 라이브러리</a></p>
+<p><a href="https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71" target="_blank" rel="noopener">하나씩 구성하기</a></p>
+<p><a href="https://kscory.com/dev/nginx/https" target="_blank" rel="noopener">자세히</a> 이거꼭보기</p>
+<p><a href="https://opentutorials.org/module/384/4328" target="_blank" rel="noopener">자세히</a></p>
+<p><a href="https://kscory.com/dev/nginx/https" target="_blank" rel="noopener">완전 따라하기</a></p>
+<p><a href="https://stackoverflow.com/questions/12102110/nginx-to-reverse-proxy-websockets-and-enable-ssl-wss" target="_blank" rel="noopener">웹소캣 wss로 nginx에 물리기</a></p>
 <h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>채팅앱을 만들다가 https에서는 <code>ws://&lt;ip&gt;</code> 를 사용하지 못하고 <code>wss://&lt;ip&gt;</code> 를 통해 websocket요청을 해야하는 것을 알았다.</p>
 <p>즉, ssl인증서가 필요했고, https로 통신이 가능해야하였다. 하지만 지금까지 내 서버는 포트포워딩으로 http로만 통신을 하는 앱을 만들었기때문에 문제가되었다. 또한 포트포워드의 한계는 요청하는 곳에서도 포트를 지정해줘야하는데 cloudflare곳에서는 ip에 도메인을 등록하는 방법이였다. 따라서 내 서버의 1개의 ip주소로는 웹서비스 1개만 제공이 가능하게되었다.</p>
 <p>ip주소는 1개인데 어떻게 다양한 서비스를 한 서버에서 제공할수있을까? 고민하던중 nignx로 reverse-proxy를 도메인 기준으로하면 같은 ip주소로 요청을 보내더라도 요청한 도메인이 서로 다르기에 그것을 기준으로 해당 서비스를 연결해줄수있었다.</p>
@@ -442,6 +448,12 @@ height:50vh;
 <p>이는 reverse proxy 서버는 80번 포트를 listen하고 server_name은 192.168.88.244로 지정했다.</p>
 <p><strong>이를 도메인으로 지정할  경우 포트는 같지만 도메인기준으로 proxy_pass도 가능해진다</strong></p>
 <p>proxy_pass설정을 보면 <code>/</code>로 들어올경우 위에서 정의한 upstream docker-nginx(web이라는이름을 가진 container의 8080포트)로  proxy한다.</p>
+<blockquote>
+<p>nginx의 잡지식</p>
+<p>nginx-available디렉토리의 파일들은  자동으로 nginx-enabled에 추가되며 이것을nginx-enabled에서 삭제하면 disable과 able을 구별할수있도록된다.</p>
+<p>conf.d 디렉토리의 파일들은 nginx-enabled와 마찬가지다. 하지만 disable로 만들라면 con.d에서 삭제하거나 이동해야해야한다는 단점이있다.</p>
+<p>즉 구조적측면이 아니라면 그냥 conf.d쓰자</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#nginx.conf  파일에서아래와같이 활용하면된다.</span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;*.conf;</span><br><span class="line">    include &#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;*.conf;</span><br><span class="line">    include &#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;my_own_conf;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></blockquote>
 
     </article>
     <!-- license  -->
