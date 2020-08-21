@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>Nginx로 Reverse-proxy 서버 구성 · lostcatbox</title>
+    <title>Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성) · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">Nginx로 Reverse-proxy 서버 구성</a>
+                <a href="#" class="post-name">Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            Nginx로 Reverse-proxy 서버 구성
+            Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)
             <!-- 404 -->
             
         </h1>
@@ -268,15 +268,19 @@ height:50vh;
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "Network">Network</a>
     
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Docker">Docker</a>
+    
         <a class="post-tag" href="javascript:void(0);" data-tags = "Nginx">Nginx</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "Proxy">Proxy</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Ssl">Ssl</a>
     
 </div>
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">1.3k</span>Reading time: <span class="post-count reading-time">8 min</span></span>
+                        <span>Word count: <span class="post-count word-count">2.2k</span>Reading time: <span class="post-count reading-time">13 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -409,10 +413,7 @@ height:50vh;
 <p><a href="https://velog.io/@minholee_93/Nginx-Overview-Install" target="_blank" rel="noopener">nginx기초부터하고싶다면</a></p>
 <p><a href="https://velog.io/@jeff0720/2018-11-18-2111-%EC%9E%91%EC%84%B1%EB%90%A8-iojomvsf0n" target="_blank" rel="noopener">프록시 구성</a></p>
 <p><a href="http://nginx.org/en/docs/http/ngx_http_upstream_module.html" target="_blank" rel="noopener">nginx공식문서</a></p>
-<p><a href="https://github.com/nginx-proxy/docker-letsencrypt-nginx-proxy-companion" target="_blank" rel="noopener">참고하면 좋은 라이브러리</a></p>
-<p><a href="https://kscory.com/dev/nginx/https" target="_blank" rel="noopener">자세히</a> </p>
-<p><a href="https://opentutorials.org/module/384/4328" target="_blank" rel="noopener">자세히</a></p>
-<p><a href="https://kscory.com/dev/nginx/https" target="_blank" rel="noopener">완전 따라하기</a></p>
+<p><a href="https://opentutorials.org/module/384/4328" target="_blank" rel="noopener">upstream</a></p>
 <p><a href="https://stackoverflow.com/questions/12102110/nginx-to-reverse-proxy-websockets-and-enable-ssl-wss" target="_blank" rel="noopener">웹소캣 wss로 nginx에 물리기</a></p>
 <h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>채팅앱을 만들다가 https에서는 <code>ws://&lt;ip&gt;</code> 를 사용하지 못하고 <code>wss://&lt;ip&gt;</code> 를 통해 websocket요청을 해야하는 것을 알았다.</p>
 <p>즉, ssl인증서가 필요했고, https로 통신이 가능해야하였다. 하지만 지금까지 내 서버는 포트포워딩으로 http로만 통신을 하는 앱을 만들었기때문에 문제가되었다. 또한 포트포워드의 한계는 요청하는 곳에서도 포트를 지정해줘야하는데 cloudflare곳에서는 ip에 도메인을 등록하는 방법이였다. 따라서 내 서버의 1개의 ip주소로는 웹서비스 1개만 제공이 가능하게되었다.</p>
@@ -423,7 +424,17 @@ height:50vh;
 <li>/etc/nginx/sites-available: 해당 디렉터리에서 프록시 설정 및 어떻게 요청을 처리해야 할지에 대해 설정 할 수 있습니다.</li>
 <li>/etc/nginx/sites-enabled: 해당 디렉터리는 sites-available 디렉터리에서 연결된 파일들이 존재하는 곳 입니다.이 곳에 디렉터리와 연결이 되어 있어야 nginx가 프록시 설정을 적용합니다.</li>
 <li>/etc/nginx/snippets: sites-available 디렉터리에 있는 파일들에 공통적으로 포함될 수 있는 설정들을 정의할 수 있는 디렉터리 입니다.</li>
+<li>/etc/nginx/con.d : 해당 디렉터리는 nginx-enabled와 마찬가지다.</li>
 </ul>
+<blockquote>
+<p>nginx의 잡지식</p>
+<p>nginx-available디렉토리의 파일들은  자동으로 nginx-enabled에 추가되며 이것을nginx-enabled에서 삭제하면 disable과 able을 구별할수있도록된다.</p>
+<p>conf.d 디렉토리의 파일들은 nginx-enabled와 마찬가지다. 하지만 disable로 만들라면 con.d에서 삭제하거나 이동해야해야한다는 단점이있다.</p>
+<p>즉 구조적측면이 아니라면 그냥 conf.d 디렉토리 쓰자</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#nginx.conf  파일에서 아래와 같이 활용하면된다.</span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;*.conf;</span><br><span class="line">    include &#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;*.conf;</span><br><span class="line">    include &#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;my_own_conf;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</blockquote>
 <h2 id="연습"><a href="#연습" class="headerlink" title="연습"></a>연습</h2><p>디렉토리 및 파일 구성은 다음과 같다</p>
 <p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghp96u7sa3j30vo0kadk4.jpg" alt="스크린샷 2020-08-13 오후 5.14.22"></p>
 <p>실험으로 docker-compose.yml로 한번에 만드는 것이지, 결국에는 reverse-proxy역할하는 nginx는 따로 두고 관리하는게 편할것이다. 외부에서볼떄 가장 프론트의 nginx가 모든 요청을 받고 포트, 도메인, ip를 기준으로 포워딩할수있다.</p>
@@ -447,34 +458,60 @@ height:50vh;
 <p>이는 reverse proxy 서버는 80번 포트를 listen하고 server_name은 192.168.88.244로 지정했다.</p>
 <p><strong>이를 도메인으로 지정할  경우 포트는 같지만 도메인기준으로 proxy_pass도 가능해진다</strong></p>
 <p>proxy_pass설정을 보면 <code>/</code>로 들어올경우 위에서 정의한 upstream docker-nginx(web이라는이름을 가진 container의 8080포트)로  proxy한다.</p>
-<blockquote>
-<p>nginx의 잡지식</p>
-<p>nginx-available디렉토리의 파일들은  자동으로 nginx-enabled에 추가되며 이것을nginx-enabled에서 삭제하면 disable과 able을 구별할수있도록된다.</p>
-<p>conf.d 디렉토리의 파일들은 nginx-enabled와 마찬가지다. 하지만 disable로 만들라면 con.d에서 삭제하거나 이동해야해야한다는 단점이있다.</p>
-<p>즉 구조적측면이 아니라면 그냥 conf.d쓰자</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#nginx.conf  파일에서아래와같이 활용하면된다.</span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;*.conf;</span><br><span class="line">    include &#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;*.conf;</span><br><span class="line">    include &#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;my_own_conf;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
 <h1 id="Nginx-reverse-proxy에-SSL-적용하기"><a href="#Nginx-reverse-proxy에-SSL-적용하기" class="headerlink" title="Nginx reverse proxy에 SSL 적용하기"></a>Nginx reverse proxy에 SSL 적용하기</h1><p><a href="https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71" target="_blank" rel="noopener">도커+Let’s Encrypt</a></p>
 <p>아래는 최종 nginx reverse proxy구성 tree이다</p>
 <p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghxhquo285j30qm0g8dgv.jpg" alt="스크린샷 2020-08-20 오후 8.15.39"></p>
-<h2 id="구성"><a href="#구성" class="headerlink" title="구성"></a>구성</h2><p>certbot과 nginx를 모두 컨테이너로 올려서 자동 ssl 인증서 연장까지 구현할 것이므로 docker-compose.yml은 다음과같다</p>
+<h2 id="구성"><a href="#구성" class="headerlink" title="구성"></a>구성</h2><h3 id="docker-compose-yml-1"><a href="#docker-compose-yml-1" class="headerlink" title="docker-compose.yml"></a>docker-compose.yml</h3><p>certbot과 nginx를 모두 컨테이너로 올려서 자동 ssl 인증서 연장까지 구현할 것이므로 docker-compose.yml은 다음과같다</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># docker-compose.yml</span><br><span class="line"></span><br><span class="line">version: &#39;3&#39;</span><br><span class="line">services:</span><br><span class="line">  nginx:</span><br><span class="line">    image: nginx:1.18-alpine</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;80:80&quot;</span><br><span class="line">      - &quot;443:443&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - .&#x2F;data&#x2F;nginx.conf:&#x2F;etc&#x2F;nginx&#x2F;nginx.conf</span><br><span class="line">      - .&#x2F;data&#x2F;nginx:&#x2F;etc&#x2F;nginx&#x2F;conf.d</span><br><span class="line">      - .&#x2F;data&#x2F;certbot&#x2F;conf:&#x2F;etc&#x2F;letsencrypt</span><br><span class="line">      - .&#x2F;data&#x2F;certbot&#x2F;www:&#x2F;var&#x2F;www&#x2F;certbot</span><br><span class="line">    command: &quot;&#x2F;bin&#x2F;sh -c &#39;while :; do sleep 6h &amp; wait $$&#123;!&#125;; nginx -s reload; done &amp; nginx -g \&quot;daemon off;\&quot;&#39;&quot;</span><br><span class="line"></span><br><span class="line">  certbot:</span><br><span class="line">    image: certbot&#x2F;certbot</span><br><span class="line">    volumes:</span><br><span class="line">      - .&#x2F;data&#x2F;certbot&#x2F;conf:&#x2F;etc&#x2F;letsencrypt</span><br><span class="line">      - .&#x2F;data&#x2F;certbot&#x2F;www:&#x2F;var&#x2F;www&#x2F;certbot</span><br><span class="line">    entrypoint: &quot;&#x2F;bin&#x2F;sh -c &#39;trap exit TERM; while :; do certbot renew; sleep 12h &amp; wait $$&#123;!&#125;; done;&#39;&quot;</span><br></pre></td></tr></table></figure>
 
-
-
-
-
+<ul>
+<li>services&gt;nginx&gt;volumes와 services&gt; certbox&gt;volumes에서 <code>./data/certbot/conf:/etc/letsencrypt</code>, <code>./data/certbot/www:/var/www/certbot</code> 를 보면 certbot의 인증서 발급에  관해서 nginx컨테이너와 certbot컨테이너가 동시에 마운트되어있다.</li>
+</ul>
+<h3 id="nginx-conf"><a href="#nginx-conf" class="headerlink" title="nginx.conf"></a>nginx.conf</h3><p>nginx.conf파일은 추후에 프록시 서버, 로드밸런서를 설정할 때 중요하므로 volume해놓았다.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># nginx.conf</span><br><span class="line">user  nginx;</span><br><span class="line">worker_processes  1;</span><br><span class="line">error_log  &#x2F;var&#x2F;log&#x2F;nginx&#x2F;error.log warn;</span><br><span class="line">pid        &#x2F;var&#x2F;run&#x2F;nginx.pid;</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line">http &#123;</span><br><span class="line">    include       &#x2F;etc&#x2F;nginx&#x2F;mime.types;</span><br><span class="line">    default_type  application&#x2F;octet-stream;</span><br><span class="line"></span><br><span class="line">    log_format  main  &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;</span><br><span class="line">                      &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;</span><br><span class="line">                      &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#39;;</span><br><span class="line"></span><br><span class="line">    access_log  &#x2F;var&#x2F;log&#x2F;nginx&#x2F;access.log  main;</span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line">    include &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;*.conf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-
+<h3 id="app-conf"><a href="#app-conf" class="headerlink" title="app.conf"></a>app.conf</h3><p>내 채팅앱에 대해 리버스 프록시는 다음과 같은 구성이 되어있다.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"># app.conf</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name chatting.lostcatbox.com;</span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">    &#125;</span><br><span class="line">    location &#x2F;.well-known&#x2F;acme-challenge&#x2F; &#123;</span><br><span class="line">         root &#x2F;var&#x2F;www&#x2F;certbot;</span><br><span class="line">    &#125;</span><br><span class="line">    access_log &#x2F;var&#x2F;log&#x2F;nginx&#x2F;access.log;</span><br><span class="line">    error_log &#x2F;var&#x2F;log&#x2F;nginx&#x2F;error.log;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">upstream chatting-html &#123;</span><br><span class="line">        server htmldeploy;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name chatting.lostcatbox.com;</span><br><span class="line"></span><br><span class="line">    access_log &#x2F;var&#x2F;log&#x2F;nginx&#x2F;access.log;</span><br><span class="line">    error_log &#x2F;var&#x2F;log&#x2F;nginx&#x2F;error.log;</span><br><span class="line"></span><br><span class="line">    proxy_connect_timeout 1d;</span><br><span class="line">    proxy_send_timeout 1d;</span><br><span class="line">    proxy_read_timeout 1d;</span><br><span class="line"></span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        proxy_pass http:&#x2F;&#x2F;chatting-html&#x2F;; #for demo purposes</span><br><span class="line">        proxy_redirect     off;</span><br><span class="line">    &#125;</span><br><span class="line">    location &#x2F;websocket&#x2F; &#123;</span><br><span class="line">        proxy_pass http:&#x2F;&#x2F;172.29.0.6:7777&#x2F;;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;chatting.lostcatbox.com&#x2F;fullchain.pem;</span><br><span class="line">    ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;chatting.lostcatbox.com&#x2F;privkey.pem;</span><br><span class="line">    include &#x2F;etc&#x2F;letsencrypt&#x2F;options-ssl-nginx.conf;</span><br><span class="line">    ssl_dhparam &#x2F;etc&#x2F;letsencrypt&#x2F;ssl-dhparams.pem;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<ul>
+<li><p>아래는 certbot이 ssl을 발급할때 위의 해당주소/.well-known/acme-challenge/ 를 통해 인증하므로 반드시 필요하다.(???)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">location &#x2F;.well-known&#x2F;acme-challenge&#x2F; &#123;</span><br><span class="line">     root &#x2F;var&#x2F;www&#x2F;certbot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>nginx에서 HTTPS프로토콜에 이용될 ssl인증서 경로</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;chatting.lostcatbox.com&#x2F;fullchain.pem;</span><br><span class="line">ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;chatting.lostcatbox.com&#x2F;privkey.pem;</span><br></pre></td></tr></table></figure>
 
 
-<h1 id="Nginx-websocket-wss-적용하기"><a href="#Nginx-websocket-wss-적용하기" class="headerlink" title="Nginx websocket wss:// 적용하기"></a>Nginx websocket wss:// 적용하기</h1><p>https에서는 wss가 필수이므로 반드시 ssl적용이 필요했다</p>
-<p>하지만 nginx에서는 이미 websocket에 대해 따로 지원을 해준다. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">server &#123;   </span><br><span class="line">    ##아래와 같은 양식으로 추가</span><br><span class="line">    location &#x2F;websocket&#x2F; &#123;</span><br><span class="line">        proxy_pass http:&#x2F;&#x2F;172.29.0.6:7777&#x2F;;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">        proxy_read_timeout 86400;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<ul>
+<li><p>Let’s also add them to our config file. This will score you a straight A in the <a href="https://www.ssllabs.com/index.html" target="_blank" rel="noopener">SSL Labs test</a>! (???)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">include &#x2F;etc&#x2F;letsencrypt&#x2F;options-ssl-nginx.conf;</span><br><span class="line">ssl_dhparam &#x2F;etc&#x2F;letsencrypt&#x2F;ssl-dhparams.pem;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="init-letsencrypt-sh"><a href="#init-letsencrypt-sh" class="headerlink" title="init-letsencrypt.sh"></a>init-letsencrypt.sh</h3><p>앞서 과정만 진행을 하고 <code>docker-compose up</code>을 실행한다면 실패한다. 왜냐하면 nginx에 ssl인증서가 발급되어있지않으므로 파일이 존재하지않기때문이다. </p>
+<p>즉, create dummy certificate&gt;start nginx, delete dummy and request the real certificates 과정을 거쳐야한다.</p>
+<p>아래는 init-letsencrypt.sh 내용이다. </p>
+<p><strong>반드시 domains, email, data_path란에 해당 서비스로 수정해야한다.</strong></p>
+<p>권한부여 후  <code>chmod +x init-letsencrypt.sh</code></p>
+<p>실행하자  <code>sudo ./init-letsencrypt.sh</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line"></span><br><span class="line">if ! [ -x &quot;$(command -v docker-compose)&quot; ]; then</span><br><span class="line">  echo &#39;Error: docker-compose is not installed.&#39; &gt;&amp;2</span><br><span class="line">  exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">domains&#x3D;(example.org www.example.org)</span><br><span class="line">rsa_key_size&#x3D;4096</span><br><span class="line">data_path&#x3D;&quot;.&#x2F;data&#x2F;certbot&quot;</span><br><span class="line">email&#x3D;&quot;&quot; # Adding a valid address is strongly recommended</span><br><span class="line">staging&#x3D;0 # Set to 1 if you&#39;re testing your setup to avoid hitting request limits</span><br><span class="line"></span><br><span class="line">if [ -d &quot;$data_path&quot; ]; then</span><br><span class="line">  read -p &quot;Existing data found for $domains. Continue and replace existing certificate? (y&#x2F;N) &quot; decision</span><br><span class="line">  if [ &quot;$decision&quot; !&#x3D; &quot;Y&quot; ] &amp;&amp; [ &quot;$decision&quot; !&#x3D; &quot;y&quot; ]; then</span><br><span class="line">    exit</span><br><span class="line">  fi</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if [ ! -e &quot;$data_path&#x2F;conf&#x2F;options-ssl-nginx.conf&quot; ] || [ ! -e &quot;$data_path&#x2F;conf&#x2F;ssl-dhparams.pem&quot; ]; then</span><br><span class="line">  echo &quot;### Downloading recommended TLS parameters ...&quot;</span><br><span class="line">  mkdir -p &quot;$data_path&#x2F;conf&quot;</span><br><span class="line">  curl -s https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;certbot&#x2F;certbot&#x2F;master&#x2F;certbot-nginx&#x2F;certbot_nginx&#x2F;_internal&#x2F;tls_configs&#x2F;options-ssl-nginx.conf &gt; &quot;$data_path&#x2F;conf&#x2F;options-ssl-nginx.conf&quot;</span><br><span class="line">  curl -s https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;certbot&#x2F;certbot&#x2F;master&#x2F;certbot&#x2F;certbot&#x2F;ssl-dhparams.pem &gt; &quot;$data_path&#x2F;conf&#x2F;ssl-dhparams.pem&quot;</span><br><span class="line">  echo</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">echo &quot;### Creating dummy certificate for $domains ...&quot;</span><br><span class="line">path&#x3D;&quot;&#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;$domains&quot;</span><br><span class="line">mkdir -p &quot;$data_path&#x2F;conf&#x2F;live&#x2F;$domains&quot;</span><br><span class="line">docker-compose run --rm --entrypoint &quot;\</span><br><span class="line">  openssl req -x509 -nodes -newkey rsa:1024 -days 1\</span><br><span class="line">    -keyout &#39;$path&#x2F;privkey.pem&#39; \</span><br><span class="line">    -out &#39;$path&#x2F;fullchain.pem&#39; \</span><br><span class="line">    -subj &#39;&#x2F;CN&#x3D;localhost&#39;&quot; certbot</span><br><span class="line">echo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo &quot;### Starting nginx ...&quot;</span><br><span class="line">docker-compose up --force-recreate -d nginx</span><br><span class="line">echo</span><br><span class="line"></span><br><span class="line">echo &quot;### Deleting dummy certificate for $domains ...&quot;</span><br><span class="line">docker-compose run --rm --entrypoint &quot;\</span><br><span class="line">  rm -Rf &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;$domains &amp;&amp; \</span><br><span class="line">  rm -Rf &#x2F;etc&#x2F;letsencrypt&#x2F;archive&#x2F;$domains &amp;&amp; \</span><br><span class="line">  rm -Rf &#x2F;etc&#x2F;letsencrypt&#x2F;renewal&#x2F;$domains.conf&quot; certbot</span><br><span class="line">echo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo &quot;### Requesting Let&#39;s Encrypt certificate for $domains ...&quot;</span><br><span class="line">#Join $domains to -d args</span><br><span class="line">domain_args&#x3D;&quot;&quot;</span><br><span class="line">for domain in &quot;$&#123;domains[@]&#125;&quot;; do</span><br><span class="line">  domain_args&#x3D;&quot;$domain_args -d $domain&quot;</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"># Select appropriate email arg</span><br><span class="line">case &quot;$email&quot; in</span><br><span class="line">  &quot;&quot;) email_arg&#x3D;&quot;--register-unsafely-without-email&quot; ;;</span><br><span class="line">  *) email_arg&#x3D;&quot;--email $email&quot; ;;</span><br><span class="line">esac</span><br><span class="line"></span><br><span class="line"># Enable staging mode if needed</span><br><span class="line">if [ $staging !&#x3D; &quot;0&quot; ]; then staging_arg&#x3D;&quot;--staging&quot;; fi</span><br><span class="line"></span><br><span class="line">docker-compose run --rm --entrypoint &quot;\</span><br><span class="line">  certbot certonly --webroot -w &#x2F;var&#x2F;www&#x2F;certbot \</span><br><span class="line">    $staging_arg \</span><br><span class="line">    $email_arg \</span><br><span class="line">    $domain_args \</span><br><span class="line">    --rsa-key-size $rsa_key_size \</span><br><span class="line">    --agree-tos \</span><br><span class="line">    --force-renewal&quot; certbot</span><br><span class="line">echo</span><br><span class="line"></span><br><span class="line">echo &quot;### Reloading nginx ...&quot;</span><br><span class="line">docker-compose exec nginx nginx -s reload</span><br></pre></td></tr></table></figure>
+
+<h3 id="자동으로-인증서-재발급"><a href="#자동으로-인증서-재발급" class="headerlink" title="자동으로 인증서 재발급"></a>자동으로 인증서 재발급</h3><p><code>docker-compose.yml</code>파일에서 certbot 아래를 추가해주자(12시간마다 재발급)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">entrypoint: &quot;&#x2F;bin&#x2F;sh -c &#39;trap exit TERM; while :; do certbot renew; sleep 12h &amp; wait $$&#123;!&#125;; done;&#39;&quot;</span><br></pre></td></tr></table></figure>
+
+<p><code>docker-compose.yml</code>파일에서 nginx 아래를 추가해주자(6시간마다 nginx reload)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command: &quot;&#x2F;bin&#x2F;sh -c &#39;while :; do sleep 6h &amp; wait $$&#123;!&#125;; nginx -s reload; done &amp; nginx -g \&quot;daemon off;\&quot;&#39;&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="네트워크-구성"><a href="#네트워크-구성" class="headerlink" title="네트워크 구성"></a>네트워크 구성</h2><p>네트워크는 <code>docker-compose up</code>을 통해 <code>proxy_default</code> 가 자동으로 생성될것이다. </p>
+<p>따라서 reverse-proxy를 원하는 컨테이너를 <code>proxy_default</code>망에 추가하고  쓸때는 해당 <code>컨테이너이름:[포트]</code>로 nginx의 conf파일에 지정해주면 외부컨테이너와 연결가능하다.</p>
+<p>예시) <code>docker run -d --expose 7777 --name chattingserver chatting server:v5</code></p>
+<h1 id="Nginx-websocket-wss-적용하기"><a href="#Nginx-websocket-wss-적용하기" class="headerlink" title="Nginx websocket wss:// 적용하기"></a>Nginx websocket wss:// 적용하기</h1><p>https에서는 wss가 필수이므로 반드시 ssl적용이 필요했다.</p>
+<p>upstream부터 <code>server { }를</code> 따로 설정해줄수있지만 1.1.3버전부터 nginx에서는 이미 websocket에 대해 따로 지원을 해준다. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">upstream pythonchattingserver &#123;</span><br><span class="line">        server chattingserver:7777;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;   </span><br><span class="line">    ##아래와 같은 양식으로 추가</span><br><span class="line">    location &#x2F;websocket&#x2F; &#123;</span><br><span class="line">        proxy_pass http:&#x2F;&#x2F;pythonchattingserver&#x2F;;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">        proxy_read_timeout 86400;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// js로 요청하는 방법</span></span><br><span class="line"><span class="keyword">var</span> webSocket = <span class="keyword">new</span> WebSocket(<span class="string">"wss://chatting.lostcatbox.com/websocket/"</span>);</span><br></pre></td></tr></table></figure>
 
@@ -621,7 +658,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx로-프록시서버-만들기"><span class="toc-number">2.</span> <span class="toc-text">Nginx로 프록시서버 만들기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx의-디렉터리-의미를-간단하게-알아봅시다"><span class="toc-number">2.1.</span> <span class="toc-text">Nginx의 디렉터리 의미를 간단하게 알아봅시다.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#연습"><span class="toc-number">2.2.</span> <span class="toc-text">연습</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dockerfile"><span class="toc-number">2.2.1.</span> <span class="toc-text">Dockerfile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-compose-yml"><span class="toc-number">2.2.2.</span> <span class="toc-text">docker-compose.yml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reverse-proxy-서버의-nginx의-nginx-conf"><span class="toc-number">2.2.3.</span> <span class="toc-text">reverse-proxy 서버의 nginx의 nginx.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#nginx-upstream"><span class="toc-number">2.2.3.1.</span> <span class="toc-text">nginx upstream</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#server"><span class="toc-number">2.2.3.2.</span> <span class="toc-text">server</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx-reverse-proxy에-SSL-적용하기"><span class="toc-number">3.</span> <span class="toc-text">Nginx reverse proxy에 SSL 적용하기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#구성"><span class="toc-number">3.1.</span> <span class="toc-text">구성</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx-websocket-wss-적용하기"><span class="toc-number">4.</span> <span class="toc-text">Nginx websocket wss:&#x2F;&#x2F; 적용하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#오류"><span class="toc-number">5.</span> <span class="toc-text">오류</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx에서-소캣을-자동-삭제"><span class="toc-number">5.1.</span> <span class="toc-text">nginx에서 소캣을 자동 삭제</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#해결"><span class="toc-number">5.1.1.</span> <span class="toc-text">해결</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx로-프록시서버-만들기"><span class="toc-number">2.</span> <span class="toc-text">Nginx로 프록시서버 만들기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx의-디렉터리-의미를-간단하게-알아봅시다"><span class="toc-number">2.1.</span> <span class="toc-text">Nginx의 디렉터리 의미를 간단하게 알아봅시다.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#연습"><span class="toc-number">2.2.</span> <span class="toc-text">연습</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dockerfile"><span class="toc-number">2.2.1.</span> <span class="toc-text">Dockerfile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-compose-yml"><span class="toc-number">2.2.2.</span> <span class="toc-text">docker-compose.yml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reverse-proxy-서버의-nginx의-nginx-conf"><span class="toc-number">2.2.3.</span> <span class="toc-text">reverse-proxy 서버의 nginx의 nginx.conf</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#nginx-upstream"><span class="toc-number">2.2.3.1.</span> <span class="toc-text">nginx upstream</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#server"><span class="toc-number">2.2.3.2.</span> <span class="toc-text">server</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx-reverse-proxy에-SSL-적용하기"><span class="toc-number">3.</span> <span class="toc-text">Nginx reverse proxy에 SSL 적용하기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#구성"><span class="toc-number">3.1.</span> <span class="toc-text">구성</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-compose-yml-1"><span class="toc-number">3.1.1.</span> <span class="toc-text">docker-compose.yml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nginx-conf"><span class="toc-number">3.1.2.</span> <span class="toc-text">nginx.conf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#app-conf"><span class="toc-number">3.1.3.</span> <span class="toc-text">app.conf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init-letsencrypt-sh"><span class="toc-number">3.1.4.</span> <span class="toc-text">init-letsencrypt.sh</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#자동으로-인증서-재발급"><span class="toc-number">3.1.5.</span> <span class="toc-text">자동으로 인증서 재발급</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#네트워크-구성"><span class="toc-number">3.2.</span> <span class="toc-text">네트워크 구성</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx-websocket-wss-적용하기"><span class="toc-number">4.</span> <span class="toc-text">Nginx websocket wss:&#x2F;&#x2F; 적용하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#오류"><span class="toc-number">5.</span> <span class="toc-text">오류</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx에서-소캣을-자동-삭제"><span class="toc-number">5.1.</span> <span class="toc-text">nginx에서 소캣을 자동 삭제</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#해결"><span class="toc-number">5.1.1.</span> <span class="toc-text">해결</span></a></li></ol></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -634,10 +671,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
     
     
     
@@ -1648,7 +1681,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성</a>
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
         </li>
     
     
@@ -2008,21 +2041,19 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
         <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
     
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
-        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
-    
-        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
-    
         <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
     
         <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
-    
-        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
     
         <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
     
@@ -2030,11 +2061,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
-        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
     
         <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
     
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
         <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -2042,13 +2077,17 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
-        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
-    
         <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
@@ -2058,43 +2097,39 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
-        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
-    
-        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
-    
-        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
-    
-        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
-    
-        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
-    
         <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
     
         <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
     
-        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
     
-        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
     
         <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
     
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
         <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
     
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
         <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
         <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
     
         <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
-    
-        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
-    
-        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -2135,9 +2170,9 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
-        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
-    
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
         <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
     
@@ -2145,9 +2180,9 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
     
-        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
-    
         <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
     
         <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
     
@@ -2155,19 +2190,19 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
-        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
-    
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
-    
-        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
         <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
-        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
-    
         <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
     
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
         <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
         <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
     
@@ -2175,9 +2210,9 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
     
-        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
-    
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
