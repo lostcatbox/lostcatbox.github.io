@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>우분투 · lostcatbox</title>
+    <title>우분투에서 ssh,ftp,sftp 설정 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">우분투</a>
+                <a href="#" class="post-name">우분투에서 ssh,ftp,sftp 설정</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            우분투
+            우분투에서 ssh,ftp,sftp 설정
             <!-- 404 -->
             
         </h1>
@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">651</span>Reading time: <span class="post-count reading-time">4 min</span></span>
+                        <span>Word count: <span class="post-count word-count">441</span>Reading time: <span class="post-count reading-time">2 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -403,7 +403,7 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh agd@192.168.1.211</span><br><span class="line">ssh: connect to host 192.168.1.211 port 22: Connection refused</span><br></pre></td></tr></table></figure>
+        <h1 id="ssh-적용"><a href="#ssh-적용" class="headerlink" title="ssh 적용"></a>ssh 적용</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh agd@192.168.1.211</span><br><span class="line">ssh: connect to host 192.168.1.211 port 22: Connection refused</span><br></pre></td></tr></table></figure>
 
 
 <p>PC2에 고정 IP가 구성되어 있습니다. 그리고 WiFi를 통해 PC2에 SSH를 시도하면 작동합니다.</p>
@@ -426,17 +426,6 @@ height:50vh;
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -R 192.168.0.7 #shh-keygen 초기화</span><br></pre></td></tr></table></figure>
 
 <p><a href="https://cpuu.postype.com/post/30065" target="_blank" rel="noopener">해결</a></p>
-<h1 id="root권한을-주는-것과-동시에-외부접속-root계정은-x"><a href="#root권한을-주는-것과-동시에-외부접속-root계정은-x" class="headerlink" title="root권한을 주는 것과 동시에 외부접속 root계정은 x"></a>root권한을 주는 것과 동시에 외부접속 root계정은 x</h1><p><a href="https://www.hanumoka.net/2019/09/26/ubuntu-20190926-ubuntu-grant-root/" target="_blank" rel="noopener">자세히</a></p>
-<p><a href="https://studyforus.tistory.com/235" target="_blank" rel="noopener">자세히</a></p>
-<p><a href="https://www.hanumoka.net/2019/09/26/ubuntu-20190926-ubuntu-grant-root/" target="_blank" rel="noopener">자세히</a></p>
-<p>일단 일반 계정에 root권한 부여</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sudo su #관리자로 로그인</span><br><span class="line">adduser &lt;계정명&gt; #계정 추가</span><br><span class="line">usermod -aG sudo &lt;계정명&gt; #sudo 그룹에 원하는 계정을 추가</span><br><span class="line">su - &lt;계정명&gt; # 계정전환</span><br><span class="line">groups     #잘 등록되었나 확인</span><br><span class="line">su - &lt;계정명&gt; # 계정전환</span><br></pre></td></tr></table></figure>
-
-<p>만약 정말 외부접속부터 root계정과 똑같이 쓰고싶다면(sudo사용안해도됨, 권한부여)</p>
-<p>(추천하지않는다. 위험)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;ssh&#x2F;sshd_config #이동후 </span><br><span class="line">#파일안에</span><br><span class="line">#PermitRootLogin without-password #이부분을 yes로 수정, root계정으로 로그인이 가능하도록</span><br><span class="line"></span><br><span class="line">service ssh restart #반드시 재시작해야 적용됨</span><br><span class="line"></span><br><span class="line">vim &#x2F;etc&#x2F;sudoers #이동</span><br><span class="line"></span><br><span class="line">#파일안에서</span><br><span class="line">root All&#x3D;(ALL:ALL) ALL </span><br><span class="line">일반계정명 All&#x3D;(ALL:ALL) ALL   &lt;-  이렇게 추가하자.</span><br><span class="line"></span><br><span class="line">vim &#x2F;etc&#x2F;passwd #이동</span><br><span class="line">root:x 뒤에 0:0 가 보일것이다.</span><br><span class="line"></span><br><span class="line">앞의 0은 uid(유저아이디) 뒤의 0는 gid(그룹아이디)를 의미하는데, 슈퍼유저의 uid는 0 슈퍼유저의 gid도 0이다.</span><br><span class="line"></span><br><span class="line">root의 권한이 필요한 일반계정의 uid와 gid를 0:0으로 변경해주자.</span><br><span class="line">lostcatbox:x:0:0:lostcatbox:&#x2F;home&#x2F;lostcatbox</span><br><span class="line"></span><br><span class="line">vim &#x2F;etc&#x2F;group #이동</span><br><span class="line">root:x:0: 를 root:x:0:&lt;일반계정명&gt; 으로 수정해주자.</span><br><span class="line"></span><br><span class="line">#확인</span><br><span class="line"> sudo 없이 명령어가 실행되는지 확인해보자.</span><br></pre></td></tr></table></figure>
-
-<p>기존에는 sudo docker ps 로 실행 해야 했지만, 이제는 docker ps 로 바로 명령어가 실행되는 것을 확인 할 수 있다.</p>
 <h1 id="비번없이-ssh-로그인하기"><a href="#비번없이-ssh-로그인하기" class="headerlink" title="비번없이 ssh 로그인하기"></a>비번없이 ssh 로그인하기</h1><p><a href="[https://employee.tistory.com/entry/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8-%EC%97%86%EC%9D%B4-ssh-%EB%A1%9C%EA%B7%B8%EC%9D%B8](https://employee.tistory.com/entry/비밀번호-없이-ssh-로그인)">자세히</a></p>
 <h2 id="ssh의-공개-키-인증-방식"><a href="#ssh의-공개-키-인증-방식" class="headerlink" title="ssh의 공개 키 인증 방식"></a>ssh의 공개 키 인증 방식</h2><p>공개 키 (Public Key)로 암호화 한 문자열은 비공개 키 (Private Key)로 복호화가 가능하다. 반대로 비공개 키로 암호화한 문자열은 공개 키로 복호화가 가능하다.</p>
 <ol>
@@ -461,11 +450,7 @@ height:50vh;
 <h3 id="athorized-keys-생성"><a href="#athorized-keys-생성" class="headerlink" title="athorized_keys 생성"></a>athorized_keys 생성</h3><p>접속하고자 하는 서버에 authorized_keys 파일이 없다면 생성해주자.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh username@domain.name mkdir .ssh</span><br></pre></td></tr></table></figure>
 
-
-
 <h3 id="id-rsa-pub-추가"><a href="#id-rsa-pub-추가" class="headerlink" title="id_rsa.pub 추가"></a>id_rsa.pub 추가</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cat ~&#x2F;.ssh&#x2F;id_rsa.pub | ssh username@domain.name &#39;cat &gt;&gt; .ssh&#x2F;authorized_keys&#39;</span><br></pre></td></tr></table></figure>
-
-
 
 <h3 id="퍼미션-설정"><a href="#퍼미션-설정" class="headerlink" title="퍼미션 설정"></a>퍼미션 설정</h3><p>.ssh 폴더와 authorized_keys 퍼미션을 적절하게 바꿔줘야 로그인이 가능하다.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh username@domain.name &#39;chmod 700 .ssh; chmod 640 .ssh&#x2F;authorized_keys&#39;</span><br></pre></td></tr></table></figure>
@@ -618,7 +603,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#root권한을-주는-것과-동시에-외부접속-root계정은-x"><span class="toc-number">1.</span> <span class="toc-text">root권한을 주는 것과 동시에 외부접속 root계정은 x</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#비번없이-ssh-로그인하기"><span class="toc-number">2.</span> <span class="toc-text">비번없이 ssh 로그인하기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ssh의-공개-키-인증-방식"><span class="toc-number">2.1.</span> <span class="toc-text">ssh의 공개 키 인증 방식</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#공개-키-비공개-키-생성"><span class="toc-number">2.2.</span> <span class="toc-text">공개 키, 비공개 키 생성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#id-rsa-pub를-authorized-keys에-추가"><span class="toc-number">2.3.</span> <span class="toc-text">id_rsa.pub를 authorized_keys에 추가</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#athorized-keys-생성"><span class="toc-number">2.3.1.</span> <span class="toc-text">athorized_keys 생성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#id-rsa-pub-추가"><span class="toc-number">2.3.2.</span> <span class="toc-text">id_rsa.pub 추가</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#퍼미션-설정"><span class="toc-number">2.3.3.</span> <span class="toc-text">퍼미션 설정</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#설정-완료"><span class="toc-number">2.4.</span> <span class="toc-text">설정 완료</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#sftp-설정"><span class="toc-number">3.</span> <span class="toc-text">sftp 설정</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ssh-적용"><span class="toc-number">1.</span> <span class="toc-text">ssh 적용</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#비번없이-ssh-로그인하기"><span class="toc-number">2.</span> <span class="toc-text">비번없이 ssh 로그인하기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ssh의-공개-키-인증-방식"><span class="toc-number">2.1.</span> <span class="toc-text">ssh의 공개 키 인증 방식</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#공개-키-비공개-키-생성"><span class="toc-number">2.2.</span> <span class="toc-text">공개 키, 비공개 키 생성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#id-rsa-pub를-authorized-keys에-추가"><span class="toc-number">2.3.</span> <span class="toc-text">id_rsa.pub를 authorized_keys에 추가</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#athorized-keys-생성"><span class="toc-number">2.3.1.</span> <span class="toc-text">athorized_keys 생성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#id-rsa-pub-추가"><span class="toc-number">2.3.2.</span> <span class="toc-text">id_rsa.pub 추가</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#퍼미션-설정"><span class="toc-number">2.3.3.</span> <span class="toc-text">퍼미션 설정</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#설정-완료"><span class="toc-number">2.4.</span> <span class="toc-text">설정 완료</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#sftp-설정"><span class="toc-number">3.</span> <span class="toc-text">sftp 설정</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1747,9 +1732,35 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 74
+        Total : 76
         </div>
         <!-- search  -->
         
@@ -1762,6 +1773,16 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >ubuntu-authentication</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-command/" >ubuntu-command</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1875,7 +1896,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu/" >우분투</a>
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투에서 ssh,ftp,sftp 설정</a>
         </li>
     
     
@@ -2129,12 +2150,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
         </li>
     
     
@@ -2147,31 +2168,29 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
-    
-        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
-    
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
-    
-        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
-    
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
         <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
     
-        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
         <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
-        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
@@ -2181,13 +2200,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
     
-        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
-    
         <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
     
         <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
     
         <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
         <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
     
@@ -2225,27 +2246,27 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
         <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
     
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
-        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
-    
         <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
     
         <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
     
         <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
     
-        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
-    
-        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
     
         <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
-    
-        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
     
         <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
     
@@ -2292,25 +2313,25 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
-    
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
-        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
     
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
     
         <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
     
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
         <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
         <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
     
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
         <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
-    
-        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
     
         <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
     
@@ -2322,11 +2343,11 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
-        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
-    
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
         <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
         <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
@@ -2334,11 +2355,11 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
         <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
-    
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
         <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
     
