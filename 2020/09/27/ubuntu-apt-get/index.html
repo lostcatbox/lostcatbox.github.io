@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>우분투에서 IP고정 · lostcatbox</title>
+    <title>우분투 apt-get · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">우분투에서 IP고정</a>
+                <a href="#" class="post-name">우분투 apt-get</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            우분투에서 IP고정
+            우분투 apt-get
             <!-- 404 -->
             
         </h1>
@@ -266,7 +266,7 @@ height:50vh;
                 
                     <div class= post-intro-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Network">Network</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "Ubuntu">Ubuntu</a>
     
@@ -274,12 +274,12 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">121</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">153</span>Reading time: <span class="post-count reading-time">1 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2020/09/25</span>
+                    <span class="post-intro-time">2020/09/27</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -403,31 +403,83 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <p><a href="https://blog.dalso.org/linux/ubuntu-20-04-lts/9069" target="_blank" rel="noopener">자세히</a></p>
-<h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>버전 20.04 LTS이다</p>
-<p>가장 먼저 해야할 것은 고정 IP 할당입니다.<br>고정 IP를 할당하지않으면 DHCP를 통해 IP가 자꾸 바뀌는 불상사가있을수도 있기 때문이다.</p>
-<p>실제로 나는 우분투를 재부팅후, IP주소를 제대로 못잡아서, apt-get의 오류를 읽고 차근차근 추론하여, 위와 같은 문제인것을 알았다. (+친구의 도움)</p>
-<h1 id="netplan-이용"><a href="#netplan-이용" class="headerlink" title="netplan 이용"></a>netplan 이용</h1><p>기본적으로 파일 경로는 /etc/netplan/50-cloud-init.yaml에있다. (파일명 다를수있음)</p>
-<p><strong>기본 파일 내용(DHCP일경우)</strong></p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gj2qdggdn8j30rr0eat9n.jpg" alt="스크린샷 2020-09-25 오후 12.09.03"></p>
-<p><strong>변경 내용</strong></p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gj2qelmcedj30rc0jmjt4.jpg" alt="스크린샷 2020-09-25 오후 12.22.53"></p>
-<ul>
-<li>dhcp4 : IPv4 dhcp 설정</li>
-<li>dhcp6 : IPv6 dhcp 설정</li>
-<li>addresses : <code>,</code>로 구분한 IP 멀티로 가능</li>
-<li>gateway4 : IPv4 gateway 설정</li>
-<li>nameservers : dns 설정 <code>,</code>로 구분 멀티로 설정 가능 [생략 가능]</li>
-</ul>
-<p>마지막으로 변경사항 적용후</p>
-<p><code>sudo netplan apply</code></p>
-<p>확인해보자</p>
-<p><code>ifconfig -a</code></p>
-<blockquote>
-<p>netplan이 없을경우 </p>
-<p><code>sudo apt-get update -y</code></p>
-<p><code>sudo apt-get install -y netplan.io</code></p>
-</blockquote>
+        <p><a href="https://www.lesstif.com/lpt/apt-apt-get-24445574.html" target="_blank" rel="noopener">자세히</a></p>
+<p><a href="http://taewan.kim/tip/apt-apt-get/" target="_blank" rel="noopener">자세히2</a></p>
+<p><code>apt</code>와 <code>apt-get</code>, <code>apt-cache</code>, <code>apt-config</code> 들의 차이가 있다. </p>
+<p><code>apt-get</code>, <code>apt-cache</code>, <code>apt-config</code> 는 too low level로 패키지들을 조정할수있다. 덕분에 매우 많은 기능들을 갖고있다.</p>
+<p><code>apt</code> 는 <code>apt-get</code>, <code>apt-cache</code>, <code>apt-config</code> 등으로 구성되어있으며, 각각의 핵심 기능들을 활용할 수 있다.</p>
+<p><code>apt</code>명령어는 ubuntu 14이상에서는 다른 것들보다 권장되고있다,</p>
+<table>
+<thead>
+<tr>
+<th align="left">apt 명령</th>
+<th align="left">기존 명령</th>
+<th align="left">설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">apt install</td>
+<td align="left">apt-get install</td>
+<td align="left">패키지 목록</td>
+</tr>
+<tr>
+<td align="left">apt remove</td>
+<td align="left">apt-get remove</td>
+<td align="left">패키지 삭제</td>
+</tr>
+<tr>
+<td align="left">apt purge</td>
+<td align="left">apt-get purge</td>
+<td align="left">패키지와 관련 설정 제거</td>
+</tr>
+<tr>
+<td align="left">apt update</td>
+<td align="left">apt-get update</td>
+<td align="left">레파지토리 인덱스 갱신</td>
+</tr>
+<tr>
+<td align="left">apt upgrade</td>
+<td align="left">apt-get upgrade</td>
+<td align="left">업그레이드 가능한 모든 패키지 업그레이드</td>
+</tr>
+<tr>
+<td align="left">apt autoremove</td>
+<td align="left">apt-get autoremove</td>
+<td align="left">불필요한 패키지 제거</td>
+</tr>
+<tr>
+<td align="left">apt full-upgrade</td>
+<td align="left">apt-get dist-upgrade</td>
+<td align="left">의존성 고려한 패키지 업그레이드</td>
+</tr>
+<tr>
+<td align="left">apt search</td>
+<td align="left">apt-cache search</td>
+<td align="left">프로그램 검색</td>
+</tr>
+<tr>
+<td align="left">apt show</td>
+<td align="left">apt-cache show</td>
+<td align="left">패키지 상세 정보 출력</td>
+</tr>
+</tbody></table>
+<p><strong>+ 새로운 명령어</strong></p>
+<table>
+<thead>
+<tr>
+<th>apt 명령</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>apt list</td>
+<td>apt-get install</td>
+</tr>
+<tr>
+<td>apt edit-sources</td>
+<td>소스 리스트 편집</td>
+</tr>
+</tbody></table>
 
     </article>
     <!-- license  -->
@@ -436,17 +488,12 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href= "/2020/09/27/ubuntu-command/" title= "ubuntu-command">
-                    <div class="nextTitle">ubuntu-command</div>
-                </a>
-            
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href= "/2020/09/25/wordpress/" title= "워드프레스 도커활용하여 배포하기(https포함)">
-                    <div class="prevTitle">워드프레스 도커활용하여 배포하기(https포함)</div>
+                <a href= "/2020/09/27/ubuntu-authentication/" title= "우분투 유저, 권환 관련">
+                    <div class="prevTitle">우분투 유저, 권환 관련</div>
                 </a>
             
         </li>
@@ -565,7 +612,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#netplan-이용"><span class="toc-number">2.</span> <span class="toc-text">netplan 이용</span></a></li></ol>
+        
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1738,17 +1785,22 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >ubuntu-authentication</a>
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-command/" >ubuntu-command</a>
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/fixedIP-in-ubuntu/" >우분투에서 IP고정</a>
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-command/" >우분투 자주 쓰는 명령어</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
         </li>
     
     
@@ -1823,11 +1875,6 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/18</span><a class="archive-post-title" href= "/2020/07/18/linux/" >리눅스 명령어(자주쓰는것들)</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
             <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
         </li>
     
@@ -1858,7 +1905,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투에서 ssh,ftp,sftp 설정</a>
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
         </li>
     
     
@@ -2130,37 +2177,41 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
         <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
     
-        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
-    
-        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
-    
-        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
-    
-        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
         <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
-        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
-    
-        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
         <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
     
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
         <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
     
         <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
         <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
     
@@ -2168,17 +2219,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
     
-        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
-    
-        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
-    
         <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
     
         <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
     
         <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
-    
-        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -2186,7 +2231,7 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
-        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
     
         <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
     
@@ -2206,13 +2251,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
     
-        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
-    
-        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
     
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
@@ -2224,11 +2267,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
     
-        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
     
         <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
     
         <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
     
@@ -2236,11 +2283,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
         <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
     
         <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
-    
-        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -2275,25 +2322,25 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
-    
         <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
     
-        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
-    
-        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
         <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
         <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
-        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
-    
-        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
     
         <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
     
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
     
         <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
     
@@ -2301,21 +2348,17 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
     
-        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
-    
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
-        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
-    
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
     
         <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
         <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
-    
-        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
         <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
@@ -2323,7 +2366,11 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
     
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
         <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
     
         <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
     
