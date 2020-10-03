@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>mysql · lostcatbox</title>
+    <title>Mysql 기본 공부 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">mysql</a>
+                <a href="#" class="post-name">Mysql 기본 공부</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            mysql
+            Mysql 기본 공부
             <!-- 404 -->
             
         </h1>
@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">895</span>Reading time: <span class="post-count reading-time">5 min</span></span>
+                        <span>Word count: <span class="post-count word-count">2.5k</span>Reading time: <span class="post-count reading-time">15 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -509,10 +509,209 @@ height:50vh;
 
 <p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gjb29rh5h4j308c06ggmx.jpg" alt="스크린샷 2020-10-02 오후 5.18.41"></p>
 <p>concat이라는 문자열 또는 칼럼의 값을 연결해주는 함수를 사용한 것입니다.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">concat</span>(<span class="keyword">name</span>, <span class="string">'의 부서코드는'</span>,dept_cd,<span class="string">'입니다'</span>) <span class="keyword">from</span> kmong.select_test</span><br><span class="line"><span class="keyword">where</span> dept_cd=<span class="string">"A"</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">concat</span>(<span class="keyword">name</span>, <span class="string">'의 부서코드는'</span>,dept_cd,<span class="string">'입니다'</span>) <span class="keyword">from</span> kmong.select_test</span><br><span class="line"><span class="keyword">where</span> dept_cd=<span class="string">"A"</span>; <span class="comment">#조건에 맞는 원하는 행을 추출하는 것이므로 selection</span></span><br></pre></td></tr></table></figure>
 
 <p>위에 sql은 among.select_test 테이블에서 dept_cd=”A”조건을 만족하는 행에 대해 concat(name, ‘의 부서코드는’,dept_cd,’입니다’)  출력한다.</p>
-<p><a href="https://stricky.tistory.com/205" target="_blank" rel="noopener">https://stricky.tistory.com/205</a> (여기부터 시작)</p>
+<h1 id="sql-독학-강의-select를-잘-이용하는-방법-2"><a href="#sql-독학-강의-select를-잘-이용하는-방법-2" class="headerlink" title="sql 독학 강의 # select를 잘 이용하는 방법(2)"></a>sql 독학 강의 # select를 잘 이용하는 방법(2)</h1><h2 id="산술-연산자-사용해보기"><a href="#산술-연산자-사용해보기" class="headerlink" title="산술 연산자 사용해보기"></a>산술 연산자 사용해보기</h2><p>다른 프로그래밍 언어와 마찬가지로 SQL 또한 +,-,*, / 를 가진다</p>
+<p>먼저 더미를 추가해주자</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> kmong.exam_result</span><br><span class="line">( </span><br><span class="line">    <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">50</span>),</span><br><span class="line">    math <span class="built_in">int</span>(<span class="number">10</span>),</span><br><span class="line">    english <span class="built_in">int</span>(<span class="number">10</span>),</span><br><span class="line">    korean <span class="built_in">int</span>(<span class="number">10</span>)</span><br><span class="line">) <span class="built_in">character</span> <span class="keyword">set</span> utf8;</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.exam_result (<span class="keyword">name</span>, math, english, korean) <span class="keyword">VALUES</span> (<span class="string">'호날두'</span>, <span class="number">98</span>, <span class="number">65</span>, <span class="number">56</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.exam_result (<span class="keyword">name</span>, math, english, korean) <span class="keyword">VALUES</span> (<span class="string">'메시'</span>, <span class="number">87</span>, <span class="number">76</span>, <span class="number">87</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.exam_result (<span class="keyword">name</span>, math, english, korean) <span class="keyword">VALUES</span> (<span class="string">'치차리토'</span>, <span class="number">76</span>, <span class="number">87</span>, <span class="number">75</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.exam_result (<span class="keyword">name</span>, math, english, korean) <span class="keyword">VALUES</span> (<span class="string">'살라'</span>, <span class="number">78</span>, <span class="number">88</span>, <span class="number">55</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.exam_result (<span class="keyword">name</span>, math, english, korean) <span class="keyword">VALUES</span> (<span class="string">'라모스'</span>, <span class="number">56</span>, <span class="number">90</span>, <span class="number">89</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.exam_result (<span class="keyword">name</span>, math, english, korean) <span class="keyword">VALUES</span> (<span class="string">'모드리치'</span>, <span class="number">90</span>, <span class="number">95</span>, <span class="number">78</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.exam_result (<span class="keyword">name</span>, math, english, korean) <span class="keyword">VALUES</span> (<span class="string">'케인'</span>, <span class="number">99</span>, <span class="number">82</span>, <span class="number">83</span>);</span><br></pre></td></tr></table></figure>
+
+<p>평균값을 구하기 위해서는</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">name</span>, math, english, korean, (math + english + korean)/<span class="number">3</span> <span class="keyword">as</span> <span class="keyword">avg</span>, </span><br><span class="line"><span class="keyword">from</span> kmong.exam_result</span><br></pre></td></tr></table></figure>
+
+<p>즉, avg라는 alias(별명)을 가진 컬럼이 생기고 평균값이 출력된다.</p>
+<h2 id="where절에-비교-연산자를-사용해-보기"><a href="#where절에-비교-연산자를-사용해-보기" class="headerlink" title="where절에 비교 연산자를 사용해 보기"></a>where절에 비교 연산자를 사용해 보기</h2><p>앞선 시간에 where절에 문자열을 넣어서 데이터중 조건에 맞는 일부 row만 출력하는 것을 배워보았습니다. where 절에 비교 연산자를 넣어서 출력하는 방법을 알아보겠습니다. 비교 연산자는 <strong>&lt;, &gt;, =</strong> 이런 것들을 이야기합니다.</p>
+<p>번외로 SQL의 where절에서 사용할 수 있는 다양한 연산자에 대해서 알아보겠습니다.</p>
+<table>
+<thead>
+<tr>
+<th><strong>비교연산자 종류</strong></th>
+<th><strong>설명</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>=</strong></td>
+<td>같은 조건을 검색</td>
+</tr>
+<tr>
+<td><strong>!=, &lt;&gt;</strong></td>
+<td>같지 않은 조건을 검색</td>
+</tr>
+<tr>
+<td><strong>&gt;</strong></td>
+<td>큰 조건을 검색</td>
+</tr>
+<tr>
+<td><strong>&gt;=</strong></td>
+<td>크거나 같은 조건을 검색</td>
+</tr>
+<tr>
+<td><strong>&lt;</strong></td>
+<td>작은 조건을 검색</td>
+</tr>
+<tr>
+<td><strong>&lt;=</strong></td>
+<td>작거나 같은 조건을 검색</td>
+</tr>
+<tr>
+<td><strong>BETWEEN a AND b</strong></td>
+<td>a 와 b 사이에 있는 값을 검색</td>
+</tr>
+<tr>
+<td><strong>IN(a,b,c)</strong></td>
+<td>a,b,c 중 어느 하나 인 것을 검색</td>
+</tr>
+<tr>
+<td><strong>like</strong></td>
+<td>특정 패턴을 가지고 있는 조건을 검색</td>
+</tr>
+<tr>
+<td><strong>is Null / is Not Null</strong></td>
+<td>NULL 인 값이나 NULL이 아닌 값을 검색</td>
+</tr>
+<tr>
+<td><strong>a AND b</strong></td>
+<td>a, b 두 조건 모두를 만족하는 값을 검색</td>
+</tr>
+<tr>
+<td><strong>a OR b</strong></td>
+<td>a 나 b 중 하나의 조건을 만족하는 값을 검색</td>
+</tr>
+<tr>
+<td><strong>NOT a</strong></td>
+<td>a 가 아닌 모든 값을 검색</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>NOT</strong> 연산자는 말그대로 바로 뒤에 오는 조건을 부정하는 역할을 한다. 때문에 혼자서는 되지 않는다.</p>
+<p>예시)</p>
+<p><code>WHERE NOT user_id IN (&#39;user1&#39;,&#39;user3&#39;)</code></p>
+</blockquote>
+<h2 id="order-by-절을-사용-하여-정렬하여-출력-하기"><a href="#order-by-절을-사용-하여-정렬하여-출력-하기" class="headerlink" title="order by 절을 사용 하여 정렬하여 출력 하기"></a>order by 절을 사용 하여 정렬하여 출력 하기</h2><p>데이터의 양이 많을 때는 데이터를 어떤 기준으로 정렬하여 보는 것이 편할 때가 있습니다. 이럴 때 SQL에서는 order by 절을 사용 하게 됩니다. order by 역시 select, from, where 등과 마찬가지로 키워드로 분류가 됩니다. 기본적으로 order by를 사용하게 되면 오름차순으로 정렬이 되며, 내림차순으로 정렬을 하고 싶을 때는 desc라는 옵션을 사용하게 됩니다.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> kmong.<span class="string">`exam_result`</span></span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> math; <span class="comment">#order by 기본은 오름차순</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> kmong.<span class="string">`exam_result`</span></span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> math <span class="keyword">desc</span>; <span class="comment"># order by에 desc 옵션주면 내림차순</span></span><br></pre></td></tr></table></figure>
+
+<p>order by 에도 역시 산술 연산자를 사용해서 정렬하여 출력하게 할 수 있습니다.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> kmong.<span class="string">`exam_result`</span></span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> (math+english+korean)/<span class="number">3</span> <span class="comment"># 기본 오름차순</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> kmong.<span class="string">`exam_result`</span></span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> (math+english+korean)/<span class="number">3</span> <span class="keyword">desc</span> <span class="comment"># 내림차순</span></span><br></pre></td></tr></table></figure>
+
+<p><code>order by 3</code> 도 써보자 (컬럼에서 3번째를 기준으로하는것)(권장안함.)(컬럼순서바뀌면 기준, 결과값달라지니까.)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> kmong.<span class="string">`exam_result`</span></span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="집합-연산자-사용하기"><a href="#집합-연산자-사용하기" class="headerlink" title="집합 연산자 사용하기"></a>집합 연산자 사용하기</h2><p>집합 연산자 사용하기 실습에 앞서 테이블 하나를 더 만들고, 데이터를 입력하겠습니다.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> kmong.exam_result_2 (</span><br><span class="line">  <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">50</span>), </span><br><span class="line">  math <span class="built_in">int</span>(<span class="number">10</span>), </span><br><span class="line">  english <span class="built_in">int</span>(<span class="number">10</span>), </span><br><span class="line">  korean <span class="built_in">int</span>(<span class="number">10</span>) </span><br><span class="line">) <span class="built_in">character</span> <span class="keyword">set</span> utf8;</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.exam_result_2 (<span class="keyword">name</span>, math, english, korean) <span class="keyword">VALUES</span> (<span class="string">'차범근'</span>, <span class="number">78</span>, <span class="number">90</span>, <span class="number">78</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.exam_result_2 (<span class="keyword">name</span>, math, english, korean) <span class="keyword">VALUES</span> (<span class="string">'서정원'</span>, <span class="number">68</span>, <span class="number">99</span>, <span class="number">68</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.exam_result_2 (<span class="keyword">name</span>, math, english, korean) <span class="keyword">VALUES</span> (<span class="string">'고종수'</span>, <span class="number">84</span>, <span class="number">96</span>, <span class="number">98</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.exam_result_2 (<span class="keyword">name</span>, math, english, korean) <span class="keyword">VALUES</span> (<span class="string">'박지성'</span>, <span class="number">67</span>, <span class="number">68</span>, <span class="number">75</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.exam_result_2 (<span class="keyword">name</span>, math, english, korean) <span class="keyword">VALUES</span> (<span class="string">'최순호'</span>, <span class="number">88</span>, <span class="number">93</span>, <span class="number">68</span>);</span><br></pre></td></tr></table></figure>
+
+<p>우선 집합 연산자의 종류에 대한 내용을 확인하고 넘어가겠습니다.</p>
+<p>그리고, 집합이라고 하면 데이터베이스에서는 기본적으로 한 테이블을 하나의 집합이라고 하고, SQL에서 하나의 select 문으로 나오는 데이터셋을 집합이라고도 표현합니다. 집합 연산자에 대한 내용 확인해보겠습니다.</p>
+<table>
+<thead>
+<tr>
+<th><strong>집합연산자 종류</strong></th>
+<th><strong>내용</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>UNION</strong></td>
+<td>두 집합을 더해서 결과를 출력한다. 중복 값 제거하고 정렬을 수행한다.</td>
+</tr>
+<tr>
+<td><strong>UNION ALL</strong></td>
+<td>두 집합을 더해서 결과를 출력한다. 중복 제거와 정렬을 하지 않는다.</td>
+</tr>
+<tr>
+<td><strong>INTERSECT</strong></td>
+<td>두 집합의 교집합 결과를 정렬하여 출력한다.</td>
+</tr>
+<tr>
+<td><strong>MINUS</strong></td>
+<td>두 집합의 차집합 결과를 정렬하고 출력한다. SQL의 순서가 중요하다.</td>
+</tr>
+</tbody></table>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> kmong.exam_result </span><br><span class="line"><span class="keyword">union</span> </span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> kmong.exam_result_2</span><br></pre></td></tr></table></figure>
+
+<p>이렇게 UNION을 이용해서 두 select 결과 (집합)을 합칠 수 있습니다.</p>
+<p>다음은 UNION과 UNION ALL의 차이점도 한번 확인해보겠습니다</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> kmong.exam_result </span><br><span class="line"><span class="keyword">union</span> <span class="keyword">all</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> kmong.exam_result_2</span><br></pre></td></tr></table></figure>
+
+<p> 중복값 제거 유무를 확인가능하다.</p>
+<p>이번엔 INTERSECT와 MINUS의 차이점을 비교해보겠습니다.</p>
+<blockquote>
+<p>mysql의 5.7.29-0 ubuntu0.18.04.1 버전에서는 INTERSECT와 MINUS 기능이 지원하지 않습니다.</p>
+</blockquote>
+<p>아래 테이블 추가</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> math_student ( </span><br><span class="line">  <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">50</span>), </span><br><span class="line">  student_no <span class="built_in">varchar</span>(<span class="number">10</span>) </span><br><span class="line">) <span class="built_in">character</span> <span class="keyword">set</span> utf8;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> korean_student ( </span><br><span class="line">  <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">50</span>), </span><br><span class="line">  student_no <span class="built_in">varchar</span>(<span class="number">10</span>)</span><br><span class="line">) <span class="built_in">character</span> <span class="keyword">set</span> utf8; </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> math_student (<span class="keyword">name</span>, student_no) <span class="keyword">VALUES</span> (<span class="string">'조단'</span>, <span class="string">'111'</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> math_student (<span class="keyword">name</span>, student_no) <span class="keyword">VALUES</span> (<span class="string">'호나우두'</span>, <span class="string">'112'</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> math_student (<span class="keyword">name</span>, student_no) <span class="keyword">VALUES</span> (<span class="string">'나달'</span>, <span class="string">'113'</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> math_student (<span class="keyword">name</span>, student_no) <span class="keyword">VALUES</span> (<span class="string">'조코비치'</span>, <span class="string">'114'</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> korean_student (<span class="keyword">name</span>, student_no) <span class="keyword">VALUES</span> (<span class="string">'조단'</span>, <span class="string">'111'</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> korean_student (<span class="keyword">name</span>, student_no) <span class="keyword">VALUES</span> (<span class="string">'호나우두'</span>, <span class="string">'112'</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> korean_student (<span class="keyword">name</span>, student_no) <span class="keyword">VALUES</span> (<span class="string">'조현우'</span>, <span class="string">'201'</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> korean_student (<span class="keyword">name</span>, student_no) <span class="keyword">VALUES</span> (<span class="string">'루이스'</span>, <span class="string">'202'</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>![스크린샷 2020-10-03 오후 2.09.00](/Users/lostcatbox/Library/Application Support/typora-user-images/스크린샷 2020-10-03 오후 2.09.00.png)</p>
+<p>아래그림과 같이 집합연산자에 대한 결과값을 표현할 수 있다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gjc2elq8xzj311k0ca4bl.jpg" alt="스크린샷 2020-10-03 오후 2.08.48"></p>
+<h1 id="단일행-함수-잘-사용-하기-문자-함수"><a href="#단일행-함수-잘-사용-하기-문자-함수" class="headerlink" title="단일행 함수 잘 사용 하기(문자 함수)"></a>단일행 함수 잘 사용 하기(문자 함수)</h1><p>여기서 함수란 무엇을 말하는 것일까요? 함수란 어떤 값을 받아서 그 값을 어떠한 정해진 정의에 의해 변환시켜 변환된 값을 출력하는 것을 말합니다</p>
+<p>DBMS에서 함수를 분류하는 기준이 몇 가지 있습니다.</p>
+<p>우선은 내장 함수와 사용자 정의 함수로 나눌 수 있습니다. 내장 함수란 우리가 사용하는 각각의 RDBMS에 이미 내장된 함수를 뜻 합니다. 그리고 사용자 정의 함수란 내장 함수를 제외하고 <strong>‘create function’</strong> 문을 사용해서 자신이 필요한 변환 규칙을 적용해 개개인의 유저 혹은 DBA, 개발자들이 만든 함수를 뜻 합니다.</p>
+<p>그리고 다른 분류로는 단일행 함수, 복수행 함수로 구분할 수 있습니다. 단일행 함수란 한 행(row)의 값을 받아서 특정 규칙과 정의를 통해 변환시키는 함수이고, 복수행 함수란 여러 행의 값을 한꺼번에 받아서 하나의 행(row)의 결과 값으로 되 돌려주는 함수를 뜻합니다. 이미 알고 계실지도 모르겠지만 가장 보편적인 복수행 함수로는 ‘count()’가 있습니다.</p>
+<p>그리고 또 분류하자면 문자 함수와 숫자 함수, 날짜 함수, 형 변환 함수, 일반 함수 등으로도 분류할 수 있습니다. 여기에 대해서는 천천히 알아보도록 하겠습니다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gjc2v3co1kj30u20u01kx.jpg" alt="스크린샷 2020-10-03 오후 2.24.44"></p>
+<p>이번 포스팅에서 공부할 내용은 내장 함수이자 단일행 함수이며 문자 함수에 속하는 내용에 대해서 공부하도록 하겠습니다.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> kmong.country (</span><br><span class="line">  country_name <span class="built_in">varchar</span>(<span class="number">100</span>), </span><br><span class="line">  capital_city <span class="built_in">varchar</span>(<span class="number">100</span>), </span><br><span class="line">  continent <span class="built_in">varchar</span>(<span class="number">100</span>) </span><br><span class="line">) <span class="built_in">character</span> <span class="keyword">set</span> utf8; </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.country (country_name, capital_city, continent) <span class="keyword">VALUES</span> (<span class="string">'USA'</span>, <span class="string">'Washington'</span>, <span class="string">'America'</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.country (country_name, capital_city, continent) <span class="keyword">VALUES</span> (<span class="string">'England'</span>, <span class="string">'London'</span>, <span class="string">'Europe'</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.country (country_name, capital_city, continent) <span class="keyword">VALUES</span> (<span class="string">'S.Korea'</span>, <span class="string">' Seoul'</span>, <span class="string">'Asia'</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.country (country_name, capital_city, continent) <span class="keyword">VALUES</span> (<span class="string">'Australia'</span>, <span class="string">' Canberra'</span>, <span class="string">'Oceania'</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.country (country_name, capital_city, continent) <span class="keyword">VALUES</span> (<span class="string">'Ghana'</span>, <span class="string">'Accra'</span>, <span class="string">'Africa'</span>); </span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> kmong.country (country_name, capital_city, continent) <span class="keyword">VALUES</span> (<span class="string">'Argentina'</span>, <span class="string">'Buenos aires'</span>, <span class="string">'America'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>위 데이터 추가후</p>
+<p><code>select from kmong.country</code>해서 아래 테이블 형태 잘 기억해두기</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gjc301xyx4j30fa084gnj.jpg" alt="스크린샷 2020-10-03 오후 2.29.30"></p>
+<h2 id="lower-upper-함수-사용-하기"><a href="#lower-upper-함수-사용-하기" class="headerlink" title="lower/upper 함수 사용 하기"></a>lower/upper 함수 사용 하기</h2><p>lower(칼럼명), upper(칼럼명)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> country_name <span class="keyword">as</span> 원본, <span class="keyword">lower</span>(country_name) <span class="keyword">as</span> 소문자, <span class="keyword">upper</span>(country_name) <span class="keyword">as</span> 대문자 <span class="keyword">from</span> country;</span><br></pre></td></tr></table></figure>
+
+<p>내장함수 사용하여 원본, 소문자, 대문자로 출력된것 확인가능</p>
+<p>한 테이블의 한 칼럼을 다양하게 가공하여 여러 가지 모습으로 보이게 하는 것이 가능합니다.</p>
+<h2 id="length-함수-사용-하기"><a href="#length-함수-사용-하기" class="headerlink" title="length 함수 사용 하기"></a>length 함수 사용 하기</h2><p>length(칼럼명) </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> country_name, <span class="keyword">length</span>(country_name) <span class="keyword">as</span> 길이 <span class="keyword">from</span> kmong.country;</span><br></pre></td></tr></table></figure>
+
+<h2 id="concat-함수-사용-하기"><a href="#concat-함수-사용-하기" class="headerlink" title="concat 함수 사용 하기"></a>concat 함수 사용 하기</h2><p>간단한 사용법을 설명드리자면 concat(칼럼 값, 칼럼 값, ‘문자열’, ‘문자열’) 이런 식으로 칼럼 값 고 문자열을 원하는 데로 넣고 그 사이는 ‘, ‘로 구분하여 작성하면 됩니다.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">concat</span>(country_name,<span class="string">' 의 수도는 '</span>,capital_city,<span class="string">' 입니다!'</span>) <span class="keyword">as</span> 수도소개 <span class="keyword">from</span> kmong.country;</span><br></pre></td></tr></table></figure>
+
+<h2 id="substr-mid-substring-함수-사용-하기"><a href="#substr-mid-substring-함수-사용-하기" class="headerlink" title="substr/mid/substring 함수 사용 하기"></a>substr/mid/substring 함수 사용 하기</h2><p>substr과 mid, substring 함수는 똑같은 함수이다.</p>
+<p>substr(칼럼명, 시작할 문자열의 위치 값, 리턴 시킬 값의 길이) </p>
+<p>(함수안에 들어가는 값을 파라미터라고함.)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> continent <span class="keyword">as</span> 원본, <span class="keyword">substr</span>(continent,<span class="number">2</span>,<span class="number">3</span>) <span class="keyword">as</span> <span class="keyword">substr</span>, <span class="keyword">mid</span>(continent,<span class="number">2</span>,<span class="number">2</span>) <span class="keyword">as</span> <span class="keyword">mid</span>, <span class="keyword">substring</span>(continent,<span class="number">2</span>,<span class="number">2</span>) <span class="keyword">as</span> <span class="keyword">substring</span> <span class="keyword">from</span> kmong.country;</span><br></pre></td></tr></table></figure>
+
+<h2 id="instr-함수-사용-하기"><a href="#instr-함수-사용-하기" class="headerlink" title="instr 함수 사용 하기"></a>instr 함수 사용 하기</h2><p>instr 함수는 특정 문자열의 위치를 숫자로 리턴해주는 함수입니다.</p>
+<p>instr(칼럼 값, ‘찾는 문자’)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> continent <span class="keyword">as</span> 원본, <span class="keyword">instr</span>(continent, <span class="string">'A'</span>) <span class="keyword">as</span> A위치 <span class="keyword">from</span> country; <span class="comment">#대소문자 구별 안함, 가장 처음등장하는 인덱스 반환.</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="lpad-rpad-함수-사용-하기"><a href="#lpad-rpad-함수-사용-하기" class="headerlink" title="lpad/rpad 함수 사용 하기"></a>lpad/rpad 함수 사용 하기</h2><p>lpad와 rpad는 간단하게 설명하자면 데이터가 있고, 해당 데이터가 어떤 기준보다 짧을 경우에 원하는 문자를 왼쪽이나 오른쪽으로 자릿수를 맞춰 채워 주는 함수입니다.</p>
+<p>lpad(칼럼명, 기준 자릿수, 채워 넣을 숫자 or 문자)</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gjc3gwpi5rj30re0ewjv1.jpg" alt="스크린샷 2020-10-03 오후 2.45.44"></p>
+<h2 id="trim-ltrim-rtrim-함수-사용-하기"><a href="#trim-ltrim-rtrim-함수-사용-하기" class="headerlink" title="trim/ltrim/rtrim 함수 사용 하기"></a>trim/ltrim/rtrim 함수 사용 하기</h2><p>trim은 어떤 문자열의 양쪽, 즉 왼쪽, 오른쪽의 공백을 없애는 함수이고, ltrim과 rtrim은 각각 왼쪽관 오른쪽 공백만 없애는 함수들입니다.</p>
+<p>trim(칼럼명)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> capital_city <span class="keyword">as</span> 원본, <span class="keyword">trim</span>(capital_city) <span class="keyword">as</span> <span class="keyword">trim</span>, <span class="keyword">ltrim</span>(capital_city) <span class="keyword">as</span> <span class="keyword">ltrim</span>, <span class="keyword">rtrim</span>(capital_city) <span class="keyword">as</span> <span class="keyword">rtrim</span> <span class="keyword">from</span> kmong.country;</span><br></pre></td></tr></table></figure>
+
+<h2 id="replace-함수-사용-하기"><a href="#replace-함수-사용-하기" class="headerlink" title="replace 함수 사용 하기"></a>replace 함수 사용 하기</h2><p>replace 함수는 특정 문자열을 찾아서 다른 문자열로 치환하는 함수입니다</p>
+<p>replace(칼럼명, ‘찾을 문자’, ‘치환할 문자’)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select continent as 원본, replace(continent,&#39;A&#39;,&#39;고양이&#39;) as &#39;replace&#39; from kmong.country;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gjc3kko90hj30ba07w75n.jpg" alt="스크린샷 2020-10-03 오후 2.49.15"></p>
+<p>대소문자 구별함!</p>
+<h1 id="단일행-함수-잘-사용-하기-숫자-함수"><a href="#단일행-함수-잘-사용-하기-숫자-함수" class="headerlink" title="단일행 함수 잘 사용 하기(숫자 함수)"></a>단일행 함수 잘 사용 하기(숫자 함수)</h1><h2 id="round-함수-사용-하기"><a href="#round-함수-사용-하기" class="headerlink" title="round 함수 사용 하기"></a>round 함수 사용 하기</h2><p>round 함수는 입력된 숫자를 반올림한 후 출력하는 함수입니다</p>
+<p>round(칼럼명(그냥숫자도 당연가능), 표시할 자리수)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> student_no, <span class="keyword">round</span>(student_no) <span class="keyword">as</span> 값 <span class="keyword">from</span> korean_student; </span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> student_no, <span class="keyword">round</span>(student_no,<span class="number">1</span>) <span class="keyword">as</span> 값 <span class="keyword">from</span> korean_student; (소숫점 첫번쨰 자리까지 표시, 두번째자리에서 반올림)</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> student_no, <span class="keyword">round</span>(student_no,<span class="number">-1</span>) <span class="keyword">as</span> 값 <span class="keyword">from</span> korean_student; <span class="comment">#십의 자리까지 표시, 일의자리 반올림.</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="truncate-함수-사용-하기"><a href="#truncate-함수-사용-하기" class="headerlink" title="truncate 함수 사용 하기"></a>truncate 함수 사용 하기</h2><p>truncate 함수는 round 함수와 사용법과 옵션의 의미가 같습니다. truncate 함수의 기능은 입력된 값을 옵션에 따라 지정된 위치에서 버리고 결과를 출력하는 함수입니다.</p>
+<h2 id="mod-함수-사용-하기"><a href="#mod-함수-사용-하기" class="headerlink" title="mod 함수 사용 하기"></a>mod 함수 사용 하기</h2><p>mod 함수는 처음 입력된 값을 두 번째 입력된 값으로 나눈 뒤 나눈 값을 제외하고 나머지를 결과로 출력하는 함수입니다.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">mod</span>(<span class="number">26</span>,<span class="number">3</span>),<span class="keyword">mod</span>(<span class="number">10</span>,<span class="number">9</span>),<span class="keyword">mod</span>(<span class="number">4</span>,<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+
+<p>결과 2|1|0 나옴</p>
+<h2 id="ceil-함수-사용-하기"><a href="#ceil-함수-사용-하기" class="headerlink" title="ceil 함수 사용 하기"></a>ceil 함수 사용 하기</h2><p>ceil 함수는 입력된 숫자보다 <strong>크면서도, 가장 가까운 정수가 출력됩니다.</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">ceil</span>(<span class="number">12.6</span>),<span class="keyword">ceil</span>(<span class="number">11.5</span>),<span class="keyword">ceil</span>(<span class="number">16.3</span>)</span><br></pre></td></tr></table></figure>
+
+<p> 결과 13|12|17 나옴</p>
+<h2 id="floor-함수-사용-하기"><a href="#floor-함수-사용-하기" class="headerlink" title="floor 함수 사용 하기"></a>floor 함수 사용 하기</h2><p>floor 함수는 ceil 함수와 <strong>반대 개념</strong>입니다. </p>
+<p>입력된 값보다 작으면서 가장 가까운 정수가 출력되는 함수입니다.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">floor</span>(<span class="number">12.6</span>),<span class="keyword">floor</span>(<span class="number">11.5</span>),<span class="keyword">floor</span>(<span class="number">16.3</span>)</span><br></pre></td></tr></table></figure>
+
+<p>결과 12|11|16</p>
+<h2 id="power-함수-사용-하기"><a href="#power-함수-사용-하기" class="headerlink" title="power 함수 사용 하기"></a>power 함수 사용 하기</h2><p>power 함수는 첫 번째 입력된 값을 두번째 입력값 만큼 제곱 하여 출력을 하는 함수 입니다.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">power</span>(<span class="number">1</span>,<span class="number">2</span>),<span class="keyword">power</span>(<span class="number">2</span>,<span class="number">3</span>),<span class="keyword">power</span>(<span class="number">3</span>,<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<p>결과 1|8|243</p>
+<p>여기부터 시작 <a href="https://stricky.tistory.com/220" target="_blank" rel="noopener">https://stricky.tistory.com/220</a></p>
 
     </article>
     <!-- license  -->
@@ -645,7 +844,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL"><span class="toc-number">2.</span> <span class="toc-text">SQL</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL-명령어-종류"><span class="toc-number">2.1.</span> <span class="toc-text">SQL 명령어 종류</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#select를-잘-이용하는-방법"><span class="toc-number">3.</span> <span class="toc-text">select를 잘 이용하는 방법</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL-select-문장을-사용하기-위한-용어-정리"><span class="toc-number">3.1.</span> <span class="toc-text">SQL select 문장을 사용하기 위한 용어 정리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DESC-사용하기-Describe"><span class="toc-number">3.2.</span> <span class="toc-text">DESC 사용하기(Describe)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#원하는-데이터만-select-하기"><span class="toc-number">3.3.</span> <span class="toc-text">원하는 데이터만 select 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#표현식-Expression-사용하기"><span class="toc-number">3.4.</span> <span class="toc-text">표현식 (Expression) 사용하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#컬럼명-대신-별칭-alias-을-사용하기"><span class="toc-number">3.5.</span> <span class="toc-text">컬럼명 대신 별칭(alias)을 사용하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DISTINCT로-중복된-값을-제외하고-출력하기"><span class="toc-number">3.6.</span> <span class="toc-text">DISTINCT로 중복된 값을 제외하고 출력하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#연결-연산자-함수로-칼럼-값을-붙여서-출력하기"><span class="toc-number">3.7.</span> <span class="toc-text">연결 연산자 함수로 칼럼 값을 붙여서 출력하기</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL"><span class="toc-number">2.</span> <span class="toc-text">SQL</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL-명령어-종류"><span class="toc-number">2.1.</span> <span class="toc-text">SQL 명령어 종류</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#select를-잘-이용하는-방법"><span class="toc-number">3.</span> <span class="toc-text">select를 잘 이용하는 방법</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL-select-문장을-사용하기-위한-용어-정리"><span class="toc-number">3.1.</span> <span class="toc-text">SQL select 문장을 사용하기 위한 용어 정리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DESC-사용하기-Describe"><span class="toc-number">3.2.</span> <span class="toc-text">DESC 사용하기(Describe)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#원하는-데이터만-select-하기"><span class="toc-number">3.3.</span> <span class="toc-text">원하는 데이터만 select 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#표현식-Expression-사용하기"><span class="toc-number">3.4.</span> <span class="toc-text">표현식 (Expression) 사용하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#컬럼명-대신-별칭-alias-을-사용하기"><span class="toc-number">3.5.</span> <span class="toc-text">컬럼명 대신 별칭(alias)을 사용하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DISTINCT로-중복된-값을-제외하고-출력하기"><span class="toc-number">3.6.</span> <span class="toc-text">DISTINCT로 중복된 값을 제외하고 출력하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#연결-연산자-함수로-칼럼-값을-붙여서-출력하기"><span class="toc-number">3.7.</span> <span class="toc-text">연결 연산자 함수로 칼럼 값을 붙여서 출력하기</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#sql-독학-강의-select를-잘-이용하는-방법-2"><span class="toc-number">4.</span> <span class="toc-text">sql 독학 강의 # select를 잘 이용하는 방법(2)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#산술-연산자-사용해보기"><span class="toc-number">4.1.</span> <span class="toc-text">산술 연산자 사용해보기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#where절에-비교-연산자를-사용해-보기"><span class="toc-number">4.2.</span> <span class="toc-text">where절에 비교 연산자를 사용해 보기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#order-by-절을-사용-하여-정렬하여-출력-하기"><span class="toc-number">4.3.</span> <span class="toc-text">order by 절을 사용 하여 정렬하여 출력 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#집합-연산자-사용하기"><span class="toc-number">4.4.</span> <span class="toc-text">집합 연산자 사용하기</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#단일행-함수-잘-사용-하기-문자-함수"><span class="toc-number">5.</span> <span class="toc-text">단일행 함수 잘 사용 하기(문자 함수)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#lower-upper-함수-사용-하기"><span class="toc-number">5.1.</span> <span class="toc-text">lower&#x2F;upper 함수 사용 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#length-함수-사용-하기"><span class="toc-number">5.2.</span> <span class="toc-text">length 함수 사용 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#concat-함수-사용-하기"><span class="toc-number">5.3.</span> <span class="toc-text">concat 함수 사용 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#substr-mid-substring-함수-사용-하기"><span class="toc-number">5.4.</span> <span class="toc-text">substr&#x2F;mid&#x2F;substring 함수 사용 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#instr-함수-사용-하기"><span class="toc-number">5.5.</span> <span class="toc-text">instr 함수 사용 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lpad-rpad-함수-사용-하기"><span class="toc-number">5.6.</span> <span class="toc-text">lpad&#x2F;rpad 함수 사용 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#trim-ltrim-rtrim-함수-사용-하기"><span class="toc-number">5.7.</span> <span class="toc-text">trim&#x2F;ltrim&#x2F;rtrim 함수 사용 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#replace-함수-사용-하기"><span class="toc-number">5.8.</span> <span class="toc-text">replace 함수 사용 하기</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#단일행-함수-잘-사용-하기-숫자-함수"><span class="toc-number">6.</span> <span class="toc-text">단일행 함수 잘 사용 하기(숫자 함수)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#round-함수-사용-하기"><span class="toc-number">6.1.</span> <span class="toc-text">round 함수 사용 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#truncate-함수-사용-하기"><span class="toc-number">6.2.</span> <span class="toc-text">truncate 함수 사용 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mod-함수-사용-하기"><span class="toc-number">6.3.</span> <span class="toc-text">mod 함수 사용 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ceil-함수-사용-하기"><span class="toc-number">6.4.</span> <span class="toc-text">ceil 함수 사용 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#floor-함수-사용-하기"><span class="toc-number">6.5.</span> <span class="toc-text">floor 함수 사용 하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#power-함수-사용-하기"><span class="toc-number">6.6.</span> <span class="toc-text">power 함수 사용 하기</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1841,7 +2040,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/02</span><a class="archive-post-title" href= "/2020/10/02/mysql/" >mysql</a>
+            <span class="archive-post-date">10/02</span><a class="archive-post-title" href= "/2020/10/02/mysql/" >Mysql 기본 공부</a>
         </li>
     
     
