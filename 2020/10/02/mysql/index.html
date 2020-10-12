@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">15.7k</span>Reading time: <span class="post-count reading-time">98 min</span></span>
+                        <span>Word count: <span class="post-count word-count">15.8k</span>Reading time: <span class="post-count reading-time">98 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -2017,7 +2017,7 @@ height:50vh;
 <p>이미 우리가 지난 시간에 select 서브쿼리에 대해서 공부할때 inline view (인라인 뷰) 라는것에 관해서 공부를 했었습니다.</p>
 <p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gjk7swsfy5j30sy0dg0xw.jpg" alt="스크린샷 2020-10-10 오후 3.20.10"></p>
 <p>from 절에 들어가는 (,) (괄호) 안에 있는 select문을 다시 한번 상기 시켜 보세요. 이것을 inline view 라고 이야기하는데, 말그대로 inline, SQL문 안에 있는 view 라는 뜻 입니다.</p>
-<p>맞습니다. view(뷰)를 위에서 가상의 테이블이라고 했는데, 말그대로 데이터는 없고, SQL만 저장되어있는 object를 말합니다. view를 select 하게 되면 view가 가지고 있는 SQL문이 실행이 되는것과 같습니다. 바로 아래 그림과 마찬가지로 말이죠!</p>
+<p>맞습니다. <strong>view(뷰)를 위에서 가상의 테이블이라고 했는데, 말그대로 데이터는 없고, SQL만 저장되어있는 object를 말합니다. view를 select 하게 되면 view가 가지고 있는 SQL문이 실행이 되는것과 같습니다.</strong> 바로 아래 그림과 마찬가지로 말이죠!</p>
 <p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gjk7tk8x04j30zu0fejy1.jpg" alt="스크린샷 2020-10-10 오후 3.20.47"></p>
 <h2 id="view를-사용하는-이유"><a href="#view를-사용하는-이유" class="headerlink" title="view를 사용하는 이유"></a>view를 사용하는 이유</h2><p>그럼 그냥 테이블을 쓰던지 inline view로 쓰면 되지 왜 굳이 view라는 object를 만들어서 따로 관리를 하는것 일까요?</p>
 <p>이유는 보안과 함께 사용자의 편의성을 높이기 위해서 입니다.</p>
@@ -2030,7 +2030,7 @@ height:50vh;
 <p>만들어진 뷰의 기본 테이블의 기본키(속성)을 포함하여 뷰를 생성하면 삽입, 삭제, 갱신, 연산이 가능 합니다. 또한 한번 정의가 된 뷰의 경우 다른 뷰의 기본 데이터가 될 수 있으며, 뷰에 정의되어 있는 기본 테이블이나 뷰를 삭제 하게 되면 해당 데이터를 기초로한 다른 뷰들이 자동으로 삭제가 됩니다.</p>
 <p>뷰에서는 ALTER 명령어를 사용 할 수 없습니다. 뷰의 내용을 수정 하고 싶으면 drop &amp; create를 반복 하여야 합니다.</p>
 <p>뷰는 원본 테이블과 같은 이름으로 생성 할 수 없습니다. 실무에서는 대체적으로 “vw_” 등의 접미사나 접두사를 붙여 해당 데이터셋이 뷰라는것을 명시 해주고 있습니다.</p>
-<h2 id="view-생성-및-삭제-문-예제"><a href="#view-생성-및-삭제-문-예제" class="headerlink" title="view 생성 및 삭제 문 예제"></a>view 생성 및 삭제 문 예제</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 생성문</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">VIEW</span> 뷰이름 <span class="keyword">AS</span> <span class="keyword">SELECT</span> 구문;</span><br><span class="line"></span><br><span class="line"><span class="comment">#삭제문</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">VIEW</span> 뷰이름;</span><br></pre></td></tr></table></figure>
+<h2 id="view-생성-및-삭제-문-예제"><a href="#view-생성-및-삭제-문-예제" class="headerlink" title="view 생성 및 삭제 문 예제"></a>view 생성 및 삭제 문 예제</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 생성문</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">VIEW</span> [view_name]<span class="keyword">AS</span> \</span><br><span class="line"><span class="keyword">SELECT</span> [field_name_1], [field_name_2] ... \</span><br><span class="line"><span class="keyword">FROM</span> [table_name] \</span><br><span class="line"><span class="keyword">WHERE</span> [조건];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">출처: https://kkamikoon.tistory.com/172 [컴퓨터를 다루다]</span><br><span class="line"><span class="comment">#삭제문</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">VIEW</span> 뷰이름;</span><br></pre></td></tr></table></figure>
 
 <h2 id="view-실행-원리-및-예제"><a href="#view-실행-원리-및-예제" class="headerlink" title="view 실행 원리 및 예제"></a>view 실행 원리 및 예제</h2><h3 id="아래와-같은-view의-생성문이-있다고-가정-합니다"><a href="#아래와-같은-view의-생성문이-있다고-가정-합니다" class="headerlink" title="아래와 같은 view의 생성문이 있다고 가정 합니다."></a>아래와 같은 view의 생성문이 있다고 가정 합니다.</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">name</span>,</span><br><span class="line"></span><br><span class="line">       money_received,</span><br><span class="line">       money_sent,</span><br><span class="line">       (money_received - money_sent) <span class="keyword">AS</span> balance,</span><br><span class="line">       address,</span><br><span class="line"> ...</span><br><span class="line"></span><br><span class="line"><span class="keyword">FROM</span> table_customers c <span class="keyword">JOIN</span> accounts_table a <span class="keyword">ON</span> a.customer_id = c.customer_id</span><br></pre></td></tr></table></figure>
 
@@ -2186,16 +2186,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -3768,9 +3758,9 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
     
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
     
-        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
@@ -3778,17 +3768,17 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
     
-        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
-    
-        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
     
         <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
     
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
@@ -3806,19 +3796,19 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
-        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
-    
         <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
     
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
         <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
         <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
-    
-        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
     
         <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
     
@@ -3836,13 +3826,13 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
     
-        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
-    
-        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
-    
         <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
     
         <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
@@ -3864,9 +3854,9 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
     
-        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
-    
         <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
     
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
@@ -3913,11 +3903,11 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
-        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
     
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
     
@@ -3925,17 +3915,17 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
-        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
-    
         <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
     
         <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
     
-        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
-    
         <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
     
         <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
     
@@ -3943,15 +3933,15 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
-        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
-    
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
     
         <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
-        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
-    
         <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
         <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
@@ -3961,9 +3951,9 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
     
-        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
-    
         <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
         <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
     
