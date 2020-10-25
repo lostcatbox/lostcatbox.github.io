@@ -407,7 +407,6 @@ height:50vh;
     <article class="article-entry">
         <p><a href="https://stricky.tistory.com/202" target="_blank" rel="noopener">원본 강의 및 출처</a></p>
 <p><a href="https://valuefactory.tistory.com/497" target="_blank" rel="noopener">다끝나면 읽어보기 mysql vs postgresql</a></p>
-<p><a href="https://junetudie.tistory.com/11" target="_blank" rel="noopener">포스팅 모두하면 쉬운 쿼리 연습</a></p>
 <h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>모든 데이터 처리(읽기, 쓰기 등)와 서버의 트래픽 관리에서는 반드시 DB의 설계가 안정성과 성능을 좌우할 수 있다.</p>
 <p>DB에 쿼리를 최대한 적게 보내는 것이 목적이며, RDBMS와 NOSQL에 따라 잘하는 것이 다르다.</p>
 <p>분명 RDB와 NOSQL 각자 하나씩은 다뤄보면서 앞으로 DB를 설계 할 상황이나 만날 오류와 한계를 미리 학습하면 추후에 다양한 백엔드 작업시 많은 도움이 될 것이라고 생각하며, 학습을 시작했다.</p>
@@ -2056,6 +2055,7 @@ height:50vh;
 <p>(2020.10 3주차~4주차는 대학교 시험기간 + 간단하게 인덱싱과 DB명령어들 처리 능숙해지기)</p>
 <blockquote>
 <p><strong>쿼리 연습중에 햇갈린것들</strong></p>
+<p><a href="https://junetudie.tistory.com/11" target="_blank" rel="noopener">포스팅 모두하면 쉬운 쿼리 연습</a></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> EMP</span><br><span class="line"><span class="keyword">where</span> mgr <span class="keyword">is</span> <span class="literal">Null</span>; <span class="comment">#컬럼이 NULL인지 판단하기 위해선, IS NULL, IS NOT NULL 문장을 사용한다</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> deptno, <span class="keyword">avg</span>(sal) <span class="keyword">from</span> EMP</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> DEPTNO;   <span class="comment">#group by문은 종류별로 구별해서 복수행 함수 돌리고싶을때 쓰면될듯</span></span><br></pre></td></tr></table></figure>
 
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># GROUP BY 구문을 사용하면서 이 결과에 조건을 줄 때 WHERE 조건문을 사용할 수 없다. 따라서 위 쿼리는 에러를 발생한다. GROUP BY 구문을 사용하면서 조건을 주기 위해서는 대신 HAVING 구문을 사용한다. HAVING 구문에서는 그룹화의 기준이 되는 컬럼과 그룹함수만이 사용 할 수 있다는 점에 주의한다. 위 쿼리문에서 그룹화의 기준이 되는 컬럼이 DEPTNO이므로, DEPTNO는 HAVING 구문에 사용할 수 있다.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> DEPTNO,<span class="keyword">AVG</span>(SAL)</span><br><span class="line"><span class="keyword">FROM</span> EMP</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> DEPTNO</span><br><span class="line"><span class="keyword">HAVING</span> <span class="keyword">AVG</span>(SAL) &gt;= <span class="number">2000</span>;</span><br></pre></td></tr></table></figure>
