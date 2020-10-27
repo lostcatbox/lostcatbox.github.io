@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">977</span>Reading time: <span class="post-count reading-time">6 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.2k</span>Reading time: <span class="post-count reading-time">7 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -508,13 +508,35 @@ height:50vh;
 
 <p>(개인 서버 내부망를 쓰고 VPN접속할것이므로 192.168.88.244 우분투 IP로 접속했다.)</p>
 <p>결과를 확인하자</p>
-<h2 id="redis-cache로-사용해보기"><a href="#redis-cache로-사용해보기" class="headerlink" title="redis cache로 사용해보기"></a>redis cache로 사용해보기</h2>
+<h2 id="mysql을-Python으로-조회하기"><a href="#mysql을-Python으로-조회하기" class="headerlink" title="mysql을 Python으로 조회하기"></a>mysql을 Python으로 조회하기</h2><p><a href="https://yurimkoo.github.io/python/2019/09/14/connect-db-with-python.html" target="_blank" rel="noopener">자세히</a></p>
+<p>일단 캐시 서버로 쓰기전에 간단하게  python으로 mysql과 연결해보겠다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line">mysql_db = pymysql.connect(</span><br><span class="line">    user=<span class="string">"root"</span>,</span><br><span class="line">    passwd=<span class="string">"lostcatboxmysql"</span>,</span><br><span class="line">    host=<span class="string">"192.168.88.244"</span>,</span><br><span class="line">    port=<span class="number">7676</span>,</span><br><span class="line">    db=<span class="string">"employees"</span>,</span><br><span class="line">    charset = <span class="string">"utf8"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">cursor = mysql_db.cursor()</span><br><span class="line">sql = <span class="string">"select * from employees;"</span></span><br><span class="line">cursor.execute(sql)</span><br><span class="line">result = cursor.fetchall()</span><br></pre></td></tr></table></figure>
+
+<p>만약 where문을 쓰고 싶다면</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cursor = mysql_db.cursor()</span><br><span class="line">sql = '''<span class="keyword">select</span> * <span class="keyword">from</span> employees <span class="keyword">where</span> last_name=%s;'''</span><br><span class="line">cursor.execute(sql, ("Facello"))</span><br><span class="line">result = cursor.fetchall()</span><br></pre></td></tr></table></figure>
+
+<p>결과는 판다스로 출력한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">result = pd.DataFrame(result)</span><br><span class="line">result</span><br></pre></td></tr></table></figure>
+
+<h2 id="Redis-cache로-사용해보기"><a href="#Redis-cache로-사용해보기" class="headerlink" title="Redis cache로 사용해보기"></a>Redis cache로 사용해보기</h2><p>정말 간단하게 구현하였다</p>
+<p>request.py는 먼저 캐시로 요청하고 null이면 DB를 조회 요청 후 결과를 캐시에 업데이트하며, 다시 캐시로 조회를 한다. 그러면 무조건 hit가 되고 원하는 값을 받을 수 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#request.py</span></span><br><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 레디스 클라이언트를 만든다</span></span><br><span class="line"><span class="comment"># Redis&lt;ConnectionPool&lt;Connection&gt;&gt;</span></span><br><span class="line">r = redis.Redis(host=<span class="string">"192.168.88.244"</span>, port=<span class="number">6379</span>, password=<span class="string">"password"</span>, </span><br><span class="line">                decode_responses=<span class="literal">True</span>)</span><br><span class="line">                </span><br><span class="line"><span class="comment">#pymysql로 mysql 연결</span></span><br><span class="line">mysql_db = pymysql.connect(</span><br><span class="line">    user=<span class="string">"root"</span>,</span><br><span class="line">    passwd=<span class="string">"password"</span>,</span><br><span class="line">    host=<span class="string">"192.168.88.244"</span>,</span><br><span class="line">    port=<span class="number">7676</span>,</span><br><span class="line">    db=<span class="string">"employees"</span>,</span><br><span class="line">    charset = <span class="string">"utf8"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">#여기부터 실제 로직</span></span><br><span class="line">result_list = []</span><br><span class="line"><span class="comment">#id=int(input("emp_no 입력 (6자리)")) #직접입력귀찮아서;</span></span><br><span class="line"><span class="keyword">for</span> emp_no <span class="keyword">in</span> range(<span class="number">10200</span>,<span class="number">10300</span>):</span><br><span class="line">    id= int(emp_no)</span><br><span class="line">    first_time = time.time()</span><br><span class="line">    result = r.get(name=id)</span><br><span class="line">    print(id)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> result:</span><br><span class="line">        print(<span class="string">"캐시에서 가져오지 못함"</span>)</span><br><span class="line">        cursor = mysql_db.cursor()</span><br><span class="line">        sql = <span class="string">'''select emp_no,first_name from employees where emp_no=%s'''</span></span><br><span class="line">        cursor.execute(sql, (int(id)))</span><br><span class="line">        result = cursor.fetchone()</span><br><span class="line">        r.set(name=result[<span class="number">0</span>], value=result[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">"캐시에서 가져옴!"</span>)</span><br><span class="line"></span><br><span class="line">    result = r.get(name=id) <span class="comment">#if문에 넣을수있지만 동일한 조건을 주기위함</span></span><br><span class="line">    last_time = time.time()</span><br><span class="line">    timetotime = last_time-first_time</span><br><span class="line">    print(timetotime, <span class="string">"초 걸림"</span>)</span><br><span class="line">    print(result)</span><br><span class="line">    result_list.append(timetotime)</span><br><span class="line">    </span><br><span class="line">print(<span class="string">"완료"</span>)</span><br><span class="line">print(sum(result_list)/len(result_list))</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gk44394qbxj30my06kdgc.jpg" alt="스크린샷 2020-10-27 오후 8.17.35"></p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gk44376vvqj30kl06174s.jpg" alt="스크린샷 2020-10-27 오후 8.17.15"></p>
+<p>2배 더 빨랐다!</p>
+
     </article>
     <!-- license  -->
     
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/10/27/tech-terms-concept/" title= "tech-terms-concept">
+                    <div class="nextTitle">tech-terms-concept</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -640,7 +662,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#캐시"><span class="toc-number">2.</span> <span class="toc-text">캐시</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Redis와-Memcached-스펙-비교"><span class="toc-number">3.</span> <span class="toc-text">Redis와 Memcached 스펙 비교</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RDBMS의-문제점"><span class="toc-number">4.</span> <span class="toc-text">RDBMS의 문제점</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#데이터-베이스-데이터-캐싱"><span class="toc-number">5.</span> <span class="toc-text">데이터 베이스 데이터 캐싱</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#데이터-캐싱이-적용된-시스템에서-CRUD"><span class="toc-number">6.</span> <span class="toc-text">데이터 캐싱이 적용된 시스템에서 CRUD</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Memcached-plugin"><span class="toc-number">7.</span> <span class="toc-text">Memcached plugin</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Redis"><span class="toc-number">8.</span> <span class="toc-text">Redis</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#구성해보기-redis"><span class="toc-number">9.</span> <span class="toc-text">구성해보기(redis)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-설치"><span class="toc-number">9.1.</span> <span class="toc-text">redis 설치</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-테스트"><span class="toc-number">9.2.</span> <span class="toc-text">redis 테스트</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-cache로-사용해보기"><span class="toc-number">9.3.</span> <span class="toc-text">redis cache로 사용해보기</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#캐시"><span class="toc-number">2.</span> <span class="toc-text">캐시</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Redis와-Memcached-스펙-비교"><span class="toc-number">3.</span> <span class="toc-text">Redis와 Memcached 스펙 비교</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RDBMS의-문제점"><span class="toc-number">4.</span> <span class="toc-text">RDBMS의 문제점</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#데이터-베이스-데이터-캐싱"><span class="toc-number">5.</span> <span class="toc-text">데이터 베이스 데이터 캐싱</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#데이터-캐싱이-적용된-시스템에서-CRUD"><span class="toc-number">6.</span> <span class="toc-text">데이터 캐싱이 적용된 시스템에서 CRUD</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Memcached-plugin"><span class="toc-number">7.</span> <span class="toc-text">Memcached plugin</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Redis"><span class="toc-number">8.</span> <span class="toc-text">Redis</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#구성해보기-redis"><span class="toc-number">9.</span> <span class="toc-text">구성해보기(redis)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-설치"><span class="toc-number">9.1.</span> <span class="toc-text">redis 설치</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-테스트"><span class="toc-number">9.2.</span> <span class="toc-text">redis 테스트</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql을-Python으로-조회하기"><span class="toc-number">9.3.</span> <span class="toc-text">mysql을 Python으로 조회하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis-cache로-사용해보기"><span class="toc-number">9.4.</span> <span class="toc-text">Redis cache로 사용해보기</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1865,9 +1887,24 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 80
+        Total : 81
         </div>
         <!-- search  -->
         
@@ -1880,6 +1917,11 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
     
     
         <li class="archive-post-item">
