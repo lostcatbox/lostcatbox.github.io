@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">2.3k</span>Reading time: <span class="post-count reading-time">14 min</span></span>
+                        <span>Word count: <span class="post-count word-count">3.7k</span>Reading time: <span class="post-count reading-time">22 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -408,6 +408,8 @@ height:50vh;
         <h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>코테 준비</p>
 <p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gk45ocdb2sj30oe18wx6p.jpg" alt="스크린샷 2020-10-27 오후 9.16.29"></p>
 <p>이대로 그대로 따라갈것이다</p>
+<p>3장 부터는 꼼꼼히 보다는 제 방식대로 정리하고끝냈다. 시간이없으니 여기서부터 최대한 요약했어요.</p>
+<p>그리고 python에 해당하는 내용만 담으로고 노력했어요.</p>
 <h1 id="2장"><a href="#2장" class="headerlink" title="2장"></a>2장</h1><p>문제를 푸는 것이 중요한 것이 아니라 문제를 푸는 기술을 연마하는 것이중요하다</p>
 <p>이를 위해서는 자신이 문제를 어떤 방식으로 해결하는지를 의식하고 어느 부분이 부족한지, 어떤 부분을 개선해야 할지 파악해야 합니다. 실력을 늘리기 위해서는 문제 푸는 과정을 여러 부분으로 나눠 보고 각 과정을 자신이 잘하고 있는지, 그리고 잘하지 못하는 것이 있다면 어떤 방향으로 개선해야 하는지를 끈임없이 파악해야한다. </p>
 <h2 id="2-2-문제-해결-과정"><a href="#2-2-문제-해결-과정" class="headerlink" title="2.2 문제 해결 과정"></a>2.2 문제 해결 과정</h2><p>리처드 파인만이 사용한 알고리즘. 칠판에 문제를 적는다&gt;생각한다&gt;칠판에 답안을 적는다. 문제풀이를 단계별로 나눈다는 아이디어를 얻어내자. 특히, 문제를 적는다는 단계는 문제를 읽고 이해한 뒤 자신의 언어를 이용해 재정의를 해야하기 때문에 중요하다. </p>
@@ -659,9 +661,121 @@ height:50vh;
 </tr>
 </tbody></table>
 <p>햇갈리면 괄호로 감싸서 계산하자</p>
-<p><strong>너무 느린 입출력 방식 선택</strong></p>
-<p>대부분의 프로그래밍 언어에서는 텍스트를 입출력할 수 있는 다양한 방법을 제공한다. 예를 들어 C++에서는 gets()를 이용해 모든 입력을 문자열 하나로 읽어드린뒤…</p>
+<blockquote>
+<p>비트 연산자는 비트(bit) 단위로 논리 연산을 할 때 사용하는 연산자입니다. 또한, 비트 단위로 전체 비트를 왼쪽이나 오른쪽으로 이동시킬 때도 사용합니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">1</span></span><br><span class="line">b = <span class="number">3</span></span><br><span class="line">print(a^b)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
 
+<p>이진법 0,1로 생각해보면 a는 0,1 b는 1,1이므로 xor결과 1,0나온다. 따라서 2가 출력됨.</p>
+</blockquote>
+<p><strong>너무 느린 입출력 방식 선택</strong></p>
+<p>대부분의 프로그래밍 언어에서는 텍스트를 입출력할 수 있는 다양한 방법을 제공한다. 예를 들어 C++에서는 gets()를 이용해 모든 입력을 문자열 하나로 파싱할 수도있고, cin등의 고수준 입력 방식을 사용할 수도있지만, 고수준은 속도 저하..</p>
+<p><strong>위에 사례처럼 입력출력할 변수가 1만개 넘어가면, 긴장하고 python에서 어떤 입출력이 빠르게 되는지 점검하자</strong></p>
+<p><strong>변수 초기화 문제</strong></p>
+<p>프로그램을 한번만 실행하고, 한 번에 여러개의 입력에 대해 답을 처리하라고요구한다. 이때 이전 입력에서 사용한 전역 변수 값을 <strong>초기화하지 않고 그대로 사용하면 절대 안된다</strong></p>
+<p>이를 방지하기위해 동일 예제 두번반복시키면 혹여나 못찾아낸것도 찾을수있다.</p>
+<h3 id="디버깅과-테스팅"><a href="#디버깅과-테스팅" class="headerlink" title="디버깅과 테스팅"></a>디버깅과 테스팅</h3><p><strong>디버깅에 관하여</strong></p>
+<p>대부분 사람들은 예제 입력 실행후 결과가 다른 상황이면 보통 디버거를 켜고 프로그램이 실행되는 과정을 하나하나 따라가본다. 하지만 대회에서는 눈으로하는것이 빠를때도있으며, 재귀호출 중복 반복문을 많이 사용하는 복잡한 코드는 디버거 활용이 적당하지않고, 3명이 컴퓨터 1개이기때문에 나머지 2명 아무것도못함. 따라서 복잡한 코드를 짜지 말고, 잘 분리된 기능적인 코드를 짜야한다.</p>
+<p>눈으로 디버깅 가능한 조건은 단순한 코드+ 분리된 기능적 코드 이다</p>
+<p><strong>눈으로 디버깅할 때 순서</strong></p>
+<ul>
+<li><p>작은 입력에 대해 제대로 실행되나 확인 &gt; 예제 입력의 크기를 줄여 디버깅</p>
+</li>
+<li><p>python의 <code>assert</code> 함수를 사용해 체크하자. 참이면 무시되며, 거짓일때 오류를 냄</p>
+<p>예를 들면 함수에서 넘겨받은 인자들이 범위안에 있는지, 값들은 제대로 입력받았는지 검사가능</p>
+</li>
+<li><p>프로그램의 계산 중간 결과를 출력한다&gt; 어디까지 예상대로 진행됫는지 보기위해</p>
+</li>
+</ul>
+<p><strong>앞으로 디버깅시 눈으로 위 3과정을 거치고도 모르겠다면 디버거를 사용하자.</strong></p>
+<p><strong>테스트에 관하여</strong></p>
+<p>답안 제출 전에 예제 입력을 만들어 가능한 많이 프로그램을 테스트하는 것이 좋다. 예제를 변경하여 가장 작은 입력, 가장 큰 입력을 만들어서도 넣어보고, 시간안에 실행되는지, 답이 잘 나오는지 꼭 테스트해보자! </p>
+<p>프로그램을 테스트할 때 유용하게 사용할 수 있는 기법으로 스캐폴딩(공사판에 걸어다니기위한 임시 구조물..)이 있다. 이 말은 다른 코드를 개발할 때 뼈대를 잡기 위해 임시로 사용하는 코드라는 뜻으로 쓰입니다.</p>
+<p>스캐폴딩은 코드의 정당성을 확인하거나 반례를 찾는데 특히 유용하게 쓰인다.</p>
+<p>예를 들면 코드를 제출했는데 오답판정이 나는데, 예제는 다 통과하는 상황이라면 오류를 찾는게 쉽지않다. 이때 임의의 작은 입력을 자동으로 생성해 프로그램을 동려 보고, 그 답안을 검증하는 프로그램을 짜면된다. 직접 작성한 정렬 함수를 테스트 하고 싶다면 <code>while Ture</code>안에서 입력값을 매번생산해서 함수에 넣어주고 하나는 직접만든 함수에 하나는 표준 라이브러리sort를 이용해 결과값이 다르다면 오류를 내고 원인을 출력하게한다.</p>
+<p>하지만 비교 대상이없다면, 아주 단순한 알고리즘으로짠(대신느린)것과 비교해볼수도있다. </p>
+<p><strong>꼭 필요한 경우에 쓰자. 시간을 그만큼 더 잡아 먹기 때문이다</strong></p>
+<h3 id="변수-범위의-이해"><a href="#변수-범위의-이해" class="headerlink" title="변수 범위의 이해"></a>변수 범위의 이해</h3><p><strong>산술 오버플로</strong></p>
+<p>어떤 식의 계산 값이 반환되는 자료형의 표현 가능한 범위를 벗어나는 경우를 말한다</p>
+<p>수학에 어떤 변수 n있다면 이 변수에 담을 수 있는 숫자제한없다. 하지만 컴퓨터의 모든 변수에는 담을 수 있 크기가 제한되어있다. 즉, 완전히 정당한 알고리즘도 구현했을때 흔히 문제를 일으키는 것이 산술 오버플로다.</p>
+<p><strong>실수 2가지</strong></p>
+<ul>
+<li>보통 언어에서는 오버플로 일어나도 경고안해줌. 비효율적이니까</li>
+<li>프로그램의 정당성을 검증할 때 프로그램 논리의 정확성에만 집중하다보면 산술 오버플로가 등장할 것이라는것을 간과할때가 많다</li>
+</ul>
+<p><strong>너무 큰 결과</strong></p>
+<p>32비트, 64비트 고려하기</p>
+<p><strong>너무 큰 중간 값</strong></p>
+<p>출력 값은 작지만, 중간 과정에서 큰 값을 일시적으로 계산해야할때!(64비트, 32비트고려)</p>
+<p><strong>너무 큰 무한대 값</strong></p>
+<p>너무큰 무한대 값들이 서로 연산되면 산술 오버플로가 발생하므로 조심하자</p>
+<p><strong>오버플로 피해가기</strong></p>
+<p>더 큰 자료형을 쓰면 오버플로를 피할수있다. 64비트 사용!</p>
+<p>또한 연산 순서를 바꾼다면 해결될수도있다</p>
+<p><del><strong>자료형의 프로모션</strong></del></p>
+<p><del>사칙연산이나 대소 비교등의 이항 연산자들은 두 개의 피연산자를 받는다. 피연산자의 자료형이 다르거나 자료형의 범위가 너무 작은 경우 컴파일러들이 대개 이들을 같은 자료현으로 변환하여 계산하는데 이를 프로모션이라고함(C++해당내용) 버그에 기여할때가있다.</del> </p>
+<h3 id="실수-자료형의-이해"><a href="#실수-자료형의-이해" class="headerlink" title="실수 자료형의 이해"></a>실수 자료형의 이해</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">isX</span><span class="params">(range_number)</span>:</span></span><br><span class="line">    count_result = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">1</span>,range_number+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">1</span>/x)*x == <span class="number">1</span>:</span><br><span class="line">            count_result += <span class="number">1</span></span><br><span class="line">    print(count_result)</span><br><span class="line">isX(<span class="number">500</span>)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="number">469</span></span><br></pre></td></tr></table></figure>
+
+<p>왜? 모든 실수가 만족하는 것인데?</p>
+<p>컴퓨터가 사용하는 실수 표현 방식에 대해 알아야한다</p>
+<p><strong>실수와 근사 값</strong></p>
+<p>일상적으로 정수들은 컴퓨터가 모두 정확하게 표현할수있다. 반면 실수에서는 이야기가 다르다. 1만원을 3명이 나누면 0.33333333… 되어버린다. 소수점 뒤로 무한하게 이어진다. 컴퓨터의 메모리는 유한하고, 이 모든 값들을 모두 정확하게 담을 수 없으니 적절히 비슷한 값을 사용하는 것으로 만족해야한다. 적절한 반올림같은것. 컴퓨터도 정확도가 제한된 근사 값을 저장한다.즉, 컴퓨터에서 실수를 다루는 것은 까다롭다. </p>
+<p><strong>IEE 754 표준</strong></p>
+<p>가장 많은 컴퓨터/컴파일러들에서 사용되는 실수 표기 방식은 IEE754표준이다. 특징은 다음과 같다.</p>
+<ul>
+<li>이진수를 실수로 표기</li>
+<li>부동 소수점 표기법</li>
+<li>무한대, 비정규 수, NaN(숫자아님) 등의 특수한 값이 존재</li>
+</ul>
+<p>책에 주제에 대해서 직접적인 영향을 미치는 주제에 관해서만 다루자.</p>
+<p><strong>실수의 이진법 표기</strong></p>
+<p>12.34라는 실수의 십진법 표기를 보자. 마지막 자리의 4가 5로 변한다면 전체 수의 0.01만큼 커진다. 즉, 소수점 바로 아래 자리의 크기는 1/10, 그 다음자리의 크기는 1/100이 된다. 일반화하면 소수점 밑 i번째 자리의 크기는 1/10^i라고 할수있다.</p>
+<p>실수의 이진수 표기도 기본적으로 똑같은 방식을 사용한다. 소수점 밑 i번째 자리의 크기는 1/2^i가 된다. 따라서 이진법으로 쓴 실수 1011.101인 경우는 정수는 2^3+2^1+2^0=11 이다. 소수부는 1/2 +1/8=0.625이다. 11.625</p>
+<p><strong>부동 소수점 표기</strong>(움직이는 소수점)</p>
+<p>32비트 공간을 이용해 실수를 이진법으로 표기한다고하자. 정수부와 소수부에 비트를 어떻게 배분할 것인지 선택해야한다. _ _ . _ _ 처럼 소수점위 X자리, 소수점 밑 Y자리! 하지만 모두를 만족시킬수없는 이방법은 정확도를 떨어트린다.(어느숫자는 정수부가 많고, 어느숫자는 소수부가 많으므로)</p>
+<p>따라서 1011.101이라는 이진법 수가 있다면 이것을 1.011101으로 저장한다. 소수점앞에있을수있는 유일한 숫자 1이므로 1비트를 절약한다. 즉, 5비트만을 저장할수있다면 최상위비트 1을 제외한 01110 5비트를 저장할수있다!</p>
+<p>이때 실수 변수는 다음과 같은 3가지의 정보를 저장해야한다</p>
+<ul>
+<li>부호 비트- 양수인지 음수인지</li>
+<li>지수- 소수점 몇칸 옮겼나?</li>
+<li>가수- 소수점을 옮긴 실수의 최상위 X비트(숫자를 표현하는 비트)</li>
+</ul>
+<p>만약 63비트중 53비트를 지수표현에 쓰고 10비트만 가수 표현사용하는데 쓴다면, 1024를 이진법으로 표현하면 1 00000 00000 이고, 1024.25 는 1 00000 00000.01 이다. 따라서 최대 11비트를 사용할수있는 기수는 결국 1024와 1024.25의 차이를 모르고 같은 숫자로 저장한다. 정확도 하락</p>
+<p>따라서 사람들은 지수보다 가수에 훨씬 많은 비트 수를 부여하기로했다.</p>
+<p>따라서 실수 자료형들에는 32, 64,80비트등에서 지수 가수에 공간을 어떻게 분배하는지에 따라 표현할수있는 숫자 범위값이 정해짐.</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gkhr6jrpu3j30o407en6t.jpg" alt="스크린샷 2020-11-08 오후 3.34.14"></p>
+<p>64비트에서 52비트가 가수 비트이며 맨앞 1까지 포함하면 53비트까지 표현하고 54비트 이하의 숫자들은 반올림된후 버려진다. 이것을 십진수로 따지만 최대 7자리의 정확도밖에 제공하지 않는것이다.</p>
+<p>64비트 쓰자.</p>
+<p><strong>실수 비교하기</strong></p>
+<p>컴퓨터가 실수를 근사적으로 표현한다는 사실을 알면, 위에 소스 코드에서 원하는 답이 안나온이유를 알수있다. 이진법으로 표현할 수 없는 형태의 실수는  근사 값으로 저장되는데, 이때 생기는 작은 오차가 계산 과정에서 다른 결과를 가져오기때문이다.</p>
+<p>따라서 두 값의 차이가 매우 작은 경우 두 값이 같다고 판단할때는  |(a-b)|&lt;1e-10으로 검증하면 된다. 오차보다 작으면 같은거지!</p>
+<p><strong>비교할 실수의 크기들에 비례한 오차 한도를 정한다</strong></p>
+<p>500월짜리가 3000천만원이 될수없는것처럼 실제 입력으로 들어올 최대 값과 최소값을 대략 예측할수있고, 이들이 크게 차이 나지 않는 경우ㅔ는 하나의 오차한도 값을 사용할수있다.  같게 판단할만큼 크고 다름을 알정도로 작아야한다.</p>
+<p>동전 문제에서 동전의 반지름은 항상 1이상이고, 소수점 밑 둘째 자리까지 입력이 주어진다면, 사실상 1밀리미터 단위로 주어지는 것이다. 반지름 1인원과 1.01인 원의 넓비 차이를 보자</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gkhrwrjjnvj30d4046772.jpg" alt="스크린샷 2020-11-08 오후 3.59.30"></p>
+<p>따라서 오차 한도가 0.0001 이하라면 충분하다.</p>
+<p><strong>상대 오차를 이용한다</strong></p>
+<p>문제 입력으로 한자리 또는 서른 자리가 주어질지 알수없을때 오차 한도를 미리 정할수없다. 이런 경우에는 비교하는 숫자들의 크기에 비례하여 오차를 정하는 방식을 사용하자.</p>
+<p>두 숫자의 크기에 비해 그 차이가 작다면 그 차이가 작다면 두 수가 같다고 판정하는 식이다.</p>
+<p><strong>대소 비교</strong></p>
+<p>만약 예상하는 결과가 다른경우 이 상황도 비교전 미리 오차범위내에있는지확인해야한다</p>
+<p><strong>정확한 사칙연산</strong></p>
+<p>IEEE표준에 의해 정확하게 표현할 수 있는 값은 항상 정확하게 저장하도록 구현되어있다. 64비트 실수형은 52비트이므로 +-2^52 보다 작은 정수들은 항상정확함.</p>
+<p><strong>코드의 수치적 안정성 파악하기</strong></p>
+<p>수치적으로 안정적이라는 말은 프로그램 실행 과정에서 발생하는 오차가 더 커지지 않는다는말이다.</p>
+<p>모든 실수가 아닌 주어진 {1,4,6}에서 답찾는것은 실수로 1,4가 false가 나오는순간 6이 정답이므로 수치적 안전성이 낮은 프로그램이 나올수있다.</p>
+<p><strong>실수 연산 아예하지 않기</strong></p>
+<p>피해가는게 젤 중요!</p>
+<ul>
+<li><p>곱셈과 나눗셈 순서바꾸기</p>
+<p>(결과가 항상정수라면 a/b*c를 할게 아니라 a*c/b)(대신 오버 플로 주의)</p>
+</li>
+<li><p>양변 제곱하기</p>
+<p>정수 좌표를 갖는 두 점 A(x1,y2),B(x2,y2) 사이의 거리가 r인지 확인하고싶은것은 원리 root((x1-x2)^2 -(y1-y2)^2) = r을 확인해야하는데 이때는 그냥 양변 제곱한것을 비교하는게 더 좋다.</p>
+</li>
+<li><p>실수 좌표를 써야 하는 기하 문제에서 좌표계를 가로 세로로 정수배 늘리면 정수만을 이용해 문제 풀기가능.</p>
+</li>
+</ul>
+<h1 id="4장-알고리즘의-시간-복잡도-분석"><a href="#4장-알고리즘의-시간-복잡도-분석" class="headerlink" title="4장 알고리즘의 시간 복잡도 분석"></a>4장 알고리즘의 시간 복잡도 분석</h1>
     </article>
     <!-- license  -->
     
@@ -798,7 +912,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2장"><span class="toc-number">2.</span> <span class="toc-text">2장</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-문제-해결-과정"><span class="toc-number">2.1.</span> <span class="toc-text">2.2 문제 해결 과정</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6단계-문제-해결-알고리즘"><span class="toc-number">2.1.1.</span> <span class="toc-text">6단계 문제 해결 알고리즘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#문제를-읽고-이해하기"><span class="toc-number">2.1.2.</span> <span class="toc-text">문제를 읽고 이해하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#재정의와-추상화"><span class="toc-number">2.1.3.</span> <span class="toc-text">재정의와 추상화</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#계획-세우기"><span class="toc-number">2.1.4.</span> <span class="toc-text">계획 세우기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#계획-검증하기"><span class="toc-number">2.1.5.</span> <span class="toc-text">계획 검증하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#계획-수행하기"><span class="toc-number">2.1.6.</span> <span class="toc-text">계획 수행하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#회고하기"><span class="toc-number">2.1.7.</span> <span class="toc-text">회고하기</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#문제-해결-전략-계획-세우기-단계"><span class="toc-number">2.2.</span> <span class="toc-text">문제 해결 전략 (계획 세우기 단계)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#직관과-체계적인-접근"><span class="toc-number">2.2.1.</span> <span class="toc-text">직관과 체계적인 접근</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#체계적인-접근을-위한-질문들"><span class="toc-number">2.2.2.</span> <span class="toc-text">체계적인 접근을 위한 질문들</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3장"><span class="toc-number">3.</span> <span class="toc-text">3장</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1"><span class="toc-number">3.1.</span> <span class="toc-text">3.1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-좋은-코드를-짜기-위한-원칙"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 좋은 코드를 짜기 위한 원칙</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#간결한-코드-작성"><span class="toc-number">3.2.1.</span> <span class="toc-text">간결한 코드 작성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#적극적으로-코드-재사용하기"><span class="toc-number">3.2.2.</span> <span class="toc-text">적극적으로 코드 재사용하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#표준-라이브러리-공부하기"><span class="toc-number">3.2.3.</span> <span class="toc-text">표준 라이브러리 공부하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#항상-같은-형태로-프로그램을-작성하기"><span class="toc-number">3.2.4.</span> <span class="toc-text">항상 같은 형태로 프로그램을 작성하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#일관적이고-명명법-사용하기"><span class="toc-number">3.2.5.</span> <span class="toc-text">일관적이고 명명법 사용하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#모든-자료를-정규화해서-저장하기"><span class="toc-number">3.2.6.</span> <span class="toc-text">모든 자료를 정규화해서 저장하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#코드와-데이터를-분리하기"><span class="toc-number">3.2.7.</span> <span class="toc-text">코드와 데이터를 분리하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#자주하는-실수"><span class="toc-number">3.2.8.</span> <span class="toc-text">자주하는 실수</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2장"><span class="toc-number">2.</span> <span class="toc-text">2장</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-문제-해결-과정"><span class="toc-number">2.1.</span> <span class="toc-text">2.2 문제 해결 과정</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6단계-문제-해결-알고리즘"><span class="toc-number">2.1.1.</span> <span class="toc-text">6단계 문제 해결 알고리즘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#문제를-읽고-이해하기"><span class="toc-number">2.1.2.</span> <span class="toc-text">문제를 읽고 이해하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#재정의와-추상화"><span class="toc-number">2.1.3.</span> <span class="toc-text">재정의와 추상화</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#계획-세우기"><span class="toc-number">2.1.4.</span> <span class="toc-text">계획 세우기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#계획-검증하기"><span class="toc-number">2.1.5.</span> <span class="toc-text">계획 검증하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#계획-수행하기"><span class="toc-number">2.1.6.</span> <span class="toc-text">계획 수행하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#회고하기"><span class="toc-number">2.1.7.</span> <span class="toc-text">회고하기</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#문제-해결-전략-계획-세우기-단계"><span class="toc-number">2.2.</span> <span class="toc-text">문제 해결 전략 (계획 세우기 단계)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#직관과-체계적인-접근"><span class="toc-number">2.2.1.</span> <span class="toc-text">직관과 체계적인 접근</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#체계적인-접근을-위한-질문들"><span class="toc-number">2.2.2.</span> <span class="toc-text">체계적인 접근을 위한 질문들</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3장"><span class="toc-number">3.</span> <span class="toc-text">3장</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1"><span class="toc-number">3.1.</span> <span class="toc-text">3.1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-좋은-코드를-짜기-위한-원칙"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 좋은 코드를 짜기 위한 원칙</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#간결한-코드-작성"><span class="toc-number">3.2.1.</span> <span class="toc-text">간결한 코드 작성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#적극적으로-코드-재사용하기"><span class="toc-number">3.2.2.</span> <span class="toc-text">적극적으로 코드 재사용하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#표준-라이브러리-공부하기"><span class="toc-number">3.2.3.</span> <span class="toc-text">표준 라이브러리 공부하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#항상-같은-형태로-프로그램을-작성하기"><span class="toc-number">3.2.4.</span> <span class="toc-text">항상 같은 형태로 프로그램을 작성하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#일관적이고-명명법-사용하기"><span class="toc-number">3.2.5.</span> <span class="toc-text">일관적이고 명명법 사용하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#모든-자료를-정규화해서-저장하기"><span class="toc-number">3.2.6.</span> <span class="toc-text">모든 자료를 정규화해서 저장하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#코드와-데이터를-분리하기"><span class="toc-number">3.2.7.</span> <span class="toc-text">코드와 데이터를 분리하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#자주하는-실수"><span class="toc-number">3.2.8.</span> <span class="toc-text">자주하는 실수</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#디버깅과-테스팅"><span class="toc-number">3.2.9.</span> <span class="toc-text">디버깅과 테스팅</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#변수-범위의-이해"><span class="toc-number">3.2.10.</span> <span class="toc-text">변수 범위의 이해</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#실수-자료형의-이해"><span class="toc-number">3.2.11.</span> <span class="toc-text">실수 자료형의 이해</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4장-알고리즘의-시간-복잡도-분석"><span class="toc-number">4.</span> <span class="toc-text">4장 알고리즘의 시간 복잡도 분석</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -2079,9 +2193,42 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 84
+        Total : 85
         </div>
         <!-- search  -->
         
@@ -2094,6 +2241,11 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -2529,31 +2681,29 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
         <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
         <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
     
         <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
     
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
-    
-        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
-    
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
-    
-        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
-    
-        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
-    
-        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
-    
-        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
@@ -2561,15 +2711,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
     
-        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
-        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
         <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
     
-        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
     
-        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
     
         <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
     
@@ -2577,11 +2727,13 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
     
-        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
-    
         <span class="sidebar-tag-name" data-tags="Codingtest"><span class="iconfont-archer">&#xe606;</span>Codingtest</span>
     
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
         <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
     
         <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
     
@@ -2597,27 +2749,27 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
-        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
-    
-        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
-    
-        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
-    
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
     
         <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
     
-        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
-        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
     
         <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
     
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
-        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
     
         <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
     
@@ -2627,21 +2779,21 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
     
-        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
-    
-        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
-    
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
         <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
     
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
         <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
     
         <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
     
         <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
-    
-        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
     
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
@@ -2684,59 +2836,59 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
     
-        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
         <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
     
-        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
-        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
     
         <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
         <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
     
-        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
-    
         <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
     
-        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
     
         <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
     
-        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
-    
         <span class="sidebar-category-name" data-categories="Codingtest"><span class="iconfont-archer">&#xe60a;</span>Codingtest</span>
     
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
         <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
     
         <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
         <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
-        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
     
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
-        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
-    
-        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
-    
         <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
-        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
-        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
     
         <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
         <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
     
         <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
     
