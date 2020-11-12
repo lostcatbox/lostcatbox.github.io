@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">5.5k</span>Reading time: <span class="post-count reading-time">34 min</span></span>
+                        <span>Word count: <span class="post-count word-count">6.2k</span>Reading time: <span class="post-count reading-time">38 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -865,6 +865,45 @@ height:50vh;
 <p><strong>시간 복잡도가 높다는 말은 입력의 크기가 증가할 때 알고리즘의 수행 시간이 더 빠르게 증가한다는 의미다.</strong> 하나더 생각해야할 것은 시간 복잡도가 낮다고 해서 언제나 더 빠르게 동작하는 것은 아니라는 것이다. 입력의 크기가 충분히 작을 때는 시간 복잡도가 높은 알고리즘이 더 빠르게 동작할수도있다. 시간 복잡도가 낮은 알고리즘은 입력이 커지면 커질수록 더 효율적이다.</p>
 <p><strong>따라서 시간복잡도는 알고리즘의 완전한 속도 기준이 아니다</strong>. 만약 A와 B에 입력의 크기 N에 대해 10240+35logN, 2N^2의 시간이 걸린다고하자. A는 처음에 복잡한 작업을 하지만 N에대해서는 선형 이하 시간이다. 반면 B는 전형적인 다항 시간 알고리즘이다. N이 낮을때는 B가 우위를 가진다. 하지만 N이 높을때는 A가 더 빠르다. A는 입력의 크기가 더 크더라도 수행시간에 미치는 영향이 적기때문이다.</p>
 <h3 id="입력의-종류에-따른-수행-시간의-변화"><a href="#입력의-종류에-따른-수행-시간의-변화" class="headerlink" title="입력의 종류에 따른 수행 시간의 변화"></a>입력의 종류에 따른 수행 시간의 변화</h3><p>배열에서 같은 입력값과 같은 수 찾아서 index반환하는 함수, 보통 최악 수행시간이 마지막 에있을경우이므로 최악의 수행 시간을 사용한다.</p>
+<h3 id="점근적-시간-표기-O-표기"><a href="#점근적-시간-표기-O-표기" class="headerlink" title="점근적 시간 표기: O 표기"></a>점근적 시간 표기: O 표기</h3><p>시간 복잡도는 알고리즘의 수행 시간을 표가하는 방법이지만, 계산하기 너무 힘듬. 따라서 반복문의 반복 수만 고려하게된다.</p>
+<p>더욱 간단하게 표현한 대문자 O표기법을 사용해 알고리즘의 수행 시간을 표기한다. O표기법은 간단하게 말해 주어진 함수에서 가장 빨리 증가하는 항만을 남긴 채 나머지를 다 버리는 표기법이다.(앞에상수도빼버림)</p>
+<p>예를 들어 수행시간이 F(N)=root(5)/3<em>N^2-N</em>log(N/2)+16N-7이라고하자. 4개의 항이있다. N이 증가할때 가장 빨리 증가하는 항은 root(5)/3<em>N^2이고, 여기에서 상수를 떼어내면 N^2가 된다. 그럼 이 알고리즘의 수행시간은 O(N^2)이라고 표기한다. 위에 알고리즘에서 반복문의 수행 횟수가 N\</em>M*2^M 인것이있었다. 이것은  O(N*M*2^M)</p>
+<p>만약에 알고리즘의 입력의 크기가 두개 이상의 변수로 표현될때는 그중 가장 빨리 증가하는 항들만을 떼 놓고 나머지를 버린다. </p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gkmhjf0u81j30ky0bak04.jpg" alt="스크린샷 2020-11-12 오후 5.48.27"></p>
+<p>마지막 두가지는 흥미롭다. (N^2)*M, N*(M^2) 어느 한쪽이 빠르게 증가한다고 할수 없기때문에 둘다 O표기에 포함된다. 맨 마지막은 입력의 크기와 상관없이 항상 같은시간에 끝나기에, 이 알고리즘은 1만큼의 시간밖에 걸리지 않는다고 씬다. 이런 알고리즘은 <strong>상수 시간 알고리즘</strong>이라고 부른다</p>
+<p>이 같이 최고차항을 제외한 모든 것을 들어내기 때문에, 수행 시간의  O표기가 훨씬 간편하다. <strong>이 표기법을 쓸떄 알고리즘의 시간 복잡도는 반복문에 의해 결정되기 때문에, 반복문들이 몇번이나 실행되는지만 보면된다.</strong></p>
+<h3 id="O표기법의-의미"><a href="#O표기법의-의미" class="headerlink" title="O표기법의 의미"></a>O표기법의 의미</h3><p>O 표기법은 대략적으로 함수의 상한을 나타낸다는데 의미를 가진다. 여기서의 상한의 의미는 특이하다. N에 대한 함수  F(N)이 주어질때, F(N)=O(g(N)) 은 다음과 같은 의미이다</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gkmhvahxw4j30zo0aenau.jpg" alt="스크린샷 2020-11-12 오후 5.59.53"></p>
+<p>즉 F(N)=(N^2) + 100*N + 1 일때 O(N^2)이다. N^2는 F(N)보다는 항상 작다. 하지만 적당한 C를 곱해준다면 항상 F(N)보다 크거나 같아진다. </p>
+<p>N0와 C는 우리맘대로 정하면된다. </p>
+<p>O표기법이 수행 시간의 상한을 나타낸다는 것이 알고리즘의 최악의 수행 시간을 알아냇다고착각하는 일이 잦다. 하지만 O표기법은 각 경우의 수행 시간을 간단히 나타내는 표기법일뿐, 특별히 최악의 수행시간과 관련없다. </p>
+<p>예를 들면 퀵 정렬의 최악의 수행시간을 보면 최고차항이 N^2이고, 최악의 시간 복잡도는 O(N^2)이다. 하지만 평균 수행 시간을 계산해보면 최고차항이 NlogN이며, 평균 시간 복잡도는 O(NlogN)이다</p>
+<h3 id="시간-복잡도-분석-연습"><a href="#시간-복잡도-분석-연습" class="headerlink" title="시간 복잡도 분석 연습"></a>시간 복잡도 분석 연습</h3><p>아래 코드는 주어진 정수 배열을 정렬하는 유명한 두가지 알고리즘의 구현이다</p>
+<p>selectionSort()는 선택 정렬알고리즘을 구현한다. 선택 정렬은 모든 i에 대해 A[i..N-1]에서 가장 작은 원소를 찾은 뒤, 이것을 A[i]에 넣는 것을 반복합니다. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 선택정렬</span></span><br><span class="line">A=[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">selectionSort</span><span class="params">(unsorted_list)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> range(len(unsorted_list)):</span><br><span class="line">        minIndex = x</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> range(x+<span class="number">1</span>,len(unsorted_list)):</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(unsorted_list[minIndex]&gt;unsorted_list[y]):</span><br><span class="line">                minIndex=y</span><br><span class="line">        unsorted_list[x],unsorted_list[minIndex] = unsorted_list[minIndex],unsorted_list[x]</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">selectionSort(A)</span><br><span class="line">print(A)</span><br></pre></td></tr></table></figure>
+
+<p>x=0일때 N-1번,x=1일때 N-2번, x=N-1일때는 0번이다. 즉 O(N^2), N은 당연히 A[ ]의 크기이다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gkmjr5392lj30so04gn1y.jpg" alt="스크린샷 2020-11-12 오후 7.05.05"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 선택정렬</span></span><br><span class="line">A=[<span class="number">3</span>,<span class="number">1</span>,<span class="number">6</span>,<span class="number">5</span>,<span class="number">7</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">insertionSort</span><span class="params">(unsorted_list)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> range(len(unsorted_list)):</span><br><span class="line">        y = x</span><br><span class="line">        <span class="keyword">while</span>(y&gt;<span class="number">0</span> <span class="keyword">and</span> unsorted_list[y<span class="number">-1</span>]&gt;unsorted_list[y]):</span><br><span class="line">            unsorted_list[y<span class="number">-1</span>],unsorted_list[y] =unsorted_list[y],unsorted_list[y<span class="number">-1</span>]</span><br><span class="line">            y-=<span class="number">1</span></span><br><span class="line">            </span><br><span class="line">insertionSort(A)</span><br><span class="line">print(A)</span><br></pre></td></tr></table></figure>
+
+<p>insertionSort( )는 전체 배열중 정렬되어 있는 부분에 새 원소를 끼워넣는 일을 반복한다. 삽입 정렬은 A[i]에 있던 값을 하나씩 앞으로 옮기면서 조건 만족할때까지 while문으로 구현. </p>
+<p>입력 배열의 초기 순서에 따라 달라진다.</p>
+<p>따라서 최선의 경우와 최악의 경우가 나눠질수있다.</p>
+<p>최선의 경우는 이미 정렬된배열이 입력일때는, while문은 바로 종료기 때문에 O(1)으로 보고, 따라서 전체 시간 복잡도는 x에 대한 for문으로 자우된다. 따라서 O(N)이다.</p>
+<p>반면 최악의 경우는 숫자들을 계속 앞으로 전달하는 경우 이므로 while문 시간복잡도는 O(N)이며 전체 시간 복잡도는 O(N^2)이다.</p>
+<p>따라서 삽입정렬이 거의 선택정렬보다 빠르다는 것을 알수있다. </p>
+<h3 id="시간-복잡도의-분할-상환-분석"><a href="#시간-복잡도의-분할-상환-분석" class="headerlink" title="시간 복잡도의 분할 상환 분석"></a>시간 복잡도의 분할 상환 분석</h3><p>알고리즘의 시간 복잡도를 항상 반복문의 개수를 세는 것만으로만 결정하지않는다. 더 정확한 시간 복잡도 계산에 대표적 예시가 시간 복잡도의 분할 상환 분석을 사용하지만, 이 책범위넘어감</p>
+<h2 id="4-6-수행-시간-어림짐작하기"><a href="#4-6-수행-시간-어림짐작하기" class="headerlink" title="4.6 수행 시간 어림짐작하기"></a>4.6 수행 시간 어림짐작하기</h2><h3 id="주먹구구-법칙"><a href="#주먹구구-법칙" class="headerlink" title="주먹구구 법칙"></a>주먹구구 법칙</h3><p>다양한 요소가 프로그램의 수행시간에 관여한다. 많은 경우 <strong>시간 복잡도</strong>와 입력 크기만 알아도 대략 시간을 알수있다. </p>
+<p>입력의 크기를 시간 복잡도에 대입해서 얻는 반복문 수행 횟수에 대해, 1초당 반복문 수행 횟수가 1억(10^8)을 넘어가면 시간 제한 초과 생각하자</p>
+<p>N=10000 일떄 O(N^3)는 통과못하고 O(NlogN)은 통과한다.</p>
+<p>하지만 의외로 다른요소때문에 안될때가 있다</p>
+<ul>
+<li>시간 복잡도가 프로그램의 실제 수행 속도 반영못하는 경우</li>
+<li>반복문의 내부가 복잡한 경우</li>
+<li>메모리 사용 패턴이 복잡한 경우</li>
+<li>언어와 컴파일러 차이</li>
+<li>구형 컴퓨터를 사용하는경우</li>
+</ul>
 
     </article>
     <!-- license  -->
@@ -1002,7 +1041,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2장"><span class="toc-number">2.</span> <span class="toc-text">2장</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-문제-해결-과정"><span class="toc-number">2.1.</span> <span class="toc-text">2.2 문제 해결 과정</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6단계-문제-해결-알고리즘"><span class="toc-number">2.1.1.</span> <span class="toc-text">6단계 문제 해결 알고리즘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#문제를-읽고-이해하기"><span class="toc-number">2.1.2.</span> <span class="toc-text">문제를 읽고 이해하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#재정의와-추상화"><span class="toc-number">2.1.3.</span> <span class="toc-text">재정의와 추상화</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#계획-세우기"><span class="toc-number">2.1.4.</span> <span class="toc-text">계획 세우기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#계획-검증하기"><span class="toc-number">2.1.5.</span> <span class="toc-text">계획 검증하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#계획-수행하기"><span class="toc-number">2.1.6.</span> <span class="toc-text">계획 수행하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#회고하기"><span class="toc-number">2.1.7.</span> <span class="toc-text">회고하기</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#문제-해결-전략-계획-세우기-단계"><span class="toc-number">2.2.</span> <span class="toc-text">문제 해결 전략 (계획 세우기 단계)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#직관과-체계적인-접근"><span class="toc-number">2.2.1.</span> <span class="toc-text">직관과 체계적인 접근</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#체계적인-접근을-위한-질문들"><span class="toc-number">2.2.2.</span> <span class="toc-text">체계적인 접근을 위한 질문들</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3장"><span class="toc-number">3.</span> <span class="toc-text">3장</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1"><span class="toc-number">3.1.</span> <span class="toc-text">3.1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-좋은-코드를-짜기-위한-원칙"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 좋은 코드를 짜기 위한 원칙</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#간결한-코드-작성"><span class="toc-number">3.2.1.</span> <span class="toc-text">간결한 코드 작성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#적극적으로-코드-재사용하기"><span class="toc-number">3.2.2.</span> <span class="toc-text">적극적으로 코드 재사용하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#표준-라이브러리-공부하기"><span class="toc-number">3.2.3.</span> <span class="toc-text">표준 라이브러리 공부하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#항상-같은-형태로-프로그램을-작성하기"><span class="toc-number">3.2.4.</span> <span class="toc-text">항상 같은 형태로 프로그램을 작성하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#일관적이고-명명법-사용하기"><span class="toc-number">3.2.5.</span> <span class="toc-text">일관적이고 명명법 사용하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#모든-자료를-정규화해서-저장하기"><span class="toc-number">3.2.6.</span> <span class="toc-text">모든 자료를 정규화해서 저장하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#코드와-데이터를-분리하기"><span class="toc-number">3.2.7.</span> <span class="toc-text">코드와 데이터를 분리하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#자주하는-실수"><span class="toc-number">3.2.8.</span> <span class="toc-text">자주하는 실수</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#디버깅과-테스팅"><span class="toc-number">3.2.9.</span> <span class="toc-text">디버깅과 테스팅</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#변수-범위의-이해"><span class="toc-number">3.2.10.</span> <span class="toc-text">변수 범위의 이해</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#실수-자료형의-이해"><span class="toc-number">3.2.11.</span> <span class="toc-text">실수 자료형의 이해</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4장-알고리즘의-시간-복잡도-분석"><span class="toc-number">4.</span> <span class="toc-text">4장 알고리즘의 시간 복잡도 분석</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-도입"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 도입</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-선형-시간-알고리즘"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 선형 시간 알고리즘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-선형-이하-시간-알고리즘"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 선형 이하 시간 알고리즘</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#성형-전-사진-찾기"><span class="toc-number">4.3.1.</span> <span class="toc-text">성형 전 사진 찾기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#이진-탐색"><span class="toc-number">4.3.2.</span> <span class="toc-text">이진 탐색</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#그래도-선형-시간-아닌가"><span class="toc-number">4.3.3.</span> <span class="toc-text">그래도 선형 시간 아닌가?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#구현"><span class="toc-number">4.3.4.</span> <span class="toc-text">구현</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#지수-시간-알고리즘"><span class="toc-number">4.4.</span> <span class="toc-text">지수 시간 알고리즘</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#다항-시간-알고리즘"><span class="toc-number">4.4.1.</span> <span class="toc-text">다항 시간 알고리즘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#알러지가-심한-친구들"><span class="toc-number">4.4.2.</span> <span class="toc-text">알러지가 심한 친구들</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#모든-답-후보로-평가하기"><span class="toc-number">4.4.3.</span> <span class="toc-text">모든 답 후보로 평가하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#지수-시간-알고리즘-1"><span class="toc-number">4.4.4.</span> <span class="toc-text">지수 시간 알고리즘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#소인수-분해의-수행-시간"><span class="toc-number">4.4.5.</span> <span class="toc-text">소인수 분해의 수행 시간</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-시간-복잡도"><span class="toc-number">4.5.</span> <span class="toc-text">4.5 시간 복잡도</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#입력의-종류에-따른-수행-시간의-변화"><span class="toc-number">4.5.1.</span> <span class="toc-text">입력의 종류에 따른 수행 시간의 변화</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2장"><span class="toc-number">2.</span> <span class="toc-text">2장</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-문제-해결-과정"><span class="toc-number">2.1.</span> <span class="toc-text">2.2 문제 해결 과정</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6단계-문제-해결-알고리즘"><span class="toc-number">2.1.1.</span> <span class="toc-text">6단계 문제 해결 알고리즘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#문제를-읽고-이해하기"><span class="toc-number">2.1.2.</span> <span class="toc-text">문제를 읽고 이해하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#재정의와-추상화"><span class="toc-number">2.1.3.</span> <span class="toc-text">재정의와 추상화</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#계획-세우기"><span class="toc-number">2.1.4.</span> <span class="toc-text">계획 세우기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#계획-검증하기"><span class="toc-number">2.1.5.</span> <span class="toc-text">계획 검증하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#계획-수행하기"><span class="toc-number">2.1.6.</span> <span class="toc-text">계획 수행하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#회고하기"><span class="toc-number">2.1.7.</span> <span class="toc-text">회고하기</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#문제-해결-전략-계획-세우기-단계"><span class="toc-number">2.2.</span> <span class="toc-text">문제 해결 전략 (계획 세우기 단계)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#직관과-체계적인-접근"><span class="toc-number">2.2.1.</span> <span class="toc-text">직관과 체계적인 접근</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#체계적인-접근을-위한-질문들"><span class="toc-number">2.2.2.</span> <span class="toc-text">체계적인 접근을 위한 질문들</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3장"><span class="toc-number">3.</span> <span class="toc-text">3장</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1"><span class="toc-number">3.1.</span> <span class="toc-text">3.1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-좋은-코드를-짜기-위한-원칙"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 좋은 코드를 짜기 위한 원칙</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#간결한-코드-작성"><span class="toc-number">3.2.1.</span> <span class="toc-text">간결한 코드 작성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#적극적으로-코드-재사용하기"><span class="toc-number">3.2.2.</span> <span class="toc-text">적극적으로 코드 재사용하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#표준-라이브러리-공부하기"><span class="toc-number">3.2.3.</span> <span class="toc-text">표준 라이브러리 공부하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#항상-같은-형태로-프로그램을-작성하기"><span class="toc-number">3.2.4.</span> <span class="toc-text">항상 같은 형태로 프로그램을 작성하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#일관적이고-명명법-사용하기"><span class="toc-number">3.2.5.</span> <span class="toc-text">일관적이고 명명법 사용하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#모든-자료를-정규화해서-저장하기"><span class="toc-number">3.2.6.</span> <span class="toc-text">모든 자료를 정규화해서 저장하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#코드와-데이터를-분리하기"><span class="toc-number">3.2.7.</span> <span class="toc-text">코드와 데이터를 분리하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#자주하는-실수"><span class="toc-number">3.2.8.</span> <span class="toc-text">자주하는 실수</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#디버깅과-테스팅"><span class="toc-number">3.2.9.</span> <span class="toc-text">디버깅과 테스팅</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#변수-범위의-이해"><span class="toc-number">3.2.10.</span> <span class="toc-text">변수 범위의 이해</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#실수-자료형의-이해"><span class="toc-number">3.2.11.</span> <span class="toc-text">실수 자료형의 이해</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4장-알고리즘의-시간-복잡도-분석"><span class="toc-number">4.</span> <span class="toc-text">4장 알고리즘의 시간 복잡도 분석</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-도입"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 도입</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-선형-시간-알고리즘"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 선형 시간 알고리즘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-선형-이하-시간-알고리즘"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 선형 이하 시간 알고리즘</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#성형-전-사진-찾기"><span class="toc-number">4.3.1.</span> <span class="toc-text">성형 전 사진 찾기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#이진-탐색"><span class="toc-number">4.3.2.</span> <span class="toc-text">이진 탐색</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#그래도-선형-시간-아닌가"><span class="toc-number">4.3.3.</span> <span class="toc-text">그래도 선형 시간 아닌가?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#구현"><span class="toc-number">4.3.4.</span> <span class="toc-text">구현</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#지수-시간-알고리즘"><span class="toc-number">4.4.</span> <span class="toc-text">지수 시간 알고리즘</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#다항-시간-알고리즘"><span class="toc-number">4.4.1.</span> <span class="toc-text">다항 시간 알고리즘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#알러지가-심한-친구들"><span class="toc-number">4.4.2.</span> <span class="toc-text">알러지가 심한 친구들</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#모든-답-후보로-평가하기"><span class="toc-number">4.4.3.</span> <span class="toc-text">모든 답 후보로 평가하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#지수-시간-알고리즘-1"><span class="toc-number">4.4.4.</span> <span class="toc-text">지수 시간 알고리즘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#소인수-분해의-수행-시간"><span class="toc-number">4.4.5.</span> <span class="toc-text">소인수 분해의 수행 시간</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-시간-복잡도"><span class="toc-number">4.5.</span> <span class="toc-text">4.5 시간 복잡도</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#입력의-종류에-따른-수행-시간의-변화"><span class="toc-number">4.5.1.</span> <span class="toc-text">입력의 종류에 따른 수행 시간의 변화</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#점근적-시간-표기-O-표기"><span class="toc-number">4.5.2.</span> <span class="toc-text">점근적 시간 표기: O 표기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#O표기법의-의미"><span class="toc-number">4.5.3.</span> <span class="toc-text">O표기법의 의미</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#시간-복잡도-분석-연습"><span class="toc-number">4.5.4.</span> <span class="toc-text">시간 복잡도 분석 연습</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#시간-복잡도의-분할-상환-분석"><span class="toc-number">4.5.5.</span> <span class="toc-text">시간 복잡도의 분할 상환 분석</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-수행-시간-어림짐작하기"><span class="toc-number">4.6.</span> <span class="toc-text">4.6 수행 시간 어림짐작하기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#주먹구구-법칙"><span class="toc-number">4.6.1.</span> <span class="toc-text">주먹구구 법칙</span></a></li></ol></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -2373,12 +2412,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
         </li>
     
     
@@ -2767,15 +2806,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
-    
-        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
-    
-        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
-    
         <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
     
         <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
     
         <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
     
@@ -2783,9 +2818,9 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
-        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
     
-        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
     
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
@@ -2793,37 +2828,41 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
         <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
     
         <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
     
         <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
     
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
         <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
         <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
     
         <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
     
-        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
-    
-        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
-    
-        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
-    
         <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
     
-        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
     
         <span class="sidebar-tag-name" data-tags="Codingtest"><span class="iconfont-archer">&#xe606;</span>Codingtest</span>
     
         <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
     
-        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
-    
         <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
     
         <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
     
@@ -2837,29 +2876,31 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
     
-        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
-    
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
         <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
     
         <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
     
-        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
         <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
     
         <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
     
-        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
-    
-        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
     
         <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
         <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
     
         <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
     
@@ -2869,23 +2910,21 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
     
-        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
-    
         <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
     
-        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
-    
         <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
     
         <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
     
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
         <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
     
         <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
-    
-        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -2920,29 +2959,29 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
-    
         <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
     
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
-        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
     
         <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
         <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
     
         <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
     
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
         <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
     
         <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
     
-        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
-    
         <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
-    
-        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
     
         <span class="sidebar-category-name" data-categories="Codingtest"><span class="iconfont-archer">&#xe60a;</span>Codingtest</span>
     
@@ -2954,31 +2993,31 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
-        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
-    
         <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
     
-        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
-    
-        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
     
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
-        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
     
         <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
-        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
         <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
     
         <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
     
         <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
     
-        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
-    
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
