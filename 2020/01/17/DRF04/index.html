@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>DRF 기본편 10+11 · lostcatbox</title>
+    <title>DRF 기본편 4 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">DRF 기본편 10+11</a>
+                <a href="#" class="post-name">DRF 기본편 4</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            DRF 기본편 10+11
+            DRF 기본편 4
             <!-- 404 -->
             
         </h1>
@@ -279,7 +279,7 @@ height:50vh;
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2020/01/23</span>
+                    <span class="post-intro-time">2020/01/17</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -403,216 +403,116 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="EP-10-Throttling"><a href="#EP-10-Throttling" class="headerlink" title="EP 10 - Throttling"></a>EP 10 - Throttling</h1><p>공식문서 : <a href="http://www.django-rest-framework.org/api-guide/throttling/" target="_blank" rel="noopener">http://www.django-rest-framework.org/api-guide/throttling/</a></p>
-<h2 id="용어정리"><a href="#용어정리" class="headerlink" title="용어정리"></a>용어정리</h2><ul>
-<li>Rate : 지정 기간 내의 최대 호출 횟수 (10/m 1분에 최대 10번)</li>
-<li>Scope : 각 Rate에 대한 별칭 (alias)</li>
-<li>Throttle : 특정 조건 하에 최대 호출 횟수를 결정하는 클래스</li>
-</ul>
-<h3 id="기본-제공-Throttle"><a href="#기본-제공-Throttle" class="headerlink" title="기본 제공 Throttle"></a>기본 제공 Throttle</h3><ul>
-<li>AnonRateThrottle<ul>
-<li>인증요청에는 제한을 두지 않고, 비인증 요청에는 IP 별로 횟수 제한</li>
-<li>Throttle 클래스별로 scope을 1개만 지정할 수 있습니다.</li>
-<li>디폴트 scope: ‘anon’</li>
-</ul>
-</li>
-<li>UserRateThrottle<ul>
-<li>인증요청에는 유저 별로 횟수를 제한하고, 비인증 요청에는 IP 별로 횟수 제한</li>
-<li>Throttle 클래스별로 scope을 1개만 지정할 수 있습니다.</li>
-<li>디폴트 scope: ‘user’</li>
-</ul>
-</li>
-<li>ScopedRateThrottle<ul>
-<li>인증요청에는 유저 별로 횟수를 제한하고, 비인증 요청에는 IP 별로 횟수 제한</li>
-<li>여러 APIView내 throttle_scope값을 읽어들여, APIView별로 다른 Scope을 적용해줍니다.</li>
-</ul>
-</li>
-</ul>
-<p>디폴트 settings</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">REST_FRAMEWORK = &#123;</span><br><span class="line">    <span class="string">'DEFAULT_THROTTLE_CLASSES'</span>: [],</span><br><span class="line">    <span class="string">'DEFAULT_THROTTLE_RATES'</span>: &#123;</span><br><span class="line">        <span class="string">'anon'</span>: <span class="literal">None</span>,</span><br><span class="line">        <span class="string">'user'</span>: <span class="literal">None</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h1 id="EP-04-ViewSet과-Router"><a href="#EP-04-ViewSet과-Router" class="headerlink" title="EP 04 - ViewSet과 Router"></a>EP 04 - ViewSet과 Router</h1><h2 id="ViewSet"><a href="#ViewSet" class="headerlink" title="ViewSet"></a>ViewSet</h2><p>ViewSet은 <strong>일반적인 장고 CBV</strong>는 아닙니다. 2개의 뷰를 만들어주는 <strong>보다 확장된 형태의 CBV</strong>입니다. “View + Set” 즉, <strong>다수 View를 지원하는 CBV</strong>.</p>
+<p>모든 뷰셋은 <code>.as_view({&#39;http_method&#39;: &#39;처리할멤버함수&#39;})</code>를 호출하여, 해당 <code>http_method</code>를 지원하는 뷰 함수를 생성합니다. <strong>1개의 뷰 함수</strong>를 생성하므로, <strong>하나의 URL</strong>만을 처리할 수 있습니다.</p>
+<p><code>rest_framework/viewsets.py</code>에서는 다음 2가지 뷰셋을 지원하고 있습니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">viewsets.ReadOnlyModelViewSet</span><br></pre></td></tr></table></figure>
 
-<h2 id="APIView에-커스텀-Throttle"><a href="#APIView에-커스텀-Throttle" class="headerlink" title="APIView에 커스텀 Throttle"></a>APIView에 커스텀 Throttle</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 프로젝트/settings.py</span></span><br><span class="line">REST_FRAMEWORK = &#123;</span><br><span class="line">    <span class="string">'DEFAULT_THROTTLE_CLASSES'</span>: [</span><br><span class="line">        <span class="string">'rest_framework.throttling.UserRateThrottle'</span>,</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">'DEFAULT_THROTTLE_RATES'</span>: &#123;</span><br><span class="line">        <span class="string">'user'</span>: <span class="string">'10/day'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>이제, 모든 APIView에 걸쳐, <code>최대호출 횟수</code>제한이 걸립니다.</p>
-<h3 id="혹은-APIView-별로-지정도-할-수-있습니다"><a href="#혹은-APIView-별로-지정도-할-수-있습니다" class="headerlink" title="혹은 APIView 별로 지정도 할 수 있습니다."></a>혹은 APIView 별로 지정도 할 수 있습니다.</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.throttling <span class="keyword">import</span> UserRateThrottle</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(ViewSet)</span>:</span></span><br><span class="line">    throttle_classes = UserRateThrottle</span><br></pre></td></tr></table></figure>
-
-<h3 id="API-요청-시에-제한을-넘어선다면"><a href="#API-요청-시에-제한을-넘어선다면" class="headerlink" title="API 요청 시에 제한을 넘어선다면?"></a>API 요청 시에 제한을 넘어선다면?</h3><p>429 Too Many Requests 응답을 받습니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http :8000</span><br><span class="line"></span><br><span class="line">HTTP&#x2F;1.0 429 Too Many Requests</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;detail&quot;: &quot;Request wat throttled. Expected available in 86326 seconds.&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>예외 메세지에 API 활용이 가능한 시점을 알려줍니다. 이는 Throttle의 <code>wait</code>멤버함수를 통해 계산합니다.</p>
-<h2 id="Rates-포맷"><a href="#Rates-포맷" class="headerlink" title="Rates 포맷"></a>Rates 포맷</h2><ul>
-<li>“숫자/간격”</li>
-<li>숫자 : 지정 간격내의 최대 요청 제한 횟수</li>
-<li>간격 : 지정 문자열의 첫 글자만 봅니다. 즉 “d”, “day”, “ddd” 모두 Day를 뜻합니다.<ul>
-<li>“s”: 초</li>
-<li>“m”: 분</li>
-<li>“h”: 시</li>
-<li>“d”: 일</li>
-</ul>
-</li>
-</ul>
-<h2 id="Rates-제한-메커니즘"><a href="#Rates-제한-메커니즘" class="headerlink" title="Rates 제한 메커니즘"></a>Rates 제한 메커니즘</h2><ol>
-<li>SingleRateThrottle에서는 요청한 시간의 scope별로 timestamp를  list로 유지</li>
-<li>매 요청 시마다<ol>
-<li>cache 에서 현재 scope에  timestamp list를 가져옵니다.</li>
-<li>체크범위 밖의 timestamp값은 모두 버립니다.</li>
-<li>timestamp list의 크기가 허용범위보다 클 경우, 요청을 거부합니다.</li>
-<li>timestamp list의 크기가 허용범위보다 작을 경우, 현재 timestamp를 timestamp list에 추가하고, cache에 다시 저장합니다.</li>
-</ol>
-</li>
-</ol>
-<h2 id="클라이언트-IP"><a href="#클라이언트-IP" class="headerlink" title="클라이언트 IP"></a>클라이언트 IP</h2><p><code>X-Forwarded-For</code> 헤더값과 <code>REMOTE_ADDR</code> WSGI 변수값을 참조해서, 클라이언트 IP를 확정합니다.</p>
-<p><code>X-Forwarded-For</code> 헤더값이 <code>REMOTE_ADDR</code> 값에 우선합니다.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 주요 코드</span></span><br><span class="line">xff = request.META.get(<span class="string">'HTTP_X_FORWARDED_FOR'</span>)</span><br><span class="line">remote_addr = request.META.get(<span class="string">'REMOTE_ADDR'</span>)</span><br><span class="line"><span class="comment"># (중략)</span></span><br><span class="line"><span class="keyword">if</span> xff:</span><br><span class="line">    client_ip = <span class="string">''</span>.join(xff.split()) </span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    client_ip = remote_addr</span><br></pre></td></tr></table></figure>
-
-<h2 id="API-별로-서로-다른-Rate-적용하기"><a href="#API-별로-서로-다른-Rate-적용하기" class="headerlink" title="API 별로 서로 다른 Rate 적용하기"></a>API 별로 서로 다른 Rate 적용하기</h2><p>API 별로 서로 다른 Rate를 적용하기 할려면 어떻게 해야할까요? 매 API마다 새로운 Throttle 클래스를 만들어서 지정해야할까요? 일단 다음과 같이 해볼 수 있겠습니다.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 프로젝트/settings.py</span></span><br><span class="line">REST_FRAMEWORK = &#123;</span><br><span class="line">    <span class="string">'DEFAULT_THROTTLE_CLASSES'</span>: [],</span><br><span class="line">    <span class="string">'DEFAULT_THROTTLE_RATES'</span>: &#123;</span><br><span class="line">        <span class="string">'contact'</span>: <span class="string">'1000/day'</span>,</span><br><span class="line">        <span class="string">'upload'</span>: <span class="string">'20/day'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># myapp/throttles.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CotactRateThrottle</span><span class="params">(UserRateThrottle)</span>:</span></span><br><span class="line">    scope = <span class="string">'contact'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UploadRateThrottle</span><span class="params">(UserRateThrottle)</span>:</span></span><br><span class="line">    scope = <span class="string">'upload'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># myapp/views.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ContactListView</span><span class="params">(APIView)</span>:</span></span><br><span class="line">    throttle_classes = [CotactRateThrottle]</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ContactDetailView</span><span class="params">(APIView)</span>:</span></span><br><span class="line">    throttle_classes = [ContactRateThrottle]</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UploadView</span><span class="params">(APIView)</span>:</span></span><br><span class="line">    throttle_classes = [UploadRateThrottle]</span><br></pre></td></tr></table></figure>
-
-<p>위 코드도 잘 동작하긴 합니다만, __ScopedRateThrottle를 통해 코드를 줄이실 수 있습니다. __ScopedRateThrottle는 APIView의 <code>throttle_scope</code>값을 읽어들여 적용해줍니다. 커스텀 Throttle를 만드실 필요가 없습니다. 아래 코드는 위 코드의 대체 코드입니다.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 프로젝트/settings.py</span></span><br><span class="line">REST_FRAMEWORK = &#123;</span><br><span class="line">    <span class="string">'DEFAULT_THROTTLE_CLASSES'</span>: [</span><br><span class="line">        <span class="string">'rest_framework.throttling.ScopedRateThrottle'</span>,</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">'DEFAULT_THROTTLE_RATES'</span>: &#123;</span><br><span class="line">        <span class="string">'contact'</span>: <span class="string">'1000/day'</span>,</span><br><span class="line">        <span class="string">'upload'</span>: <span class="string">'20/day'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># myapp/views.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ContactListView</span><span class="params">(APIView)</span>:</span></span><br><span class="line">    throttle_scope = <span class="string">'contact'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ContactDetailView</span><span class="params">(APIView)</span>:</span></span><br><span class="line">    throttle_scope = <span class="string">'contact'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UploadView</span><span class="params">(APIView)</span>:</span></span><br><span class="line">    throttle_scope = <span class="string">'upload'</span></span><br></pre></td></tr></table></figure>
-
-<p>어떤가요? 훨씬 코드보기가 좋아졌죠?</p>
-<h2 id="유저별로-Rate-다르게-적용하기"><a href="#유저별로-Rate-다르게-적용하기" class="headerlink" title="유저별로 Rate 다르게 적용하기"></a>유저별로 Rate 다르게 적용하기</h2><p>프로젝트/settings.py</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">REST_FRAMEWORK = &#123;</span><br><span class="line">    <span class="string">'DEFAULT_THROTTLE_RATES'</span>: &#123;</span><br><span class="line">        <span class="string">'premium_user'</span>: <span class="string">'1000/day'</span>,  <span class="comment"># premium 유저는 하루에 1000회 요청 제한</span></span><br><span class="line">        <span class="string">'light_user'</span>: <span class="string">'10/day'</span>,      <span class="comment"># light 유저는 하루에 10회 요청 제한</span></span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>myapp/throttling.py</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.throttling <span class="keyword">import</span> UserRateThrottle</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PremiumThrottle</span><span class="params">(UserRateThrottle)</span>:</span></span><br><span class="line">    <span class="comment"># 본 Throttle에서는 생성자에서 get_rate가져오는 것은 불필요하므로</span></span><br><span class="line">    <span class="comment"># 생서자 오버로딩을 통해 루틴 제거</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">allow_request</span><span class="params">(self, request, view)</span>:</span></span><br><span class="line">        premium_scope = getattr(view, <span class="string">'premium_scope'</span>, <span class="literal">None</span>)</span><br><span class="line">        light_scope = getattr(view, <span class="string">'light_scope'</span>, <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> request.user.profile.is_premium_user:  <span class="comment"># Profile모델에 is_premium_user 필드가 있을 경우</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> premium_scope:  <span class="comment"># premium_scope 미지정 시에는 Throttling제한을 하지 않습니다.</span></span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            self.scope = premium_scope</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> light_scope:  <span class="comment"># light_scope 미지정 시에는 Throttling제한을 하지 않습니다.</span></span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            self.scope = light_scope</span><br><span class="line"></span><br><span class="line">        self.rate = self.get_rate()</span><br><span class="line">        self.num_requests, self.duration = self.parse_rate(self.rate)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> super().allow_request(request, view)</span><br></pre></td></tr></table></figure>
-
-<p>myapp/views.py</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework <span class="keyword">import</span> viewsets</span><br><span class="line"><span class="keyword">from</span> .serializers <span class="keyword">import</span> PostSerializer</span><br><span class="line"><span class="keyword">from</span> .throttling <span class="keyword">import</span> PremiumThrottle</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Post</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(viewsets.ModelViewSet)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line"></span><br><span class="line">    throttle_classes = [PremiumThrottle]</span><br><span class="line">    premium_scope = <span class="string">'premium_user'</span></span><br><span class="line">    light_scope = <span class="string">'light_user'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">perform_create</span><span class="params">(self, serializer)</span>:</span></span><br><span class="line">        print(self.request.FILES)</span><br><span class="line">        serializer.save(author=self.request.user)</span><br></pre></td></tr></table></figure>
-
-<h2 id="Cache-휘발성있는-데이터저장시켜줌"><a href="#Cache-휘발성있는-데이터저장시켜줌" class="headerlink" title="Cache (휘발성있는 데이터저장시켜줌)"></a>Cache (휘발성있는 데이터저장시켜줌)</h2><p>매 요청시마다 cache에서 <code>timestamp list</code>값을 get/set하므로, cache의 성능이 중요합니다.</p>
-<p>SimpleRateThrottle에는 다음 코드와 같이 장고 디폴트 cache를 쓰도록 설정되어있습니다.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rest_framework/throttling.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.core.cache <span class="keyword">import</span> cache <span class="keyword">as</span> default_cache</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleRateThrottle</span><span class="params">(BaseThrottle)</span>:</span></span><br><span class="line">    cache = default_cache</span><br></pre></td></tr></table></figure>
-
-<p>장고 프로젝트 디폴트 설정으로 <code>CACHES</code>는 “로컬 메모리 캐쉬”가 설정되어있습니다. 이는 서버가 재시작되면 캐쉬가 모두 초기화됩니다. 이 외에도 장고에서는 수많은 Cache를 지원합니다.</p>
+<p>: 목록 조회, 특정 레코드 조회를 지원 =&gt; 2개의 URL 지원</p>
 <ul>
-<li>Memcached 서버 지원 (보통사용)<ul>
-<li>django.core.cache.backends.memcached.MemcachedCache</li>
-<li>django.core.cache.backends.memcached.PyLibMCCache</li>
+<li>특정 Record 조회 : <code>mixins.RetrieveModelMixin</code>을 통해 <code>retrieve()</code>함수 지원</li>
+<li>리스트 조회 : <code>mixins.ListModelMixin</code>을 통해 <code>list()</code>함수 지원</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">viewsets.ModelViewSet</span><br></pre></td></tr></table></figure>
+
+<p>: 목록 조회, 생성, 특정 레코드 조회/수정/삭제 지원 =&gt; 2개의 URL 지원</p>
+<ul>
+<li>리스트 조회 : <code>mixins.ListModelMixin</code>을 통해 <code>list()</code>함수 지원</li>
+<li>특정 Record 조회 : <code>mixins.RetrieveModelMixin</code>을 통해 <code>retrieve()</code>함수 지원</li>
+<li>새 Record 생성 : <code>mixins.CreateModelMixin</code>을 통해 <code>create()</code>함수 지원</li>
+<li>특정 Record 수정 : <code>mixins.UpdateModelMixin</code>을 통해 <code>update()</code>함수 및 <code>partial_update()</code>함수 지원</li>
+<li>특정 Record 삭제 : <code>mixins.DestroyModelMixin</code>을 통해 <code>destroy()</code>함수 지원</li>
+</ul>
+<p>다음 코드에서 보듯이, <code>PostViewSet</code>에서 <code>list/create/retrieve/update/partial_update/destory</code> 함수를 모두 지원한다고 하여, 이 함수들을 하나의 URL에서 처리할 수 없습니다. 일반적인 <code>REST API</code>설계에서 벗어나기 때문입니다. &gt;&gt;결국 url 2개 지원해야함</p>
+<h3 id="REST-API-규격에-맞춰-URL-매핑을-해봅시다"><a href="#REST-API-규격에-맞춰-URL-매핑을-해봅시다" class="headerlink" title="REST API 규격에 맞춰, URL 매핑을 해봅시다."></a>REST API 규격에 맞춰, URL 매핑을 해봅시다.</h3><p><strong>list route</strong>(Pk값 필요없음)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># list&#x2F;create를 쌍으로 주로 씁니다. (URL 예 - &quot;&#x2F;posts&#x2F;&quot;, &quot;&#x2F;article&#x2F;&quot;)</span><br><span class="line">post_list &#x3D; PostViewSet.as_view(&#123;</span><br><span class="line">    # GET요청이 들어오면 get함수가 호출이 될 것이며, 이어 list함수를 통해 처리하려 합니다.</span><br><span class="line">    &#39;get&#39;: &#39;list&#39;,</span><br><span class="line"></span><br><span class="line">    # POST요청이 들어오면 post함수가 호출이 될 것이며, 이어 create함수를 통해 처리하려 합니다.</span><br><span class="line">    &#39;post&#39;: &#39;create&#39;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>detail route</strong>(Pk값 필요함)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># retrieve&#x2F;update&#x2F;partial\_update&#x2F;destory를 쌍으로 주로 씁니다. (URL 예 - &quot;&#x2F;posts&#x2F;10&#x2F;&quot;, &quot;&#x2F;article&#x2F;hello-world&#x2F;&quot;)</span><br><span class="line">post_detail &#x3D; PostViewSet.as_view(&#123;</span><br><span class="line">    # GET요청이 들어오면 get함수가 호출이 될 것이며, 이어 retrieve 통해 처리하려 합니다.</span><br><span class="line">    &#39;get&#39;: &#39;retrieve&#39;,</span><br><span class="line">    # PUT요청이 들어오면 put 호출이 될 것이며, 이어 update함수를 통해 처리하려 합니다.</span><br><span class="line">    &#39;put&#39;: &#39;update&#39;,</span><br><span class="line">    # PATCH요청이 들어오면 patch함수가 호출이 될 것이며, 이어 partial_update함수를 통해 처리하려 합니다.</span><br><span class="line">    &#39;patch&#39;: &#39;partial_update&#39;,</span><br><span class="line">    # DELETE요청이 들어오면 delete함수가 호출이 될 것이며, 이어 destroy함수를 통해 처리하려 합니다.</span><br><span class="line">    &#39;delete&#39;: &#39;destroy&#39;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>이렇게 만들어진 뷰 함수는 다른 FBV(함수 기반 뷰)와 동일하게 URLConf에 매핑할 수 있습니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns = [</span><br><span class="line">    url(<span class="string">r'^post/'</span>, post_list),</span><br><span class="line">    url(<span class="string">r'^post/(?P&lt;pk&gt;\d+)/$'</span>, post_detail),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>읽기 전용 뷰가 필요할 경우, 다음과 같이 매핑하실 수 있습니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">post_list = PostViewSet.as_view(&#123;</span><br><span class="line">    <span class="string">'get'</span>: <span class="string">'list'</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">post_detail = PostViewSet.as_view(&#123;</span><br><span class="line">    <span class="string">'get'</span>: <span class="string">'retrieve'</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Router-활용"><a href="#Router-활용" class="headerlink" title="Router 활용"></a>Router 활용</h2><p>Router를 활용하면, 관례(Convention)에 기반하여 URL매핑을 손쉽게 할 수 있습니다. 아래 코드에서 보듯이 <code>PostViewSet</code>을 <code>Router</code>에 등록하면, <strong>해당 뷰셋이 지원하는 메소드/함수들에 한해서 URL매핑을 수행</strong>합니다. 뷰는 등록할 수 없습니다. <strong>뷰셋만 등록가능합니다.</strong></p>
+<p>하나의 Router에 다수 뷰셋을 등록하실 수 있습니다.</p>
+<p>디폴트 매핑은 위에서 수행한 내역대로 리스트/디테일 라우팅을 수행합니다.</p>
+<ul>
+<li><p>list route에서는 /prefix/주소가 지정되며, URL Reverse 이름으로서 <code>모델명소문자-list</code></p>
+<p>가 사용됩니다.</p>
+<ul>
+<li>get =&gt; list</li>
+<li>post =&gt; create</li>
 </ul>
 </li>
-<li>데이터베이스 캐시<ul>
-<li>django.core.cache.backends.db.DataabseCache</li>
-</ul>
-</li>
-<li>파일 시스템 캐시<ul>
-<li>django.core.cache.backends.filebased.FileBasedCache</li>
-</ul>
-</li>
-<li>로컬 메모리 캐시<ul>
-<li>django.core.cache.backends.locmem.LocMemCache</li>
-</ul>
-</li>
-<li>더미 캐시 : 캐시 인터페이스를 제공해주지만, 캐시를 수행하지 않습니다.<ul>
-<li>django.core.cache.backends.dummy.DummyCache</li>
+<li><p>detail route에서는 /prefix/pk/ 주소가 지정되며, URL Reverse 이름으로서 <code>모델명소문자-detail</code> 이 사용됩니다.</p>
+<ul>
+<li>get =&gt; retrieve</li>
+<li>put =&gt; update</li>
+<li>patch =&gt; partial_update</li>
+<li>delete =&gt; destroy</li>
 </ul>
 </li>
 </ul>
-<p>장고 Cache(<a href="https://docs.djangoproject.com/en/1.11/topics/cache/" target="_blank" rel="noopener">공식문서</a>)에 대해서는 별도 문서/VOD를 통해 살펴보도록 하겠습니다.</p>
-<h1 id="EP-11-rest-framework-대표적인-디폴트-설정-살펴보기"><a href="#EP-11-rest-framework-대표적인-디폴트-설정-살펴보기" class="headerlink" title="EP 11 rest_framework 대표적인 디폴트 설정 살펴보기"></a>EP 11 rest_framework 대표적인 디폴트 설정 살펴보기</h1><h2 id="이번-시간에는-…"><a href="#이번-시간에는-…" class="headerlink" title="이번 시간에는 …"></a>이번 시간에는 …</h2><p> rest_framework의 디폴트 설정을 살펴봄으로서, DRF의 기본동작에</p>
-<p>대해서 이해해봅시다.<br> 디폴트 설정은 rest_framework/settings.py내 DEFAULTS 사전을</p>
-<p>통해 확인하실 수 있습니다.<br> (버전 3.7.3 기준, 2017년 11월 기준, 최신버전)</p>
-<h2 id="HTTP-최종-응답-생성"><a href="#HTTP-최종-응답-생성" class="headerlink" title="HTTP 최종 응답 생성"></a>HTTP 최종 응답 생성</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123; </span><br><span class="line">	&#39;DEFAULT_RENDERER_CLASSES&#39;: (</span><br><span class="line">    &#39;rest_framework.renderers.JSONRenderer&#39;, </span><br><span class="line">    &#39;rest_framework.renderers.BrowsableAPIRenderer&#39;,  </span><br><span class="line">    ),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># myapp/urls.py</span></span><br><span class="line"><span class="keyword">from</span> rest_framework.routers <span class="keyword">import</span> DefaultRouter</span><br><span class="line"></span><br><span class="line">router = DefaultRouter()</span><br><span class="line">router.register(<span class="string">r'prefix'</span>, PostViewSet)  <span class="comment">#prefix가 'prefix'로 지정됨</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 이제, router.urls를 urlpatterns에 등록(include)시키면 OK</span></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(<span class="string">r''</span>, include(router.urls)),  <span class="comment"># 셋업된 라우팅 URLConf는 router.urls를 통해 제공받습니다.</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="예1"><a href="#예1" class="headerlink" title="예1)"></a>예1)</h3><p>다음과 같이 register될 경우</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">router.register(<span class="string">r'post'</span>, PostViewSet)  <span class="comment">#prefix가 post로 지정됨</span></span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><p>render란: client가 요청한것을 서버에서 응답을 만들때 render호출</p>
-</li>
-<li><p>JSONRenderer : JSON 포맷  #api응답</p>
-</li>
-<li><p>BrowsableAPIRenderer : Browsable API 포맷 응답 (HTML) #웹브라우저로 접속 #(django-debug-toolbar이용가능)</p>
-<p>본 설정을 추가/삭제함으로서 응답 지원포맷을 조정할 수 있습니다.</p>
-</li>
+<li><code>/post/</code> 주소에 대해 URL Reverse 이름은 <code>post-list</code>이 등록됩니다.(name=post-list임)</li>
+<li><code>/post/10/</code> 류의 주소에 대해 URL Reverse 이름은 <code>post-detail</code>이 등록됩니다.</li>
 </ul>
-<h2 id="HTTP-요청-내역-처리"><a href="#HTTP-요청-내역-처리" class="headerlink" title="HTTP 요청 내역 처리"></a>HTTP 요청 내역 처리</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123; </span><br><span class="line">	&#39;DEFAULT_PARSER_CLASSES&#39;: (</span><br><span class="line">    &#39;rest_framework.parsers.JSONParser&#39;</span><br><span class="line">    &#39;rest_framework.parsers.FormParser&#39;,</span><br><span class="line">    &#39;rest_framework.parsers.MultiPartParser&#39;</span><br><span class="line">), &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py shell  #장고 쉘 부름</span><br><span class="line">&gt;&gt;&gt; from django.urls import reverse</span><br><span class="line">&gt;&gt;&gt; reverse(&#39;ep04:post-list&#39;)      # 데이터이름소문자</span><br><span class="line">&#39;&#x2F;ep04&#x2F;post&#x2F;&#39;    # post는 prefix이름따라감.</span><br><span class="line">&gt;&gt;&gt; reverse(&#39;ep04:post-detail&#39;, args&#x3D;[100])    #pk 값을 줌, 데이터이름소문자</span><br><span class="line">&#39;&#x2F;ep04&#x2F;post&#x2F;100&#x2F;&#39;   # post는 prefix이름따라감.</span><br></pre></td></tr></table></figure>
+
+<p>Tip: 아래는 rest-framework에 routers.py 내용중 하나이다, 보면queryset에서 model가져와서  _meta데이터에서 이름가져와서 소문자로 받는것을 알수있다. basename은 결국 위에 reverse name인 post-list, post-detail에서 post가 데이터이름에 따라 바뀔수있다는것임</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">def get_default_basename(self, viewset):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        If &#96;basename&#96; is not specified, attempt to automatically determine</span><br><span class="line">        it from the viewset.</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        queryset &#x3D; getattr(viewset, &#39;queryset&#39;, None)</span><br><span class="line"></span><br><span class="line">        assert queryset is not None, &#39;&#96;basename&#96; argument not specified, and could &#39; \</span><br><span class="line">            &#39;not automatically determine the name from the viewset, as &#39; \</span><br><span class="line">            &#39;it does not have a &#96;.queryset&#96; attribute.&#39;</span><br><span class="line"></span><br><span class="line">        return queryset.model._meta.object_name.lower()</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="예2"><a href="#예2" class="headerlink" title="예2)"></a>예2)</h3><p>다음과 같이 register될 경우</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">router.register(<span class="string">r'hello'</span>, PostViewSet)  <span class="comment">#prefix이름 hello</span></span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>Parser: client가 서버로 요청한것을 처리할때 호출됨</li>
-<li>JSONParser : JSON 포맷 요청 처리</li>
-<li>FormParser : enctype application/x-www-form-urlencoded 요청 처리</li>
-<li>MultiPartParser : encytpe multipart/form-data 요청 처리 <strong>(파일 업로드 지원)</strong></li>
+<li><code>/hello/</code> 주소에 대해 URL Reverse 이름은 <code>post-list</code>가 등록됩니다.</li>
+<li><code>/hello/10/</code> 류의 주소에 대해 URL Reverse 이름은 <code>post-detail</code>이 등록됩니다.</li>
 </ul>
-<h2 id="각-HTTP-요청의-인증"><a href="#각-HTTP-요청의-인증" class="headerlink" title="각 HTTP 요청의 인증"></a><strong>각</strong> HTTP 요청의 인증</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123; &#39;DEFAULT_AUTHENTICATION_CLASSES&#39;: (</span><br><span class="line">    &#39;rest_framework.authentication.SessionAuthentication&#39;,</span><br><span class="line">    &#39;rest_framework.authentication.BasicAuthentication&#39;</span><br><span class="line">) &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="router를-쓸-경우는-api-root뷰를-통한-지원-ViewSet-목록-조회"><a href="#router를-쓸-경우는-api-root뷰를-통한-지원-ViewSet-목록-조회" class="headerlink" title="router를 쓸 경우는 api-root뷰를 통한 지원 ViewSet 목록 조회"></a>router를 쓸 경우는 <code>api-root</code>뷰를 통한 지원 ViewSet 목록 조회</h3><p>Router에서는 추가로 현 Router에 등록된 ViewSet내역을 조회할 수 있는 <code>api-root</code> 뷰를 추가로 지원합니다. <code>router.urls</code>가 매핑된 주소로 브라우저 접속 혹은 GET요청을 날려보세요. ;)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">현재 예시에서는</span><br><span class="line">http:&#x2F;&#x2F;127.0.0.1:8000&#x2F;ep04&#x2F;</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li><p>Id/pw인증지원&gt;&gt; 장고 기본 지원 , Token인증지원&gt;&gt; DRF가 지원해줌</p>
-</li>
-<li><p>SessionAuthentication : 세션을 통해 인증 유저를 찾습니다.</p>
-</li>
-<li><p>BasicAuthentication : 각 HTTP 요청에 대해 Basic Authentication을 수행 (헤더에 Authentication을 참조하며 base64로 인코딩되어있는 정보임.)</p>
-<p>하지만, 이것만으로는 부족합니다. <strong>API에서는 Token인증이 빠질 수 없죠.</strong></p>
-</li>
-</ul>
-<h2 id="각API-호출권한체크"><a href="#각API-호출권한체크" class="headerlink" title="각API 호출권한체크"></a><strong>각</strong>API 호출권한체크</h2><p>디폴트 설정으로 모든 접근을 허용 (<strong>AllowAny</strong>) 합니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">DEFAULTS &#x3D; &#123; </span><br><span class="line">	&#39;DEFAULT_PERMISSION_CLASSES&#39;: (</span><br><span class="line">		&#39;rest_framework.permissions.AllowAny&#39;, </span><br><span class="line">		),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="ViewSet에-추가-API는-어떻게-추가할-수-있죠"><a href="#ViewSet에-추가-API는-어떻게-추가할-수-있죠" class="headerlink" title="ViewSet에 추가 API는 어떻게 추가할 .. 수 있죠 ??"></a>ViewSet에 추가 API는 어떻게 추가할 .. 수 있죠 ??</h1><p>물론입니다. list route로서 <code>list/create</code>함수와 detail route로서 <code>retrieve/update/partial_update/delete</code>외에 추가로 구현하여 매핑하실 수 있습니다. 이때 추가할 API가 list route에 등록할 것인지, detail route에 등록할 것인지를 결정해야합니다.(pk값필요유무차이)</p>
+<p>구현은 해당 ViewSet 클래스 내에 멤버함수로서 구현하고 <code>list_route</code> 장식자 혹은 <code>detail_route</code> 장식자로 꾸며주면 끄읕 !!! URL매핑은 Router에서 알아서 해줍니다.</p>
+<p>Django-rest-framework 3.8버전이상부터는 action으로 통합됨</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Replace detail_route uses with @action(detail&#x3D;True).</span><br><span class="line">Replace list_route uses with @action(detail&#x3D;False).</span><br></pre></td></tr></table></figure>
 
-<h2 id="특정-시간-내-최대-요청수-제한-Throttling"><a href="#특정-시간-내-최대-요청수-제한-Throttling" class="headerlink" title="특정 시간 내, 최대 요청수 제한 (Throttling)"></a><strong>특정 시간 내</strong>, <strong>최대 요청수 제한</strong> (Throttling)</h2><p>디폴트로 Throtting 꺼짐</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123; </span><br><span class="line">	&#39;DEFAULT_THROTTLE_CLASSES&#39;: (),</span><br><span class="line">	&#39;DEFAULT_THROTTLE_RATES&#39;: &#123;</span><br><span class="line">        &#39;user&#39;: None,</span><br><span class="line">        &#39;anon&#39;: None,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>PostViewSet</code>에 다음 2개 API를 추가해봅시다. 아래 예시는 Post모델에 <code>is_public=models.BooleanField()</code>가 있음을 가정한 코드입니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#views.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rest_framework.decorators <span class="keyword">import</span> list_route, detail_route</span><br><span class="line"><span class="keyword">from</span> rest_framework.response <span class="keyword">import</span> Response</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(ModelViewSet)</span>:</span></span><br><span class="line">    queryset = PostViewSet.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># /ep04/post/ =&gt; list() 함수</span></span><br><span class="line">    <span class="comment"># /ep04/post/public_list/ =&gt; public_list() 함수  # 즉 함수명으로 url뒤에붙음</span></span><br><span class="line"><span class="meta">    @action(detail=False)  # 목록 단위로 적용할 API이기에, list_route 장식자 사용</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">public_list</span><span class="params">(self, request)</span>:</span></span><br><span class="line">        qs = self.queryset.filter(is_public=<span class="literal">True</span>)  <span class="comment"># Post모델에 is_public 필드가 있을 경우</span></span><br><span class="line">        <span class="comment">#serializer = self.serializer(qs, many=True) 써도되지만 viewset에 구현되어있는 함수 get_serializer를 이용했음</span></span><br><span class="line">        serializer = self.get_serializer(qs, many=<span class="literal">True</span>)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data)</span><br><span class="line">      </span><br><span class="line">    <span class="comment"># /ep04/post/10/ =&gt; retrieve() 함수가 호출</span></span><br><span class="line">    <span class="comment"># /ep04/post/10/set_public/ =&gt; set_public()함수가 호출</span></span><br><span class="line"><span class="meta">    @action(methods=['patch'], detail=True)  # Record 단위로 적용할 API이기에, detail_route 장식자 사용</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_public</span><span class="params">(self, request, pk)</span>:</span></span><br><span class="line">        <span class="comment">#viewset에는 이미 get_object_or_404(Post, pk=pk)가 이미구현된 get_object()함수가 존재</span></span><br><span class="line">        instance = self.get_object()</span><br><span class="line">        instance.is_public = <span class="literal">True</span></span><br><span class="line">        instance.save()</span><br><span class="line">        serializer = self.get_serializer(instance)</span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data)</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>DEFAULT_THROTTLE_CLASSES : 최대 호출를 제한할 로직 (클래스)</li>
-<li>DEFAULT_THROTTLE_RATES : 최대 호출 횟수 지정</li>
+<h2 id="PostViewSet의-public-list-API"><a href="#PostViewSet의-public-list-API" class="headerlink" title="PostViewSet의 public_list API"></a>PostViewSet의 public_list API</h2><ul>
+<li>URL 매핑은 <code>/prefix/함수명/</code>으로서 <code>/post/public_list/</code>가 됩니다.(기본 get으로 응답)</li>
+<li>methods가 지정되지 않았으므로 GET요청에 응답합니다. 이는 <code>list_route/detail_route</code>의 디폴트 처리입니다.</li>
+<li>함수명이 <code>public_list</code>이므로, URL Reverse 이름은 <code>모델명-함수명</code>으로서 <code>post-public-list</code>가 됩니다. 언더바(<code>_</code>)는 하이픈(<code>-</code>)으로 변경하여 처리됩니다.</li>
 </ul>
-<h2 id="페이징-처리"><a href="#페이징-처리" class="headerlink" title="페이징 처리"></a><strong>페이징 처리</strong></h2><p>디폴트로 페이징 처리 꺼짐</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123; </span><br><span class="line">	&#39;DEFAULT_PAGINATION_CLASS&#39;: None </span><br><span class="line">	&#39;PAGE_SIZE&#39;: None</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>요청 예시</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http http:&#x2F;&#x2F;localhost:8000&#x2F;ep04&#x2F;post&#x2F;public_list&#x2F;</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>DEFAULT_PAGINATION_CLASS : 페이징을 처리할 로직 (클래스)</li>
-<li>PAGE_SIZE : 1페이지 최대 갯수</li>
+<h2 id="PostViewSet의-set-public-API"><a href="#PostViewSet의-set-public-API" class="headerlink" title="PostViewSet의 set_public API"></a>PostViewSet의 set_public API</h2><ul>
+<li>URL 매핑은 <code>/prefix/{pk}/함수명/</code>으로서 <code>/post/{pk}/set_public/</code>이 됩니다.</li>
+<li>methods이 patch로 지정되었으므로, patch 요청에 응답합니다.(GET요청못받음)</li>
+<li>함수명이 <code>set_public</code>이므로, URL Reverse 이름은 <code>모델명-함수명</code>으로서 <code>post-set-public</code>이 됩니다. 언더바(<code>_</code>)는 하이픈(<code>-</code>)으로 변경하여 처리됩니다.</li>
 </ul>
-<h2 id="필터-문자열-매칭-검색-기능"><a href="#필터-문자열-매칭-검색-기능" class="headerlink" title="필터 (문자열 매칭 검색 기능)"></a><strong>필터</strong> (<strong>문자열 매칭 검색 기능</strong>)</h2><p>디폴트로 필터:꺼짐 DB에서 간단한검색이라고 생각하면됨 (SQL where사용)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123; </span><br><span class="line">  &#39;DEFAULT_FILTER_BACKENDS&#39;: (), </span><br><span class="line">  &#39;SEARCH_PARAM&#39;: &#39;search&#39;, </span><br><span class="line">  &#39;ORDERING_PARAM&#39;: &#39;ordering&#39;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>요청 예시</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http PATCH http:&#x2F;&#x2F;localhost:8000&#x2F;ep04&#x2F;post&#x2F;&#123;pk&#125;&#x2F;set_public&#x2F;</span><br></pre></td></tr></table></figure>
 
-<h2 id="날짜-시간-포맷"><a href="#날짜-시간-포맷" class="headerlink" title="날짜/시간 포맷"></a><strong>날짜</strong>/시간 포맷</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from rest_framework import ISO_8601 # 실제 값은 문자열 &quot;iso-8601&quot;</span><br><span class="line"></span><br><span class="line">DEFAULTS &#x3D; &#123;</span><br><span class="line">        # Input and output formats</span><br><span class="line">    &#39;DATE_FORMAT&#39;: ISO_8601, </span><br><span class="line">    &#39;DATE_INPUT_FORMATS&#39;: (ISO_8601,),</span><br><span class="line">    </span><br><span class="line">    &#39;DATETIME_FORMAT&#39;: ISO_8601, </span><br><span class="line">    &#39;DATETIME_INPUT_FORMATS&#39;: (ISO_8601,),</span><br><span class="line">    </span><br><span class="line">    &#39;TIME_FORMAT&#39;: ISO_8601,</span><br><span class="line">    &#39;TIME_INPUT_FORMATS&#39;: (ISO_8601,), </span><br><span class="line">&#125;</span><br><span class="line"># 궁금하다면 ISO 8601포맷 찾아보기</span><br></pre></td></tr></table></figure>
+<p>본 API는 <code>detail_route</code>예로서 작성한 것일 뿐, 다음과 같이 <code>PATCH</code>요청을 통한 <code>partial_update</code>을 이용해도 충분합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http --form PATCH http:&#x2F;&#x2F;localhost:8000&#x2F;ep04&#x2F;post&#x2F;&#123;pk&#125;&#x2F; title&#x3D;&quot;수정된 제목&quot; is_public&#x3D;true</span><br></pre></td></tr></table></figure>
 
-<h2 id="인코딩"><a href="#인코딩" class="headerlink" title="인코딩"></a>인코딩</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123;</span><br><span class="line">    &#39;UNICODE_JSON&#39;: True, </span><br><span class="line">    &#39;COMPACT_JSON&#39;: True, </span><br><span class="line">    &#39;STRICT_JSON&#39;: True, </span><br><span class="line">    &#39;COERCE_DECIMAL_TO_STRING&#39;: True, </span><br><span class="line">    &#39;UPLOADED_FILES_USE_URL&#39;: True,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>디폴트 UNICODE_JSON = True</p>
-<ul>
-<li>json.dumps 시에, ensure_ascii=False 옵션을 적용함 =&gt; UTF8 인코딩</li>
-</ul>
-</li>
-<li><p>디폴트 COMPACT_JSON = True</p>
-<ul>
-<li><p>json.dumps 시에, separators 옵션을 적용</p>
-<ul>
-<li><p>True : ‘,’와 ‘:’을 적용 =&gt; 띄워쓰기없음</p>
-</li>
-<li><p>False : ‘, ‘와’: ‘을적용</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>디폴트 STRICT_JSON = True</p>
-<ul>
-<li><p>json.dumps 시에, allow_nan=False 옵션을 적용</p>
-<ul>
-<li><p>NaN : Not-A-Number 의 약어</p>
-</li>
-<li><p>nan/inf/-inf 값이 있을 경우 ValueError 예외 발생</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>디폴트 COERCE_DECIMAL_TO_STRING = True</p>
-<ul>
-<li>Decimal을 문자열로 강제 변환(python은 decimal, float형이 있지만 js는 실수형밖에없으므로 float&gt;float으로 변환, deciamal&gt;문자열 로 변환)</li>
-</ul>
-</li>
-<li><p>디폴트UPLOADED_FILES_USE_URL=True</p>
-<ul>
-<li>파일명대신에URL을제공할지여부</li>
-</ul>
-</li>
-</ul>
-<h2 id="Browseable-API"><a href="#Browseable-API" class="headerlink" title="Browseable API"></a>Browseable API</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DEFAULTS &#x3D; &#123;</span><br><span class="line">	&#39;HTML_SELECT_CUTOFF&#39;: 1000,</span><br><span class="line">	&#39;HTML_SELECT_CUTOFF_TEXT&#39;: &quot;More than &#123;count&#125; items...&quot;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>HTML_SELECT_CUTOFF : Choice 옵션에서 Option 최대 허용수</li>
-<li>HTML_SELECT_CUTOFF_TEXT : 초과 시의 안내 메세지</li>
+<p>Tip: <code>PUT</code>을 통한 수정에서는 모든 필수(required) 필드를 지정하여야 하며, <code>PATCH</code>를 통한 수정에서는 “부분수정”으로서 수정할 필드만 지정하면 됩니다.</p>
+<h2 id="관련-공식문서"><a href="#관련-공식문서" class="headerlink" title="관련 공식문서"></a>관련 공식문서</h2><ul>
+<li><a href="http://www.django-rest-framework.org/tutorial/6-viewsets-and-routers/" target="_blank" rel="noopener">http://www.django-rest-framework.org/tutorial/6-viewsets-and-routers/</a></li>
+<li><a href="http://www.django-rest-framework.org/api-guide/routers/" target="_blank" rel="noopener">http://www.django-rest-framework.org/api-guide/routers/</a></li>
 </ul>
 
     </article>
@@ -623,16 +523,16 @@ height:50vh;
         <li class="next">
             
                 <div class="nextSlogan">Next Post</div>
-                <a href= "/2020/01/23/project-processing/" title= "효율적인 프로젝트 진행을 위한 것">
-                    <div class="nextTitle">효율적인 프로젝트 진행을 위한 것</div>
+                <a href= "/2020/01/18/DRF05+06+07/" title= "DRF 기본편 5+6+7">
+                    <div class="nextTitle">DRF 기본편 5+6+7</div>
                 </a>
             
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href= "/2020/01/22/kakao-api-basic/" title= "카카오채널 구현해보기">
-                    <div class="prevTitle">카카오채널 구현해보기</div>
+                <a href= "/2020/01/11/DRF03/" title= "DRF 기본편 3">
+                    <div class="prevTitle">DRF 기본편 3</div>
                 </a>
             
         </li>
@@ -751,7 +651,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-10-Throttling"><span class="toc-number">1.</span> <span class="toc-text">EP 10 - Throttling</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#용어정리"><span class="toc-number">1.1.</span> <span class="toc-text">용어정리</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#기본-제공-Throttle"><span class="toc-number">1.1.1.</span> <span class="toc-text">기본 제공 Throttle</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#APIView에-커스텀-Throttle"><span class="toc-number">1.2.</span> <span class="toc-text">APIView에 커스텀 Throttle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#혹은-APIView-별로-지정도-할-수-있습니다"><span class="toc-number">1.2.1.</span> <span class="toc-text">혹은 APIView 별로 지정도 할 수 있습니다.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#API-요청-시에-제한을-넘어선다면"><span class="toc-number">1.2.2.</span> <span class="toc-text">API 요청 시에 제한을 넘어선다면?</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rates-포맷"><span class="toc-number">1.3.</span> <span class="toc-text">Rates 포맷</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rates-제한-메커니즘"><span class="toc-number">1.4.</span> <span class="toc-text">Rates 제한 메커니즘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#클라이언트-IP"><span class="toc-number">1.5.</span> <span class="toc-text">클라이언트 IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API-별로-서로-다른-Rate-적용하기"><span class="toc-number">1.6.</span> <span class="toc-text">API 별로 서로 다른 Rate 적용하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#유저별로-Rate-다르게-적용하기"><span class="toc-number">1.7.</span> <span class="toc-text">유저별로 Rate 다르게 적용하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cache-휘발성있는-데이터저장시켜줌"><span class="toc-number">1.8.</span> <span class="toc-text">Cache (휘발성있는 데이터저장시켜줌)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-11-rest-framework-대표적인-디폴트-설정-살펴보기"><span class="toc-number">2.</span> <span class="toc-text">EP 11 rest_framework 대표적인 디폴트 설정 살펴보기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#이번-시간에는-…"><span class="toc-number">2.1.</span> <span class="toc-text">이번 시간에는 …</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-최종-응답-생성"><span class="toc-number">2.2.</span> <span class="toc-text">HTTP 최종 응답 생성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-요청-내역-처리"><span class="toc-number">2.3.</span> <span class="toc-text">HTTP 요청 내역 처리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#각-HTTP-요청의-인증"><span class="toc-number">2.4.</span> <span class="toc-text">각 HTTP 요청의 인증</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#각API-호출권한체크"><span class="toc-number">2.5.</span> <span class="toc-text">각API 호출권한체크</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#특정-시간-내-최대-요청수-제한-Throttling"><span class="toc-number">2.6.</span> <span class="toc-text">특정 시간 내, 최대 요청수 제한 (Throttling)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#페이징-처리"><span class="toc-number">2.7.</span> <span class="toc-text">페이징 처리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#필터-문자열-매칭-검색-기능"><span class="toc-number">2.8.</span> <span class="toc-text">필터 (문자열 매칭 검색 기능)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#날짜-시간-포맷"><span class="toc-number">2.9.</span> <span class="toc-text">날짜&#x2F;시간 포맷</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#인코딩"><span class="toc-number">2.10.</span> <span class="toc-text">인코딩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Browseable-API"><span class="toc-number">2.11.</span> <span class="toc-text">Browseable API</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-04-ViewSet과-Router"><span class="toc-number">1.</span> <span class="toc-text">EP 04 - ViewSet과 Router</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ViewSet"><span class="toc-number">1.1.</span> <span class="toc-text">ViewSet</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#REST-API-규격에-맞춰-URL-매핑을-해봅시다"><span class="toc-number">1.1.1.</span> <span class="toc-text">REST API 규격에 맞춰, URL 매핑을 해봅시다.</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Router-활용"><span class="toc-number">1.2.</span> <span class="toc-text">Router 활용</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#예1"><span class="toc-number">1.2.1.</span> <span class="toc-text">예1)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#예2"><span class="toc-number">1.2.2.</span> <span class="toc-text">예2)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#router를-쓸-경우는-api-root뷰를-통한-지원-ViewSet-목록-조회"><span class="toc-number">1.2.3.</span> <span class="toc-text">router를 쓸 경우는 api-root뷰를 통한 지원 ViewSet 목록 조회</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ViewSet에-추가-API는-어떻게-추가할-수-있죠"><span class="toc-number">2.</span> <span class="toc-text">ViewSet에 추가 API는 어떻게 추가할 .. 수 있죠 ??</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#PostViewSet의-public-list-API"><span class="toc-number">2.1.</span> <span class="toc-text">PostViewSet의 public_list API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PostViewSet의-set-public-API"><span class="toc-number">2.2.</span> <span class="toc-text">PostViewSet의 set_public API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#관련-공식문서"><span class="toc-number">2.3.</span> <span class="toc-text">관련 공식문서</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -764,6 +664,14 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -2478,7 +2386,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/api14/" >DRF 기본편 14</a>
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
         </li>
     
     
@@ -2488,12 +2396,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/api13/" >DRF 기본편 13</a>
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/api12/" >DRF 기본편 12</a>
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
         </li>
     
     
@@ -2503,7 +2411,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/api10/" >DRF 기본편 10+11</a>
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
         </li>
     
     
@@ -2513,37 +2421,37 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/api09/" >DRF 기본편 9</a>
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/api08/" >DRF 기본편 8</a>
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/api05/" >DRF 기본편 5+6+7</a>
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/api04/" >DRF 기본편 4</a>
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/api03/" >DRF 기본편 3</a>
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/api02/" >DRF 기본편 2</a>
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/api01/" >DRF 기본편 1</a>
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
         </li>
     
     
@@ -2660,9 +2568,13 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
-    
         <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
     
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
     
@@ -2680,37 +2592,33 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
         <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
     
         <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
-        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
-    
-        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
-    
-        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
-    
-        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
     
         <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
     
         <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
     
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
         <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
     
         <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
     
-        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
-    
         <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
-    
-        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
         <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
     
@@ -2726,15 +2634,17 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
-        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
-    
         <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
     
         <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
     
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
         <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
@@ -2742,39 +2652,37 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
     
-        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
-    
         <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
     
         <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
-    
-        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
-    
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
-    
-        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
     
         <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
     
-        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
-    
         <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
         <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
     
-        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
-    
         <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
     
         <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
     
@@ -2821,29 +2729,29 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
         <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
     
         <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
-        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
-    
         <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
     
         <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
     
-        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
-    
-        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
     
         <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
     
-        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
-    
-        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
     
         <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
     
@@ -2851,23 +2759,23 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
     
-        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
-    
         <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
-        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
-    
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
     
         <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
-    
         <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
@@ -2877,9 +2785,9 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
     
-        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
-    
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     

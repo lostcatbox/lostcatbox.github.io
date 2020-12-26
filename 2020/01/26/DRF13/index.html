@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>DRF 기본편 14 · lostcatbox</title>
+    <title>DRF 기본편 13 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">DRF 기본편 14</a>
+                <a href="#" class="post-name">DRF 기본편 13</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            DRF 기본편 14
+            DRF 기본편 13
             <!-- 404 -->
             
         </h1>
@@ -274,12 +274,12 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">1.6k</span>Reading time: <span class="post-count reading-time">10 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.7k</span>Reading time: <span class="post-count reading-time">10 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2020/01/28</span>
+                    <span class="post-intro-time">2020/01/26</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -403,150 +403,71 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="EP-14-Serverless-배포-AWS-Lambda"><a href="#EP-14-Serverless-배포-AWS-Lambda" class="headerlink" title="EP 14. Serverless 배포 - AWS Lambda"></a>EP 14. Serverless <strong>배포</strong> - AWS Lambda</h1><h2 id="AWS-Lambda에-Django-애플리케이션을-간략히-배포해보겠습니다"><a href="#AWS-Lambda에-Django-애플리케이션을-간략히-배포해보겠습니다" class="headerlink" title="AWS Lambda에 Django 애플리케이션을 간략히 배포해보겠습니다."></a>AWS Lambda에 Django <strong>애플리케이션을 간략히 배포해보겠습니다</strong>.</h2><ul>
-<li>NO STATIC FILE 서빙</li>
-<li>SQLITE 3 데이터베이스 사용 : 실서비스에서는 RDS 사용 권장</li>
-</ul>
-<h3 id="배포준비"><a href="#배포준비" class="headerlink" title="배포준비"></a><strong>배포준비</strong></h3><p><strong>장고</strong>-<strong>서비스배포하기코스를참고</strong></p>
+        <h1 id="EP-13-Token-인증"><a href="#EP-13-Token-인증" class="headerlink" title="EP 13. Token 인증"></a>EP 13. Token <strong>인증</strong></h1><h2 id="DRF에서-지원하는-인증"><a href="#DRF에서-지원하는-인증" class="headerlink" title="DRF에서 지원하는 인증"></a>DRF<strong>에서 지원하는 인증</strong></h2><ul>
+<li><p>rest_framework.authentication.SessionAuthentication</p>
 <ul>
-<li>구동환경별requirements.txt분기</li>
-<li>구동환경별settings분기</li>
+<li>외부서비스/앱에서세션인증을못쓰죠.</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#현재는 프로젝트 새로 생성</span><br><span class="line">mkdir deploy-aws-lambda </span><br><span class="line">django-admin startproject askdjango .</span><br><span class="line"></span><br><span class="line">#전 프로젝트에 api앱을 복붙해서 가져옴</span><br><span class="line">cp -r ..&#x2F;api_prec&#x2F;api .</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="ZAPPA"><a href="#ZAPPA" class="headerlink" title="ZAPPA"></a>ZAPPA</h2><p><strong>Serverless Python Web Services - Powered by AWS Lambda and API Gateway</strong></p>
+</li>
+<li><p>rest_framework.authentication.BasicAuthentication</p>
 <ul>
-<li><a href="https://www.zappa.io" target="_blank" rel="noopener">https://www.zappa.io</a></li>
-<li>장점<ul>
-<li>WSGI Application을 지원하기에, 파이썬 웹애플리케이션을 그대로 배포 가능</li>
+<li>외부서비스/앱에서 매번요청시 username/password를넘기는것은보안상위험하고,못할 짓.</li>
 </ul>
 </li>
-<li>단점<ul>
-<li>Pure 파이썬 라이브러리만 지원</li>
-<li>혹은 Lambda 구동환경(Amazon Linux)에 맞춘 팩키지를 써도 됩니다. #lib</li>
-</ul>
-</li>
-<li>AWS Lambda에서는 Python 2.7와 3.6 만을 지원합니다.<ul>
-<li>3.6을 쓰기 위해서는 로컬머신에 3.6이 있어야 합니다.</li>
-</ul>
-</li>
-<li>필수조건<ul>
-<li>파이썬3.6</li>
-<li>zappa는 배포 시에 호스트 머신의 virtualenv내 팩키지를 가져와서 압축하기 때문에, virtualenv를 통한 실행이 필수입니다.</li>
+<li><p><strong>rest_framework.authentication.TokenAuthentication</strong> (강추)</p>
+<ul>
+<li>초기에username/password으로 Token을발급받고,(유저마다 하나의 토큰이며, 언제든 폐기가능)</li>
+<li>이Token을 매API요청에 담아서 보내어 인증을처리</li>
 </ul>
 </li>
 </ul>
-<h3 id="ZAPPA에서-구성"><a href="#ZAPPA에서-구성" class="headerlink" title="ZAPPA에서 구성"></a>ZAPPA<strong>에서 구성</strong></h3><p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gbc6azzp8bj316g0ogtjt.jpg" alt="스크린샷 2020-01-28 오후 1.41.01"></p>
-<ul>
-<li><strong>사용하는 명령 요약</strong></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install zappa</span><br><span class="line">zappa init</span><br><span class="line">zappa deploy</span><br></pre></td></tr></table></figure>
+<h2 id="시작하기전에-기본코드"><a href="#시작하기전에-기본코드" class="headerlink" title="시작하기전에-기본코드"></a><strong>시작하기전에</strong>-<strong>기본코드</strong></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 앱/models.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Post</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    <span class="comment">#이미 다른 앱에서도 usermodel참고하고있으므로 reverse가 지정불가, related_name지정필요한데 '+'값을 주면 사용안됨</span></span><br><span class="line">    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE, related_name=<span class="string">'+'</span>)</span><br><span class="line">    message = models.TextField(blank=<span class="literal">True</span>)</span><br><span class="line">    photo = models.ImageField(blank=<span class="literal">True</span>)</span><br><span class="line">    created_at = models.DateTimeField(auto_now_add=<span class="literal">True</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 앱/serializers.py</span></span><br><span class="line"><span class="keyword">from</span> rest_framework.fields <span class="keyword">import</span> ReadOnlyField</span><br><span class="line"><span class="keyword">from</span> rest_framework.serializers <span class="keyword">import</span> ModelSerializer </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostSerializer</span><span class="params">(ModelSerializer)</span>:</span></span><br><span class="line">    author_username = ReadOnlyField(source=<span class="string">'author.username'</span>)</span><br><span class="line">    </span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">            model = Post</span><br><span class="line">            fields = (<span class="string">'id'</span>, <span class="string">'author_username'</span>, <span class="string">'message'</span>, <span class="string">'photo'</span>)</span><br></pre></td></tr></table></figure>
 
-<h2 id="Credential-환경변수-설정"><a href="#Credential-환경변수-설정" class="headerlink" title="Credential 환경변수 설정"></a>Credential <strong>환경변수 설정</strong></h2><p>IAM유저생성필요한최소한의권한에대한토론</p>
-<ol>
-<li><p>인증정보를 환경변수 AWS_ACCESS_KEY_ID와 환경변수 AWS_SECRET_ACCESS_KEY에 저장해서 활용</p>
-</li>
-<li><p>~/.aws/config에키설정저장하여,환경변수AWS_PROFILE을 통한 접근</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[profile zappa]</span><br><span class="line">aws_access_key_id &#x3D; your_access_key_id_specific_to_zappa aws_secret_access_key &#x3D; your_secret_access_key_specific_to_zappa region &#x3D; ap-northeast-2</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 앱/views.py</span></span><br><span class="line"><span class="keyword">from</span> rest_framework.authentication <span class="keyword">import</span> TokenAuthentication </span><br><span class="line"><span class="keyword">from</span> rest_framework.permissions <span class="keyword">import</span> IsAuthenticated</span><br><span class="line"><span class="keyword">from</span> rest_framework.viewsets <span class="keyword">import</span> ModelViewSet</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostModelViewSet</span><span class="params">(ModelViewSet)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer </span><br><span class="line">    authentication_classes = [TokenAuthentication]  <span class="comment">#세션인증, basic에 유저인증 은 안됨</span></span><br><span class="line">    permission_classes = [IsAuthenticated] <span class="comment">#인증이 되어야만 처리</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">perform_create</span><span class="params">(self, serializer)</span>:</span></span><br><span class="line">    		serializer.save(author=self.request.user)</span><br><span class="line">    		</span><br><span class="line"><span class="comment"># 앱/urls.py</span></span><br><span class="line">router = DefaultRouter()</span><br><span class="line">router.register(<span class="string">'post'</span>, PostModelViewSet)</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">		url(<span class="string">r''</span>, include(router.urls)),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
-<h3 id="선택1-로컬-파이썬이-3-6일-경우-로컬머신에-셋업"><a href="#선택1-로컬-파이썬이-3-6일-경우-로컬머신에-셋업" class="headerlink" title="선택1) 로컬 파이썬이 3.6일 경우, 로컬머신에 셋업"></a><strong>선택</strong>1) <strong>로컬 파이썬이</strong> 3.6<strong>일 경우</strong>, <strong>로컬머신에 셋업</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir myproj</span><br><span class="line">cd myproj</span><br><span class="line"># 각자에 맞게 가상환경을 생성해주시고,</span><br><span class="line">pip install -r requirements.txt </span><br><span class="line">zappa init</span><br></pre></td></tr></table></figure>
-
-<h3 id="선택-2-Python-3-6이-없을-경우-직접-설치"><a href="#선택-2-Python-3-6이-없을-경우-직접-설치" class="headerlink" title="선택 2) Python 3.6이 없을 경우, 직접 설치"></a><strong>선택</strong> 2) Python 3.6<strong>이 없을 경우</strong>, 직접 설치</h3><ul>
-<li>Anaconda를 쓰는 경우, conda를 통한 가상환경 생성 시에 파이썬 버전을 3.6으로 지정<ul>
-<li>anaconda는 여러 버전을 설치할 필요없습니다. 하나의 버전만 설치되어있으면 됩니다.</li>
-</ul>
-</li>
-<li>맥/리눅스일경우,pyenv를통한3.6설치</li>
-</ul>
-<h3 id="선택-3-추천-Docker-환경에-셋업-참고-참고2"><a href="#선택-3-추천-Docker-환경에-셋업-참고-참고2" class="headerlink" title="선택 3) (추천) Docker 환경에 셋업 (참고) (참고2)"></a><strong>선택</strong> 3) (<strong>추천</strong>) Docker 환경에 셋업 (<a href="https://romandc.com/zappa-django-guide/aws_credentials/%23setup-local-account-credentials" target="_blank" rel="noopener">참고</a>) (<a href="https://romandc.com/zappa-django-guide/setup/%23inital-setup" target="_blank" rel="noopener">참고2</a>)</h3><p>Docker가 설치되어 있지 않으신분은 <a href="https://www.docker.com/products/container-runtime" target="_blank" rel="noopener">Docker Community Edition</a>을 설치해주세요.</p>
-<p>로컬에 AWS Lambda 구동환경에 동일한 환경을 만들 Dockerfile</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">FROM lambci&#x2F;lambda:build-python3.6 WORKDIR &#x2F;var&#x2F;task</span><br><span class="line"># Fancy prompt to remind you are in zappashell</span><br><span class="line">RUN echo &#39;export PS1&#x3D;&quot;\[\e[36m\]zappashell&gt;\[\e[m\] &quot;&#39; &gt;&gt; &#x2F;root&#x2F;.bashrc</span><br><span class="line"># Additional RUN commands here # RUN yum clean all &amp;&amp; \</span><br><span class="line"># yum -y install &lt;stuff&gt;</span><br><span class="line">CMD [&quot;bash&quot;]</span><br></pre></td></tr></table></figure>
-
-<h3 id="Docker-실행"><a href="#Docker-실행" class="headerlink" title="Docker 실행"></a>Docker 실행</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">호스트쉘&gt; docker run -ti \</span><br><span class="line">-e AWS_PROFILE&#x3D;zappa \</span><br><span class="line">-v $(pwd):&#x2F;var&#x2F;task \</span><br><span class="line">-v ~&#x2F;.aws&#x2F;:&#x2F;root&#x2F;.aws \ </span><br><span class="line">--rm myzappa</span><br><span class="line"></span><br><span class="line">zappashell&gt; virtualenv ve</span><br><span class="line">zappashell&gt; source ve&#x2F;bin&#x2F;activate zappashell&gt; pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
-
-<p>Tip: AWS_PROFILE 대신에 AWS_SECRET_ACCESS_KEY, AWS_ACCESS_KEY_ID, AWS_DEFAULT_REGION 환경변수를 대신 설정하셔도 됩니다.</p>
-<h3 id="zappa-init"><a href="#zappa-init" class="headerlink" title="zappa init"></a>zappa init</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zappa init 실행</span><br><span class="line">(ve) zappashell&gt; zappa init</span><br><span class="line">웰컴 메세지</span><br><span class="line">███████╗ █████╗ ██████╗ ██████╗ █████╗ ╚══███╔╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗</span><br><span class="line">███╔╝ ███████║██████╔╝██████╔╝███████║ ███╔╝ ██╔══██║██╔═══╝ ██╔═══╝ ██╔══██║</span><br><span class="line">███████╗██║ ██║██║ ██║ ██║ ██║ ╚══════╝╚═╝ ╚═╝╚═╝ ╚═╝ ╚═╝ ╚═╝</span><br><span class="line">Welcome to Zappa!</span><br><span class="line">Zappa is a system for running server-less Python web applications on AWS Lambda and AWS API Gateway. This &#96;init&#96; command will help you create and configure your new Zappa deployment.</span><br><span class="line">Let&#39;s get started!</span><br></pre></td></tr></table></figure>
+<h2 id="Token인증설정하기"><a href="#Token인증설정하기" class="headerlink" title="Token인증설정하기"></a>Token<strong>인증설정하기</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># settings</span><br><span class="line">INSTALLED_APPS &#x3D; ( &#39;rest_framework.authtoken&#39;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>배포 구분 : dev (개발), staging (비프로덕션 테스트), production (실서 비스)</li>
+<li>migrate가 필요합니다.</li>
+<li>rest_framework.authtoken.Token모델에 대한 테이블을 생성해야 합니다</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Your Zappa configuration can support multiple production stages, like &#39;dev&#39;, &#39;staging&#39;, and &#39;production&#39;. What do you want to call this environment (default &#39;dev&#39;):</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>AWS Credential - Profile 선택</li>
+<h2 id="Token모델"><a href="#Token모델" class="headerlink" title="Token모델"></a>Token<strong>모델</strong></h2><ul>
+<li>각 User에 대해 1:1 Relation =&gt; OneToOneField</li>
+<li>각User별 Token인스턴스가자동생성되지않습니다.(모델생성했다고 자동생성절대안됨)</li>
+<li>Token은 유저 별로 Unique합니다. Token만으로 인증을 수행합니다.</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AWS Lambda and API Gateway are only available in certain regions. Let&#39;s check to make sure you have a profile set up in one that will work.</span><br><span class="line">Okay, using profile zappa!</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rest_framework/authotken/models.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Token</span><span class="params">(models.Model)</span>:</span> <span class="comment"># 모델 코드에서 주요부분만 발췌</span></span><br><span class="line">    key = models.CharField(max_length=<span class="number">40</span>, primary_key=<span class="literal">True</span>) </span><br><span class="line">    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name=<span class="string">'auth_token'</span>)</span><br></pre></td></tr></table></figure>
 
-<p><strong>zappa</strong> 이름의 <em>profile*이 있어서</em>,* 디폴트 지정되었습니다<em>.</em></p>
-<ul>
-<li>배포코드를 저장할 S3 버킷명</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Your Zappa deployments will need to be uploaded to a private S3 bucket. If you don&#39;t have a bucket yet, we&#39;ll create one for you too.</span><br><span class="line">What do you want call your bucket? (default &#39;zappa-1i7vt2z5p&#39;):</span><br></pre></td></tr></table></figure>
+<h2 id="Token생성"><a href="#Token생성" class="headerlink" title="Token생성"></a>Token생성</h2><h3 id="방법1-ObtatinAuthToken뷰를-통한-획득-or-생성"><a href="#방법1-ObtatinAuthToken뷰를-통한-획득-or-생성" class="headerlink" title="방법1) ObtatinAuthToken뷰를 통한 획득 or 생성"></a><strong>방법</strong>1) ObtatinAuthToken<strong>뷰를 통한 획득</strong> or <strong>생성</strong></h3><p>token 획득 API 뷰에서 Token 획득/생성을 아래 코드와 같이 처리하므로, <strong>Token</strong> <strong>재생성</strong>이 아니라면 특별히 처리해줄 필요는 없습니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rest_framework/authtoken/views.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ObtainAuthToken</span><span class="params">(APIView)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">    <span class="comment"># 중략</span></span><br><span class="line">    token, created = Token.objects.get_or_create(user=user)</span><br><span class="line">    <span class="keyword">return</span> Response(&#123;<span class="string">'token'</span>: token.key&#125;)</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>구동할 장고 애플리케이션 settings 경로</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">It looks like this is a Django application!</span><br><span class="line">What is the module path to your projects&#39;s Django settings?</span><br><span class="line">We discovered: askdjango.settings</span><br><span class="line">Where are your project&#39;s settings? (default &#39;askdjango.settings&#39;):</span><br></pre></td></tr></table></figure>
+<h3 id="방법2-Signal을-통한-자동-생성-필수는-아님-이벤트헨들러느낌"><a href="#방법2-Signal을-통한-자동-생성-필수는-아님-이벤트헨들러느낌" class="headerlink" title="방법2) Signal을 통한 자동 생성 (필수는 아님)(이벤트헨들러느낌)"></a><strong>방법</strong>2) Signal<strong>을 통한 자동 생성</strong> (<strong>필수는 아님</strong>)(이벤트헨들러느낌)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.conf <span class="keyword">import</span> settings</span><br><span class="line"><span class="keyword">from</span> django.db.models.signals <span class="keyword">import</span> post_save </span><br><span class="line"><span class="keyword">from</span> django.dispatch <span class="keyword">import</span> receiver</span><br><span class="line"><span class="keyword">from</span> rest_framework.authtoken.models <span class="keyword">import</span> Token</span><br><span class="line"></span><br><span class="line"><span class="meta">@receiver(post_save, sender=settings.AUTH_USER_MODEL) # post_save 처럼 save가 일어나는건데 그게 AUTH_USER_MODEL일어날 경우 끝나고 아래 함수 실행</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_auth_token</span><span class="params">(sender, instance=None, created=False, **kwargs)</span>:</span></span><br><span class="line">		<span class="keyword">if</span> created:  <span class="comment">#save할때가 created or updated중에 created일때 작동</span></span><br><span class="line">				Token.objects.create(user=instance)</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>글로벌 배포 여부</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">You can optionally deploy to all available regions in order to provide fast global service. If you are using Zappa for the first time, you probably don&#39;t want to do this!</span><br><span class="line">Would you like to deploy this application globally? (default &#39;n&#39;) [y&#x2F;n&#x2F;(p)rimary]: n</span><br></pre></td></tr></table></figure>
+<h3 id="방법3-Management-명령을-통한-생성"><a href="#방법3-Management-명령을-통한-생성" class="headerlink" title="방법3) Management 명령을 통한 생성"></a><strong>방법</strong>3) Management <strong>명령을 통한 생성</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 본 명령은 생성된 Token을 변경하지 않습니다. 필수는 아님. </span><br><span class="line">python3 manage.py drf_create_token &lt;username&gt;</span><br><span class="line"># 강제로 Token 재생성하기</span><br><span class="line">python3 manage.py drf_create_token -r &lt;username&gt;</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>생성된 zappa_settings.json 내역</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Okay, here&#39;s your zappa_settings.json:</span><br><span class="line">&#123;</span><br><span class="line">    &quot;dev&quot;: &#123;</span><br><span class="line">        &quot;aws_region&quot;: &quot;ap-northeast-2&quot;, &quot;django_settings&quot;: &quot;askdjango.settings&quot;, &quot;profile_name&quot;: &quot;zappa&quot;,</span><br><span class="line">        &quot;project_name&quot;: &quot;task&quot;,</span><br><span class="line">        &quot;runtime&quot;: &quot;python3.6&quot;,</span><br><span class="line">        &quot;s3_bucket&quot;: &quot;zappa-1i7vt2z5p&quot; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">Does this look okay? (default &#39;y&#39;) [y&#x2F;n]: y</span><br></pre></td></tr></table></figure>
+<h2 id="Token-획득을-API-ENDPOINT로-노출하기"><a href="#Token-획득을-API-ENDPOINT로-노출하기" class="headerlink" title="Token 획득을 API ENDPOINT로 노출하기"></a>Token <strong>획득을</strong> API ENDPOINT로 노출하기</h2><p>post만 처리가능함</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.authtoken.views <span class="keyword">import</span> obtain_auth_token</span><br><span class="line"></span><br><span class="line">urlpatterns += [</span><br><span class="line">		url(<span class="string">r'^api-token-auth/'</span>, obtain_auth_token),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
-<h3 id="나머지-안내"><a href="#나머지-안내" class="headerlink" title="나머지 안내"></a>나머지 안내</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Done! Now you can deploy your Zappa application by executing:</span><br><span class="line">    $ zappa deploy dev</span><br><span class="line">    </span><br><span class="line">After that, you can update your application code with:</span><br><span class="line">    $ zappa update dev</span><br><span class="line">    </span><br><span class="line">To learn more, check out our project page on GitHub here: https:&#x2F;&#x2F;github.com&#x2F;Miserlou&#x2F;Zappa and stop by our Slack channel here: https:&#x2F;&#x2F;slack.zappa.io</span><br><span class="line"></span><br><span class="line">Enjoy!,</span><br><span class="line">~ Team Zappa!</span><br></pre></td></tr></table></figure>
+<h3 id="HTTPie를-통한-Token-획득"><a href="#HTTPie를-통한-Token-획득" class="headerlink" title="HTTPie를 통한 Token 획득"></a>HTTPie<strong>를 통한</strong> Token 획득</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">쉘&gt; http POST http:&#x2F;&#x2F;주소&#x2F;api-token-auth&#x2F; username&#x3D;&quot;유저명&quot; password&#x3D;&quot;암호&quot;</span><br></pre></td></tr></table></figure>
 
-<h2 id="첫배포수행"><a href="#첫배포수행" class="headerlink" title="첫배포수행"></a><strong>첫배포수행</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(ve) zappashell&gt; zappa deploy dev</span><br><span class="line">(botocore 1.8.6 (&#x2F;var&#x2F;task&#x2F;ve&#x2F;lib&#x2F;python3.6&#x2F;site-packages), Requirement.parse(&#39;botocore&lt;1.8.0,&gt;&#x3D;1.7.0&#39;), &#123;&#39;boto3&#39;&#125;) Calling deploy for stage dev..</span><br><span class="line">Downloading and installing dependencies..</span><br><span class="line">- pillow&#x3D;&#x3D;4.3.0: Downloading</span><br><span class="line">100%|███████████████████████████████████████| 5.82M&#x2F;5.82M [00:01&lt;00:00, 5.35MB&#x2F;s]</span><br><span class="line">- sqlite&#x3D;&#x3D;python36: Using precompiled lambda package</span><br><span class="line">Packaging project as zip.</span><br><span class="line">Uploading task-dev-1512376218.zip (21.9MiB).. 100%|███████████████████████████████████████| 23.0M&#x2F;23.0M [00:03&lt;00:00, 5.99MB&#x2F;s]</span><br><span class="line">Scheduling..</span><br><span class="line">Scheduled task-dev-zappa-keep-warm-handler.keep_warm_callback with expression rate(4 minutes)! Uploading task-dev-template-1512376324.json (1.6KiB).. 100%|███████████████████████████████████████| 1.61K&#x2F;1.61K [00:00&lt;00:00, 50.7KB&#x2F;s]</span><br><span class="line">Waiting for stack task-dev to create (this can take a bit).. 100%|███████████████████████████████████████| 4&#x2F;4 [00:12&lt;00:00, 4.31s&#x2F;res]</span><br><span class="line">Deploying API Gateway..</span><br><span class="line">Deployment complete!: https:&#x2F;&#x2F;rw8qusuhq7.execute-api.ap-northeast-2.amazonaws.com&#x2F;dev</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP&#x2F;1.0 200 OK</span><br><span class="line">Allow: POST, OPTIONS</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Date: Fri, 01 Dec 2017 06:49:35 GMT Server: WSGIServer&#x2F;0.2 CPython&#x2F;3.6.1</span><br><span class="line">&#123;</span><br><span class="line">		&quot;token&quot;: &quot;9cdd705c0a0e5adb8671d22bd6c7a99bbacab227&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="접속-URL"><a href="#접속-URL" class="headerlink" title="접속 URL"></a>접속 URL</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;rw8qusuhq7.execute-api.ap-northeast-2.amazonaws.com&#x2F;dev&#x2F;</span><br><span class="line"> ^^^^^^^^^^^^^^^^^^^^^^</span><br><span class="line">Auto Generated API Gateway</span><br><span class="line">        ^^^</span><br><span class="line">Your Zappa Environment</span><br></pre></td></tr></table></figure>
-
-<h3 id="추후-업데이트-시"><a href="#추후-업데이트-시" class="headerlink" title="추후 업데이트 시"></a><strong>추후 업데이트 시</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(ve) zappashell&gt; zappa update dev</span><br><span class="line">(botocore 1.8.6 (&#x2F;var&#x2F;task&#x2F;ve&#x2F;lib&#x2F;python3.6&#x2F;site-packages), Requirement.parse(&#39;botocore&lt;1.8.0,&gt;&#x3D;1.7.0&#39;), &#123;&#39;boto3&#39;&#125;) Calling update for stage dev..</span><br><span class="line">Downloading and installing dependencies..</span><br><span class="line">- pillow&#x3D;&#x3D;4.3.0: Using locally cached manylinux wheel</span><br><span class="line">- sqlite&#x3D;&#x3D;python36: Using precompiled lambda package</span><br><span class="line">Packaging project as zip.</span><br><span class="line">Uploading task-dev-1512376455.zip (21.9MiB).. 100%|███████████████████████████████████████| 23.0M&#x2F;23.0M [00:03&lt;00:00, 6.20MB&#x2F;s]</span><br><span class="line">Updating Lambda function code..</span><br><span class="line">Updating Lambda function configuration..</span><br><span class="line">Uploading task-dev-template-1512376560.json (1.6KiB).. 100%|███████████████████████████████████████| 1.61K&#x2F;1.61K [00:00&lt;00:00, 44.0KB&#x2F;s]</span><br><span class="line">Deploying API Gateway..</span><br><span class="line">Scheduling..</span><br><span class="line">Unscheduled task-dev-zappa-keep-warm-handler.keep_warm_callback.</span><br><span class="line">Scheduled task-dev-zappa-keep-warm-handler.keep_warm_callback with expression rate(4 minutes)!</span><br><span class="line">Your updated Zappa deployment is live!: https:&#x2F;&#x2F;rw8qusuhq7.execute-api.ap-northeast-2.amazonaws.com&#x2F;dev</span><br></pre></td></tr></table></figure>
+<h3 id="HTTPie-예제-맥-리눅스"><a href="#HTTPie-예제-맥-리눅스" class="headerlink" title="HTTPie 예제 (맥/리눅스)"></a>HTTPie <strong>예제</strong> (<strong>맥</strong>/<strong>리눅스</strong>)</h3><p>-헤더에 토큰값 넣어서 요청 보내야함(띄어쓰기 잘하기)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http http:&#x2F;&#x2F;localhost:8000&#x2F;api&#x2F;post&#x2F; &quot;Authorization: Token &lt;TOKEN값입력&gt;&quot;</span><br></pre></td></tr></table></figure>
 
 
 
-<h3 id="로그-확인"><a href="#로그-확인" class="headerlink" title="로그 확인"></a><strong>로그 확인</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">zappashell&gt; zappa tail</span><br><span class="line">zappashell&gt; zappa tail --http         # HTTP 로그만 보기</span><br><span class="line">zappashell&gt; zappa tail --non-http    # 비 HTTP 로그만 보기</span><br><span class="line">zappashell&gt; zappa tail --since 4h   # 4시간 이내 로그부터</span><br><span class="line">zappashell&gt; zappa tail --since 1m   # 1분이내로그부터</span><br><span class="line">zappashell&gt; zappa tail --since 1mm    # 1달이내로그부터</span><br><span class="line">zappashell&gt; zappa tail --http --filter &quot;POST&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#환경변수를 설정해서 편하게 이용하자</span><br><span class="line">export HOST&#x3D;&quot;http:&#x2F;&#x2F;localhost:8000&quot;</span><br><span class="line">export TOKEN&#x3D;&quot;d7ec115d8370de00f06c50ec5b61bd519b1038ae&quot; </span><br><span class="line"></span><br><span class="line"># Post List</span><br><span class="line">http $HOST&#x2F;api&#x2F;post&#x2F; &quot;Authorization: Token $TOKEN&quot;</span><br><span class="line"></span><br><span class="line"># Post Create</span><br><span class="line">http POST $HOST&#x2F;api&#x2F;post&#x2F; &quot;Authorization: Token $TOKEN&quot; message&#x3D;&quot;hello&quot; </span><br><span class="line"></span><br><span class="line"># Post Create with Photo</span><br><span class="line">http --form POST $HOST&#x2F;api&#x2F;post&#x2F; &quot;Authorization: Token $TOKEN&quot; message&#x3D;&quot;hello&quot; photo@&quot;f1.jpg&quot;   # httpie 문법임, 현재 프로젝트전체폴에경로에존재하는 사진파일</span><br><span class="line"></span><br><span class="line"># Post#16 Detail</span><br><span class="line">http GET $HOST&#x2F;api&#x2F;post&#x2F;16&#x2F; &quot;Authorization: Token $TOKEN&quot;</span><br><span class="line"></span><br><span class="line"># Post#16 Update</span><br><span class="line">http PATCH $HOST&#x2F;api&#x2F;post&#x2F;16&#x2F; &quot;Authorization: Token $TOKEN&quot; message&#x3D;&quot;patched&quot; http PUT $HOST&#x2F;api&#x2F;post&#x2F;16&#x2F; &quot;Authorization: Token $TOKEN&quot; message&#x3D;&quot;updated&quot;</span><br><span class="line"></span><br><span class="line"># Post#16 Delete</span><br><span class="line">http DELETE $HOST&#x2F;api&#x2F;post&#x2F;16&#x2F; &quot;Authorization: Token $TOKEN&quot;</span><br></pre></td></tr></table></figure>
 
-<h2 id="장고-manage-명령"><a href="#장고-manage-명령" class="headerlink" title="장고 manage 명령"></a><strong>장고</strong> manage <strong>명령</strong></h2><p><strong><strong>표준입력이 불가합니다</strong>. <strong>단방향 명령만 가능합니다</strong>.</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># showmigrations 명령 수행</span><br><span class="line">zappashell&gt; zappa manage dev showmigrations</span><br><span class="line"></span><br><span class="line"># 옵션이 필요한 Management 명령일 경우</span><br><span class="line">zappashell&gt; zappa manage dev &quot;shell --version&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="파이썬-코드를-통한-Token-획득"><a href="#파이썬-코드를-통한-Token-획득" class="headerlink" title="파이썬 코드를 통한 Token 획득"></a><strong>파이썬 코드를 통한</strong> Token <strong>획득</strong></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">HOST = <span class="string">'http://localhost:8000'</span></span><br><span class="line"></span><br><span class="line">res = requests.post(HOST + <span class="string">'/api-token-auth/'</span>, &#123;</span><br><span class="line">    <span class="string">'username'</span>: <span class="string">'유저명'</span>, <span class="comment"># <span class="doctag">FIXME:</span> 기입해주세요.</span></span><br><span class="line">    <span class="string">'password'</span>: <span class="string">'암호'</span>,  <span class="comment"># <span class="doctag">FIXME:</span> 기입해주세요.</span></span><br><span class="line">&#125;) </span><br><span class="line">res.raise_for_status()</span><br><span class="line"></span><br><span class="line">token = res.json()[<span class="string">'token'</span>] </span><br><span class="line"></span><br><span class="line">print(token)</span><br><span class="line"></span><br><span class="line">이제 모든 요청에는 다음 인증헤더를 붙여주셔야 합니다. </span><br><span class="line"></span><br><span class="line">headers = &#123;</span><br><span class="line">		<span class="string">'Authorization'</span>: <span class="string">'Token '</span> + token, <span class="comment"># 필히 띄워쓰기 꼭 ㄴ필요</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="참고"><a href="#참고" class="headerlink" title="참고"></a><strong>참고</strong></h2><ul>
-<li><p>Github 공식 저장소(<a href="https://github.com/Miserlou/Zappa" target="_blank" rel="noopener">https://github.com/Miserlou/Zappa</a>)</p>
-</li>
-<li><p>edgarroman.github.io/zappa-django-guide/setup/   (<a href="https://romandc.com/zappa-django-guide/setup/" target="_blank" rel="noopener">https://romandc.com/zappa-django-guide/setup/</a>)</p>
-<ul>
-<li>zappa-django-utils    (<a href="https://github.com/Miserlou/zappa-django-utils" target="_blank" rel="noopener">https://github.com/Miserlou/zappa-django-utils</a>)</li>
-</ul>
-</li>
-<li><p>songyunseop.github.io/post/2017/09/serverless-microservice-with-zappa-2-/   (<a href="https://songyunseop.github.io/post/2017/09/serverless-microservice-with-zappa-2-/" target="_blank" rel="noopener">https://songyunseop.github.io/post/2017/09/serverless-microservice-with-zappa-2-/</a>)</p>
-</li>
-<li><p>Advanced Topic</p>
-<ul>
-<li>커스텀 도메인 설정   (<a href="https://romandc.com/zappa-django-guide/walk_domain/" target="_blank" rel="noopener">https://romandc.com/zappa-django-guide/walk_domain/</a>)</li>
-</ul>
-</li>
-</ul>
-<h2 id="zappa-django-utils"><a href="#zappa-django-utils" class="headerlink" title="zappa-django-utils"></a>zappa-django-utils</h2><h3 id="데이터베이스"><a href="#데이터베이스" class="headerlink" title="데이터베이스"></a><strong>데이터베이스</strong></h3><p>고성능을 위해서는 <a href="https://aws.amazon.com/ko/rds/" target="_blank" rel="noopener">AWS RDS</a>를 쓰는 것이 정답이나, 방문자가 거의 없는 사이트는 SQLite3 데이터베이스를 활용해볼 수도 있겠습 니다. zappa-django-utils를 활용하여 S3에 동기화된 SQLite3 데이터베이스를 손쉽게 연동하실 수 있습니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># settings</span><br><span class="line">INSTALLED_APPS +&#x3D; [&#39;zappa_django_utils&#39;]</span><br><span class="line">DATABASES &#x3D; &#123; &#39;default&#39;: &#123;</span><br><span class="line">&#39;ENGINE&#39;: &#39;zappa_django_utils.db.backends.s3sqlite&#39;, &#39;NAME&#39;: &#39;db.sqlite3&#39;, # 원하는 DB파일명</span><br><span class="line">&#39;BUCKET&#39;: &#39;zappa-dist&#39;, # 원하는 버킷명 &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 명령</span><br><span class="line">zappashell&gt; zappa manage dev migrate</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Post List</span></span><br><span class="line">res = requests.get(HOST + <span class="string">'/api/post/'</span>, headers=headers) res.raise_for_status()</span><br><span class="line">print(res.json())</span><br><span class="line"></span><br><span class="line"><span class="comment"># Post Create</span></span><br><span class="line">data = &#123;<span class="string">'message'</span>: <span class="string">'hello requests'</span>&#125;</span><br><span class="line">res = requests.post(HOST + <span class="string">'/api/post/'</span>, data=data, headers=headers) print(res)</span><br><span class="line">print(res.json())</span><br><span class="line"></span><br><span class="line"><span class="comment"># Post Create with Photo</span></span><br><span class="line">files = &#123;<span class="string">'photo'</span>: open(<span class="string">'f1.jpg'</span>, <span class="string">'rb'</span>)&#125;</span><br><span class="line">data = &#123;<span class="string">'message'</span>: <span class="string">'hello requests'</span>&#125;</span><br><span class="line">res = requests.post(HOST + <span class="string">'/api/post/'</span>, files=files, data=data, headers=headers) </span><br><span class="line">print(res)</span><br><span class="line">print(res.json())</span><br></pre></td></tr></table></figure>
 
-<h3 id="superuser-생성"><a href="#superuser-생성" class="headerlink" title="superuser 생성"></a>superuser <strong>생성</strong></h3><p>표준입력이안되기에zappa manage dev createsuperuser명령 은 사용불가합니다. zappa-django-utils에서 지원하는 create_admin_user 명령을 사용합니다. 랜덤 암호를 생성하여 superuser계정을 생성해줍니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(ve) zappashell&gt; zappa manage dev create_admin_user</span><br><span class="line">(botocore 1.8.6 (&#x2F;var&#x2F;task&#x2F;ve&#x2F;lib&#x2F;python3.6&#x2F;site-packages), Requirement.parse(&#39;botocore&lt;1.8.0,&gt;&#x3D;1.7.0&#39;), &#123;&#39;boto3&#39;&#125;) [DEBUG] 2017-12-04T10:19:05.162Z 8e5e2ad0-d8dc-11e7-ab32-8f51a9665759 Zappa Event: &#123;&#39;manage&#39;: &#39;create_admin_user&#39;&#125; Creating new admin user..</span><br><span class="line">Created user &quot;admin&quot;, email: &quot;admin@admin.com&quot;, password: Z1V9W4PP70</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Post#16 Detail</span></span><br><span class="line">res = requests.get(HOST + <span class="string">'/api/post/'</span>, headers=headers) </span><br><span class="line">res = requests.get(HOST + <span class="string">'/api/post/16/'</span>, headers=headers) res.raise_for_status()</span><br><span class="line">print(res.json())</span><br><span class="line"></span><br><span class="line"><span class="comment"># Post#16 Patch</span></span><br><span class="line">res = requests.patch(HOST + <span class="string">'/api/post/16/'</span>, headers=headers, data=&#123;<span class="string">'message'</span>: <span class="string">'hello'</span>&#125;) </span><br><span class="line">res.raise_for_status()</span><br><span class="line">print(res.json())</span><br><span class="line"></span><br><span class="line"><span class="comment"># Post#16 Update</span></span><br><span class="line">res = requests.put(HOST + <span class="string">'/api/post/16/'</span>, headers=headers, data=&#123;<span class="string">'message'</span>: <span class="string">'hello'</span>&#125;) </span><br><span class="line">res.raise_for_status()</span><br><span class="line">print(res.json())</span><br><span class="line"></span><br><span class="line"><span class="comment"># Post#16 Delete</span></span><br><span class="line">res = requests.delete(HOST + <span class="string">'/api/post/16/'</span>, headers=headers, data=&#123;<span class="string">'message'</span>: <span class="string">'hello'</span>&#125;) </span><br><span class="line">res.raise_for_status()</span><br><span class="line">print(res.ok)</span><br></pre></td></tr></table></figure>
 
-<h3 id="lambda-packages-지원-라이브러리-github"><a href="#lambda-packages-지원-라이브러리-github" class="headerlink" title="lambda-packages 지원 라이브러리 github"></a>lambda-packages <strong>지원 라이브러리</strong> <a href="https://github.com/Miserlou/lambda-packages" target="_blank" rel="noopener">github</a></h3><p>MySQL-Python, OpenCV, Pillow, PyNACI, bcrypt, cffi, cryptography, datrie_extended, lxml, misaka, mysqlclient, numpy, pycopg2, pycrypto, pylibmc, pyproj, python- Levenshtein, python-ldap, regex, sqlite3, xmlsec</p>
-<p>하지만, lambci/lambda:build-python3.6 기반의 Docker 이미지 가Lambda 환경과동일하기에,pip install한라이브러리를 Lambda에 올려 사용할 수 있습니다.</p>
-<ul>
-<li><p>AWS Zappa<strong>에 대해서는</strong> <strong>장고</strong> - <strong>서비스 배포하기 코스에서</strong></p>
-<p><strong>더 자세히 다뤄보겠습니다</strong>.</p>
-</li>
-</ul>
+<h3 id="실제-터미널"><a href="#실제-터미널" class="headerlink" title="실제 터미널"></a>실제 터미널</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">In [1]: import requests</span><br><span class="line"></span><br><span class="line">In [3]: res &#x3D; requests.post(&#39;http:&#x2F;&#x2F;localhost:8000&#x2F;api-auth-token&#x2F;&#39;, &#123;&#39;username&#39;</span><br><span class="line">   ...: :&#39;tester&#39;, &#39;password&#39;: &#39;rhdiddl486&#39;&#125;)</span><br><span class="line"></span><br><span class="line">In [4]: res &#x3D; requests.post(&#39;http:&#x2F;&#x2F;localhost:8000&#x2F;api-token-auth&#x2F;&#39;, &#123;&#39;username&#39;</span><br><span class="line">   ...: :&#39;tester&#39;, &#39;password&#39;: &#39;rhdiddl486&#39;&#125;)</span><br><span class="line"></span><br><span class="line">In [5]: res</span><br><span class="line">Out[5]: &lt;Response [200]&gt;</span><br><span class="line"></span><br><span class="line">In [6]: res.text</span><br><span class="line">Out[6]: &#39;&#123;&quot;token&quot;:&quot;d7ec115d8370de00f06c50ec5b61bd519b1038ae&quot;&#125;&#39;</span><br><span class="line"></span><br><span class="line">In [7]: res.json()</span><br><span class="line">Out[7]: &#123;&#39;token&#39;: &#39;d7ec115d8370de00f06c50ec5b61bd519b1038ae&#39;&#125;</span><br><span class="line"></span><br><span class="line">In [8]: res.json()[&#39;token&#39;]</span><br><span class="line">Out[8]: &#39;d7ec115d8370de00f06c50ec5b61bd519b1038ae&#39;</span><br><span class="line"></span><br><span class="line">In [9]: token &#x3D; res.json()[&#39;token&#39;]</span><br><span class="line"></span><br><span class="line">In [10]: headers &#x3D; &#123;</span><br><span class="line">    ...:     &#39;Authorization&#39;: &#39;Token &#39; + token,</span><br><span class="line">    ...:     &#125;</span><br><span class="line"></span><br><span class="line">In [11]: headers</span><br><span class="line">Out[11]: &#123;&#39;Authorization&#39;: &#39;Token d7ec115d8370de00f06c50ec5b61bd519b1038ae&#39;&#125;</span><br><span class="line"></span><br><span class="line">In [12]: res &#x3D; requests.get(&#39;http:&#x2F;&#x2F;localhost:800&#x2F;api&#x2F;post&#x2F;&#39;, headers&#x3D;headers)</span><br><span class="line"></span><br><span class="line">In [13]: res &#x3D; requests.get(&#39;http:&#x2F;&#x2F;localhost:8000&#x2F;api&#x2F;post&#x2F;&#39;, headers&#x3D;headers)</span><br><span class="line"></span><br><span class="line">In [14]: res</span><br><span class="line">Out[14]: &lt;Response [200]&gt;</span><br><span class="line"></span><br><span class="line">In [15]: res.text</span><br><span class="line">Out[15]: &#39;[&#123;&quot;id&quot;:1,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:2,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:3,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:4,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:5,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:6,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:7,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:8,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:9,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:10,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:11,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:null&#125;,&#123;&quot;id&quot;:12,&quot;author_username&quot;:&quot;tester&quot;,&quot;message&quot;:&quot;Hello&quot;,&quot;photo&quot;:&quot;http:&#x2F;&#x2F;localhost:8000&#x2F;api&#x2F;post&#x2F;a_7Y7nc8e.jpg&quot;&#125;]&#39;</span><br><span class="line"></span><br><span class="line">In [16]: res.json()</span><br><span class="line">Out[16]:</span><br><span class="line">[&#123;&#39;id&#39;: 1, &#39;author_username&#39;: &#39;tester&#39;, &#39;message&#39;: &#39;Hello&#39;, &#39;photo&#39;: None&#125;,</span><br><span class="line"> &#123;&#39;id&#39;: 2, &#39;author_username&#39;: &#39;tester&#39;, &#39;message&#39;: &#39;Hello&#39;, &#39;photo&#39;: None&#125;,</span><br><span class="line"> &#123;&#39;id&#39;: 3, &#39;author_username&#39;: &#39;tester&#39;, &#39;message&#39;: &#39;Hello&#39;, &#39;photo&#39;: None&#125;,</span><br><span class="line"> &#123;&#39;id&#39;: 4, &#39;author_username&#39;: &#39;tester&#39;, &#39;message&#39;: &#39;Hello&#39;, &#39;photo&#39;: None&#125;,</span><br><span class="line"> &#123;&#39;id&#39;: 5, &#39;author_username&#39;: &#39;tester&#39;, &#39;message&#39;: &#39;Hello&#39;, &#39;photo&#39;: None&#125;,</span><br><span class="line"> &#123;&#39;id&#39;: 6, &#39;author_username&#39;: &#39;tester&#39;, &#39;message&#39;: &#39;Hello&#39;, &#39;photo&#39;: None&#125;,</span><br><span class="line"> &#123;&#39;id&#39;: 7, &#39;author_username&#39;: &#39;tester&#39;, &#39;message&#39;: &#39;Hello&#39;, &#39;photo&#39;: None&#125;,</span><br><span class="line"> &#123;&#39;id&#39;: 8, &#39;author_username&#39;: &#39;tester&#39;, &#39;message&#39;: &#39;Hello&#39;, &#39;photo&#39;: None&#125;,</span><br><span class="line"> &#123;&#39;id&#39;: 9, &#39;author_username&#39;: &#39;tester&#39;, &#39;message&#39;: &#39;Hello&#39;, &#39;photo&#39;: None&#125;,</span><br><span class="line"> &#123;&#39;id&#39;: 10, &#39;author_username&#39;: &#39;tester&#39;, &#39;message&#39;: &#39;Hello&#39;, &#39;photo&#39;: None&#125;,</span><br><span class="line"> &#123;&#39;id&#39;: 11, &#39;author_username&#39;: &#39;tester&#39;, &#39;message&#39;: &#39;Hello&#39;, &#39;photo&#39;: None&#125;,</span><br><span class="line"> &#123;&#39;id&#39;: 12,</span><br><span class="line">  &#39;author_username&#39;: &#39;tester&#39;,</span><br><span class="line">  &#39;message&#39;: &#39;Hello&#39;,</span><br><span class="line">  &#39;photo&#39;: &#39;http:&#x2F;&#x2F;localhost:8000&#x2F;api&#x2F;post&#x2F;a_7Y7nc8e.jpg&#39;&#125;]</span><br><span class="line"></span><br><span class="line">In [17]: for post in res.json():</span><br><span class="line">    ...:     print(post[&#39;message&#39;])</span><br><span class="line">    ...:</span><br><span class="line"></span><br><span class="line">In [17]: for post in res.json():</span><br><span class="line">    ...:     print(post[&#39;message&#39;])</span><br><span class="line">    ...:</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line">Hello</span><br><span class="line"></span><br><span class="line">In [19]: for post in res.json():</span><br><span class="line">    ...:     print(&#39;&#123;id&#125;: &#123;message&#125;&#39;.format(**post))</span><br><span class="line">    ...:</span><br><span class="line">    ...:</span><br><span class="line">    ...:</span><br><span class="line">1: Hello</span><br><span class="line">2: Hello</span><br><span class="line">3: Hello</span><br><span class="line">4: Hello</span><br><span class="line">5: Hello</span><br><span class="line">6: Hello</span><br><span class="line">7: Hello</span><br><span class="line">8: Hello</span><br><span class="line">9: Hello</span><br><span class="line">10: Hello</span><br><span class="line">11: Hello</span><br><span class="line">12: Hello</span><br></pre></td></tr></table></figure>
 
+<h1 id="python-pack-unpack-반드시-알아보기"><a href="#python-pack-unpack-반드시-알아보기" class="headerlink" title="python pack unpack 반드시 알아보기 (???)"></a>python pack unpack 반드시 알아보기 (???)</h1>
     </article>
     <!-- license  -->
     
@@ -555,16 +476,16 @@ height:50vh;
         <li class="next">
             
                 <div class="nextSlogan">Next Post</div>
-                <a href= "/2020/02/06/Elastic%20Beanstalk/" title= "AWS Elastic Beanstalk + django">
-                    <div class="nextTitle">AWS Elastic Beanstalk + django</div>
+                <a href= "/2020/01/27/missing-note/" title= "실수노트">
+                    <div class="nextTitle">실수노트</div>
                 </a>
             
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href= "/2020/01/27/missing-note/" title= "실수노트">
-                    <div class="prevTitle">실수노트</div>
+                <a href= "/2020/01/24/DRF12/" title= "DRF 기본편 12">
+                    <div class="prevTitle">DRF 기본편 12</div>
                 </a>
             
         </li>
@@ -683,7 +604,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-14-Serverless-배포-AWS-Lambda"><span class="toc-number">1.</span> <span class="toc-text">EP 14. Serverless 배포 - AWS Lambda</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AWS-Lambda에-Django-애플리케이션을-간략히-배포해보겠습니다"><span class="toc-number">1.1.</span> <span class="toc-text">AWS Lambda에 Django 애플리케이션을 간략히 배포해보겠습니다.</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#배포준비"><span class="toc-number">1.1.1.</span> <span class="toc-text">배포준비</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZAPPA"><span class="toc-number">1.2.</span> <span class="toc-text">ZAPPA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ZAPPA에서-구성"><span class="toc-number">1.2.1.</span> <span class="toc-text">ZAPPA에서 구성</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credential-환경변수-설정"><span class="toc-number">1.3.</span> <span class="toc-text">Credential 환경변수 설정</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#선택1-로컬-파이썬이-3-6일-경우-로컬머신에-셋업"><span class="toc-number">1.3.1.</span> <span class="toc-text">선택1) 로컬 파이썬이 3.6일 경우, 로컬머신에 셋업</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#선택-2-Python-3-6이-없을-경우-직접-설치"><span class="toc-number">1.3.2.</span> <span class="toc-text">선택 2) Python 3.6이 없을 경우, 직접 설치</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#선택-3-추천-Docker-환경에-셋업-참고-참고2"><span class="toc-number">1.3.3.</span> <span class="toc-text">선택 3) (추천) Docker 환경에 셋업 (참고) (참고2)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-실행"><span class="toc-number">1.3.4.</span> <span class="toc-text">Docker 실행</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zappa-init"><span class="toc-number">1.3.5.</span> <span class="toc-text">zappa init</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#나머지-안내"><span class="toc-number">1.3.6.</span> <span class="toc-text">나머지 안내</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#첫배포수행"><span class="toc-number">1.4.</span> <span class="toc-text">첫배포수행</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#접속-URL"><span class="toc-number">1.4.1.</span> <span class="toc-text">접속 URL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#추후-업데이트-시"><span class="toc-number">1.4.2.</span> <span class="toc-text">추후 업데이트 시</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#로그-확인"><span class="toc-number">1.4.3.</span> <span class="toc-text">로그 확인</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#장고-manage-명령"><span class="toc-number">1.5.</span> <span class="toc-text">장고 manage 명령</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#참고"><span class="toc-number">1.6.</span> <span class="toc-text">참고</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zappa-django-utils"><span class="toc-number">1.7.</span> <span class="toc-text">zappa-django-utils</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#데이터베이스"><span class="toc-number">1.7.1.</span> <span class="toc-text">데이터베이스</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#superuser-생성"><span class="toc-number">1.7.2.</span> <span class="toc-text">superuser 생성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lambda-packages-지원-라이브러리-github"><span class="toc-number">1.7.3.</span> <span class="toc-text">lambda-packages 지원 라이브러리 github</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-13-Token-인증"><span class="toc-number">1.</span> <span class="toc-text">EP 13. Token 인증</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DRF에서-지원하는-인증"><span class="toc-number">1.1.</span> <span class="toc-text">DRF에서 지원하는 인증</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#시작하기전에-기본코드"><span class="toc-number">1.2.</span> <span class="toc-text">시작하기전에-기본코드</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Token인증설정하기"><span class="toc-number">1.3.</span> <span class="toc-text">Token인증설정하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Token모델"><span class="toc-number">1.4.</span> <span class="toc-text">Token모델</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Token생성"><span class="toc-number">1.5.</span> <span class="toc-text">Token생성</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#방법1-ObtatinAuthToken뷰를-통한-획득-or-생성"><span class="toc-number">1.5.1.</span> <span class="toc-text">방법1) ObtatinAuthToken뷰를 통한 획득 or 생성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#방법2-Signal을-통한-자동-생성-필수는-아님-이벤트헨들러느낌"><span class="toc-number">1.5.2.</span> <span class="toc-text">방법2) Signal을 통한 자동 생성 (필수는 아님)(이벤트헨들러느낌)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#방법3-Management-명령을-통한-생성"><span class="toc-number">1.5.3.</span> <span class="toc-text">방법3) Management 명령을 통한 생성</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Token-획득을-API-ENDPOINT로-노출하기"><span class="toc-number">1.6.</span> <span class="toc-text">Token 획득을 API ENDPOINT로 노출하기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTPie를-통한-Token-획득"><span class="toc-number">1.6.1.</span> <span class="toc-text">HTTPie를 통한 Token 획득</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTPie-예제-맥-리눅스"><span class="toc-number">1.6.2.</span> <span class="toc-text">HTTPie 예제 (맥&#x2F;리눅스)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#파이썬-코드를-통한-Token-획득"><span class="toc-number">1.7.</span> <span class="toc-text">파이썬 코드를 통한 Token 획득</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#실제-터미널"><span class="toc-number">1.7.1.</span> <span class="toc-text">실제 터미널</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#python-pack-unpack-반드시-알아보기"><span class="toc-number">2.</span> <span class="toc-text">python pack unpack 반드시 알아보기 (???)</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -696,6 +617,14 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -2410,7 +2339,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/api14/" >DRF 기본편 14</a>
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
         </li>
     
     
@@ -2420,12 +2349,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/api13/" >DRF 기본편 13</a>
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/api12/" >DRF 기본편 12</a>
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
         </li>
     
     
@@ -2435,7 +2364,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/api10/" >DRF 기본편 10+11</a>
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
         </li>
     
     
@@ -2445,37 +2374,37 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/api09/" >DRF 기본편 9</a>
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/api08/" >DRF 기본편 8</a>
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/api05/" >DRF 기본편 5+6+7</a>
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/api04/" >DRF 기본편 4</a>
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/api03/" >DRF 기본편 3</a>
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/api02/" >DRF 기본편 2</a>
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/api01/" >DRF 기본편 1</a>
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
         </li>
     
     
@@ -2592,9 +2521,13 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
-    
         <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
     
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
     
@@ -2612,37 +2545,33 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
         <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
     
         <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
-        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
-    
-        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
-    
-        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
-    
-        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
     
         <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
     
         <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
     
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
         <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
     
         <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
     
-        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
-    
         <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
-    
-        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
         <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
     
@@ -2658,15 +2587,17 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
-        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
-    
         <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
     
         <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
     
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
         <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
@@ -2674,39 +2605,37 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
     
-        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
-    
         <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
     
         <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
-    
-        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
-    
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
-    
-        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
     
         <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
     
-        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
-    
         <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
         <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
     
-        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
-    
         <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
     
         <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
     
@@ -2753,29 +2682,29 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
         <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
     
         <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
-        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
-    
         <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
     
         <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
     
-        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
-    
-        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
     
         <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
     
-        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
-    
-        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
     
         <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
     
@@ -2783,23 +2712,23 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
     
-        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
-    
         <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
-        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
-    
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
     
         <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
-    
         <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
@@ -2809,9 +2738,9 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
     
-        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
-    
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     

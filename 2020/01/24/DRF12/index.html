@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>DRF 기본편 8 · lostcatbox</title>
+    <title>DRF 기본편 12 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">DRF 기본편 8</a>
+                <a href="#" class="post-name">DRF 기본편 12</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            DRF 기본편 8
+            DRF 기본편 12
             <!-- 404 -->
             
         </h1>
@@ -274,12 +274,12 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">1.1k</span>Reading time: <span class="post-count reading-time">6 min</span></span>
+                        <span>Word count: <span class="post-count word-count">945</span>Reading time: <span class="post-count reading-time">5 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2020/01/21</span>
+                    <span class="post-intro-time">2020/01/24</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -403,105 +403,108 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h2 id="EP-08-Serializer를-통한-유효성-검사-및-저장"><a href="#EP-08-Serializer를-통한-유효성-검사-및-저장" class="headerlink" title="EP 08 - Serializer를 통한 유효성 검사 및 저장"></a>EP 08 - Serializer를 통한 유효성 검사 및 저장</h2><h3 id="Serializer의-생성자"><a href="#Serializer의-생성자" class="headerlink" title="Serializer의 생성자"></a>Serializer의 생성자</h3><p>Serializer는 Django Form과 컨셉/사용법이 유사합니다. 하지만 생성자를 지정할 때, 인자 구성이 조금 상이한데요.</p>
-<p><strong>Django Form의 생성자 Signature는 다음과 같습니다. 첫번째 인자로 data를 받습니다.</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># django/forms/forms.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaseForm</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, data=None, files=None, auto_id=<span class="string">'id_%s'</span>, prefix=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                 initial=None, error_class=ErrorList, label_suffix=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                 empty_permitted=False, field_order=None, use_required_attribute=None, renderer=None)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Form</span><span class="params">(BaseForm)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-
-<p>ModelForm에서는 <code>instance</code>인자가 추가로 지정되어 있구요.(instance인자를 주면 지정 instance 저장을 수행가능하게내부적으로 설정됨)</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># django/forms/models.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaseModelForm</span><span class="params">(BaseForm)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, data=None, files=None, auto_id=<span class="string">'id_%s'</span>, prefix=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                 initial=None, error_class=ErrorList, label_suffix=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                 empty_permitted=False, instance=None, use_required_attribute=None)</span>:</span></span><br></pre></td></tr></table></figure>
-
-<p>그래서, 뷰 내에서 Form생성자를 호출할 때에는 다음과 같은 코드가 가능합니다.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">form = MyForm(request.POST)  <span class="comment"># 생성자의 첫번째 인자가 data 입니다.</span></span><br><span class="line">form = MyForm(request.POST, request.FILES)</span><br><span class="line">form = MyForm(&#123;<span class="string">'title'</span>: <span class="string">'my title'</span>&#125;)</span><br><span class="line"></span><br><span class="line">form = MyModelForm(request.POST, instance=my_instance)</span><br></pre></td></tr></table></figure>
-
-<p>많이 익숙하신 코드죠? :)</p>
-<hr>
-<p><strong>그런데, Serializer의 생성자 Signature는 다음과 같습니다. 첫번째 인자로 <code>instance</code>를 받으며, 두번째 인자로 <code>data</code>를 받습니다.</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rest_framework/serializers.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaseSerializer</span><span class="params">(Field)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, instance=None, data=empty, **kwargs)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Serializer</span><span class="params">(BaseSerializer)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>Django Form의 Signature가 조금 다릅니다. <code>data</code>인자만 지정하실 때에는 <code>MySerializer(data=mydata)</code>처럼 필히 keyword를 지정해주셔야 합니다.</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">serializer = MySerializer(my_instance)</span><br><span class="line">serializer = MySerializer(my_instance, request.POST)</span><br><span class="line">serializer = MySerializer(data=request.POST)</span><br></pre></td></tr></table></figure>
-
-<p>참고) 파이썬의 함수 인자에 대해서는 “<a href="https://nomade.kr/vod/python/91/" target="_blank" rel="noopener">파이썬 차근차근 시작하기 - 함수편</a>“ 에서 자세히 다루고 있습니다.</p>
-<p><code>data=</code> 인자가 주어지면, 다음 순서로 처리됩니다.</p>
-<ol>
-<li><code>.is_valid()</code>가 호출이 되면</li>
-<li><code>.initial_data</code> 필드에 접근할 수 있고,</li>
-<li><code>.validated_data</code> (사전형태)를 통해 유효성 검증에 통과한 값들에 대한 사전. <code>.save()</code>시에 사용됩니다.(cleaned_data같은느낌)</li>
-<li><code>.errors</code> : 유효성 검사에 대한 오류 내역</li>
-<li><code>.data</code> : 유효성 검사 후에, 갱신된 인스턴스에 대한 필드값 사전(restframework에서 특정 인스턴스의 필드내역을 응답할떄 사용)</li>
-</ol>
-<p><code>serializer.save(**kwargs)</code> 호출이 이뤄질 때 (form.save느낌)</p>
+        <h1 id="EP-12-PostAPIView-차근차근-응답시간-줄여보기"><a href="#EP-12-PostAPIView-차근차근-응답시간-줄여보기" class="headerlink" title="EP 12. PostAPIView 차근차근 응답시간 줄여보기"></a>EP 12. PostAPIView <strong>차근차근 응답시간 줄여보기</strong></h1><h2 id="관련-문서"><a href="#관련-문서" class="headerlink" title="관련 문서"></a>관련 문서</h2><p>원문 : Web API performance: profiling Django REST framework 장고 공식문서</p>
 <ul>
-<li>DB에 저장된 관련 모델 인스턴스를 리턴</li>
-<li><code>.validated_data</code>와 <code>kwargs</code>사전을 합쳐서, <code>.update</code> 함수/<code>.create</code>함수를 통해 관련 필드에 값을 할당하고, DB로의 저장을 시도합니다.<ul>
-<li><code>.update()</code> : <code>self.instance</code> 인자가 지정되었을 때</li>
-<li><code>.create()</code> : <code>self.instance</code> 인지가 지정되지 않았을 때</li>
+<li>Performance and optimization</li>
+<li>Database access optimization</li>
 </ul>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">Signature 알아보자</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rest_framework.fields <span class="keyword">import</span> Field</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaseSerializer</span><span class="params">(Field)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, instance=None, data=empty, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create</span><span class="params">(self, validates_data)</span>:</span></span><br><span class="line">        <span class="keyword">raise</span> NotImplementedError</span><br><span class="line">        <span class="comment"># return instance</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self, instance, validatd_data)</span>:</span></span><br><span class="line">        <span class="keyword">raise</span> NotImplementedError</span><br><span class="line">        <span class="comment"># return instance</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save</span><span class="params">(self, **kwargs)</span>:</span></span><br><span class="line">        <span class="comment"># 생성자에서 self.instance 지정 여부에 따라 update 혹은 create를 호출</span></span><br><span class="line">        <span class="keyword">return</span> self.instance</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Serializer</span><span class="params">(BaseSerializer)</span>:</span></span><br><span class="line">    <span class="comment"># create/update 구현이 필요</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListSerializer</span><span class="params">(BaseSerializer)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create</span><span class="params">(self, validated_data)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            self.child.create(attrs) <span class="keyword">for</span> attrs <span class="keyword">in</span> validated_data</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self, instance, validated_data)</span>:</span></span><br><span class="line">        <span class="comment"># 여러 레코드에 대한 추가/삭제 처리가 필요한데, 디폴트로는 미지원</span></span><br><span class="line">        <span class="comment"># 필요하다면, 직접 구현하면 됩니다.</span></span><br><span class="line">        <span class="keyword">raise</span> NotImplementedError()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ModelSerializer</span><span class="params">(Serializer)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create</span><span class="params">(self, validated_data)</span>:</span></span><br><span class="line">        <span class="comment"># 중략</span></span><br><span class="line">        instance = ModelClass.objects.create(**validated_data)</span><br><span class="line">        <span class="keyword">return</span> instance</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self, instance, validated_data)</span>:</span></span><br><span class="line">        <span class="comment"># 중략</span></span><br><span class="line">        info = model_meta.get_field_info(instance)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> attr, value <span class="keyword">in</span> validated_data.items():</span><br><span class="line">            <span class="keyword">if</span> attr <span class="keyword">in</span> info.relations <span class="keyword">and</span> info.relations[attr].to_many:</span><br><span class="line">                field = getattr(instance, attr)</span><br><span class="line">                field.set(value)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                setattr(instance, attr, value)</span><br><span class="line">        instance.save()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> instance</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HyperlinkedModelSerializer</span><span class="params">(ModelSerializer)</span>:</span></span><br><span class="line">    <span class="comment"># id필드 대신에 url필드를 사용</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="Validators"><a href="#Validators" class="headerlink" title="Validators"></a>Validators</h2><p><a href="https://github.com/django/django/blob/master/django/core/validators.py" target="_blank" rel="noopener">장고 기본 validators</a>과 더불어, django-rest-framework에서는 유일성 여부 체크를 도와주는 Validator를 제공해주며, queryset 범위를 제한하여 지정 범위 내에서의 유일성 여부를 체크할 수 있습니다.</p>
-<ol>
-<li><strong>UniqueValidator : 지정 필드가 지정 QuerySet범위에서 Unique한지 체크</strong><ul>
-<li>모델 필드 unique=True 설정에 대응하여, 자동 추가</li>
-</ul>
-</li>
-<li><strong>UniqueTogetherValidator</strong><ul>
-<li>모델 클래스.Meta.unique_together 속성에 대응하여, 자동 추가</li>
-</ul>
-</li>
-<li>UniqueForDateValidator<ul>
-<li>모델 필드 unique_for_date=True 설정에 대응하여, 자동 추가</li>
-</ul>
-</li>
-<li>UniqueForMonthValidator<ul>
-<li>모델 필드 unique_for_month=True 설정에 대응하여, 자동 추가</li>
-</ul>
-</li>
-<li>UniqueForYearValidator<ul>
-<li>모델 필드 unique_for_year=True 설정에 대응하여, 자동 추가</li>
-</ul>
-</li>
-</ol>
-<h2 id="유효성-검사-예외"><a href="#유효성-검사-예외" class="headerlink" title="유효성 검사 예외"></a>유효성 검사 예외</h2><p><code>rest_framework.exceptions.ValidationError</code>를 기본으로 사용합니다. 이는 응답 상태코드 <code>400</code>으로 처리합니다.</p>
-<p>장고 기본에서 제공하는 <code>django.core.exceptions.ValidationError</code>를 사용할 수도 있습니다. 이를 사용하면, <code>rest_framework</code>측 예외로 변환되어 처리됩니다.</p>
-<h2 id="Serializer에서-유효성검사-함수-지정하기"><a href="#Serializer에서-유효성검사-함수-지정하기" class="headerlink" title="Serializer에서 유효성검사 함수 지정하기"></a>Serializer에서 유효성검사 함수 지정하기</h2><p><strong>Tip: ModelSerializer를 사용하신다면, 유효성 검사 함수는 모델 측에 지정하시는 것이 관리측면에서 좋습니다.</strong></p>
-<p>(그렇게 하면 django.admin에서도, api에서도, model자체에서도 유효성검사되므로)</p>
+<h2 id="왜-최적화를-해야하나요"><a href="#왜-최적화를-해야하나요" class="headerlink" title="왜 최적화를 해야하나요?"></a><strong>왜 최적화를 해야하나요</strong>?</h2><ul>
+<li><p>보다빠르게동작하는프로그램을위해!!!</p>
 <ul>
-<li>필드 정의 시에 <code>validators</code>인자 지정하기</li>
-<li>Field-level 검사 : 특정 필드에 대한 검사<ul>
-<li><strong>Form에서는 <code>clean_필드명</code>의 함수를 구현하지만, <code>rest_framework</code>에서는 <code>validate_필드명</code>를 구현해줍니다.</strong></li>
-<li>함수 인자로 해당 값이 전달됩니다.(value)</li>
-<li>DjangoForm과 마찬가지로, 본 함수의 리턴값을 통해 값을 변환할 수도 있습니다.</li>
+<li>보다낮은CPU타임</li>
+<li>보다낮은메모리소모</li>
 </ul>
 </li>
+<li><p>개발비용이가장큰리소스입니다.=&gt;개발시간+인건비</p>
+</li>
+<li><p>최적화를통해성능은높아지지만,유지관리성이낮아질수도있습니다.=&gt;가성비를 체크해보세요.</p>
+</li>
+<li><p>한영역의개선이다른부분을희생시킬수있습니다.</p>
+<p>ex) CPU 연산을 아꼈는데, 메모리 소모가 늘었다.</p>
+</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostSerializer</span><span class="params">(serializers.Serializer)</span>:</span></span><br><span class="line">    title = serializers.CharField(max_length=<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">validate_title</span><span class="params">(self, value)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'django'</span> <span class="keyword">not</span> <span class="keyword">in</span> value:</span><br><span class="line">            <span class="keyword">raise</span> ValidationError(<span class="string">'제목에 필히 django가 포함되어야합니다.'</span>)</span><br><span class="line">        <span class="keyword">return</span> value</span><br></pre></td></tr></table></figure>
+<h2 id="시작하기에-앞서"><a href="#시작하기에-앞서" class="headerlink" title="시작하기에 앞서"></a><strong>시작하기에 앞서</strong></h2><p>Throttle와 Pagination은 꺼주시고, 현재, DB Record갯수가 적기에 … <strong>뻥튀기</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ep08.models <span class="keyword">import</span> Post</span><br><span class="line"></span><br><span class="line">post = Post.objects.first()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line"> post.id = <span class="literal">None</span> <span class="comment"># Django Model은 id=None일 경우, CREATE를 수행합니다.</span></span><br><span class="line"></span><br><span class="line">post.save()</span><br></pre></td></tr></table></figure>
+
+<p><strong>주의: 실제 서비스에서는 id=None과 같은 코드는 절대 쓰지 마세요.</strong></p>
+<h2 id="측정-Metric"><a href="#측정-Metric" class="headerlink" title="측정 Metric"></a><strong>측정</strong> Metric</h2><p>다음 코드를 통해, 요청 처리시의 각 부분에 대한 시간을 측정해보겠습니다.</p>
+<ul>
+<li>Database Lookup (db_time) : 데이터베이스 Fetch 수행시간(DB에서 가져오는시간)</li>
+<li>Serialization (serializer_time) : Serializer 직렬화 수행시간</li>
+<li>API View (api_view_time) : APIView 수행시간(인증관련처리, 페이징처리등등)</li>
+<li>Response rendering (render_time) : Response 렌더링 수행시간</li>
+<li>Django request/response : request/response 수행시간</li>
+</ul>
+<p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7loazfo9j30yn0u0avm.jpg" alt="스크린샷 2020-01-24 오후 2.45.00"></p>
+<p>total시간은 요청이 요청되고 응답이 다생성되고 닫기까지의 시간</p>
+<p>각자 시간이 계산되서 적힘.</p>
+<h2 id="수행시간-비교-단위-초"><a href="#수행시간-비교-단위-초" class="headerlink" title="수행시간 비교 (단위:초)"></a><strong>수행시간 비교</strong> (<strong>단위</strong>:<strong>초</strong>)</h2><p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7louarl1j31d80io0vr.jpg" alt="스크린샷 2020-01-24 오후 2.45.34"></p>
+<p>(미들웨어는 웹페이지를 위한 미들웨어들을 제거, 뷰를 부를때는 미들웨어가반드시 포함되므로 제거할수록 빨라짐)(HttpResponse를 상속받은 Response를 쓰지않고 원본인 HttpResponse 씀)</p>
+<h2 id="측정을-위한-코드-코드-측정코드"><a href="#측정을-위한-코드-코드-측정코드" class="headerlink" title="측정을 위한 코드 코드 측정코드"></a>측정을 위한 코드 코드 <a href="https://gist.github.com/nomadekr/200cb7aba56de5949b40b7de53c46259" target="_blank" rel="noopener">측정코드</a></h2><ul>
+<li>코드1/3</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> rest_framework.response <span class="keyword">import</span> Response</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(ModelViewSet)</span>:</span> </span><br><span class="line">    queryset = Post.objects.all() </span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line">    </span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dispatch</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">            <span class="keyword">global</span> cbv</span><br><span class="line">            cbv = self</span><br><span class="line">            dispatch_start = time.time()</span><br><span class="line">            response = super().dispatch(request, *args, **kwargs)</span><br><span class="line">            </span><br><span class="line">            render_start = time.time()</span><br><span class="line">            response.render()</span><br><span class="line">            self.render_time = time.time() - render_start</span><br><span class="line">            </span><br><span class="line">            self.dispatch_time = time.time() - dispatch_start</span><br><span class="line">            self.api_view_time = self.dispatch_time - (self.render_time + self.serializer_time + self.db_time)</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> response</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><p>Object-level 검사 : 다수 필드에 대한 검사</p>
-<p>(예시로 게임에서 아이디 중복을 검사할때 어떤 서버에서 어떤이름 중복를 찾아야하므로 서버와 이름을 동시에 유효성검사)</p>
-</li>
+<li>코드 2/3</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostSerializer</span><span class="params">(serializers.Serializer)</span>:</span></span><br><span class="line">    title = serializers.CharField(max_length=<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">validate</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'django'</span> <span class="keyword">not</span> <span class="keyword">in</span> data[<span class="string">'title'</span>]:</span><br><span class="line">            <span class="keyword">raise</span> ValidationError(<span class="string">'제목에 필히 django가 포함되어야합니다.'</span>)</span><br><span class="line">        <span class="keyword">return</span> data</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">list</span><span class="params">(self, request, *args, **kwargs)</span>:</span> </span><br><span class="line">    db_start = time.time()</span><br><span class="line">    post_list = list(self.queryset) <span class="comment">#원래 queryset은 lazy 작동하지만 list등으로 변환을 줘서 즉시 DB Fetch를 이루워지게함 #실제 프로젝트에서는 lazy한게좋다</span></span><br><span class="line">    self.db_time = time.time() - db_start</span><br><span class="line"></span><br><span class="line">    serializer_start = time.time()</span><br><span class="line">    serializer = self.get_serializer(self.queryset, many=<span class="literal">True</span>) </span><br><span class="line">    data = serializer.data</span><br><span class="line">    self.serializer_time = time.time() - serializer_start</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Response(data)</span><br></pre></td></tr></table></figure>
 
-<h2 id="DB로의-반영과-Mixins의-perform-계열-함수"><a href="#DB로의-반영과-Mixins의-perform-계열-함수" class="headerlink" title="DB로의 반영과 Mixins의 perform_ 계열 함수"></a>DB로의 반영과 Mixins의 <code>perform_</code> 계열 함수</h2><p><strong>(예시:ModelViewSet도 까보면 아래에 mixin들 이용함)</strong></p>
-<p>API수행결과를 DB에 반영하는 create/update/destroy를 커스텀하고 싶으시다면, <code>perform_</code> 계열 함수에 주목하세요.</p>
 <ul>
-<li>저장할 때<ul>
-<li>아이피 저장하기</li>
-<li>유저 정보 기록하기</li>
-</ul>
+<li><p>코드3/3</p>
+<p>주의 : 아래코드는 Single Request에서만 동작합니다. 동시 요청에서는 제대로</p>
+<p>동작하지 않습니다.</p>
 </li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rest_framework/mixins.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CreateModelMixin</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create</span><span class="params">(self, request, *args, **kwargs)</span>:</span>             <span class="comment"># CREATE 요청이 들어오면,</span></span><br><span class="line">        serializer = self.get_serializer(data=request.data) <span class="comment"># Serializer 인스턴스를 만들고</span></span><br><span class="line">        serializer.is_valid(raise_exception=<span class="literal">True</span>)           <span class="comment"># 유효성 검사를 수행합니다. 실패하면바로예외발생 !!!</span></span><br><span class="line">        self.perform_create(serializer)                      <span class="comment"># DB로의 저장을 수행합니다.(유효성검사통과한상태)</span></span><br><span class="line">        headers = self.get_success_headers(serializer.data)  <span class="comment"># 필요한 헤더를 뽑고</span></span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)  <span class="comment"># 응답을 합니다.</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">perform_create</span><span class="params">(self, serializer)</span>:</span>                    <span class="comment"># CREATE 커스텀은 이 함수를 재정의하세요.</span></span><br><span class="line">        serializer.save()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 생략</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UpdateModelMixin</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        partial = kwargs.pop(<span class="string">'partial'</span>, <span class="literal">False</span>)               <span class="comment"># 부분 업데이트 여부(patch요청일때임)</span></span><br><span class="line">        instance = self.get_object()                         <span class="comment"># 수정할 모델 객체를 획득하고</span></span><br><span class="line">        serializer = self.get_serializer(instance, data=request.data, partial=partial)  <span class="comment"># Serializer 인스턴스를 만들고</span></span><br><span class="line">        serializer.is_valid(raise_exception=<span class="literal">True</span>)            <span class="comment"># 유효성 검사를 수행합니다. 실패하면 예외발생 !!!</span></span><br><span class="line">        self.perform_update(serializer)                      <span class="comment"># DB로의 저장을 수행합니다.</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> getattr(instance, <span class="string">'_prefetched_objects_cache'</span>, <span class="literal">None</span>):</span><br><span class="line">            <span class="comment"># If 'prefetch_related' has been applied to a queryset, we need to</span></span><br><span class="line">            <span class="comment"># forcibly invalidate the prefetch cache on the instance.</span></span><br><span class="line">            instance._prefetched_objects_cache = &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Response(serializer.data)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">perform_update</span><span class="params">(self, serializer)</span>:</span>                    <span class="comment"># UPDATE 커스텀은 이 함수를 재정의하세요.</span></span><br><span class="line">        serializer.save()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DestroyModelMixin</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">destroy</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">        instance = self.get_object()</span><br><span class="line">        self.perform_destroy(instance)</span><br><span class="line">        <span class="keyword">return</span> Response(status=status.HTTP_204_NO_CONTENT)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">perform_destroy</span><span class="params">(self, instance)</span>:</span>                     <span class="comment"># DELETE 커스텀은 이 함수를 재정의하세요.</span></span><br><span class="line">        instance.delete()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.core.signals <span class="keyword">import</span> request_started, request_finished</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">started_fn</span><span class="params">(sender, **kwargs)</span>:</span> <span class="keyword">global</span> started</span><br><span class="line">    started = time.time()</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">finished_fn</span><span class="params">(sender, **kwargs)</span>:</span></span><br><span class="line">    request_response_time = (time.time() - started) - cbv.dispatch_time</span><br><span class="line">    </span><br><span class="line">    total = cbv.db_time + cbv.serializer_time + cbv.api_view_time + cbv.render_time + request_response_time</span><br><span class="line">    </span><br><span class="line">    print(<span class="string">'Database Lookup    - db_time             : &#123;:.6f&#125;s, &#123;:&gt;4.1f&#125;%'</span>.format(cbv.db_time, <span class="number">100</span>*(cbv.db_time/total)))</span><br><span class="line">    print(<span class="string">'Serialization      - serializer_time     : &#123;:.6f&#125;s, &#123;:&gt;4.1f&#125;%'</span>.format(cbv.serializer_time, <span class="number">100</span>*(cbv.serializer_time/total)))</span><br><span class="line">    print(<span class="string">'API View           -api_view_time.       : &#123;:.6f&#125;s, &#123;:&gt;4.1f&#125;%'</span>.format(cbv.api_view_time, <span class="number">100</span>*(cbv.api_view_time/total)))</span><br><span class="line">    print(<span class="string">'Response rendering - render_time         : &#123;:.6f&#125;s,&#123;:&gt;4.1f&#125;%'</span>.format(cbv.render_time, <span class="number">100</span>*(cbv.render_time/total))) </span><br><span class="line">    print(<span class="string">'Django request/response           : &#123;:.6f&#125;s,&#123;:&gt;4.1f&#125;%'</span>.format(request_response_time, <span class="number">100</span>*(request_response_time/total)))</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">   </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    request_started.connect(started_fn)      <span class="comment"># 요청 처리 시작</span></span><br><span class="line">    request_finished.connect(finished_fn)    <span class="comment"># 요청 처리 끝</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="create시에-추가로-필드-설정하기"><a href="#create시에-추가로-필드-설정하기" class="headerlink" title="create시에 추가로 필드 설정하기"></a><code>create</code>시에 추가로 필드 설정하기</h3><p><code>CREATE</code>기능을 수행하는 APIView에서는 <code>rest_framework.mixins.CreateModelMixin</code>을 상속받습니다. <code>CREATE</code>시에 추가로 필드를 설정할려면, <code>perform_create</code>를 통해 수행되는 <code>serializer.save()</code>함수에 키워드 인자를 지정해주세요.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@views.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render</span><br><span class="line"><span class="keyword">from</span> .serializers <span class="keyword">import</span> PostSerializer</span><br><span class="line"><span class="keyword">from</span> rest_framework.viewsets <span class="keyword">import</span> ModelViewSet</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Post</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(ModelViewSet)</span>:</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">perform_create</span><span class="params">(self, serializer)</span>:</span></span><br><span class="line">        serializer.save(ip=self.request.META[<span class="string">'REMOTE_ADDR'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create your views here.</span></span><br></pre></td></tr></table></figure>
+<h2 id="기본-코드-수행"><a href="#기본-코드-수행" class="headerlink" title="기본 코드, 수행"></a><strong>기본 코드</strong>, 수행</h2><p>“GET /ep08/post/?format=json HTTP/1.1” 200 6497</p>
+<p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7m9igfb1j31fi0dimzz.jpg" alt="스크린샷 2020-01-24 오후 3.05.28"></p>
+<p>=&gt; DB Lookup 및 DRF Serializer의 시간비율이 가장 높네요.</p>
+<h2 id="Serializer를-제거해봅시다"><a href="#Serializer를-제거해봅시다" class="headerlink" title="Serializer를 제거해봅시다."></a>Serializer<strong>를 제거해봅시다</strong>.</h2><p>하지만 개발생산성이있으므로, Serializer를 쓰더라도 적절한 캐싱을 통해서 성능뽑기가능</p>
+<p>QuerySet.values(<strong>필드명</strong>)<strong>를 통해</strong>, <strong>원하는 필드만 가져오기</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">list</span><span class="params">(self, request, *args, **kwargs)</span>:</span></span><br><span class="line">    db_start = time.time()</span><br><span class="line">    <span class="comment"># post_list = list(self.queryset)</span></span><br><span class="line">    data = self.queryset.values(<span class="string">'author__username'</span>, <span class="string">'message'</span>) <span class="comment">#DB에서그냥 바로 목록가져오게함</span></span><br><span class="line">    self.db_time = time.time() - db_start</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># serializer_start = time.time()</span></span><br><span class="line">    <span class="comment"># serializer = self.get_serializer(self.queryset, many=True) </span></span><br><span class="line">    <span class="comment"># data = serializer.data</span></span><br><span class="line">    <span class="comment"># self.serializer_time = time.time() - serializer_start </span></span><br><span class="line">    self.serializer_time = <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> Response(data))</span><br></pre></td></tr></table></figure>
 
-<p>현재 오류가 나오는 이유 serializers.py 에서는 fields에서 특정 필드만 지정했으모로 유효성 검사를 잘 통과해도</p>
-<p>마지막에 serializer.save()가 들어갈때 다른 필수 field가 지정되어있지 않다면 not null constraint failed가 뜰수밖에없다.</p>
+<h3 id="수행결과"><a href="#수행결과" class="headerlink" title="수행결과"></a>수행결과</h3><p>“GET /ep08/post/?format=json HTTP/1.1” 200 6598</p>
+<p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7mb0e80zj31b20bwtb3.jpg" alt="스크린샷 2020-01-24 오후 3.06.54"></p>
+<p>=&gt; 해당 부분이 0.8초에서 0.00019초로 줄었네요.</p>
+<p><strong>Tip: 하지만, Serializer으로 얻는 막대한 개발생산성이 있으며, Serializer를 쓰더라도 적절한 캐싱을 통해 극복할 수 있습니다.</strong></p>
+<h2 id="DB-Serializer-대신에-캐싱"><a href="#DB-Serializer-대신에-캐싱" class="headerlink" title="DB/Serializer 대신에 캐싱"></a>DB/Serializer 대신에 캐싱</h2><p><strong>데이터가 변경되지 않는다면</strong>, <strong>캐싱을 통해 성능을 높일 수 있습니다</strong>.</p>
+<p>cache는 django에서 기본설정으로 django.conf.global_settings.py에서 cache를 보면 locmemcache인 것을 알수있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.core.cache <span class="keyword">import</span> cache  <span class="comment">#cache 접근</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 중략</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">list</span><span class="params">(self, request, *args, **kwargs)</span>:</span> </span><br><span class="line">        db_start = time.time()</span><br><span class="line">        </span><br><span class="line">        data = cache.get(<span class="string">'post_list_data'</span>)   <span class="comment">#값이 있다면 가져오고 아니면 None반환됨</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> data <span class="keyword">is</span> <span class="literal">None</span>:  <span class="comment">#None이라면 </span></span><br><span class="line">            data = self.queryset.values(<span class="string">'author__username'</span>, <span class="string">'message'</span>)  <span class="comment">#data를 DB에서 가져오고</span></span><br><span class="line">            cache.set(<span class="string">'post_list_data'</span>, data, <span class="number">60</span>) <span class="comment">#그 값을 cache에다가 넣음</span></span><br><span class="line"></span><br><span class="line">        self.db_time = time.time() - db_start</span><br><span class="line"></span><br><span class="line">        self.serializer_time = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Response(data)</span><br></pre></td></tr></table></figure>
+
+<h3 id="수행결과-1"><a href="#수행결과-1" class="headerlink" title="수행결과"></a>수행결과</h3><p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7md6kfqtj318a0iydjx.jpg" alt="스크린샷 2020-01-24 오후 3.08.59"></p>
+<p>Tip: 코드 최적화가 먼저입니다. 캐시는 적당히. 무분별한 캐시는 마약과도 같습니다.</p>
+<h2 id="APIView에-필요한-설정만-넣기"><a href="#APIView에-필요한-설정만-넣기" class="headerlink" title="APIView에 필요한 설정만 넣기"></a>APIView에 필요한 설정만 넣기</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rest_framework.negotiation <span class="keyword">import</span> BaseContentNegotiation</span><br><span class="line"><span class="keyword">from</span> rest_framework.renderers <span class="keyword">import</span> JSONRenderer</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IgnoreClientContentNegotiation</span><span class="params">(BaseContentNegotiation)</span>:</span> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select_parser</span><span class="params">(self, request, parsers)</span>:</span></span><br><span class="line">   		 	<span class="string">"Select the first parser in the `.parser_classes` list."</span></span><br><span class="line">        <span class="keyword">return</span> parsers[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select_renderer</span><span class="params">(self, request, renderers, format_suffix)</span>:</span> </span><br><span class="line">        <span class="string">"Select the first renderer in the `.renderer_classes` list."</span> </span><br><span class="line">        <span class="keyword">return</span> (renderers[<span class="number">0</span>], renderers[<span class="number">0</span>].media_type)</span><br><span class="line">        </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostViewSet</span><span class="params">(ModelViewSet)</span>:</span> <span class="comment">#디폴트값들 없앰, 최소한으로</span></span><br><span class="line">    queryset = Post.objects.all()</span><br><span class="line">    serializer_class = PostSerializer</span><br><span class="line">    permission_classes = []</span><br><span class="line">    authentication_classes = []</span><br><span class="line">    renderer_classes = [JSONRenderer] </span><br><span class="line">    content_negotiation_class = IgnoreClientContentNegotiation</span><br></pre></td></tr></table></figure>
+
+<h3 id="수행결과-2"><a href="#수행결과-2" class="headerlink" title="수행결과"></a>수행결과</h3><p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7mfg96hdj31bi0l4n1o.jpg" alt="스크린샷 2020-01-24 오후 3.11.09"></p>
+<h2 id="미들웨어-제거하기"><a href="#미들웨어-제거하기" class="headerlink" title="미들웨어 제거하기"></a>미들웨어 제거하기</h2><p><strong>본 프로젝트가 API 기능만 할 경우, 장고 웹페이지를 위한 기능을 꺼볼 수 있겠습니다.</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 프로젝트/settings.py</span></span><br><span class="line">INSTALLED_APPS = [</span><br><span class="line">		<span class="comment"># 'debug_toolbar',</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">MIDDLEWARE = [</span><br><span class="line">    <span class="comment"># 'debug_toolbar.middleware.DebugToolbarMiddleware',</span></span><br><span class="line">    <span class="comment"># 'django.middleware.security.SecurityMiddleware',</span></span><br><span class="line">    <span class="comment"># 'django.contrib.sessions.middleware.SessionMiddleware',</span></span><br><span class="line">    <span class="comment"># 'django.middleware.common.CommonMiddleware',</span></span><br><span class="line">    <span class="comment"># 'django.middleware.csrf.CsrfViewMiddleware',</span></span><br><span class="line">    <span class="comment"># 'django.contrib.auth.middleware.AuthenticationMiddleware', </span></span><br><span class="line">    <span class="comment"># 'django.contrib.messages.middleware.MessageMiddleware',</span></span><br><span class="line">    <span class="comment"># 'django.middleware.clickjacking.XFrameOptionsMiddleware',</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="수행결과-3"><a href="#수행결과-3" class="headerlink" title="수행결과"></a><strong>수행결과</strong></h3><p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7mgon1qvj31ae0l8jvt.jpg" alt="스크린샷 2020-01-24 오후 3.12.16"></p>
+<h2 id="Django-기본-HttpResponse-쓰기"><a href="#Django-기본-HttpResponse-쓰기" class="headerlink" title="Django 기본 HttpResponse 쓰기"></a>Django <strong>기본</strong> HttpResponse <strong>쓰기</strong></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">list</span><span class="params">(self, request, *args, **kwargs)</span>:</span> </span><br><span class="line">    db_start = time.time()</span><br><span class="line">    data = cache.get(<span class="string">'post_list_data'</span>)</span><br><span class="line">    <span class="keyword">if</span> data <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    		data = list(self.queryset.values(<span class="string">'author__username'</span>, <span class="string">'message'</span>))   <span class="comment"># QuerySet은 JSON 직렬화 불가, 따라서 list로 바꿔줌&gt;&gt;이제 json직렬화가능해짐</span></span><br><span class="line">    		cache.set(<span class="string">'post_list_data'</span>, data, <span class="number">60</span>)</span><br><span class="line">    		</span><br><span class="line"></span><br><span class="line">    self.db_time = time.time() - db_start</span><br><span class="line">    </span><br><span class="line">    self.serializer_time = <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#json으로 직렬화해주는것이 가능한 data타입을 줘야함</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(json.dumps(data), content_type=<span class="string">'application/json; charset=utf-8'</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="수행-결과"><a href="#수행-결과" class="headerlink" title="수행 결과"></a>수행 결과</h3><p><img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gb7mk55zofj31ba0m0aeg.jpg" alt="스크린샷 2020-01-24 오후 3.15.39"></p>
+<h2 id="정리"><a href="#정리" class="headerlink" title="정리"></a>정리</h2><ul>
+<li><p>필요에따라Serializer/Response를쓰지않고직접처리 </p>
+<ul>
+<li>생산성을통한성능의희생</li>
+</ul>
+</li>
+<li><p>조회요청의경우,적절한캐싱은 성능을높여줍니다.</p>
+<ul>
+<li><strong>주의) 로직으로캐싱된내용을적절히만료시켜야만합니다.</strong> (예를 들면 만약 지워지거나하면 다시캐싱해줘야함)</li>
+</ul>
+</li>
+<li><p>어떤설정이적용되는지정확히알고,필요한설정만적용하기.</p>
+<ul>
+<li>APIView 설정 최소화</li>
+<li>미들웨어제거</li>
+</ul>
+</li>
+<li><p><strong>제일 중요한것은 DB query를 필요한 만큼 요청하고 생성하는지만 체크하는 것(성능폭풍상승)</strong></p>
+</li>
+</ul>
 
     </article>
     <!-- license  -->
@@ -511,16 +514,16 @@ height:50vh;
         <li class="next">
             
                 <div class="nextSlogan">Next Post</div>
-                <a href= "/2020/01/22/api09/" title= "DRF 기본편 9">
-                    <div class="nextTitle">DRF 기본편 9</div>
+                <a href= "/2020/01/26/DRF13/" title= "DRF 기본편 13">
+                    <div class="nextTitle">DRF 기본편 13</div>
                 </a>
             
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href= "/2020/01/18/api05/" title= "DRF 기본편 5+6+7">
-                    <div class="prevTitle">DRF 기본편 5+6+7</div>
+                <a href= "/2020/01/23/project-processing/" title= "효율적인 프로젝트 진행을 위한 것">
+                    <div class="prevTitle">효율적인 프로젝트 진행을 위한 것</div>
                 </a>
             
         </li>
@@ -639,7 +642,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#EP-08-Serializer를-통한-유효성-검사-및-저장"><span class="toc-number">1.</span> <span class="toc-text">EP 08 - Serializer를 통한 유효성 검사 및 저장</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Serializer의-생성자"><span class="toc-number">1.1.</span> <span class="toc-text">Serializer의 생성자</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Validators"><span class="toc-number">2.</span> <span class="toc-text">Validators</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#유효성-검사-예외"><span class="toc-number">3.</span> <span class="toc-text">유효성 검사 예외</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Serializer에서-유효성검사-함수-지정하기"><span class="toc-number">4.</span> <span class="toc-text">Serializer에서 유효성검사 함수 지정하기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DB로의-반영과-Mixins의-perform-계열-함수"><span class="toc-number">5.</span> <span class="toc-text">DB로의 반영과 Mixins의 perform_ 계열 함수</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create시에-추가로-필드-설정하기"><span class="toc-number">5.1.</span> <span class="toc-text">create시에 추가로 필드 설정하기</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EP-12-PostAPIView-차근차근-응답시간-줄여보기"><span class="toc-number">1.</span> <span class="toc-text">EP 12. PostAPIView 차근차근 응답시간 줄여보기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#관련-문서"><span class="toc-number">1.1.</span> <span class="toc-text">관련 문서</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#왜-최적화를-해야하나요"><span class="toc-number">1.2.</span> <span class="toc-text">왜 최적화를 해야하나요?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#시작하기에-앞서"><span class="toc-number">1.3.</span> <span class="toc-text">시작하기에 앞서</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#측정-Metric"><span class="toc-number">1.4.</span> <span class="toc-text">측정 Metric</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#수행시간-비교-단위-초"><span class="toc-number">1.5.</span> <span class="toc-text">수행시간 비교 (단위:초)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#측정을-위한-코드-코드-측정코드"><span class="toc-number">1.6.</span> <span class="toc-text">측정을 위한 코드 코드 측정코드</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#기본-코드-수행"><span class="toc-number">1.7.</span> <span class="toc-text">기본 코드, 수행</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Serializer를-제거해봅시다"><span class="toc-number">1.8.</span> <span class="toc-text">Serializer를 제거해봅시다.</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#수행결과"><span class="toc-number">1.8.1.</span> <span class="toc-text">수행결과</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DB-Serializer-대신에-캐싱"><span class="toc-number">1.9.</span> <span class="toc-text">DB&#x2F;Serializer 대신에 캐싱</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#수행결과-1"><span class="toc-number">1.9.1.</span> <span class="toc-text">수행결과</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#APIView에-필요한-설정만-넣기"><span class="toc-number">1.10.</span> <span class="toc-text">APIView에 필요한 설정만 넣기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#수행결과-2"><span class="toc-number">1.10.1.</span> <span class="toc-text">수행결과</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#미들웨어-제거하기"><span class="toc-number">1.11.</span> <span class="toc-text">미들웨어 제거하기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#수행결과-3"><span class="toc-number">1.11.1.</span> <span class="toc-text">수행결과</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Django-기본-HttpResponse-쓰기"><span class="toc-number">1.12.</span> <span class="toc-text">Django 기본 HttpResponse 쓰기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#수행-결과"><span class="toc-number">1.12.1.</span> <span class="toc-text">수행 결과</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#정리"><span class="toc-number">1.13.</span> <span class="toc-text">정리</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -652,6 +655,14 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -2366,7 +2377,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/api14/" >DRF 기본편 14</a>
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
         </li>
     
     
@@ -2376,12 +2387,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/api13/" >DRF 기본편 13</a>
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/api12/" >DRF 기본편 12</a>
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
         </li>
     
     
@@ -2391,7 +2402,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/api10/" >DRF 기본편 10+11</a>
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
         </li>
     
     
@@ -2401,37 +2412,37 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/api09/" >DRF 기본편 9</a>
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/api08/" >DRF 기본편 8</a>
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/api05/" >DRF 기본편 5+6+7</a>
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/api04/" >DRF 기본편 4</a>
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/api03/" >DRF 기본편 3</a>
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/api02/" >DRF 기본편 2</a>
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/api01/" >DRF 기본편 1</a>
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
         </li>
     
     
@@ -2548,9 +2559,13 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
-    
         <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
     
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
     
@@ -2568,37 +2583,33 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
     
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
         <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
     
         <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
     
-        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
     
         <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
     
         <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
     
-        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
-    
-        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
-    
-        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
-    
-        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
     
         <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
     
         <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
     
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
         <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
     
         <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
     
-        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
-    
         <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
-    
-        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
     
         <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
     
@@ -2614,15 +2625,17 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
     
-        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
-    
         <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
     
         <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
     
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
         <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
     
         <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
         <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
     
@@ -2630,39 +2643,37 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
     
-        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
-    
         <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
     
         <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
     
         <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
     
         <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
     
-        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
-    
-        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
-    
         <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
-    
-        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
     
         <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
     
-        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
-    
         <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
         <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
     
-        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
-    
         <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
     
         <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
     
         <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
     
@@ -2709,29 +2720,29 @@ jsonContent:
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
         <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
     
         <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
     
         <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
     
-        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
-    
         <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
     
         <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
     
-        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
-    
-        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
     
         <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
     
-        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
-    
-        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
     
         <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
     
         <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
     
@@ -2739,23 +2750,23 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
     
-        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
-    
         <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
     
         <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
     
         <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
     
-        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
-    
         <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
     
         <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
     
-        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
-    
         <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
     
         <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
     
@@ -2765,9 +2776,9 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
     
-        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
-    
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
     
