@@ -1,0 +1,3684 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>OS에 관한 쉬운 세가지 이야기 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">OS에 관한 쉬운 세가지 이야기</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            OS에 관한 쉬운 세가지 이야기
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "OS">OS</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">5k</span>Reading time: <span class="post-count reading-time">31 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/08/26</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>근본적으로 전공자와 비전공자의 차이를 매꾸기 위한 목적이다</p>
+<p><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/" target="_blank" rel="noopener">자료</a>에서 제공하는 운영체제, 3가지 쉬운 이야기에 대해  볼수있다.</p>
+<ul>
+<li>가상화(Virtualization)</li>
+<li>동시성(Concurrency) </li>
+<li>지속성(Persistence)</li>
+</ul>
+<p>이러한 아이디어를 배울있어서 OS의 구조, 즉 CPU에서 어떻게 프로그램을 다음 실행하거나 어떻게 가상 메모리 시스템의 메모리 과부하를 처리하거나 가상 머신 모니터의 작동 방식 디스크에 대한 정보를 관리하는 방법도 약간은 있지만 부품이 고장 났을 때 동작하는 분산 시스템을 구축하는 방법에 대해 설명합니다. 구체적으로 말하면 그러한 같은 것이군요.</p>
+<p>일단 2020.09.07까지 읽어왔던것을 정리할 것이다. 책은 기본적으로 virtualization, concurrency까지 읽었고, 100% 이해했다곤 하지못하겠지만, 컴공 친구말로는 이정도면 컴공에서 OS지식수준은 도달했고, 조금더 아는 수준으로 알아도된다고 하여 멈추고 다른 공부로 전환하려고한다.</p>
+<p>필자의 이 포스팅은 남을 이해시키기 위함이 아닌 내가 이해하면서 끄적이면서 정리한 글이라고 봐주면 고맙겠다.</p>
+<p><strong>제1장 이 책에 관한 대화</strong><br><strong>제2장 운영체제 개요</strong></p>
+<p>프로그램은 매우 단순한일을 한다.</p>
+<p>초당 수백만 번 명령어를 반입(fetch)하고 해석(decode)하고 (즉, 무슨 명령어인지 파악하고), 실행(execute)한다.</p>
+<p>(즉, 두수를 더하고, 메모리에 접근하고, 조건을 검사하고, 함수로 분기하는 등의 정해진 일을 한다.)</p>
+<p>명령어 작업을 완료한 후 프로세서는 다음 명령어로, 또 그 다음 명령어로 프로그램이 완전히 종료될 떄까지 실행한다.</p>
+<p><strong>운영체제란</strong></p>
+<p>프로그램을 쉽게 실행하고(동시에 여러 개의 프로그램을 실행할수도), 프로그램 간의 메모리 공유를 가능케 하고, 장치와 상호작용을 가능케하고, 다양한 흥미로운 일을 할수있게하는 소프트웨어이다. 시스템을 사용하기 편리하게, 정확하고, 올바르게 동작 시킬 책임이있다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ginp9x5nufj316y0u07wh.jpg" alt="IMG_43F69D48D405-1"></p>
+<p>운영체제는 다양한 물리자원들을 배분하기 위해 <strong>가상화</strong>를 한다. 그래서 OS를 가상 머신이라고 부른다.</p>
+<p>사용자 프로그램의 프로그램 실행, 메모리 할당, 파일 접근과 같은 가상 머신과 관련된 기능들을 운영체제에게 요청할 수 있도록, 운영체제는 사용자에게 API를 제공한다.<strong>(시스템콜)</strong></p>
+<p>가상화는 많은 프로그램들이 CPU를 공유하여, 동시에 실행될 수 있게한다. 프로그램들이 각자 명령어와 데이터를 접근할수있게한다. OS는 자원 관리자</p>
+<p> 물리적인 CPU, 메모리, 디스크는 시스템의 자원이다.</p>
+<p>효율적으로, 공정하게, 이들 자원을 관리하는 것이 OS의 역할이다.</p>
+<p>만약 두개의 쓰레드를 사용하여 각자 같은 변수를 참조하여 100을 더하는 프로그램을 실행시킨다면 결과는 200이 아닌 1xx가 나올것이다.</p>
+<p>이뉴는 명령어가 한번에 하나씩만 실행된다는 것과 관련있다.</p>
+<p>변수를 메모리에서 레지스터로 탑재하는 명령어1</p>
+<p>레지스터를 1증가시키는 명령어 2</p>
+<p>레지스터의 값을 다시 메모리에 저장하는 명령어 3</p>
+<p>하지만 3개의 명령어가 원자적으로 (한번에 3개 모두) 실행되지 않기 때문에 이상한일이 발생한다.</p>
+<p><strong>병행성</strong> 과 관련있다</p>
+<h1 id="제Ⅰ편-가상화"><a href="#제Ⅰ편-가상화" class="headerlink" title="제Ⅰ편 가상화"></a>제Ⅰ편 가상화</h1><h2 id="제3장-가상화에-관한-대화"><a href="#제3장-가상화에-관한-대화" class="headerlink" title="제3장 가상화에 관한 대화"></a>제3장 가상화에 관한 대화</h2><p>복숭아(CPU) 나눠먹기</p>
+<h2 id="제4장-프로세스의-개념"><a href="#제4장-프로세스의-개념" class="headerlink" title="제4장 프로세스의 개념"></a>제4장 프로세스의 개념</h2><p> 프로세스= 실행중인 프로그램</p>
+<p>프로그램 자체는 생명x, 디스크상에 존재하며, 실행을 위한 명령어와 정적 데이터의 묶음이다. </p>
+<p>프로세스들이 생각할때 각자 자신의 CPU가 있다고 착각하게 할수있을까?</p>
+<p>Time Sharing기법으로 하나의 프로레스를 실행하고, 얼마 후 중단시키고 다른 프로레스를 실행하는 작업 반복 (context switch의 구현필요)</p>
+<p>policy는 어느 프로그램을 실행시킬것인가?에 대한 대답이다 </p>
+<p>mechanism은 어떻게 다음 실행할 프로그램들로 넘어갈것인가?에 대한 대답이다</p>
+<p><strong>프로그램에서 프로세스 생성</strong></p>
+<ul>
+<li><p>OS가 프로그램 코드와 정적데이터를 메모리, 프로레스의 주소 공간(address space)에 탑재(load)하는 것이다.</p>
+</li>
+<li><p>스택, 힙을 할당한다</p>
+<p>(스택은 지역 변수, 함수 인자, 리턴 주소등을 저장,힙은 동적으로 할당된 데이터를 저장위해서 연결 리스트, 해시 테이블, 트리 크기가 가변적인 자료 구조위해서)</p>
+</li>
+<li><p>OS는 입출력과 관계된 초기화 작업을 수행한다.</p>
+</li>
+<li><p>OS는 CPU를 새로 생성된 프로세스에 넘기게 되고 프로그램이 실행된다.</p>
+</li>
+</ul>
+<p><strong>프로세스 상태</strong></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ginq8ylq3oj316y0u01kx.jpg" alt="IMG_1548"></p>
+<p>ready상태에서 스케줄되어야함 그래야 running상태가능</p>
+<p>running상태는 현재 실행중인 프로세스임</p>
+<p>I/O기다리거나 이벤트 wait를 받았을때 waiting상태로 전환!</p>
+<p><strong>자료구조</strong></p>
+<p>프로세스 리스트라는 자료 구조를 이용하여 시스템에서 실행 중인 프로그램을 관리한다. 프로세스의 관리를 위한 정보를 저장하는 자료 구조를 프로세스 제어 블럭(PCB)라고 부른다. </p>
+<p>레지스터 문맥(register context)자료 구조는 프로세스가 중단되었을 때 해당 프로세스의 레지스터값들을 저장한다. 이 레지스터값들을 복원하여  OS는 프로세스 실행을 재개한다(문맥 교환(context switch))</p>
+<h2 id="제5장-막간-프로레스-API"><a href="#제5장-막간-프로레스-API" class="headerlink" title="제5장 막간: 프로레스 API"></a>제5장 막간: 프로레스 API</h2><p>fork() 시스템콜</p>
+<p>PID(프로세스 식별자)</p>
+<p><strong>자식 프로세스는 부모 프로세스와 완전히 동일하지는 않다. 자식 프로세스는 자신의 주소 공간, 자신의 레지스터, 자신의 PC값을 갖는다.</strong></p>
+<p>CPU스케줄러는 실행할 프로세스를 선택한다. 어느 프로세스가 먼저 실행될지 모름.</p>
+<p>wait() 시스템콜</p>
+<p>부모가 먼지 실행되면  wait()가 일어나서 자식 프로세스가 일끝낼떄까지 리턴하지않는다.</p>
+<p>exec() 시스템콜</p>
+<p>자신이 아닌 다른 프로그램을 실행해야 할떄 사용한다. (fork()는 자신의 복사본을 만드는 것과 반대)</p>
+<p>fork()와 exec()를 나눠놓은이유는 fork()하고 명령어 (예를들면 입출력바꿈등의 명령)후에  exec()를 하여 외부 프로그램 실행할 수 있기 때문이다</p>
+<h2 id="제6장-제한적-직접-실행-원리"><a href="#제6장-제한적-직접-실행-원리" class="headerlink" title="제6장 제한적 직접 실행 원리"></a>제6장 제한적 직접 실행 원리</h2><p><strong>CPU시간을 나눠 씀으로써 가상화를 구현한다.</strong>(Time sharing)</p>
+<p>성능저하, 제어권의 문제가 발생할수있다.</p>
+<p>직접 실행 원리로 프로그램을 CPU에서 직접 실행시킴.</p>
+<p>제한적! 이라는것은 프로그램 실행에 제한을 둬야 OS는 제어권을 다시 획득해서 제어를 할수있다.</p>
+<p>OS에 사용자 모드와 커널 모드가 도입되었다</p>
+<p>사용자 모드에서 실행되는 코드는 할수있는 일이 제한된다. 프로세스가 제한된 요청을 할 경우 프로세서가 예외를 발생시키고, OS는 해당 프로세스를 제거한다</p>
+<p>커널 모드는 OS의 중용한 코드들이 실행된다. 이 모드에서 실행되는 코드는 모든 특수한 명령어를 포함하여 원하는 모든 작업을 수행할 수 있다.</p>
+<p>사용자 프로세스에게 특권 명령을 실행해야할때는 OS가 제공하는 시스템 콜을 이용한다.</p>
+<p>trap 특수 명령어를 실행&gt; 커널 안에서 분기하는 동시에 커널 모드로 상향 조정&gt; 커널 모드 진입후 해당 명령 실행&gt; 완료시 return-from-trap 특수 명령어 호출&gt; 사용자 모드로 다시 하향 조정&gt; 호출한 사용자 프로그램으로 리털</p>
+<p>trap요청한 프로세스의 레지스터들을 저장해야한다. return-from-trap 명령어 실행 시 사용자 프로세스로 제대로 리턴할 수 있도록 하기 위함이다.</p>
+<p>커널은 부팅 시에 trap table만들고 시스템을 통제한다. trap handler는 트랩 발생시 해야하는 행동들이 적혀있다. 즉 하드웨어들이 예외적인 사건이 일어났을때 trap&gt;trap handler&gt;순으로 진행 (???)</p>
+<p>프로레스간의 전환중 OS가 제어권획득을 위한 방법은 timer interrupt를 발생시키는것이다. 즉 수행 중인 프로세스가 중단되고 미리 구성된 OS의 interrupt handler가 실행된다. 이 시점에서 OS는 CPU제어권을 다시 얻게 되고 원하는 일가능(현재 프로세스를 중단하고 다른 프로세스를 실행시키는 작업등…)</p>
+<p>OS가 현재 실행중인 프로세스를 재개할것인지, 다른 프로세스로 전활할 것인지를 결정해야한다. </p>
+<p>이 역할을 OS의 scheduler라는 부분에 의해 내려진다.</p>
+<p>다른 프로세스로 전활하기로 결정되면 OS는 context switch한다.(코드를 실행)</p>
+<p>현재 실행중인 프로세스의 레지스터 값을 커널 스택 같은 곳에 저장하고 곧 실행될 프로세스의 커널 스택으로부터 레지스터 값을 복원하는 것이 전부다.</p>
+<p>시스템 콜을 처리하는 도중 타이머인터럽트가 발생? 등의 질문은 <strong>병행성</strong>단원에서…</p>
+<h2 id="제7장-스케줄링-개요"><a href="#제7장-스케줄링-개요" class="headerlink" title="제7장 스케줄링: 개요"></a>제7장 스케줄링: 개요</h2><p>(프로세스를 7~9까지 job이라고 부를것임)</p>
+<p>스케줄링 평가 항목.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gioyd8lqa4j313g0fm41y.jpg" alt="스크린샷 2020-09-13 오후 2.21.08"></p>
+<h3 id="FIFO-First-In-First-Out"><a href="#FIFO-First-In-First-Out" class="headerlink" title="FIFO(First In, First Out)"></a>FIFO(First In, First Out)</h3><p>먼저 온 job 먼저 처리</p>
+<p>A job 이 엄청 길고 B, C job이 짧다고 가정</p>
+<p>맨 처음 온 job이 너무 많은 시간요구하면 뒤에 다른 job들의 결과처리까지 시간너무 많이소요</p>
+<h3 id="SJF-Shortest-Job-First"><a href="#SJF-Shortest-Job-First" class="headerlink" title="SJF(Shortest Job First)"></a>SJF(Shortest Job First)</h3><p>가장 짫은것 처리하기</p>
+<p>A가 먼저 도착해버리고 일 처리가 된다면</p>
+<p>B,C가 늦게 도착하면 FIFO에서의 문제점과 같아짐</p>
+<h3 id="STCF-Shortest-Time-to-Completion-First"><a href="#STCF-Shortest-Time-to-Completion-First" class="headerlink" title="STCF(Shortest Time-to-Completion First)"></a>STCF(Shortest Time-to-Completion First)</h3><p>Preemptive scheduling 선점방식!</p>
+<p>can stop a job! 이 필요하며, 즉,context switch를 필요로 한다.</p>
+<p>A 도착후 10초후에 B,C가 도착하면</p>
+<p>B,C가 먼저 처리가능한 job이므로 A를 중단후 B,C처리후 A로 다시 CPU줌</p>
+<h3 id="RR-Round-robin"><a href="#RR-Round-robin" class="headerlink" title="RR(Round-robin)"></a>RR(Round-robin)</h3><p> job을 시간으로 나눠서 배치함 (time slice)</p>
+<p>time quantum 조건에 따라</p>
+<ul>
+<li><p>small일 경우</p>
+<p>good responsiveness, high context switch overhead(계속 바꿔야하므로 스위치 비용높다)</p>
+</li>
+<li><p>Large일 경우</p>
+<p>low context switch overhead but bad responsiveness</p>
+</li>
+</ul>
+<h3 id="Incorporating-I-O"><a href="#Incorporating-I-O" class="headerlink" title="Incorporating I/O"></a>Incorporating I/O</h3><p>많은 애플리케이션이 I/O를 한다.</p>
+<p>A가 I/O요청하면 잠시  block 하고 B처리하다가 I/O요청 받으면 A로 스위칭</p>
+<h2 id="제8장-스케줄링-멀티-레벨-피드백-큐"><a href="#제8장-스케줄링-멀티-레벨-피드백-큐" class="headerlink" title="제8장 스케줄링: 멀티 레벨 피드백 큐"></a>제8장 스케줄링: 멀티 레벨 피드백 큐</h2><h3 id="MLFQ-Multi-Level-Feedback-Queue"><a href="#MLFQ-Multi-Level-Feedback-Queue" class="headerlink" title="MLFQ(Multi-Level Feedback Queue)"></a>MLFQ(Multi-Level Feedback Queue)</h3><p>SJF, STCF: good for turnaround time, terrible for response time</p>
+<p>RR: vice response time</p>
+<p>How to optimize the turnaround time while minimizing response time?</p>
+<p><strong>MLFQ (Multi-Level Feedback Queue)</strong></p>
+<ul>
+<li>Consist of multiple queues</li>
+<li>Each queue is assigned a different priority level</li>
+<li>A job that is ready to run is on a single queue (running or blocked jobs are out of the queues)</li>
+<li>A job with higher priority (a job on a higher queue) is chosen to run next (RR among jobs in the same queue)</li>
+</ul>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gioz0tb85sj30sc0380uz.jpg" alt="스크린샷 2020-09-13 오후 2.43.52"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gioz0xp3rlj30y609eqbc.jpg" alt="스크린샷 2020-09-13 오후 2.43.59"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gioz1yxunyj314i0dmdj2.jpg" alt="스크린샷 2020-09-13 오후 2.44.58"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gioz2q97axj31280o2tk0.jpg" alt="스크린샷 2020-09-13 오후 2.45.42"></p>
+<h2 id="제9장-스케줄링-비례-배분"><a href="#제9장-스케줄링-비례-배분" class="headerlink" title="제9장 스케줄링: 비례 배분"></a>제9장 스케줄링: 비례 배분</h2><h2 id="제10장-멀티프로세서-스케줄링-고급"><a href="#제10장-멀티프로세서-스케줄링-고급" class="headerlink" title="제10장 멀티프로세서 스케줄링(고급)"></a>제10장 멀티프로세서 스케줄링(고급)</h2><p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gioz523csyj312r0u0q8a.jpg" alt="스크린샷 2020-09-13 오후 2.47.56"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gioz59mo5pj311i0u00yb.jpg" alt="스크린샷 2020-09-13 오후 2.48.08"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gioz6xlvm1j313c0u0dnx.jpg" alt="스크린샷 2020-09-13 오후 2.49.44"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gioz69csnwj314d0u0q9q.jpg" alt="스크린샷 2020-09-13 오후 2.48.53"></p>
+<h2 id="제11장-CPU-가상화에-관한-마무리-대화"><a href="#제11장-CPU-가상화에-관한-마무리-대화" class="headerlink" title="제11장 CPU 가상화에 관한 마무리 대화"></a>제11장 CPU 가상화에 관한 마무리 대화</h2><p><strong>Mechanism</strong>: Context switch, Timer interrupt, Handler &gt; 어떻게 넘어가고 처리할것인가!!에 대한것 메커니즘</p>
+<p><strong>Policy</strong>: FIFO, SJF, RR, MLFQ, Lottery, Stride, Multiprocessor &gt; 일 나열에 관한 정책</p>
+<h2 id="제12장-메모리-가상화에-관한-대화"><a href="#제12장-메모리-가상화에-관한-대화" class="headerlink" title="제12장 메모리 가상화에 관한 대화"></a>제12장 메모리 가상화에 관한 대화</h2><p><strong>사용자 프로그램이 생성하는 모든 주소는 가상주소다.</strong></p>
+<p><strong>즉, 당신이 보는 모든 것은 가상 주소</strong></p>
+<p>왜 물리 메모리를 가상화해?</p>
+<p>OS는 각 프로세스에게 단지 환상을 제공한다. 마치 자기만의 메모리가 있는것처럼!</p>
+<p>OS가 하드웨어로부터 약간의 도움을 얻어 가장된 가상 주소를 실제 물리 주소로 변환하고 원하는 정보의 위치를 찾을수있다. 사용하기 쉬운 시스템</p>
+<p>고림과 보호!도 중요한 이유중하나</p>
+<h2 id="제13장-주소-공간의-개념"><a href="#제13장-주소-공간의-개념" class="headerlink" title="제13장 주소 공간의 개념"></a>제13장 주소 공간의 개념</h2><p>멀티프로그래밍과 시분할이 필요해졌다. 시분할을 구현하는 한 가지 방법은 실행 중단 다른 프로세스 실행 중단하는 것이다. 이 중단 시점에 모든 상태를 디스크에 저장..다른 프로세스해당하는거 메모리 올리는것은 매우 느리다</p>
+<p>즉, 레지스터 상태를 저장하고 복원하는 것은 빠르지만, 프로세스 전환시 프로세스를 메모리에 그대로 유지하면서, 운영체제가 시분할 시스템을 효율적으로 구현할 수 있게 하는 것이다.</p>
+<p>여기서 발생하는 문제점은 여러 프로그램이 메모리에 동시에 존재하려면 <strong>보호</strong>가 중요한 문제다. 한 프로세스가 다른 프로세스의 메모리를 읽는것을 막아야한다</p>
+<p><strong>주소 공간</strong></p>
+<p>OS는 사용하기 쉬운 메모리 개념을 만들어야하고, 이 개념이 주소 공간이다.</p>
+<p>주소 공간은 실행 프로그램의 모든 메모리 상태를 갖고 있다. </p>
+<p>일단 실행중인 프로그램 코드(명령어)는 반드시 메모리에 존재하므로 주소 공간에 존재한다. 스택은 함수 호출 체인 상의 현재 위치, 지역 변수, 함수 인자와 반환 값등을 저장하는 데 사용된다. 힙은 동적으로 할당되는 메모리를 위해 사용된다.  힙과 스택은 각각 반대방향으로 커진다.![스크린샷 2020-09-14 오후 4.33.51](/Users/lostcatbox/Library/Application Support/typora-user-images/스크린샷 2020-09-14 오후 4.33.51.png)</p>
+<p>주소 공간을 설명할떄, OS가 실행중인 프로그램에게 제공하는 개념을 설명한다. 실제로 프로그램이 물리 주소 0~16KB사이에 존재하는 것이 아니다. 실제로는  임의의 물리 주소에 탑제된다.!!!</p>
+<p>OS가 메모리를 가상화하여 다수의 프로세스에게 프로세스전용의 커다랑 주소 공간이라는 개념을 제공한다.</p>
+<p>프로세스 A가 가상주소 0부터 load를 수행할때, OS는 하드웨어의 지원을 통해 물리 주소 0이 아니라 물리 주소 320KB(A가 탑재된 메모리 시작주소)를 읽도록 보장한다.</p>
+<p>VM(가상 메모리 시스템)의 목표는</p>
+<ul>
+<li>투명성(실행중인 프로그램이 가상 메모리의 존재를 인지x)</li>
+<li>효율성(가상화가 시간, 공간 측면에서 효율적이도록)(TLB지원,,)</li>
+<li>보호(프로세스가 남의 프로세스 메모리에 접근, 영향 x)&gt;&gt;프로세스들 서로 고립</li>
+</ul>
+<h2 id="제14장-막간-메모리-관리-API"><a href="#제14장-막간-메모리-관리-API" class="headerlink" title="제14장 막간: 메모리 관리 API"></a>제14장 막간: 메모리 관리 API</h2><p>어떻게 메모리를 할당하고 관리할 것인가?</p>
+<p>C프로그램 실행되면, 두가지 유형의 메모리 공간이 할당된다</p>
+<p>스택 메모리는 컴파일러에 의해 암묵적.. 자동 메모리임</p>
+<p>함수 리턴 이후에도 유지되어야 하는 정보는 스택에 저장x</p>
+<p>힙 메모리는 모든 할당과 반환이 프로그래머에 의해 명시적으로 처리됨</p>
+<p><strong>malloc()</strong> 힙에 요청할 공간의 크기 넣어줌., 메모리 할당</p>
+<p><strong>free()</strong> 할당된 메모리 해제.</p>
+<p>새로운 언어들이 자동 메모리 관리를 지원(가비지 컬렉터.)</p>
+<p>…CS관련아니므로나머지패스</p>
+<h2 id="제15장-주소-변환의-원리"><a href="#제15장-주소-변환의-원리" class="headerlink" title="제15장 주소 변환의 원리"></a>제15장 주소 변환의 원리</h2><p>CPU가상화 부분에서 제한적 직접 실행이라는 기법을 집중적으로 다뤘다.</p>
+<p>즉, 중요한 순간에 OS가 관여하여 하드웨어를 직접 제어한다.</p>
+<p>메모리 가상화도 비슷한 전략이다.</p>
+<p>하드웨어-기반 주소 변환 &gt;&gt; 주소 변환 으로 부른다</p>
+<p>프로그램의 모든 메모리 참조는 가상 주소를 물리 주소로 변환한다.</p>
+<p>아주 예전에는 베이스와 바운드라는 간단한 아이디어가 채택되었다. (동적 재배치)</p>
+<p>CPU마다 2개의 하드웨어 레지스터가 필요하다. 하나는 베이스 레지스터, 하나는 바운드 레지스터(=리미트 레지스터)이다.</p>
+<p>프로그램 시작시 OS가 베이스 레지스터에 프로그램이 탑재될 물리 메모리 위치 시작주소를 저장한다. 프로그램 카운터(PC)는 128이라면 이를 베이스값을 더해서 해당 물리 주소로 변환됫으니 명령어를 가져온다. 또 프로세스에서 가상 주소 15KB의 값을 탑재하라는 명령어를 내리면, 이 주소를 프로세서가 받아 다시 베이스 레지스터 값(32KB라고가정)을 더하고 물리주소는 47KB에서 원하는 내용을 탑재한다.</p>
+<p>이를 주소 변환 기술이라고 한다. 하드웨어는 프로세스가 참조하는 가상 주소를 받아들여 데이터가 실제로 존재하는 물리 주소로 변환한다. 동적 재배치! 프로세스가 실행을 시작한 이후에도 주소 공간을 이동가능하기때문에</p>
+<p>리미트 레지스터는 합법적인 주소 참조의 범위에 있다는 것을 확인할때 쓰인다</p>
+<p>베이스와 리미트 레지스터는 CPU칩 상에 존자하는 하드웨어 구조이다. 주소 변환에 도움을 주는 프로세서의 일부를  MMU라고 부르기도한다</p>
+<p>주소 공간의 마지막 물리 주소를 리미트 레지스터에 저장해놓는다면</p>
+<p>가상주소+베이스 =&lt; 리미트 를 검사하면 유효한 범위인지 할수있다.</p>
+<p>하드웨어는 베이스와 바운드 레지스터를 자체적으로 제공한다. </p>
+<p>CPU는 사용자 프로그램이 바운드를 벗어난 주소를 불법적인 메모리 접근을 시도하려고할때 예외를 발생시킬수있다. OS의 “바운드 벗어남”예외 핸들러가 실행되도록 조치.</p>
+<p>context switch 가 일어날때 PCB(프로세스 제어 블럭)으로 OS가 실행중인 프로세스를 중단시키면 베이스와 바운드 레지스터의 값을 저장.(메모리에 저장해놓음)</p>
+<p>동적 재배치는 비효율적이다.</p>
+<p>주소 공간 이미지에서의  free는 즉 내부 단편화를 의미하는 것이므로..</p>
+<p>이를 세그멘테이션!으로 줄일수있다.</p>
+<h2 id="제16장-세그멘테이션"><a href="#제16장-세그멘테이션" class="headerlink" title="제16장 세그멘테이션"></a>제16장 세그멘테이션</h2><p>베이스와 바운드 레지스터를 사용하면 OS가 물리 메모리의 다른 부분으로 쉽게 재배치할수 있다. 하지만 스택과 힙사이에 큰 free공간이 있으므로 그만큼 내부 단편화가 존재하게된다(낭비)</p>
+<p>이를 위해 세그멘테이션이라는 아이디어가 탄생했다. MMU안에 오직 하나의 베이스와 바운드 쌍만 존재하는 것이 아니라 __주소 공간의 논리적인 세그멘트(segment) 마다 베이스와 바운드 쌍이 존재한다. __ 세그멘트는 특정 길이를 가지는 연속적인 주소 공간이다. 예시기준으로는 코드, 스택, 힙의 세 종류의 논리적 세그멘트가 있다.  OS는 각 세그멘트를 물리 메모리의 각기 다른 위치에 배치가능.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gir6pri3wsj30ei0i6aoi.jpg" alt="스크린샷 2020-09-15 오후 12.41.09"></p>
+<p>예시기준으로는 3쌍의 베이스와 바운드 레지스터 쌍이 필요하다. 오프셋값+베이스값 이 바운드값을 넘지 않으면 범위내에 있으므로 그 물리 메모리 주소를 읽는다.</p>
+<blockquote>
+<p>가상 주소에서 각 논리에 해당하는 시작값을 뺴고, <strong>오프셋값을 얻어낸후</strong> 다시 해당 베이스값을 더해야하는 것에 주의하자</p>
+</blockquote>
+<p><strong>세그멘트 종류의 파악</strong></p>
+<p>하드웨어는 가상 주소가 어느 세그멘트를 참조하는지, 그 세그멘트 안에서 오프셋이 얼마인지를 어떻게 알수있을까?</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gir8bhzu55j31480hc1kx.jpg" alt="스크린샷 2020-09-15 오후 1.36.39"></p>
+<p>이런식으로 세그먼트를 명시하고, 나머지는 오프셋을 뜻하는것으로 해결한다. 특히 오프셋이 바운드보다 작은지 여부만 검사하면 된다.</p>
+<p>시스템이 각 주소 공간 구성 요소(힙, 스택, 코드)를 (베이스, 바운드를 기준으로) 별도로 물리 메모리에 재배치하기 때문에 메모리 절약이가능하다.</p>
+<p>문제점들은 다음과 같다 </p>
+<ul>
+<li><p>context switch때 세그멘트 레지스터의 저장과 복원이다</p>
+</li>
+<li><p>미사용중인 물리 메모리 공간의 관리다. 새로운 주소 공간이 생성되면 OS는 이 공간의 세그멘트를 위한 비어있는 물리 메모리 영역을 찾을 수 있어야한다. 각 세그먼트의 크기가 다를수있다.. 특 외부 단편화가 일어날수있다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gir8kojnxej30ni0funij.jpg" alt="스크린샷 2020-09-15 오후 1.45.27"> 물리메모리상태이다</p>
+</li>
+</ul>
+<h2 id="제17장-빈-공간-관리"><a href="#제17장-빈-공간-관리" class="headerlink" title="제17장 빈 공간 관리"></a>제17장 빈 공간 관리</h2><p>외부 단편화를 방지하는 방법에 대해 생각해보기</p>
+<p><strong>저수준 기법들</strong></p>
+<p>분할 -  free list를 작성해놓고 할당 요청들어오면 split해서 free list update하고</p>
+<p>병합 - 메모리 청크가 반환될때(free()사용시) 해제되는 청크의 주소와 바로 인접한 빈 청크의 주소를 살펴보고, 바로 인접해있다면 더 큰 빈 청크로 병합한다. 아래 그림 5번째</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gir97tcj57j31ac0ruajg.jpg" alt="IMG_920CBC59B6E0-1"></p>
+<h2 id="제18장-페이징-개요"><a href="#제18장-페이징-개요" class="headerlink" title="제18장 페이징: 개요"></a>제18장 페이징: 개요</h2><p>세그멘테이션은 가변 크기의 조각들로 분할하는 것이다. 공간을 다양한 크기의 청크로 분할할 때 공간 자체가 단편화가 될수있다. 할당은 점점더 어려워진다</p>
+<p>이를 해결하기 위해 공간을 동일 크기의 조각으로 분할 하는 것을 고려한다</p>
+<p><strong>페이징</strong></p>
+<p><img src="/Users/lostcatbox/Downloads/IMG_B04CB3E0407E-1.jpeg" alt="IMG_B04CB3E0407E-1"></p>
+<p>프로세스의 주소 공간을 몇개의 가변 크기의 논리 세그멘트(코드, 힙, 스택)으로 나누는것이 아니라 고정 크기의 단위로 나눈다. 이 각각의 고정 크기 단위를 페이지(page)라고 부른다. 또한 상응하여 물리 메모리도 페이지 프레임(page frame)이라고 불리는 고정 크기의 슬롯의 배열이라고 생각한다. 이 프레임 각각은 하나의 가상 메모리 페이지를 저장할 수 있다. </p>
+<p>주소 공간은 전체0~64KB로  4개의 페이지로 나누면 각 16KB이다. 이를 전체 물리메모리 128KB로 가정하면 페이지 프레임이 8개가 나오므로 OS가 유지하는 빈 공간 리스트에서 가져와 4개의 페이지 프레임에 배치하면된다. 또한 힙 스택이 어느 방향으로 커지는가, 어떻게 사용되는가에 대한 가정을 하지 않아도된다.</p>
+<p>주소 공간의 각 가상 페이지에 대한 물리 메모리 위치 기록을 위해서 <strong>OS는 프로세스마다 페이지 테이블(page table)이라는 자료 구조를 유지한다</strong>. 페이지 테이블의 주요 역할은 주소 공간의 가상 페이지 주소 변환 정보를 저장하는 것이다. VPN(가상주소)&gt;&gt;PFN(물리주소)  (즉, 가상페이지0&gt;&gt;물리페이지3)</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gira9wb8ucj31ac0sejz2.jpg" alt="IMG_1559"></p>
+<p>offset은 놨두고 VPN&gt;PFN으로 전환</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1giraa3uri4j314x0u0qdc.jpg" alt="IMG_1560"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1giraaaqzljj315d0u0dss.jpg" alt="IMG_1561"></p>
+<p>Page table은 매우 크므로 MMU안에서 유지하지 않고, 대신 각 프로ㅔ쓰의 페이지 테이블을 메모리에 저장한다. </p>
+<p>페이지 테이블은 가상 주소를 물리 주소로 매핑하는데 사용되는 자료구조로, 가장 간단한 형태는 선형 페이지 테이블이다. VPN로 배열의 항목(PTE)에 접근하여 PFN을 얻어낸다. 각 PTE에는 다른 심도있는 비트들도 존재한다.</p>
+<p>protection bit, accessed bit, valid bit등등 중요함.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1giragyuzdlj30no04aq98.jpg" alt="스크린샷 2020-09-15 오후 2.51.05"></p>
+<p><strong>페이징 너무 느림</strong></p>
+<p>페이지 테이블로 인해 처리 속도가 매우 저하될수있다. </p>
+<p>명령어를 가져오는과정은</p>
+<p> 메모리 접근에서 VPN을 PFN으로 바꾸기 위해 메모리에 있는 page table에 접근하고 다시 PFN으로 메모리에 접근하여 명령어를 가져온다 (무조건 2번이상의 메모리 처리가 필요…)(느려짐)</p>
+<p>메모리 낭비(유용한 응용 데이터 대신 페이지 테이블로 가득참)초래한다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1giramf4fbsj30mc0hynju.jpg" alt="스크린샷 2020-09-15 오후 2.56.20"></p>
+<h2 id="제19장-페이징-더-빠른-변환-TLB"><a href="#제19장-페이징-더-빠른-변환-TLB" class="headerlink" title="제19장 페이징: 더 빠른 변환(TLB)"></a>제19장 페이징: 더 빠른 변환(TLB)</h2><p>페이징은 상당한 성능 저하를 가져올 수 있다.  하지만 위에처럼 모든 페이징 주소변환에 있어서 모든 로드/스토어 명령어 실행이 추가적인 메모리 읽기를 수반하는 상황(페이지 테이블이 메모리에 잇으므로)을 가정해보자. 정말 느려질수밖에없다.</p>
+<p>주소 변환을 빠르게 하기 위해서는 변환-색인 버퍼(TLB)라고 부르는 것을 도입한다. MMU의 일부이다!!. 자주 참조되는 가상 주소-실주소 변환 정보를 저장하는 하드웨어 캐시이다. </p>
+<p>하드웨어는 먼저 TLB에 원하는 변환 정보가 있는 지 확인후</p>
+<blockquote>
+<p>&gt;&gt;&gt;&gt;존재하면(hit) 실주소 반환함&gt;&gt;권한 검사&gt;&gt; 원래 오프셋과 합쳐서 메모리 접근</p>
+<p>&gt;&gt;&gt;&gt;없다면(miss) 페이지 테이블에 접근하여 변환 정보를 찾아서 TLB로 읽어드린다&gt;&gt;&gt; TLB가 갱신되면 하드웨어는 명령어 재실행&gt;&gt;TLB에 존재하므로 Hit된다.</p>
+</blockquote>
+<p>이제는 히트가 미스보다 훨씬 많다면 이제는 페이징 비용이 부담되지 않는다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1giwyv9y0cyj30km0n4dyd.jpg" alt="스크린샷 2020-09-20 오후 12.43.01"></p>
+<p>이처럼 a[0]를 처음접근할때는 miss후  해당 페이지에 대한 물리주소를 가져와서 TLB에 도움된다. 그다음 a[1], a[2]는 같은 페이지에 있는 오프셋값이므로 hit, hit가 일어난다. 다음 a[3]은 다른 페이지 이므로 miss가 뜨고 위과정을 반복한다.</p>
+<p>그렇다면 TLB가 엄청 크고 모든 페이지테이블 담아 hit가 많아지면 좋은것인가?</p>
+<p>아니다. 그럼 결국 메모리와 다를게뭐냐!</p>
+<blockquote>
+<p>지역성을 생각하자</p>
+<p>시간지역성, 공간 지역성</p>
+<p>시간 지역성: 최근에 접근된 명령어 또는 데이터는 곧 다시 접근될 확률이 높다는 사실에 근거한다! TLB효과높아짐</p>
+<p>공간 지역성: 프로그램이 메모리 주소 x를 읽거나 쓰면, x와 인접한 메모리 주소를 접근할 확률이 높다는 사실에 근거한다. </p>
+</blockquote>
+<p><strong>TLB의 구성?</strong></p>
+<p>일반적인 TLB는 32,64,128개의 엔트리를 가지며</p>
+<p>VPN|PFN|다른 비트들</p>
+<p>변환 정보 저장 위치에 제약이 없도록, 각 항목마다 가상 페이지 번호VPN와 물리 페이지 번호 PFN가 있다. </p>
+<p>다른 비트들에는 다양한 정보를 표시하고 있다.</p>
+<p><strong>TLB의 문맥교환 문제</strong></p>
+<p>TLB를 사용하게 되면 프로세스 간 문맥 교환시 새로운 문제가 등장한다. </p>
+<p>TLB는 그것을 탑재시킨 프로세스에서만 유효하다. 다른 프로세스들에게는 의미가 없다. <strong>즉, 문맥교환할 때 이전에 실행하던 프로세스의 변환 정보를 사용하지않도록 주의해야한다.</strong></p>
+<p>여러가지 해법이 있을 수 있지만 하나만 언급해보자면, ASID정보를 다른 비트들에 추가한다. 문맥 전환시, OS는 새로운 ASID 값을 정해진 레지스터에 탑재한다. (ASID는 PID와역할이 생각하면됨)</p>
+<h2 id="제20장-페이징-더-작은-테이블"><a href="#제20장-페이징-더-작은-테이블" class="headerlink" title="제20장 페이징: 더 작은 테이블"></a>제20장 페이징: 더 작은 테이블</h2><p>나중에 다시보기</p>
+<h2 id="제21장-물리-메모리-크기의-극복-메커니즘"><a href="#제21장-물리-메모리-크기의-극복-메커니즘" class="headerlink" title="제21장 물리 메모리 크기의 극복: 메커니즘"></a>제21장 물리 메모리 크기의 극복: 메커니즘</h2><p>나중에 다시보기</p>
+<p>멀티 레이블..등등 </p>
+<p>즉 세그맨테이션+페이징 개념들이 나오면서 극복</p>
+<h2 id="제22장-물리-메모리-크기의-극복-정책"><a href="#제22장-물리-메모리-크기의-극복-정책" class="headerlink" title="제22장 물리 메모리 크기의 극복: 정책"></a>제22장 물리 메모리 크기의 극복: 정책</h2><p>나중에 다시보기</p>
+<h2 id="제23장-VAX-VMS-가상-메모리-시스템"><a href="#제23장-VAX-VMS-가상-메모리-시스템" class="headerlink" title="제23장 VAX/VMS 가상 메모리 시스템"></a>제23장 VAX/VMS 가상 메모리 시스템</h2><p>나중에 다시보기</p>
+<h2 id="제24장-메모리-가상화를-정리하는-대화"><a href="#제24장-메모리-가상화를-정리하는-대화" class="headerlink" title="제24장 메모리 가상화를 정리하는 대화"></a>제24장 메모리 가상화를 정리하는 대화</h2><p>.</p>
+<h1 id="제Ⅱ편-병행성"><a href="#제Ⅱ편-병행성" class="headerlink" title="제Ⅱ편 병행성"></a>제Ⅱ편 병행성</h1><h2 id="제25장-병행성과-관한-대화"><a href="#제25장-병행성과-관한-대화" class="headerlink" title="제25장 병행성과 관한 대화"></a>제25장 병행성과 관한 대화</h2><p>여러사람이 복숭아를 먹고 싶어 한다고해보자</p>
+<p>복숭아를 눈으로 확인할 후에 복숭아를 집어 먹도록 하면 발생하는 문제들.</p>
+<p>멀티 프로그램 생각해보기</p>
+<p>각 쓰레드는 독립된 객체로서 프로그램 내에서 프로그램을 대신하여 일한다.</p>
+<p>메모리에 접근하는데, 조정하지 않으면, 예상처럼 동작안할수있다.</p>
+<h2 id="제26장-병행성-개요"><a href="#제26장-병행성-개요" class="headerlink" title="제26장 병행성: 개요"></a>제26장 병행성: 개요</h2><p>이번 장에서는 프로세스를 위한 새로운 개념인 쓰레드를 소개한다.</p>
+<p>각 쓰레드가 프로세스와 매우 유사하지만, 차이가 있다면 쓰레드들은 주소 공간을 공유하기 때문에 동일한 값에 접근할 수 있다는 것이다. </p>
+<p>하나의 쓰레드의 상태는 프로세스의 상태와 매우 유사하다. 쓰레드는 어디서 명령어들을 불러 들일지 추적하는 프로그램카운터(PC)와 연산을 위한 레지스터들을 가지고있다. 만약 두 개의 쓰레드가 하나의 프로세서에서 실행중이라는 반드시 문맥 교환이 일어나야한다.  쓰레드1이 사용하던 레지스터들을 저장하고 쓰레드2가 사용하던 레지스터 내용을 복원한다는 점에서 프로세스의 문맥 교환가 유사하다. 프로세스의 상태를 PCB에 저장하듯, 쓰레드 제어 블럭(TCB)가 필요하다. </p>
+<p>쓰레드는 각자의 레지스터를 가진다.</p>
+<p><strong>가장 큰차이는 프로세스와 달리 쓰레드 간의 문맥 교환에서는 주소 공간을 그대로 사용한다는 것이다(사용하고 있던 페이지 테이블을 그대로 사용하면 된다)(명령어 주소공간 공유하기때문에 동일한 값에 접근이가능하다</strong></p>
+<p><strong>또 다른 큰 차이는 스택에 있다.</strong> 고전적 프로세스 주소 공간과 같은 간단한 모델(단일 쓰레드 프로세스)에서는 스택이 하나만 존재한다. 반면에 멀티 쓰레드 프로세스의 경우에는 각 쓰레드가 독립적으로 실행되며 쓰레드가 실행하기 위해 여러 루틴들을 호출할 수있다. 주소 공간에는 하나의 스택이 아니라 쓰레드마다 스택이 할당되어있다…</p>
+<p>쓰레드 생성시 스케줄러의 동작에 따라 다르겟지만, 즉시 실행될수도있고, 준비 상태일수도있다. 따라서 추가 쓰레드의 종료를 예상한다면 메인 쓰레드는 pthread_join()을 호출하여 특정 쓰레드의 동작의 종료를 대기한다.</p>
+<p>쓰레드1, 쓰레드2중에 누가 먼저 실행될지 몰라서 문제가 나타날 수 있지만 더 어려운 상황은 공유 데이터에 접근시에 나타난다.</p>
+<p>전역 공유 변수를 갱신하는 두개의 쓰레드에서 공유변수인 counter에 1씩을 더해 2만을 기대한다면, 결과는 20000이 되지않는다.</p>
+<p>왜?</p>
+<p><strong>제어 없는 스케줄링</strong></p>
+<p>counter 공유 변수를 증가하는 코드의 순서는 다음과 같다</p>
+<p>mov 0x8049, %eax</p>
+<p>add $0x1, %eax</p>
+<p>mov %eax,  0x8049</p>
+<p>이 예제에서 처음 mov 명령어가 명시한 메모리 주소의 값을 읽어드린 후 eax 레지스터에 넣는다. 1을 eax레지스터의 값에 더하는 연산을 한후 마지막으로  eax에 저장되어 이 값을 메모리의 원래의 주소로 다시 저장한다.</p>
+<p>쓰레드1에서 마지막 mov 로 메모리에 해당 레지스터 값(51)을 넣기 전에 타임 인터럽트가 일어나면 쓰레드 2는 그냥 메모리에 있는 값(55까지 되었다고가정)부터 시작해서 연산시작하여,,, 정상적으로 쓰레드 문맥 교환이일어나면, 쓰레드1은 이제 레지스터 값을 메모리에 넣는것을 한다.즉, counter변수값이 55에서 다시 51이 된다.</p>
+<p><strong>명령어의 실행 순서에 따라 결과가 달라지는 상황을 경쟁조건이라고 부른다</strong>. 즉, 결정적 결과가 아니라 비결정적인 결과이다.</p>
+<p><strong>멀티 쓰레드가 같은 코드를 실행할때 경쟁 조건이 발생하기 때문에 이러한 코드 부분을 임계 영역이라고부른다. (공유 변수, 자원을 접근하고 하나 이상의 쓰레드에서 동시에 실행되면 안되는 코드를 임계영역이라고부른다.)</strong></p>
+<p><strong>이러한 코드에서 필요한 것은 상호 배제이다</strong>. 즉, 이 속성은 하나의 쓰레드가 임계 영역 내의 코드를 실행 중일 때는 다른 쓰레드가 실행할 수없도록 보장해준다. 따라서 경쟁을 피할 수 있고 프로그램 실행 결과를 결정론적으로 얻을 수 있게 된다.</p>
+<p><strong>원자성!</strong>이란 하나의 단위를 뜻하며, 때로는 전부 아니면 전무이다. 원자성을 보장한다는 것은 명령어가 실행이 안되었거나 실행이 종료된 후라는것.</p>
+<p>하드웨어 적으로는 <strong>동기화 함수</strong> 구현에 필요한 기본적인 명령 몇개만 필요하다. 즉 하드웨어와 OS의 지원을 통해 한번에 하나의 쓰레드만 임계 영역에서 실행하도록 구성된, 제대로 잘 동작하는 멀티 쓰레드 프로그램을 작성할 수 있다.</p>
+<h2 id="제27장-막간-쓰레드-API"><a href="#제27장-막간-쓰레드-API" class="headerlink" title="제27장 막간: 쓰레드 API"></a>제27장 막간: 쓰레드 API</h2><p>이번 장은 쓰레드 API에 대해 간략히 설명한다.</p>
+<p>쓰레드를 만들때, 종료할때..락, 컨디션 변수에 대해 인터페이스를 설명한다. 이중 락, 컨디션 변수에 대해 설명하겠다</p>
+<p><strong>락은 임계 영역에 대한 상호 배제 기법이다.</strong></p>
+<p>lock()&gt;&gt;~~~&gt;&gt;unlock()은 ~~~에 실행되는 것에 대해 lock()락을 획득을 시도하고 락을 얻을 때까지 호출에서 리턴하지 않는다. 많은 쓰레드들이 락 획득 함수에서 대기중일수있다. 락을 획득한 쓰레드만이 언락을 호출해야한다.</p>
+<p><strong>컨디션 변수</strong></p>
+<p>한 쓰레드가 계속 진행하기 전에 다른 쓰레드가 무언가를 해야 쓰레드 간에 일종의 시그널 교환 메커니즘이 필요하다. 이때 쓰는것이 컨디션 변수.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1giy62q0mapj30qk0dgkc9.jpg" alt="스크린샷 2020-09-21 오후 1.37.54"></p>
+<p>ready를 컨디션 변수로 활용</p>
+<p>wait()를 사용하여 호출 쓰레드를 수면상태로 만들고 다른 쓰레드로부터의 시그널을 대기한다. while문에서 ready변수가 0인지 검사하고  0일떄 wait()함수를 넣어서 0인지 계속 검사한다. 이때 wait()는 인자로 락과 시그널을 받는다. 이유는 wait()할때 락을 반납하기때문이다. 다른 쓰레드가 락을 획득 후 할일끝나고 ready=1로 변경하며, signal()로 시그널을 보낸후, 락을 반납한다. 기존 쓰레드가 ready=1이 되는순간 while문 빠져나오고 시그널 받았으므로 wait()상태를 벗어난다.(이때 wait()깨어나서 리턴하기 직전에 락을 다시 획득한다.)</p>
+<p>몇가지 유의할 점은 전역 변수 ready를 수정할때 반드시 락을 가진상태에서 수정해야한다. 이를 통해 경쟁 조건이 발생하지 않는다는 것을 보장한다. 나머지 하나는 시그널 대기 함수는 락, 시그널 두개의 인자를 받는다는 것이다. 마지막으로 대기하는 쓰레드가 조건을 검사할때 if 문대신 while문을 사용하는 것이다. 변수를 제대로 갱신하지 않고 대기하던 쓰레드를 깨울수있는데, 이때 재검사를 하지 않는다면 대기하던 쓰레드는 조건이 변경되지 않았더라도 변경되었다고 생각할 것이다. 때문에 시그널의 도착은 변경 사실을 알리는 것이 아니라, 변경된 것 같으니 검사해보라는 정도의 힌트로 간주하는게 더 안전하다. </p>
+<h2 id="제28장-락"><a href="#제28장-락" class="headerlink" title="제28장 락"></a>제28장 락</h2><p>소스 코드의 임계 영역을 락으로 둘러서 원자 단위 명령어인것처럼 실행되도록 한다. 락은 하나의 변수이므로 락 변수를 먼저 선언한다. 락은 사용가능, 사용중으로 두 가지 상태를 가진다. 사용중이면 다른 쓰레드가 lock()호출해도 리턴하지않는다.</p>
+<p><strong>락 평가</strong></p>
+<p>락을 만들었을 때 평가는 상호 배제, 공정성, 성능이있다. </p>
+<p>초창기 단일 프로세스 시스템에서는 상호 배제 지원을 위해 임계 영역 내에서는 인터럽트 비활성방법씀(Time인터럽트 발생 x) &gt;&gt;결국 마지막까지 처리가능함. 하지만 실제로 중요한 인터럽트가 발생하는데 모두를 무시하는것은 위험하고,  OS가 제어권을 가져올 기회가 프로그램에게 주어진다. + 멀티 CPU에대해서는 안통함</p>
+<p><strong>Test-And-Set(Atomic Exchange)</strong></p>
+<p>플래그 변수로 락을 구현해 보자. </p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizjp8krsej30to0ekk7l.jpg" alt="스크린샷 2020-09-22 오후 6.14.58"></p>
+<p>임계 영역에 진입하는 첫 쓰레드가 lock() 을 호출하여 플래그 값이 1인지 검사(test)하고, 플래그값이 1이 아니면 이 쓰레드가 락을 보유(hold)하고 있다고 표시한다. 임계 영역에서 나오면 쓰레드가 unlock()을 호출하여 플래그 값을 초기화하여 락을 더이상 보유하고 있지 않다고 표시한다.</p>
+<p>만약 다른 누가 사용중인데 어떤 쓰레드가 lock()호출한다면 flag==1 이므로 spin-wait을 하며 다른 누구의unlock()을 기다린다.</p>
+<p>두가지 문제가 있다. 정확성과 성능이다. 시작할 떄는 flag=0이지만 적시에 인터럽트가 발생하면 두 쓰레드 모두 flag를 1로 설정하는 경우가 생길수있다. 성능은 spin-wait라는 방법을 사용하여, 플래그의 값을 무한히 검사하는 것에서 비롯된다. 특히 단일 프로세서에서 특히 손해가 크다. 락을 소유한 쓰레드조차 문맥 교환전까지는 실행할수없기때문이다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizjx3czfuj30yy04u7b7.jpg" alt="스크린샷 2020-09-22 오후 6.22.30"></p>
+<p>이 TestAndSet이 하는 동작은 다음과같다. ptr이 가리키고 있던 예전의 값을 반환하고 동시에 new에 새로운 값을 저장한다. 핵심은 원자적으로 수행된다는 것이다. 이전값을 검사(test)하고(반환되는값임)  동시에 메모리에 새로운 값을 설정(set)하기 때문이다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizk0dfl3xj30se0doqgw.jpg" alt="스크린샷 2020-09-22 오후 6.25.39"></p>
+<p>TestAndSet을 이용한 간단한 <strong>스핀 락.</strong></p>
+<p>즉 TestAndSet이 lock-&gt;flag가 0이면 lock()호출한 쓰레드는 TestAndSet에서 0이 반환되므로 while문 탈출한다.(동시에 lock-&gt;flag값은 1로 변함)</p>
+<p>하지만  lock-&gt;flag가 1이였다면 이전값을 반환하는 TestAndSet은 1을 반환하므로 while문안을 돈다.</p>
+<p>즉 락의 값을 검사하고 새로운 값으로 설정하는 동작을 원자적 연산으로 만들어서 오직 하나의 쓰레드만 락을 획득할 수 있도록 하였다.</p>
+<p>스핀락의 정확성은 완벽하다. 상호 배제가 잘 수행되기 떄문이다. 공정성은 보장하지 못한다. 실제로 while문을 회전 중인 쓰레드는 경쟁에 밀려서 계속 그상태로 남아있을수있다. 성능은 단일 CPU의 경우에 성능 오버헤드는 크다. 스케줄러가 락을 획득하려고 하나씩 깨워야하기때문이다. CPU 사이클을 낭비하면서 락을 획득하기 위해 대기한다. 반면 CPU가 여러 개인 경우 스핀락은 괜찮은 방법이다. 임계 영역이 매우 짧다고하면 쓰레드 A가 락을 획득한 CPU1, B가 락을 기다리는 CPU2가 있다고 하면, 임계 영역 구간이 짧다고 하면 곧 락을 획득 가능한 상태가 될수있으므로 쓰레드 B는 락을 획득하게된다.</p>
+<p><strong>Compare-And-Swap</strong></p>
+<p>이 기법은 ptr이 가리키고 있는 주소의 값이 expected변수와 일치하는지 검사하는 것이다. 일치한다면 ptr이 가르키는 주소의 값을 새로운 값으로 변경한다. 불일치한다면 아무것도 하지않는다. 원래의 메모리 값을 반환하여 CompareAndSwap를 호출한 코드가 락 획득의 성공 여부를 알수 있도록한다. </p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizkeacrc9j30we06yaia.jpg" alt="스크린샷 2020-09-22 오후 6.39.02"></p>
+<p>락 구현방식은 TestAndSet과 비슷</p>
+<p><strong>Load-Linked 그리고 Store-Conditional</strong> 넘어긴다</p>
+<p><strong>Fetch-And-Add</strong></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizkhvotuwj30fi062adc.jpg" alt="스크린샷 2020-09-22 오후 6.42.30"></p>
+<p>이런식으로 원자적으로 만든 후, 하나의 쓰레드가 락 획득을 원하면, 티켓 변수에 원자적 동작인 fetch-and-add명령어를 실행한다. 결과 값은 해당 쓰레드 차례를 나타낸다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizkj8n9xpj30ni0hyql1.jpg" alt="스크린샷 2020-09-22 오후 6.43.48"></p>
+<p>myturn은 차례를 나타낸다. 전역 공유 변수인 lock-&gt;trun사용하여 어느 쓰레드의 차례인지 판단한다. myturn ==turn이라면 임계 진입, 언락 동작은 lock-&gt;turn값 올림.</p>
+<p><strong>과도한 스핀</strong></p>
+<p>이제까지 소개한 하드웨어 기반의 락은 간단하고, 제대로 동작한다. 하지만 낭비되는 것이있다. 두개의 쓰레드를 프로세서가 하나인 시스템에서 실행했다고하자. 첫번째 쓰레드는 락획득후 실행하다가 타임 인터럽트에 걸리고, 두번째 쓰레드는 락획득을 못하기때문에 타임 인터럽트까지 아무것도 하지않는다. N개의 쓰레드가 하나의 락을 획득하기 위해 경쟁하게 되면 상황은 더욱 심각해진다. N-1개의 쓰레드에 할당된 CPU 시간 동안, 낭비한다. 스핀하면서 락 해제를 기다린다..</p>
+<p>이제 하드웨어의 지원으로만 이 문제를 해결할 수가 없다. OS로 부터 추가 지원이 필요하다.</p>
+<p><strong>무조건 양보</strong> yield()라는 시스템 콜은 호출 쓰레드 상태를 running에서 ready상태로 변환하여 다른 쓰레드가 running상태로 전이하도록한다. deschedule!</p>
+<p>하지만 문맥교환비용이 만만치 않다.</p>
+<p>스핀 대신 잠자기!, 어떤 쓰레드가 다음으로 락을 획득할지를 명시적으로 지금까지 제어못했다. 오직 스케줄러에 의해서 뽑혔다. 이번에는 명시적으로 제어해보자. OS로부터 적절한 지원과 큐를 이용한 대기 쓰레드들의 관리가 필요하다. park()는 특정 쓰레드 잠재우는 함수 unpark(threadID)는 특정 쓰레드 깨우는 함수. 이것을 락요청하는 프로세스를 재우고 해당 락이 해제되면 깨우도록 하는 락을 제작하는 데 앞뒤로 사용할 수 있다.</p>
+<p>Test-And-Set와 락 대기자 전용 큐와 함께 사용하여 좀더 효율적인 락을 만들것이다. 또 큐를 사용하여 다음으로 락을 획득할 대상을 제어하여 기아 현상을 피할것이다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizmvbtqkvj30mo0k87uw.jpg" alt="스크린샷 2020-09-22 오후 8.04.35"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizmwariccj310q0fgqu7.jpg" alt="스크린샷 2020-09-22 오후 8.05.32"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizmwz2i0ij30t40haqsg.jpg" alt="스크린샷 2020-09-22 오후 8.06.12"></p>
+<p>일부 하드웨어 지원과 일부 운영체제의 지원(park(), unpark()와 같은 형태)을 받아 락을 구현하였다. 현대적 모델도 관심을 갖자!</p>
+<h2 id="제29장-락-기반의-병행-자료-구조"><a href="#제29장-락-기반의-병행-자료-구조" class="headerlink" title="제29장 락 기반의 병행 자료 구조"></a>제29장 락 기반의 병행 자료 구조</h2><p>넘김</p>
+<h2 id="제30장-컨디션-변수"><a href="#제30장-컨디션-변수" class="headerlink" title="제30장 컨디션 변수"></a>제30장 컨디션 변수</h2><p>락 만으로는 병행 프로그램을 제대로 작성 불가하다</p>
+<p>부모 쓰레드는 자식 쓰레드가 작업을 끝냈는지 검사하기 원할수있다.(join())</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">while(done&#x3D;&#x3D;0):</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+
+<p>위처럼 부모 쓰레드에서 기다리면 부모쓰레드에 CPU가 할당되었을때 낭비된다.</p>
+<p><strong>조건이 참이 되 때까지 기다리기 위해 컨디션 변수를 활용할수있다</strong></p>
+<p>컨디션 변수는 일종의 큐 자료 구조로서, 어떤 실행의 상태(또는 어떤 조건)가 원하는것과 다를때 조건이 참이 되기를 기다리며 쓰레드가 대기할 수 있는 큐이다. 즉, 다른 쓰레드가 상태를 변경시켰을 때, 대기 중이던 쓰레드(하나 이상의 쓰레드가 깨어날수도있다)를 깨우고 (조건에 따라 시그널을 보내어), 계속 진행할수있도록 한다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizn4wd4c0j30su08ewq2.jpg" alt="스크린샷 2020-09-22 오후 8.13.48"></p>
+<p><strong>wait()는 락을 해제하고 호출한 쓰레드를 재우는 것이다. 어떤 다른 쓰레드가 시그널을 보내어 쓰레드가 깨어나면, wait()에서 리턴하기 전에 락을 재획득해야한다</strong></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizn66a5u3j30r80oe7v3.jpg" alt="스크린샷 2020-09-22 오후 8.15.02"></p>
+<p>두 가지 경우가 있다.</p>
+<p>첫번째는 부모 쓰레드가 자식 쓰레드를 생성하고 계속 실행하여 thr_join()을 호출하여 자식 쓰레드가 끝나기를 기다리는 경우이다. 결국 wait()를 호출하여 락해제되고 스스로 잠재운다. 자식 쓰레드는 thr_exit()을 호출하여 부모 쓰레드를 깨울 것이다. 이 코드는 락을 획득한 후에 상태 변수를 done으로 설정하고 부모 쓰레드에 시그널을 보내어 깨어나도록한다. 마지막으로, 호출했던  wait()에서 락을 획득한 채로 리턴하여 부모 쓰레드가 실행될 것이며 락을 해제하며 <code>parent:end</code> 출력된다</p>
+<p>두번째는 자식 쓰레드 생성즉시 실행되서 자고 있는 쓰레드를 깨우기 위해 시그널을 보낸다. 하지만 자고있는 쓰레드가 없기 때문에 단순히 리턴한다. 헛 수고!, 그 후에 부모 쓰레드가 실행하고 done=1 화긴하고 대기 없이 바로 리턴된다.</p>
+<p>컨디션 변수에서 가장 기본 법칙은 언제나 if 문 아닌 while문을 사용해야한다. 조건을 재확인하는 것이 안전하다.(거짓으로 깨운경우 다시 잠재울수있음.)</p>
+<p>그리고 시그널을 보낼때, 대기할때 항상 락을 걸자.</p>
+<p>또한 상태 변경되었다는 힌트가 시그널이고 확신은 done이라느 변수사용이 중요하다. </p>
+<p>동기화 문제! 해결할수있는 컨디션 변수는 중요하다</p>
+<p>두개의 컨디션 변수를 사용하여, 생산자, 소비자를 나눠놓자!</p>
+<h2 id="제31장-세마포어"><a href="#제31장-세마포어" class="headerlink" title="제31장 세마포어"></a>제31장 세마포어</h2><p>병행성 문제 해결을 위해 락, 조건 변수가 모두 필요하다. </p>
+<p>세마포어라는 동기화 기법!</p>
+<p>세마포어는 정수 값을 갖는 객체로서 두 개의 루틴으로 조작할 수 있다. sem_wait()와 sem_post()이다. 세마포어는 초기값에 의해 동작이 결정되기 때문에, 사용하기 전”제인 먼지”값을 초기화를 해야한다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizntvpgc4j30xc0r2b29.jpg" alt="스크린샷 2020-09-22 오후 8.37.47"></p>
+<p>이 루틴들은 다수 쓰레드들에 의해 동시에 호출되는 것을 가정한다. </p>
+<p>첫번째로, sem_wait()함수는 세마포어에서 1을 빼고 즉시 리턴하거나(1을 뺀 세마포어의 값이 0이상이면), 아니면 해당 1을 뺀 세마포어 값이 0이상이 될 때까지 호출자를 대기시킨다. 다수의 쓰레드들이 sem_wait()를 호출할 수 있기 때문에, 대기큐에는 다수의 쓰레드가 존재할수있다. 대기하는 법에는 회전과 재우기의 두가지있다는 것을 기억하자</p>
+<p>두번째는, sem_wait() 함수와 달리 sem_post()함수는 대기하지 않는다. 세마포어 값을 1을 더하고 대기 중인 쓰레드 중 하나를 깨운다.</p>
+<p>세번째로 세마포어가 음수라면 그 값은 현재 대기 중인 쓰레드의 개수와 같다.</p>
+<p>이 두개의 함수는 원자적으로 실행된다고 가정한다. </p>
+<p>이진 세마포어로 락 만들기</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizo9o2e5bj30hy04egq5.jpg" alt="스크린샷 2020-09-22 오후 8.52.59"></p>
+<p> X값에 1로 시작하면된다. 처음락획득이면 1-1=0 이되고 이때 다른 쓰레드가 얻으려고하면 -1이 되고, 처음락쓰레드가 처리다하면 세마포어값은 0이며, post()로 다른 쓰레드 호출하므로, 락획득까지 하고 post()하며 모든 작업완료하면 세마포어값은 1결과적으로된다.</p>
+<p><strong>컨디션 변수로서의 세마포어</strong></p>
+<p>어떤 조건이 참이 되기를 기다리기 위해 현재 쓰레드를 멈출 때에도 세마포어는 유용하게 사용될 수 있다. 예를 들어, 리스트에서 객체를 삭제하기 위해 리스트에 객체가 추가되기를 대기하는 쓰레드가 있다고 가정한다. 이런 종류의 전형적인 패턴이 하나의 쓰레드가 어떤 사건의 발생을 기다리고, 또 다른 쓰레드는 해당 사건을 발생시킨후, 시그널을 보내어 기다리던 쓰레드를 깨우는 것이다. 대기 중인 쓰레드가 프로그램에서의 어떤 조건이 만족되기를 대기하기 때문ㅇ, 세마포어를 컨디션 변수처럼 사용할수있다.</p>
+<p>부모쓰레드가 자식쓰레드를 기다린다하자</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizoepcwjuj30w40pq4qp.jpg" alt="스크린샷 2020-09-22 오후 8.57.49"></p>
+<p>부모는 자식 프로세스 생성후 sem_wait()를 호출하여 자식의 종료를 대기한다. 자식은 sem_post()를 호출하여 종료되었음을 알리고 부모가 동작하게한다.</p>
+<p>특히 여기에서 x는 0 이되어야한다.</p>
+<p>생산자/소비자 유한 버퍼 문제</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizolu3w3cj30l00jgx34.jpg" alt="스크린샷 2020-09-22 오후 9.04.40"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizoml18r1j30l80fgdy9.jpg" alt="스크린샷 2020-09-22 오후 9.05.10"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizomrsq31j30lw0icnnc.jpg" alt="스크린샷 2020-09-22 오후 9.05.35"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gizon62amcj30k606kdo6.jpg" alt="스크린샷 2020-09-22 오후 9.05.54"></p>
+<p><strong>요약</strong></p>
+<p>세마포어는 병행 프로그램 작성을 위한 강력하고 유연한 기법이다.</p>
+<p>p.374까지 학습완료</p>
+<h2 id="제32장-병행성-관련-오류"><a href="#제32장-병행성-관련-오류" class="headerlink" title="제32장 병행성 관련 오류"></a>제32장 병행성 관련 오류</h2><h2 id="제33장-이벤트-기반의-병행성-고급"><a href="#제33장-이벤트-기반의-병행성-고급" class="headerlink" title="제33장 이벤트 기반의 병행성(고급)"></a>제33장 이벤트 기반의 병행성(고급)</h2><h2 id="제34장-병행성을-정리하는-대화"><a href="#제34장-병행성을-정리하는-대화" class="headerlink" title="제34장 병행성을 정리하는 대화"></a>제34장 병행성을 정리하는 대화</h2><h1 id="제Ⅲ편-영속성"><a href="#제Ⅲ편-영속성" class="headerlink" title="제Ⅲ편 영속성"></a>제Ⅲ편 영속성</h1><h2 id="제35장-영속성에-관한-대화"><a href="#제35장-영속성에-관한-대화" class="headerlink" title="제35장 영속성에 관한 대화"></a>제35장 영속성에 관한 대화</h2><h2 id="제36장-I-O장치"><a href="#제36장-I-O장치" class="headerlink" title="제36장 I/O장치"></a>제36장 I/O장치</h2><h2 id="제37장-하드-디스크-드라이브"><a href="#제37장-하드-디스크-드라이브" class="headerlink" title="제37장 하드 디스크 드라이브"></a>제37장 하드 디스크 드라이브</h2><h2 id="제38장-Redundant-Array-of-Inexpensive-Disk-RAID"><a href="#제38장-Redundant-Array-of-Inexpensive-Disk-RAID" class="headerlink" title="제38장 Redundant Array of Inexpensive Disk(RAID)"></a>제38장 Redundant Array of Inexpensive Disk(RAID)</h2><h2 id="제39장-막간-파일과-디렉터리"><a href="#제39장-막간-파일과-디렉터리" class="headerlink" title="제39장 막간: 파일과 디렉터리"></a>제39장 막간: 파일과 디렉터리</h2><h2 id="제40장-파일-시스템-구현"><a href="#제40장-파일-시스템-구현" class="headerlink" title="제40장 파일 시스템 구현"></a>제40장 파일 시스템 구현</h2><h2 id="제41장-지역성과-Fast-File-System"><a href="#제41장-지역성과-Fast-File-System" class="headerlink" title="제41장 지역성과 Fast File System"></a>제41장 지역성과 Fast File System</h2><h2 id="제42장-크래시-일관성-FSCK와-저널링"><a href="#제42장-크래시-일관성-FSCK와-저널링" class="headerlink" title="제42장 크래시 일관성: FSCK와 저널링"></a>제42장 크래시 일관성: FSCK와 저널링</h2><h2 id="제43장-로그-기반-파일-시스템"><a href="#제43장-로그-기반-파일-시스템" class="headerlink" title="제43장 로그 기반 파일 시스템"></a>제43장 로그 기반 파일 시스템</h2><h2 id="제44장-데이터-무결성과-보호"><a href="#제44장-데이터-무결성과-보호" class="headerlink" title="제44장 데이터 무결성과 보호"></a>제44장 데이터 무결성과 보호</h2><h2 id="제45장-영속성을-정리하는-대화"><a href="#제45장-영속성을-정리하는-대화" class="headerlink" title="제45장 영속성을 정리하는 대화"></a>제45장 영속성을 정리하는 대화</h2><h2 id="제46장-분산에-관한-대화"><a href="#제46장-분산에-관한-대화" class="headerlink" title="제46장 분산에 관한 대화"></a>제46장 분산에 관한 대화</h2><h2 id="제47장-분산-시스템"><a href="#제47장-분산-시스템" class="headerlink" title="제47장 분산 시스템"></a>제47장 분산 시스템</h2><h2 id="제48장-Sun사의-네트워크-파일-시스템-NFS"><a href="#제48장-Sun사의-네트워크-파일-시스템-NFS" class="headerlink" title="제48장 Sun사의 네트워크 파일 시스템(NFS)"></a>제48장 Sun사의 네트워크 파일 시스템(NFS)</h2><h2 id="제49장-Andrew-파일-시스템-AFS"><a href="#제49장-Andrew-파일-시스템-AFS" class="headerlink" title="제49장 Andrew 파일 시스템(AFS)"></a>제49장 Andrew 파일 시스템(AFS)</h2><h2 id="제50장-분산을-정리하는-대화"><a href="#제50장-분산을-정리하는-대화" class="headerlink" title="제50장 분산을 정리하는 대화"></a>제50장 분산을 정리하는 대화</h2>
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/09/07/networkbasic3/" title= "후니의 네트워크로 기본 잡기">
+                    <div class="nextTitle">후니의 네트워크로 기본 잡기</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/08/24/nginx/" title= "Nginx 자세히">
+                    <div class="prevTitle">Nginx 자세히</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#제Ⅰ편-가상화"><span class="toc-number">2.</span> <span class="toc-text">제Ⅰ편 가상화</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#제3장-가상화에-관한-대화"><span class="toc-number">2.1.</span> <span class="toc-text">제3장 가상화에 관한 대화</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제4장-프로세스의-개념"><span class="toc-number">2.2.</span> <span class="toc-text">제4장 프로세스의 개념</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제5장-막간-프로레스-API"><span class="toc-number">2.3.</span> <span class="toc-text">제5장 막간: 프로레스 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제6장-제한적-직접-실행-원리"><span class="toc-number">2.4.</span> <span class="toc-text">제6장 제한적 직접 실행 원리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제7장-스케줄링-개요"><span class="toc-number">2.5.</span> <span class="toc-text">제7장 스케줄링: 개요</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FIFO-First-In-First-Out"><span class="toc-number">2.5.1.</span> <span class="toc-text">FIFO(First In, First Out)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SJF-Shortest-Job-First"><span class="toc-number">2.5.2.</span> <span class="toc-text">SJF(Shortest Job First)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#STCF-Shortest-Time-to-Completion-First"><span class="toc-number">2.5.3.</span> <span class="toc-text">STCF(Shortest Time-to-Completion First)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RR-Round-robin"><span class="toc-number">2.5.4.</span> <span class="toc-text">RR(Round-robin)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Incorporating-I-O"><span class="toc-number">2.5.5.</span> <span class="toc-text">Incorporating I&#x2F;O</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제8장-스케줄링-멀티-레벨-피드백-큐"><span class="toc-number">2.6.</span> <span class="toc-text">제8장 스케줄링: 멀티 레벨 피드백 큐</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MLFQ-Multi-Level-Feedback-Queue"><span class="toc-number">2.6.1.</span> <span class="toc-text">MLFQ(Multi-Level Feedback Queue)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제9장-스케줄링-비례-배분"><span class="toc-number">2.7.</span> <span class="toc-text">제9장 스케줄링: 비례 배분</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제10장-멀티프로세서-스케줄링-고급"><span class="toc-number">2.8.</span> <span class="toc-text">제10장 멀티프로세서 스케줄링(고급)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제11장-CPU-가상화에-관한-마무리-대화"><span class="toc-number">2.9.</span> <span class="toc-text">제11장 CPU 가상화에 관한 마무리 대화</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제12장-메모리-가상화에-관한-대화"><span class="toc-number">2.10.</span> <span class="toc-text">제12장 메모리 가상화에 관한 대화</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제13장-주소-공간의-개념"><span class="toc-number">2.11.</span> <span class="toc-text">제13장 주소 공간의 개념</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제14장-막간-메모리-관리-API"><span class="toc-number">2.12.</span> <span class="toc-text">제14장 막간: 메모리 관리 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제15장-주소-변환의-원리"><span class="toc-number">2.13.</span> <span class="toc-text">제15장 주소 변환의 원리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제16장-세그멘테이션"><span class="toc-number">2.14.</span> <span class="toc-text">제16장 세그멘테이션</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제17장-빈-공간-관리"><span class="toc-number">2.15.</span> <span class="toc-text">제17장 빈 공간 관리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제18장-페이징-개요"><span class="toc-number">2.16.</span> <span class="toc-text">제18장 페이징: 개요</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제19장-페이징-더-빠른-변환-TLB"><span class="toc-number">2.17.</span> <span class="toc-text">제19장 페이징: 더 빠른 변환(TLB)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제20장-페이징-더-작은-테이블"><span class="toc-number">2.18.</span> <span class="toc-text">제20장 페이징: 더 작은 테이블</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제21장-물리-메모리-크기의-극복-메커니즘"><span class="toc-number">2.19.</span> <span class="toc-text">제21장 물리 메모리 크기의 극복: 메커니즘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제22장-물리-메모리-크기의-극복-정책"><span class="toc-number">2.20.</span> <span class="toc-text">제22장 물리 메모리 크기의 극복: 정책</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제23장-VAX-VMS-가상-메모리-시스템"><span class="toc-number">2.21.</span> <span class="toc-text">제23장 VAX&#x2F;VMS 가상 메모리 시스템</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제24장-메모리-가상화를-정리하는-대화"><span class="toc-number">2.22.</span> <span class="toc-text">제24장 메모리 가상화를 정리하는 대화</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#제Ⅱ편-병행성"><span class="toc-number">3.</span> <span class="toc-text">제Ⅱ편 병행성</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#제25장-병행성과-관한-대화"><span class="toc-number">3.1.</span> <span class="toc-text">제25장 병행성과 관한 대화</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제26장-병행성-개요"><span class="toc-number">3.2.</span> <span class="toc-text">제26장 병행성: 개요</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제27장-막간-쓰레드-API"><span class="toc-number">3.3.</span> <span class="toc-text">제27장 막간: 쓰레드 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제28장-락"><span class="toc-number">3.4.</span> <span class="toc-text">제28장 락</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제29장-락-기반의-병행-자료-구조"><span class="toc-number">3.5.</span> <span class="toc-text">제29장 락 기반의 병행 자료 구조</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제30장-컨디션-변수"><span class="toc-number">3.6.</span> <span class="toc-text">제30장 컨디션 변수</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제31장-세마포어"><span class="toc-number">3.7.</span> <span class="toc-text">제31장 세마포어</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제32장-병행성-관련-오류"><span class="toc-number">3.8.</span> <span class="toc-text">제32장 병행성 관련 오류</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제33장-이벤트-기반의-병행성-고급"><span class="toc-number">3.9.</span> <span class="toc-text">제33장 이벤트 기반의 병행성(고급)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제34장-병행성을-정리하는-대화"><span class="toc-number">3.10.</span> <span class="toc-text">제34장 병행성을 정리하는 대화</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#제Ⅲ편-영속성"><span class="toc-number">4.</span> <span class="toc-text">제Ⅲ편 영속성</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#제35장-영속성에-관한-대화"><span class="toc-number">4.1.</span> <span class="toc-text">제35장 영속성에 관한 대화</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제36장-I-O장치"><span class="toc-number">4.2.</span> <span class="toc-text">제36장 I&#x2F;O장치</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제37장-하드-디스크-드라이브"><span class="toc-number">4.3.</span> <span class="toc-text">제37장 하드 디스크 드라이브</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제38장-Redundant-Array-of-Inexpensive-Disk-RAID"><span class="toc-number">4.4.</span> <span class="toc-text">제38장 Redundant Array of Inexpensive Disk(RAID)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제39장-막간-파일과-디렉터리"><span class="toc-number">4.5.</span> <span class="toc-text">제39장 막간: 파일과 디렉터리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제40장-파일-시스템-구현"><span class="toc-number">4.6.</span> <span class="toc-text">제40장 파일 시스템 구현</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제41장-지역성과-Fast-File-System"><span class="toc-number">4.7.</span> <span class="toc-text">제41장 지역성과 Fast File System</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제42장-크래시-일관성-FSCK와-저널링"><span class="toc-number">4.8.</span> <span class="toc-text">제42장 크래시 일관성: FSCK와 저널링</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제43장-로그-기반-파일-시스템"><span class="toc-number">4.9.</span> <span class="toc-text">제43장 로그 기반 파일 시스템</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제44장-데이터-무결성과-보호"><span class="toc-number">4.10.</span> <span class="toc-text">제44장 데이터 무결성과 보호</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제45장-영속성을-정리하는-대화"><span class="toc-number">4.11.</span> <span class="toc-text">제45장 영속성을 정리하는 대화</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제46장-분산에-관한-대화"><span class="toc-number">4.12.</span> <span class="toc-text">제46장 분산에 관한 대화</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제47장-분산-시스템"><span class="toc-number">4.13.</span> <span class="toc-text">제47장 분산 시스템</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제48장-Sun사의-네트워크-파일-시스템-NFS"><span class="toc-number">4.14.</span> <span class="toc-text">제48장 Sun사의 네트워크 파일 시스템(NFS)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제49장-Andrew-파일-시스템-AFS"><span class="toc-number">4.15.</span> <span class="toc-text">제49장 Andrew 파일 시스템(AFS)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#제50장-분산을-정리하는-대화"><span class="toc-number">4.16.</span> <span class="toc-text">제50장 분산을 정리하는 대화</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 113
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/02</span><a class="archive-post-title" href= "/2020/10/02/mysql/" >Mysql 기본 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-command/" >우분투 자주 쓰는 명령어</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

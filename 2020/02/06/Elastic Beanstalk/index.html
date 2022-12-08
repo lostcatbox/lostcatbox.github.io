@@ -1,0 +1,3621 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>AWS Elastic Beanstalk + django · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">AWS Elastic Beanstalk + django</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            AWS Elastic Beanstalk + django
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Elastic Beanstalk">Elastic Beanstalk</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "AWS">AWS</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">3.7k</span>Reading time: <span class="post-count reading-time">23 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/02/06</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="Elastic-Beanstalk-Django"><a href="#Elastic-Beanstalk-Django" class="headerlink" title="Elastic Beanstalk + Django"></a>Elastic Beanstalk + Django</h1><h2 id="EB-CLI-명령어-정리"><a href="#EB-CLI-명령어-정리" class="headerlink" title="EB CLI 명령어 정리"></a>EB CLI 명령어 정리</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">eb init #  EB CLI를 사용하여 만든 애플리케이션의 기본값을 설정(init의 설정한 값은 현재 디렉터리와 리포지토리에만 적용됩니다)</span><br><span class="line"></span><br><span class="line">eb init -i #  EB CLI를 사용하여 만든 애플리케이션의 기본값을 수정</span><br><span class="line"></span><br><span class="line">eb create # 환경을 생성.</span><br><span class="line"></span><br><span class="line">eb status # 환경의 현재 상태를 확인, red가 뜬다면 로드벨런스 체크해야한다</span><br><span class="line"></span><br><span class="line">eb health # 환경 전반의 상태와 환경의 인스턴스에 대한 상태 정보 확인, </span><br><span class="line"></span><br><span class="line">eb events # 이벤트 목록 출력</span><br><span class="line"></span><br><span class="line">eb logs # 환경의 인스턴스에서 로그를 가져옵니다. red에서 로드벨런스ip주소 allowedhost추가하기</span><br><span class="line"></span><br><span class="line">eb open # 브라우저로 웹 사이트 열림</span><br><span class="line"></span><br><span class="line">eb deploy # 서버에 올림. 프로젝트 폴더의 git 리포지토리를 초기화한 경우, 대기 중인 변경 사항이 있더라도 EB CLI가 항상 최신 커밋을 배포합니다. eb deploy를 실행하기 전에 변경 사항을 커밋하여 이를 환경에 배포합니다.</span><br><span class="line">eb deploy --staged  # git add .만하고 deploy하고 싶다면 </span><br><span class="line"></span><br><span class="line">eb config # 실행 중인 환경에 사용 가능한 구성 옵션을 봅니다.</span><br><span class="line"></span><br><span class="line">eb terminate # 환경을 종료합니다. 프로젝트 작동 종료.</span><br><span class="line"></span><br><span class="line">+ </span><br><span class="line">django.config 작성할때 </span><br><span class="line"></span><br><span class="line">option_settings:</span><br><span class="line">  aws:elasticbeanstalk:container:python:</span><br><span class="line">    WSGIPath: impactstation&#x2F;wsgi.py</span><br><span class="line">    </span><br><span class="line">eb create 후에도 </span><br><span class="line">eb config 가서 wsgi.py 경로를 </span><br><span class="line">application&#x2F;wsgi.py로 해당 부분찾아가서 수정해줘야함</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Tip: .gitignore에서 숨기고싶은 파일을 등록하면 eb deploy하는중에서도 .gitignore를 참고하여버려서 원하는 값이 적절한 코드에 들어가지않을수있다. </p>
+<p>이때는 .ebignore 파일을 만들어주면 .ebignore파일이 있을시 EB CLI는 .gitignore파일을 참조하지 않으므로 적절한 해결이 될수있다. </p>
+</blockquote>
+<p>다른 오류시 참조: <a href="https://coding-dahee.tistory.com/75" target="_blank" rel="noopener">https://coding-dahee.tistory.com/75</a></p>
+<p>애플리케이션을 빠르고 쉽게 <strong>배포</strong>하고, <strong>모니터링</strong>하고, <strong>확장</strong>할 수 있습니다. <a href="https://aws.amazon.com/ko/elasticbeanstalk/" target="_blank" rel="noopener">참고</a></p>
+<p><img src="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/images/clearbox-flow-00.png" alt="clearbox-flow-00"></p>
+<ul>
+<li><p>장점</p>
+<ul>
+<li><p>빠르고 간편한 배포</p>
+<p>(Beanstalk가 용량 프로비저닝, 로드 밸런싱, Auto Scaling, 애플리케이션 상태 모니터링에 대한 배포 정보를 자동으로 처리합니다.)</p>
+</li>
+<li><p>개발자 생산성올라감</p>
+<p>(사용자 대신 인프라를 <strong>provisioning</strong>하고 운영할 뿐만 아니라 애플리케이션 스택(플랫폼)을 관리해줌)</p>
+<p>(따라서 서버, 데이터베이스, 로드 밸런서, 방화벽, 네트워크 등을 관리하고 구성하는 시간이 없음)</p>
+</li>
+<li><p>완벽한 리소스 제어</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="시작하기전"><a href="#시작하기전" class="headerlink" title="시작하기전"></a>시작하기전</h2><h3 id="Elastic-Beanstalk-개념"><a href="#Elastic-Beanstalk-개념" class="headerlink" title="Elastic Beanstalk 개념"></a>Elastic Beanstalk 개념</h3><ul>
+<li><p>애플리케이션</p>
+<p>Elastic Beanstalk <em>애플리케이션*은 *환경</em>, <em>버전</em> 및 <em>환경 구성</em>을 포함한 Elastic Beanstalk 구성 요소의 논리적 컬렉션입니다. Elastic Beanstalk에서 애플리케이션은 개념적으로 폴더와 유사합니다.</p>
+</li>
+<li><p>애플리케이션 버전</p>
+<p>Elastic Beanstalk에서 <em>애플리케이션 버전</em>은 웹 애플리케이션의 배포 가능한 코드의 레이블 지정된 특정 반복을 나타냅니다. 애플리케이션 버전은 Java WAR 파일 등의 배포 가능한 코드가 포함된 Amazon Simple Storage Service(Amazon S3) 객체를 가리킵니다.</p>
+<p>따라서 구버전과 신버전 둘다 돌리면서 테스트 해볼수도있다.</p>
+</li>
+<li><p>환경</p>
+<p><em>환경</em>은 애플리케이션 버전을 실행 중인 AWS 리소스 모음입니다.</p>
+<p>각 환경은 한 번에 하나의 애플리케이션 버전만 실행하지만 여러 환경에서 동일한 애플리케이션 버전 또는 서로 다른 애플리케이션 버전을 동시에 실행할 수 있습니다. 환경을 생성하면 Elastic Beanstalk에서 사용자가 지정한 애플리케이션 버전을 실행하는 데 필요한 리소스를 프로비저닝합니다.</p>
+</li>
+<li><p>환경 티어</p>
+<p>Elastic Beanstalk 환경을 시작할 때 먼저 환경 티어를 선택합니다. 환경 티어는 환경에서 실행하는 애플리케이션 유형을 지정하고 Elastic Beanstalk에서 이러한 애플리케이션을 지원하기 위해 프로비저닝하는 리소스를 결정합니다.</p>
+<p>HTTP 요청을 처리하는 애플리케이션은 <a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/concepts-webserver.html" target="_blank" rel="noopener">웹 서버 환경 티어</a>에서 실행됩니다. Amazon Simple Queue Service(Amazon SQS) 대기열에서 작업을 가져오는 환경은 <a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/concepts-worker.html" target="_blank" rel="noopener">작업자 환경 티어</a>에서 실행됩니다.</p>
+</li>
+<li><p>환경 구성</p>
+<p><em>환경 구성</em>은 환경 및 연관된 리소스의 작동 방법을 정의하는 파라미터 및 설정의 모음을 식별합니다. 환경의 구성 설정을 업데이트하면 Elastic Beanstalk가 자동으로 기존 리소스에 변경 사항을 적용하거나, 삭제하고 새 리소스를 배포합니다(변경 유형에 따라 다름).</p>
+</li>
+<li><p>저장된 구성</p>
+<p><em>저장된 구성</em>은 고유한 환경 구성을 생성하기 위한 시작점으로 사용할 수 있는 템플릿입니다. Elastic Beanstalk 콘솔, EB CLI, AWS CLI 또는 API를 사용하여 저장된 구성을 생성 및 수정하고 환경에 적용할 수 있습니다. API 및 AWS CLI는 저장된 구성을 <em>구성 템플릿</em>으로 참조합니다.</p>
+</li>
+<li><p>플랫폼</p>
+<p>플랫폼은 운영 체제(OS), 프로그래밍 언어 실행 시간, 웹 서버, 애플리케이션 서버 및 Elastic Beanstalk 구성 요소의 조합입니다. 플랫폼을 대상으로 하는 웹 애플리케이션을 설계합니다. Elastic Beanstalk는 애플리케이션을 구축할 수 있는 다양한 플랫폼을 제공합니다</p>
+</li>
+</ul>
+<h2 id="시작하기"><a href="#시작하기" class="headerlink" title="시작하기"></a>시작하기</h2><h3 id="Elastic-Beanstalk에-접속-및-만들기"><a href="#Elastic-Beanstalk에-접속-및-만들기" class="headerlink" title="Elastic Beanstalk에 접속 및 만들기"></a><a href="https://us-east-2.console.aws.amazon.com/elasticbeanstalk/home?region=us-east-2#/applications" target="_blank" rel="noopener">Elastic Beanstalk에 접속 및 만들기</a></h3><ul>
+<li>필요 요소나 리소스 업로드하고 시작(예제는 <strong>GettingStartedApp</strong>이름으로 시작)</li>
+</ul>
+<h3 id="환경-살펴보기"><a href="#환경-살펴보기" class="headerlink" title="환경 살펴보기"></a>환경 살펴보기</h3><ul>
+<li>콘솔에서 환경 대시보드 볼려면 <strong><myprojectname></strong>-env를 선택</li>
+<li>URL, 현재 상태, 현재 배포된 애플리케이션 버전의 이름, 최근 이벤트 다섯 개, 애플리케이션이 실행 중인 플랫폼 버전이 포함됩니다.</li>
+<li>Elastic Beanstalk에서 AWS 리소스를 만들고 애플리케이션을 시작하는 동안 환경은 <code>Pending</code> 상태에 있습니다. 시작 이벤트에 대한 상태 메시지가 대시보드에 지속적으로 추가됩니다.</li>
+<li>환경의 <strong>URL</strong>은 대시보드의 오른쪽 상단에 있는 <strong>작업</strong> 메뉴 옆에 있습니다. 이것은 환경이 실행 중인 웹 애플리케이션의 URL입니다. 이 URL을 선택해 예제 애플리케이션의 <em>구성</em> 페이지로 이동합니다.</li>
+<li>콘솔의 왼쪽에 있는 탐색 페이지는 환경에 대한 더 자세한 정보가 포함되어 있으며 추가 기능에 액세스할 수 있는 다른 페이지로 연결합니다<ul>
+<li><strong>구성</strong> – 애플리케이션을 호스팅하는 Amazon Elastic Compute Cloud(Amazon EC2) 인스턴스 등 이 환경에 대해 프로비저닝된 리소스가 표시됩니다. 이 페이지에서 일부 프로비저닝된 리소스를 구성할 수 있습니다.</li>
+<li><strong>상태</strong> – 애플리케이션을 실행하는 Amazon EC2 인스턴스에 대한 상태와 세부 상태 정보가 표시됩니다.</li>
+<li><strong>모니터링</strong> – 평균 지연 시간 및 CPU 사용률 등 환경에 대한 통계가 표시됩니다. 이 페이지를 사용하여 모니터링 중인 측정치에 대한 경보를 만들 수 있습니다.</li>
+<li><strong>이벤트</strong> – 이 환경에서 사용하는 Elastic Beanstalk 서비스 및 리소스가 있는 다른 서비스의 정보 또는 오류 메시지를 표시합니다.</li>
+<li><strong>태그</strong> – 환경 태그를 표시하고 관리할 수 있습니다. 태그는 환경에 적용되는 키-값 쌍입니다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="새-버전의-애플리케이션-배포"><a href="#새-버전의-애플리케이션-배포" class="headerlink" title="새 버전의 애플리케이션 배포"></a>새 버전의 애플리케이션 배포</h3><p>주기적으로 새 버전의 애플리케이션을 배포해야 할 수도 있습니다. 환경에서 다른 업데이트 작업이 진행 중이지 않은 한 언제든지 새 버전을 배포할 수 있습니다.</p>
+<p>이 자습서로 시작한 애플리케이션 버전을 <strong>Sample Application</strong>이라고 합니다.</p>
+<h3 id="환경-구성"><a href="#환경-구성" class="headerlink" title="환경 구성"></a>환경 구성</h3><p>애플리케이션에 더 적합하도록 환경을 구성할 수 있습니다. 예를 들어 컴퓨팅 집약적인 애플리케이션이 있는 경우 애플리케이션을 실행 중인 Amazon Elastic Compute Cloud(Amazon EC2) 인스턴스의 유형을 변경할 수 있습니다. 구성 변경을 적용하기 위해 Elastic Beanstalk는 환경 업데이트를 수행합니다.</p>
+<p>일부 구성은 변경이 간단하고 빠르게 처리되지만 일부 변경의 경우 AWS 리소스를 삭제한 후 다시 만들어야 하며, 여기에는 몇 분 정도 걸릴 수 있습니다. 구성 설정을 변경하면 Elastic Beanstalk는 잠재적 인 애플리케이션 중단 시간에 대해 경고합니다.</p>
+<h4 id="구성-변경"><a href="#구성-변경" class="headerlink" title="구성 변경"></a>구성 변경</h4><p>이 구성 변경 예에서는 환경의 용량 설정을 편집합니다. Auto Scaling 그룹에 2 ~ 4개의 Amazon EC2 인스턴스가 있고 로드 밸런싱 수행 및 자동 조정 환경을 구성한 다음 변경이 발생했는지 확인합니다. Elastic Beanstalk는 추가 Amazon EC2 인스턴스를 생성하여 처음 생성한 단일 인스턴스에 추가합니다. 그런 다음 Elastic Beanstalk는 두 인스턴스를 환경의 로드 밸런서와 연결합니다. 결과적으로 애플리케이션의 응답성이 향상되고 가용성이 향상됩니다.</p>
+<h1 id="Elastic-Beanstalk에서의-사용을-위한-개발-머신-구성"><a href="#Elastic-Beanstalk에서의-사용을-위한-개발-머신-구성" class="headerlink" title="Elastic Beanstalk에서의 사용을 위한 개발 머신 구성"></a>Elastic Beanstalk에서의 사용을 위한 개발 머신 구성</h1><p><a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/chapter-devenv.html#devenv-project-folder" target="_blank" rel="noopener">참고</a></p>
+<p>AWS Elastic Beanstalk 애플리케이션 개발을 위해 로컬 시스템을 설정하는 방법을 보여 줍니다. 또한 폴더 구조, 소스 제어 및 CLI 도구를 살펴봅니다.</p>
+<h2 id="프로젝트-폴더-만들기"><a href="#프로젝트-폴더-만들기" class="headerlink" title="프로젝트 폴더 만들기"></a>프로젝트 폴더 만들기</h2><p>여러 애플리케이션에서 작업하려는 경우 workspace나 projects 프로젝트별로 폴더만들고 프로젝트 폴더의 내용은 애플리케이션들로 구성되어있어야함. (‘’, “”는 사용하지말것)</p>
+<h2 id="소스-컨트롤-설정"><a href="#소스-컨트롤-설정" class="headerlink" title="소스 컨트롤 설정"></a>소스 컨트롤 설정</h2><p>실수로 프로젝트 폴더 내의 파일 또는 코드를 삭제하기 않도록 하고 프로젝트를 중단시키는 변경 사항을 되돌리기 위한 방법으로 소스 컨트롤을 설정합니다. git 사용</p>
+<h2 id="원격-리포지토리-구성"><a href="#원격-리포지토리-구성" class="headerlink" title="원격 리포지토리 구성"></a>원격 리포지토리 구성</h2><p>하드 드라이브가 충돌하거나 다른 컴퓨터에 있는 프로젝트에 대해 작업하려는 경우 어떻게 하시겠습니까? 소스 코드를 온라인으로 백업하고 임의의 컴퓨터에서 이 코드에 액세스하려면 커밋을 푸시할 수 있는 원격 리포지토리를 구성합니다.</p>
+<p>AWS CodeCommit을 사용하면 AWS 클라우드에서 프라이빗 리포지토리를 생성할 수 있습니다. CodeCommit는 <a href="https://aws.amazon.com/free/" target="_blank" rel="noopener">AWS 프리 티어</a>에서 계정 내 최대 5명의 AWS Identity and Access Management(IAM) 사용자에 대해 무료로 사용할 수 있습니다.</p>
+<p>GitHub는 프로젝트 코드를 온라인으로 저장할 수 있는 널리 사용되는 또 다른 옵션입니다. GitHub를 사용하면 퍼블릭 온라인 리포지토리를 무료로 생성하고 GitHub는 월별 요금으로 프라이빗 리포지토리를 지원합니다</p>
+<p>프로젝트를 위한 원격 리포지토리를 생성한 후에는 <code>git remote add</code>를 사용하여 로컬 리포지토리에 연결합니다.</p>
+<h2 id="EB-CLI-설치"><a href="#EB-CLI-설치" class="headerlink" title="EB CLI 설치"></a>EB CLI 설치</h2><p><a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/eb-cli3.html" target="_blank" rel="noopener">EB CLI</a>를 사용하여 명령줄에서 Elastic Beanstalk 환경을 관리하고 상태를 모니터링합니다. 설치 지침은 <a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/eb-cli3-install.html" target="_blank" rel="noopener">EB CLI 설치</a>를 참조하십시오.</p>
+<p>기본적으로 EB CLI는 프로젝트 파일의 내용을 모두 패키지로 묶어 Elastic Beanstalk에 소스 번들로 업로드합니다. Git과 EB CLI를 함께 사용하는 경우 <code>.gitignore</code>를 사용하여 내장 클래스 파일이 소스로 커밋되지 않도록 방지하고 <code>.ebignore</code>를 사용하여 소스 파일이 배포되지 않도록 방지할 수 있습니다.</p>
+<p>또한 프로젝트 폴더의 콘텐츠 대신 <a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/eb-cli3-configuration.html#eb-cli3-artifact" target="_blank" rel="noopener">빌드 아티팩트(WAR 또는 ZIP 파일)를 배포하도록 EB CLI를 구성</a>할 수도 있습니다</p>
+<h3 id="Clone-this-repository"><a href="#Clone-this-repository" class="headerlink" title="Clone this repository"></a>Clone this repository</h3><p>Use the following:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install awscli #brew추천함 환경변수따로 추가안해도됨</span><br></pre></td></tr></table></figure>
+
+<p>Tip: 만약 pip 로 깔았다면 아래 답변을 참고하자</p>
+<blockquote>
+<p>환경 변수조회</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#조회 </span><br><span class="line">echo $PATH</span><br><span class="line">#적용</span><br><span class="line">source ~&#x2F;.bash_profile</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>명령을 실행할 때 : <code>pip3 install awscli --upgrade --user</code></p>
+<p>AWS CLI 도구가 설치되는 위치를 자세히 살펴보면 터미널 로그의 경로를 볼 수 있습니다. 제 경우에는 다음과 같은 것이 있습니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awscli in .&#x2F;Library&#x2F;Python&#x2F;3.6&#x2F;lib&#x2F;python&#x2F;site-packages</span><br></pre></td></tr></table></figure>
+
+<p>이제 다음과 같이 .bash_profile에 bin 폴더 (lib 경로에서 제거하고 대신 bin 경로를 넣음)에 동일한 경로를 추가해야합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH&#x3D;&#x2F;Users&#x2F;xuser&#x2F;Library&#x2F;Python&#x2F;3.6&#x2F;bin&#x2F;:$PATH</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>Tip: 과정중 brew권한 이슈, zlip, awsebcli istall등 해줘야하는게많다. 오류를 따라가서 필요한 프로그램 설치해주자. brew로 수동설치해주는것도 방법임.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">You can install Python packages with</span><br><span class="line">  &#x2F;usr&#x2F;local&#x2F;opt&#x2F;python@3.8&#x2F;bin&#x2F;pip3 install &lt;package&gt;</span><br><span class="line">They will install into the site-package directory</span><br><span class="line">  &#x2F;usr&#x2F;local&#x2F;opt&#x2F;python@3.8&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;3.8&#x2F;lib&#x2F;python3.8&#x2F;site-packages</span><br><span class="line"></span><br><span class="line">See: https:&#x2F;&#x2F;docs.brew.sh&#x2F;Homebrew-and-Python</span><br><span class="line"></span><br><span class="line">python@3.8 is keg-only, which means it was not symlinked into &#x2F;usr&#x2F;local,</span><br><span class="line">because this is an alternate version of another formula.</span><br><span class="line"></span><br><span class="line">If you need to have python@3.8 first in your PATH run:</span><br><span class="line">  echo &#39;export PATH&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;opt&#x2F;python@3.8&#x2F;bin:$PATH&quot;&#39; &gt;&gt; ~&#x2F;.zshrc</span><br><span class="line"></span><br><span class="line">For compilers to find python@3.8 you may need to set:</span><br><span class="line">  export LDFLAGS&#x3D;&quot;-L&#x2F;usr&#x2F;local&#x2F;opt&#x2F;python@3.8&#x2F;lib&quot;</span><br><span class="line"></span><br><span class="line">For pkg-config to find python@3.8 you may need to set:</span><br><span class="line">  export PKG_CONFIG_PATH&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;opt&#x2F;python@3.8&#x2F;lib&#x2F;pkgconfig&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="AWS-CLI-설치"><a href="#AWS-CLI-설치" class="headerlink" title="AWS CLI 설치"></a>AWS CLI 설치</h2><p>AWS 명령줄 인터페이스(AWS CLI)는 모든 퍼블릭 API 작업을 위한 명령을 제공하는 AWS 서비스용 통합 클라이언트입니다. 이러한 명령은 EB CLI에서 제공하는 명령보다 수준이 낮기 때문에 AWS CLI에서 작업을 수행하려면 일반적으로 명령을 더 사용합니다. 다시 말해, AWS CLI에서는 로컬 머신에서 리포지토리를 설정하지 않고 계정에서 실행 중인 애플리케이션 또는 환경으로 작업할 수 있습니다. AWS CLI를 사용하여 작업을 간소화 또는 자동화하는 스크립트를 생성합니다.</p>
+<p>AWS CLI는 Amazon S3에서 효율적으로 파일을 보내고 받을 수 있는 간단한 새 <a href="https://aws.amazon.com/ko/cli/#file_commands_anchor" target="_blank" rel="noopener">파일 명령</a> 세트를 제공합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install awscli</span><br></pre></td></tr></table></figure>
+
+<h2 id="ebignore를-사용하여-파일-무시"><a href="#ebignore를-사용하여-파일-무시" class="headerlink" title=".ebignore를 사용하여 파일 무시"></a>.ebignore를 사용하여 파일 무시</h2><p><code>.ebignore</code> 파일을 프로젝트 디렉터리에 추가하여 EB CLI가 디렉터리의 특정 파일을 무시하도록 명령할 수 있습니다. 이 파일은 <code>.gitignore</code> 파일처럼 작동합니다. 프로젝트 디렉터리를 Elastic Beanstalk에 배포하고 새 애플리케이션 버전을 생성하는 경우 EB CLI에는 이렇게 생성되는 소스 번들의 <code>.ebignore</code>에서 지정된 파일이 포함되지 않습니다.</p>
+<p><code>.ebignore</code>가 없고 <code>.gitignore</code>가 있는 경우 EB CLI는 <code>.gitignore</code>에 지정된 파일을 무시합니다. <code>.ebignore</code>가 있으면 EB CLI는 <code>.gitignore</code>를 읽지 않습니다.</p>
+<p><code>.ebignore</code>가 있으면 EB CLI는 git 명령을 사용하여 소스 번들을 생성하지 않습니다. 즉 EB CLI는 <code>.ebignore</code>에 지정된 파일을 무시하고 다른 모든 파일을 포함시킵니다. 특히 커밋되지 않은 소스 파일을 포함시킵니다.</p>
+<p><a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/eb-cli3-getting-started.html" target="_blank" rel="noopener">나머지 eb cli사용법</a></p>
+<h1 id="Python-개발환경-설정"><a href="#Python-개발환경-설정" class="headerlink" title="Python 개발환경 설정"></a>Python 개발환경 설정</h1><p><a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/python-development-environment.html" target="_blank" rel="noopener">참고</a></p>
+<p>AWS Elastic Beanstalk로 배포하기 전에 로컬에서 애플리케이션을 테스트하도록 Python 개발 환경을 설정합니다. </p>
+<p><code>python3 -m venv myvenv</code>  (가상환경 생성)</p>
+<h2 id="Elastic-Beanstalk에-대해-Python-프로젝트-구성"><a href="#Elastic-Beanstalk에-대해-Python-프로젝트-구성" class="headerlink" title="Elastic Beanstalk에 대해 Python 프로젝트 구성"></a>Elastic Beanstalk에 대해 Python 프로젝트 구성</h2><p>Elastic Beanstalk CLI를 사용하여 Elastic Beanstalk에 배포하도록 Python 애플리케이션을 준비할 수 있습니다.</p>
+<p><strong>Elastic Beanstalk에 배포하도록 Python 애플리케이션을 구성하려면</strong></p>
+<ol>
+<li><p><a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/python-development-environment.html#python-common-setup-venv" target="_blank" rel="noopener">가상 환경</a>에서 프로젝트 디렉터리 트리(<code>python_eb_app</code>)의 상단으로 돌아가 다음을 입력합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip freeze &gt;requirements.txt #필수파일</span><br></pre></td></tr></table></figure>
+
+<p>이 명령은 가상 환경에 설치된 패키지의 이름과 버전을 requirements.txt로 복사합니다. 예를 들어 <em>PyYAML</em>의 경우 <em>3.11</em>은 가상 환경에 설치되며 파일에는 다음 행이 포함됩니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PyYAML&#x3D;&#x3D;3.11</span><br></pre></td></tr></table></figure>
+
+<p>애플리케이션을 개발하고 테스트하는 데 사용하는 동일한 패키지와 버전을 통해 Elastic Beanstalk는 애플리케이션의 Python 환경을 복제할 수 있습니다.</p>
+</li>
+<li><p><strong>eb init</strong> 명령으로 EB CLI 리포지토리를 구성합니다. 프롬프트 메시지에 따라 리전, 플랫폼 및 기타 옵션을 선택합니다. 자세한 지침은 <a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/eb-cli3-getting-started.html" target="_blank" rel="noopener">EB CLI를 사용하여 Elastic Beanstalk 환경 관리</a> 단원을 참조하십시오.</p>
+</li>
+</ol>
+<p>기본적으로 Elastic Beanstalk는 <code>application.py</code>라는 파일을 찾아 애플리케이션을 시작합니다. 이 파일이 생성한 Python 프로젝트에 존재하지 않는 경우, 애플리케이션 환경을 일부 조정해야 합니다. 또한 애플리케이션의 모듈을 로드할 수 있도록 환경 변수를 설정해야 합니다. 자세한 내용은 <a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/create-deploy-python-container.html" target="_blank" rel="noopener">Elastic Beanstalk Python 플랫폼 사용</a> 섹션을 참조하십시오.</p>
+<h2 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h2><p><strong>가상환경 만들어 시작</strong></p>
+<h2 id="Elastic-Beanstalk에-맞게-Django-애플리케이션-구성"><a href="#Elastic-Beanstalk에-맞게-Django-애플리케이션-구성" class="headerlink" title="Elastic Beanstalk에 맞게 Django 애플리케이션 구성"></a>Elastic Beanstalk에 맞게 Django 애플리케이션 구성</h2><p>이제 로컬 시스템에 Django 기반 사이트가 있으므로 Elastic Beanstalk에 배포하도록 이를 구성할 수 있습니다.</p>
+<p>기본적으로 Elastic Beanstalk는 <code>application.py</code>라는 파일을 찾아 애플리케이션을 시작합니다. 이 파일은 생성한 Django 프로젝트에는 존재하지 않기 때문에 애플리케이션 환경을 약간 조정해야 합니다. 또한 애플리케이션의 모듈을 로드할 수 있도록 환경 변수를 설정해야 합니다.</p>
+<p><strong>Elastic Beanstalk에 맞게 사이트를 구성하려면</strong></p>
+<ol>
+<li><p>가상 환경을 활성화합니다.</p>
+</li>
+<li><p><code>pip freeze</code>를 실행한 다음 이름이 <code>requirements.txt</code>인 파일에 출력을 저장합니다.</p>
+</li>
+<li><p><code>pip freeze</code>를 실행한 다음 이름이 <code>requirements.txt</code>인 파일에 출력을 저장합니다.</p>
+</li>
+<li><p><code>.ebextensions</code>이라는 디렉터리를 생성합니다.</p>
+</li>
+<li><p><code>.ebextensions</code> 디렉터리 내에서 다음 텍스트가 있는 <code>django.config</code>라는 <a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/ebextensions.html" target="_blank" rel="noopener">구성 파일</a>을 추가합니다.</p>
+<p>예) <strong>~/project/.ebextensions/django.config</strong> </p>
+</li>
+<li><p>이 설정 <code>WSGIPath</code>는 Elastic Beanstalk가 애플리케이션을 시작하는 데 사용하는 WSGI 스크립트의 위치를 지정합니다.</p>
+</li>
+<li><p>가상환경 비활성화</p>
+</li>
+</ol>
+<h3 id="EB-CLI를-사용하여-사이트-배포"><a href="#EB-CLI를-사용하여-사이트-배포" class="headerlink" title="EB CLI를 사용하여 사이트 배포"></a>EB CLI를 사용하여 사이트 배포</h3><p>Elastic Beanstalk에 애플리케이션을 배포하기 위해 필요한 모든 항목을 추가했습니다. 프로젝트 디렉터리가 이제 다음과 같을 것입니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;ebdjango&#x2F;</span><br><span class="line">|-- .ebextensions</span><br><span class="line">|   &#96;-- django.config</span><br><span class="line">|-- ebdjango</span><br><span class="line">|   |-- __init__.py</span><br><span class="line">|   |-- settings.py</span><br><span class="line">|   |-- urls.py</span><br><span class="line">|   &#96;-- wsgi.py</span><br><span class="line">|-- db.sqlite3</span><br><span class="line">|-- manage.py</span><br><span class="line">&#96;-- requirements.txt</span><br></pre></td></tr></table></figure>
+
+<p>다음으로 애플리케이션 환경을 생성하고 Elastic Beanstalk에 구성된 애플리케이션을 배포합니다.</p>
+<p>배포 즉시 Django의 구성을 편집해 Elastic Beanstalk가 Django <code>ALLOWED_HOSTS</code>의 사용자 애플리케이션에 할당한 도메인 이름을 추가합니다. 그리고 애플리케이션을 다시 배포합니다. 이는 HTTP <code>Host</code> 헤더 공격을 방지할 수 있도록 설계된 Django의 보안 요구 사항입니다. 자세한 내용은 <a href="https://docs.djangoproject.com/en/2.1/topics/security/#host-headers-virtual-hosting" target="_blank" rel="noopener">호스트 헤더 검증</a>을 참조하십시오.</p>
+<p><strong>환경을 생성하고 Django 애플리케이션을 배포하려면</strong></p>
+<p><strong>참고</strong></p>
+<p>이 자습서에서는 EB CLI를 배포 메커니즘으로 사용하지만, Elastic Beanstalk 콘솔을 사용하여 프로젝트의 콘텐츠를 포함하는 .zip 파일을 배포할 수도 있습니다.</p>
+<ol>
+<li><p><strong>eb init</strong> 명령으로 EB CLI 리포지토리를 초기화합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;ebdjango$ eb init -p python-3.6 django-tutorial</span><br><span class="line">Application django-tutorial has been created.</span><br></pre></td></tr></table></figure>
+
+<p>이 명령은 <code>django-tutorial</code>이라는 애플리케이션을 생성합니다. 이 명령은 또한 최신 Python 3.6 플랫폼 버전을 통해 환경을 생성하도록 로컬 리포지토리를 구성합니다.</p>
+</li>
+<li><p>(선택 사항) SSH를 통해 애플리케이션을 실행하는 EC2 인스턴스에 연결할 수 있도록 <strong>eb init</strong>를 다시 실행하여 기본 키 페어를 구성합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;ebdjango$ eb init</span><br><span class="line">Do you want to set up SSH for your instances?</span><br><span class="line">(y&#x2F;n): y</span><br><span class="line">Select a keypair.</span><br><span class="line">1) my-keypair</span><br><span class="line">2) [ Create new KeyPair ]</span><br></pre></td></tr></table></figure>
+
+<p>키 페어가 이미 있는 경우 이를 선택하거나, 프롬프트에 따라 키 페어를 생성합니다. 프롬프트가 보이지 않거나 나중에 설정을 변경해야 하는 경우 <strong>eb init -i</strong>를 실행합니다.</p>
+</li>
+<li><p>환경을 만들고 <strong>eb create</strong>로 해당 환경에 애플리케이션을 배포합니다.  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;project$ eb create django-env</span><br></pre></td></tr></table></figure>
+
+<p><strong>참고</strong></p>
+<p>“service role required” 오류 메시지가 표시되면 <code>eb create</code>를 대화식으로 실행하고(환경 이름을 지정하지 않고) EB CLI가 사용자 대신 역할을 생성하도록 합니다.</p>
+<p>이 명령은 이름이 <code>django-env</code>인 로드 밸런싱된 Elastic Beanstalk 환경을 생성합니다. 환경을 생성하는 데 약 5분이 걸립니다. Elastic Beanstalk는 애플리케이션을 실행하는 데 필요한 리소스를 생성하면서 EB CLI가 터미널에 전달하는 정보 메시지를 출력합니다.</p>
+</li>
+<li><p>환경 생성 프로세스가 완료되면, <strong>eb status</strong>를 실행해 새 환경의 도메인 이름을 찾습니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;ebdjango$ eb status</span><br><span class="line">Environment details for: django-env</span><br><span class="line">  Application name: django-tutorial</span><br><span class="line">  ...</span><br><span class="line">  CNAME: eb-django-app-dev.elasticbeanstalk.com</span><br><span class="line">  ...</span><br></pre></td></tr></table></figure>
+
+<p>사용자 환경의 도메인 이름은 <code>CNAME</code> 속성의 값입니다.</p>
+</li>
+<li><p><code>settings.py</code> 디렉터리에 있는 <code>ebdjango</code> 파일을 엽니다. <code>ALLOWED_HOSTS</code> 설정을 찾은 다음 이전 단계에 찾은 애플리케이션 도메인 이름을 설정 값에 추가합니다. 파일에서 이 설정을 찾을 수 없는 경우 새로운 줄로 추가합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">ALLOWED_HOSTS &#x3D; [&#39;eb-django-app-dev.elasticbeanstalk.com&#39;]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>파일을 저장한 후 <strong>eb deploy</strong>를 실행해 애플리케이션을 배포합니다. <strong>eb deploy</strong>를 실행하면 EB CLI가 프로젝트 디렉터리의 콘텐츠를 번들링한 후 이를 환경에 배포합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;ebdjango$ eb deploy</span><br></pre></td></tr></table></figure>
+
+<p><strong>참고</strong></p>
+<p>프로젝트에 Git을 사용할 경우 <a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/eb3-cli-git.html" target="_blank" rel="noopener">EB CLI와 Git 사용</a> 단원을 참조하십시오.</p>
+</li>
+<li><p>환경 업데이트 프로세스가 완료되면 <strong>eb open</strong>으로 웹 사이트를 엽니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;project$ eb open</span><br></pre></td></tr></table></figure>
+
+<p>그러면 애플리케이션에 대해 생성된 도메인 이름을 사용하여 브라우저 창이 열립니다. 로컬에서 만들고 테스트한 것과 동일한 Django 웹 사이트가 보일 것입니다.</p>
+<p><img src="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/images/eb_django_deployed.png" alt="             Elastic Beanstalk에 배포된 Django 웹사이트 시작 페이지           "></p>
+</li>
+</ol>
+<p>실행 중인 애플리케이션이 보이지 않거나 오류 메시지를 받은 경우, <a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/troubleshooting-deployments.html" target="_blank" rel="noopener">배포 문제 해결</a>에서 오류의 원인을 확인하는 방법에 대한 도움말을 보십시오.</p>
+<p>실행 중인 애플리케이션이 <em>보이면</em> 성공한 것입니다. Elastic Beanstalk에 첫 Django 애플리케이션을 배포했습니다.</p>
+<h2 id="애플리케이션-업데이트"><a href="#애플리케이션-업데이트" class="headerlink" title="애플리케이션 업데이트"></a>애플리케이션 업데이트</h2><p>이제 Elastic Beanstalk에서 실행 중인 애플리케이션이 있으므로 애플리케이션 또는 그 구성을 업데이트하고 다시 배포할 수 있습니다. Elastic Beanstalk에서 인스턴스를 업데이트하고 새 애플리케이션 버전을 시작하는 작업을 처리합니다.</p>
+<p>이 예제에서는 Django의 관리자 콘솔을 활성화하고 몇 가지 설정을 구성합니다.</p>
+<h3 id="사이트-설정-수정"><a href="#사이트-설정-수정" class="headerlink" title="사이트 설정 수정"></a>사이트 설정 수정</h3><p>기본적으로 Django 웹 사이트에서는 UTC 시간대를 사용하여 시간을 표시합니다. <code>settings.py</code>에서 시간대를 지정하여 이를 변경할 수 있습니다.</p>
+<p><strong>사이트의 시간대를 변경하려면</strong></p>
+<ol>
+<li><p><code>settings.py</code>에서 <code>TIME_ZONE</code> 설정을 수정합니다.</p>
+<p><strong>예 ~/ebdjango/ebdjango/settings.py</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"># Internationalization</span><br><span class="line">LANGUAGE_CODE &#x3D; &#39;en-us&#39;</span><br><span class="line">TIME_ZONE &#x3D; &#39;US&#x2F;Pacific&#39;</span><br><span class="line">USE_I18N &#x3D; True</span><br><span class="line">USE_L10N &#x3D; True</span><br><span class="line">USE_TZ &#x3D; True</span><br></pre></td></tr></table></figure>
+
+<p>시간대 목록은 <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank" rel="noopener">이 페이지</a>를 참조하십시오.</p>
+</li>
+<li><p>애플리케이션을 Elastic Beanstalk 환경에 배포합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;ebdjango&#x2F;$ eb deploy</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="사이트-관리자-생성"><a href="#사이트-관리자-생성" class="headerlink" title="사이트 관리자 생성"></a>사이트 관리자 생성</h3><p>Django 애플리케이션의 사이트 관리자를 생성하여 웹 사이트에서 직접 관리 콘솔에 액세스할 수 있습니다. 관리자 로그인 세부 정보는 Django가 생성하는 기본 프로젝트에 포함된 로컬 데이터베이스 이미지에 안전하게 저장됩니다.</p>
+<p><strong>사이트 관리자를 생성하려면</strong></p>
+<ol>
+<li><p>Django 애플리케이션의 로컬 데이터베이스를 초기화합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(eb-virt) ~&#x2F;ebdjango$ python manage.py migrate</span><br><span class="line">Operations to perform:</span><br><span class="line">  Apply all migrations: admin, auth, contenttypes, sessions</span><br><span class="line">Running migrations:</span><br><span class="line">  Applying contenttypes.0001_initial... OK</span><br><span class="line">  Applying auth.0001_initial... OK</span><br><span class="line">  Applying admin.0001_initial... OK</span><br><span class="line">  Applying admin.0002_logentry_remove_auto_add... OK</span><br><span class="line">  Applying admin.0003_logentry_add_action_flag_choices... OK</span><br><span class="line">  Applying contenttypes.0002_remove_content_type_name... OK</span><br><span class="line">  Applying auth.0002_alter_permission_name_max_length... OK</span><br><span class="line">  Applying auth.0003_alter_user_email_max_length... OK</span><br><span class="line">  Applying auth.0004_alter_user_username_opts... OK</span><br><span class="line">  Applying auth.0005_alter_user_last_login_null... OK</span><br><span class="line">  Applying auth.0006_require_contenttypes_0002... OK</span><br><span class="line">  Applying auth.0007_alter_validators_add_error_messages... OK</span><br><span class="line">  Applying auth.0008_alter_user_username_max_length... OK</span><br><span class="line">  Applying auth.0009_alter_user_last_name_max_length... OK</span><br><span class="line">  Applying sessions.0001_initial... OK</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>manage.py createsuperuser</code>를 실행하여 관리자를 생성합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(eb-virt) ~&#x2F;ebdjango$ python manage.py createsuperuser</span><br><span class="line">Username: admin</span><br><span class="line">Email address: me@mydomain.com</span><br><span class="line">Password: ********</span><br><span class="line">Password (again): ********</span><br><span class="line">Superuser created successfully.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>정적 파일을 저장할 위치를 Django에 알리려면 <code>settings.py</code>에서 <code>STATIC_ROOT</code>를 정의합니다.</p>
+<p><strong>예 ~/ebdjango/ebdjango/settings.py</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Static files (CSS, JavaScript, Images)</span><br><span class="line"># https:&#x2F;&#x2F;docs.djangoproject.com&#x2F;en&#x2F;2.1&#x2F;howto&#x2F;static-files&#x2F;</span><br><span class="line">STATIC_URL &#x3D; &#39;&#x2F;static&#x2F;&#39;</span><br><span class="line">STATIC_ROOT &#x3D; &#39;static&#39;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>manage.py collectstatic</code>을 실행하여 <code>static</code> 디렉터리를 관리자 사이트의 정적 자산(javascript, CSS, 이미지)으로 채웁니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(eb-virt) ~&#x2F;ebdjango$ python manage.py collectstatic</span><br><span class="line">119 static files copied to ~&#x2F;ebdjango&#x2F;static</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>애플리케이션 배포</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;ebdjango$ eb deploy</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="6">
+<li><p>다음과 같이 사이트 URL에 <code>/admin/</code>을 추가하여 브라우저에서 사이트를 열어 관리 콘솔을 봅니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;djang-env.p33kq46sfh.us-west-2.elasticbeanstalk.com&#x2F;admin&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/images/eb_django_admin_login.png" alt="               2단계에서 생성한 사용자 이름과 암호를 입력하여 관리 콘솔에 로그인합니다.             "></p>
+</li>
+<li><p>2단계에서 구성한 사용자 이름과 암호로 로그인합니다.</p>
+<p><img src="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/images/eb_django_admin_console.png" alt="               Elastic Beanstalk에 배포된 Django 웹사이트의 Django 관리 콘솔             "></p>
+</li>
+</ol>
+<p>로컬 업데이트/테스트와 비슷한 절차를 사용할 수 있으며, 그 다음 <strong>eb deploy</strong>를 수행합니다. Elastic Beanstalk에서 라이브 서버를 업데이트하는 작업을 처리하므로 서버 관리 대신에 애플리케이션 개발에 집중할 수 있습니다. </p>
+<p>(<code>git add .</code>만하고 deploy하고 싶다면 <code>eb deploy --staged</code> )</p>
+<h3 id="데이터베이스-마이그레이션-구성-파일-추가"><a href="#데이터베이스-마이그레이션-구성-파일-추가" class="headerlink" title="데이터베이스 마이그레이션 구성 파일 추가"></a>데이터베이스 마이그레이션 구성 파일 추가</h3><p>사이트가 업데이트될 때 실행할 <code>.ebextensions</code> 스크립트에 명령을 추가할 수 있습니다. 이를 통해 데이터베이스 마이그레이션을 자동으로 생성할 수 있습니다.</p>
+<p><strong>애플리케이션을 배포할 때 마이그레이션 단계를 추가하려면</strong></p>
+<ol>
+<li><p>다음 콘텐츠가 포함된 <code>db-migrate.config</code>라는 이름의 <a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/ebextensions.html" target="_blank" rel="noopener">구성 파일</a>을 추가합니다.</p>
+<p><strong>예 ~/ebdjango/.ebextensions/db-migrate.config</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">container_commands:</span><br><span class="line">  01_migrate:</span><br><span class="line">    command: &quot;django-admin.py migrate&quot;</span><br><span class="line">    leader_only: true</span><br><span class="line">option_settings:</span><br><span class="line">  aws:elasticbeanstalk:application:environment:</span><br><span class="line">    DJANGO_SETTINGS_MODULE: ebdjango.settings</span><br></pre></td></tr></table></figure>
+
+<p>이 구성 파일은 애플리케이션을 시작하기 전에 배포 프로세스 중에 <code>django-admin.py migrate</code> 명령을 실행합니다. 이는 애플리케이션 시작 전에 실행되므로 <code>DJANGO_SETTINGS_MODULE</code> 환경 변수를 명시적으로 구성해야 합니다(일반적으로 <code>wsgi.py</code>는 시작 중에 이를 처리). 명령에서 <code>leader_only: true</code>를 지정하면 여러 인스턴스에 배포할 때 한 번만 실행됩니다.</p>
+</li>
+<li><p>애플리케이션 배포</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;project$ eb deploy</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="정리"><a href="#정리" class="headerlink" title="정리"></a>정리</h2><p>개발 세션 사이에 인스턴스 시간과 여러 AWS 리소스를 저장하려면 <strong>eb terminate</strong>를 사용하여 Elastic Beanstalk 환경을 종료합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;project$ eb terminate django-env</span><br></pre></td></tr></table></figure>
+
+<p>이 명령은 환경과 그 안에서 실행되는 모든 AWS 리소스를 종료합니다. 그러나 애플리케이션은 삭제되지 않으므로 <strong>eb create</strong>를 다시 실행하여 동일한 구성의 더 많은 환경을 언제든 생성할 수 있습니다. EB CLI 명령에 대한 자세한 내용은 <a href="https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/eb-cli3-getting-started.html" target="_blank" rel="noopener">EB CLI를 사용하여 Elastic Beanstalk 환경 관리</a> 단원을 참조하십시오.</p>
+<p>샘플 애플리케이션 사용을 마치면 프로젝트 폴더와 가상 환경을 제거할 수 있습니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">~$ rm -rf ~&#x2F;eb-virt</span><br><span class="line">~$ rm -rf ~&#x2F;ebdjango</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="기타-구축-방법-사이트"><a href="#기타-구축-방법-사이트" class="headerlink" title="기타 구축 방법 사이트"></a>기타 구축 방법 사이트</h2><p><a href="https://aws.amazon.com/ko/getting-started/use-cases/websites/?csl_l2b_ws" target="_blank" rel="noopener">웹 사이트 및 웹 앱</a></p>
+<p><a href="https://aws.amazon.com/ko/getting-started/use-cases/databases/?csl_l2b_db" target="_blank" rel="noopener">스토리지</a></p>
+<p><a href="https://aws.amazon.com/ko/getting-started/use-cases/devops/?csl_l2b_do" target="_blank" rel="noopener">DevOps</a></p>
+<p><a href="https://aws.amazon.com/ko/getting-started/use-cases/big-data/?csl_l2b_bd" target="_blank" rel="noopener">Big Data</a></p>
+<p><a href="https://docs.aws.amazon.com/index.html?nc2=h_ql_doc_do_v" target="_blank" rel="noopener">기타 전체 설명서</a></p>
+<h1 id="오류"><a href="#오류" class="headerlink" title="오류"></a>오류</h1><h2 id="sudo"><a href="#sudo" class="headerlink" title="sudo"></a>sudo</h2><ul>
+<li><p>내 계정이 <code>brew install</code> 에서 권한이 없게 나옴</p>
+</li>
+<li><p>해결 </p>
+<p>내 계정 권한</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chown -R lostcatbox &#x2F;usr&#x2F;local&#x2F;lib&#x2F;pkgconfig</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="로드-밸런서-S3와-IP가-바뀜"><a href="#로드-밸런서-S3와-IP가-바뀜" class="headerlink" title="로드 밸런서, S3와 IP가 바뀜"></a>로드 밸런서, S3와 IP가 바뀜</h2><h3 id="해결1"><a href="#해결1" class="headerlink" title="해결1."></a>해결1.</h3><p>근본적으로 로드 밸런스가 내부 IP를 이용하여 서버의 상태를 확인하게 되므로 일어나는 문제이므로,,</p>
+<p>지금 만든 서비스가 단일 인스턴스로 해결된다면 구성&gt;용량&gt;로드 밸런스를 단일 인스턴스로 바꾸면 바로 해결됨 </p>
+<h3 id="해결2"><a href="#해결2" class="headerlink" title="해결2."></a>해결2.</h3><p><del>와시바했다</del></p>
+<p>미들웨어를 건드려서 하는방법이 존재한다 하지만 왜인지 모두 해결되지않았다</p>
+<p>아래와 같이 결국 requests를 통해 해결하였다. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">       </span><br><span class="line">#settings.py</span><br><span class="line"></span><br><span class="line">ALLOWED_HOSTS &#x3D; [</span><br><span class="line">    &#39;localhost&#39;,</span><br><span class="line">    &#39;127.0.0.1&#39;,</span><br><span class="line">    &#39;.elasticbeanstalk.com&#39;,</span><br><span class="line">    &#39;impactstation-dev.ap-northeast-2.elasticbeanstalk.com&#39;,</span><br><span class="line">    &#39;.amazonaws.com&#39;,</span><br><span class="line">    &#39;.compute-1.amazonaws.com&#39;, # allows viewing of instances directly</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line">EC2_PRIVATE_IP  &#x3D;   None</span><br><span class="line">try:</span><br><span class="line">    EC2_PRIVATE_IP  &#x3D;   requests.get(&#39;http:&#x2F;&#x2F;169.254.169.254&#x2F;latest&#x2F;meta-data&#x2F;local-ipv4&#39;, timeout &#x3D; 0.01).text</span><br><span class="line">except requests.exceptions.RequestException:</span><br><span class="line">    pass</span><br><span class="line"></span><br><span class="line">if EC2_PRIVATE_IP:</span><br><span class="line">    ALLOWED_HOSTS.append(EC2_PRIVATE_IP)</span><br></pre></td></tr></table></figure>
+
+<p>위에 방법외에도 빈스톡도 EC2를 쓰고<br>EC2 내역에서 아이피를 확인하면 바뀜&gt;이것이 로드스케일링 ip주소와 같다면&gt; EC2에  아이피로 서비스하시기보다, 도메인을 쓰시는 것이 관리상 유리하다,. 나중에 해보기</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">----------------------</span><br><span class="line">option_settings: #환경변수 학습후 참고해보기</span><br><span class="line">  aws:elasticbeanstalk:application:environment:</span><br><span class="line">    DJANGO_SETTINGS_MODULE: config.settings</span><br><span class="line">    PYTHONPATH: &#x2F;opt&#x2F;python&#x2F;current&#x2F;app&#x2F;eb-django:$PYTHONPATH</span><br><span class="line">  aws:elasticbeanstalk:container:python:</span><br><span class="line">    WSGIPath: eb-django&#x2F;config&#x2F;wsgi.py</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://lhy.kr/elb-healthcheck-for-django?fbclid=IwAR0hJuPy_zomKc18rJWTOyC4Poe3KWXEOIyagPV4L7om9JEwGSNDH4aVC40" target="_blank" rel="noopener">참고</a></p>
+<p><a href="https://sanyambansal.wordpress.com/2017/06/26/how-to-make-djangos-allowed_hosts-work-with-aws-elb-health-checks/?fbclid=IwAR2QZg9eXmQZc574ozolOEVBIQ404JdEDWIArlExwkjdDXU1MPttCWij5Kc" target="_blank" rel="noopener">참고2</a></p>
+<h2 id="다중-계정-사용시"><a href="#다중-계정-사용시" class="headerlink" title="다중 계정 사용시"></a>다중 계정 사용시</h2><p><strong>AWS CLI로 인증 정보 (Access Key ID, Secret Access Key) 관리하기</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">~&#x2F;.aws&#x2F;</span><br><span class="line">vim config</span><br><span class="line"></span><br><span class="line">[profile user01]</span><br><span class="line">aws_access_key_id &#x3D; &lt;key_id&gt;</span><br><span class="line">aws_secret_access_key &#x3D; &lt;key&gt;</span><br><span class="line">output &#x3D; json</span><br><span class="line">region &#x3D; us-west-1</span><br><span class="line"></span><br><span class="line">[profile user02]</span><br><span class="line">aws_access_key_id &#x3D; &lt;key_id&gt;</span><br><span class="line">aws_secret_access_key &#x3D; &lt;key&gt;</span><br><span class="line">output &#x3D; json</span><br><span class="line">region &#x3D; us-west-1</span><br></pre></td></tr></table></figure>
+
+<p>설정후 앞으로 명령 내릴때 는 –profile user01와 같이 뒤에 붙이면 그 계정으로 속하여 실행됨</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eb create --profile user01</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ cat ~&#x2F;.aws&#x2F;credentials</span><br><span class="line">[default]</span><br><span class="line">aws_access_key_id &#x3D; ABCDEF</span><br><span class="line">aws_secret_access_key &#x3D; GHIJKL</span><br><span class="line">[work]</span><br><span class="line">aws_access_key_id &#x3D; WORK1234</span><br><span class="line">aws_secret_access_key &#x3D; WORK5678</span><br><span class="line">참고로 .aws 디렉토리에는 credentials 파일 말고도 config라는 파일도 있는데 이 곳에는 위에서 설정한 디폴트 기본 리전 및 출력 포멧 옵션들이 저장되어 있습니다.</span><br></pre></td></tr></table></figure>
+
+<p>참고로 <code>.aws</code> 디렉토리에는 <code>credentials</code> 파일 말고도 <code>config</code>라는 파일도 있는데 이 곳에는 위에서 설정한 디폴트 기본 리전 및 출력 포멧 옵션들이 저장되어 있습니다.</p>
+<h2 id="꼭-참고하기"><a href="#꼭-참고하기" class="headerlink" title="꼭 참고하기"></a>꼭 참고하기</h2><p><strong>eb에서 사용하는 .elasticbeanstalk 디렉토리는 배포 대상이 아니다.</strong><br>zip으로 압축해서 웹으로 통해 업로드할 때 이 디렉토리도 함께 압축해서 올려야 하는지 궁금했는데 명확하게 딱 표시된 곳이 없었다. 나중에 git init을 한 후 .gitignore파일을 만들었더니 거기에 .elasticbeanstalk를 제외하는 부분이 있더라. 그러니 이 디렉토리는 제외하면 된다. <strong>.elasticbeanstalk</strong> 디렉토리를 열어보면 eb 배포 환경에 관한 파일이 config.yml이 들어 있다. <strong>.elasticbeanstalk</strong>와 비슷하게 생긴 <strong>.ebextensions</strong> 디렉토리는 django.config와 같이 .config 확장자 파일로 배포 시 수행해야 하는 명령이나 WSGIPath 등 옵션을 설정할 수 있는 파일이 들어 있다. 이 디렉토리는 zip으로 압축할 때 같이 압축해주면 된다.</p>
+<p><strong>가상환경 디렉토리까지 eb deploy 대상에 포함시키지 마라.</strong><br>pip freeze로 생성된 requirements.txt로 eb가 알아서 ec2 인스턴스 /opt/python/run/venv 경로에 가상환경을 만든다.</p>
+<p><strong>eb deploy를 통해 배포에서 제외할 파일을 설정할 때</strong><br>git init으로 git이 활성화 되어 있어야 .gitignore 파일이 적용된다. 그렇지 않으면 .ebignore 사용할 것</p>
+<p><a href="https://lhy.kr/elb-healthcheck-for-django" target="_blank" rel="noopener">자세히2</a>(aws 전반적인 원리 이해하기)</p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/02/11/SessionAndCookie/" title= "세션,쿠키와 캐시 (session and cookie)">
+                    <div class="nextTitle">세션,쿠키와 캐시 (session and cookie)</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/01/28/DRF14/" title= "DRF 기본편 14">
+                    <div class="prevTitle">DRF 기본편 14</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Elastic-Beanstalk-Django"><span class="toc-number">1.</span> <span class="toc-text">Elastic Beanstalk + Django</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#EB-CLI-명령어-정리"><span class="toc-number">1.1.</span> <span class="toc-text">EB CLI 명령어 정리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#시작하기전"><span class="toc-number">1.2.</span> <span class="toc-text">시작하기전</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Elastic-Beanstalk-개념"><span class="toc-number">1.2.1.</span> <span class="toc-text">Elastic Beanstalk 개념</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#시작하기"><span class="toc-number">1.3.</span> <span class="toc-text">시작하기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Elastic-Beanstalk에-접속-및-만들기"><span class="toc-number">1.3.1.</span> <span class="toc-text">Elastic Beanstalk에 접속 및 만들기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#환경-살펴보기"><span class="toc-number">1.3.2.</span> <span class="toc-text">환경 살펴보기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#새-버전의-애플리케이션-배포"><span class="toc-number">1.3.3.</span> <span class="toc-text">새 버전의 애플리케이션 배포</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#환경-구성"><span class="toc-number">1.3.4.</span> <span class="toc-text">환경 구성</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#구성-변경"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">구성 변경</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Elastic-Beanstalk에서의-사용을-위한-개발-머신-구성"><span class="toc-number">2.</span> <span class="toc-text">Elastic Beanstalk에서의 사용을 위한 개발 머신 구성</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#프로젝트-폴더-만들기"><span class="toc-number">2.1.</span> <span class="toc-text">프로젝트 폴더 만들기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#소스-컨트롤-설정"><span class="toc-number">2.2.</span> <span class="toc-text">소스 컨트롤 설정</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#원격-리포지토리-구성"><span class="toc-number">2.3.</span> <span class="toc-text">원격 리포지토리 구성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EB-CLI-설치"><span class="toc-number">2.4.</span> <span class="toc-text">EB CLI 설치</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Clone-this-repository"><span class="toc-number">2.4.1.</span> <span class="toc-text">Clone this repository</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AWS-CLI-설치"><span class="toc-number">2.5.</span> <span class="toc-text">AWS CLI 설치</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ebignore를-사용하여-파일-무시"><span class="toc-number">2.6.</span> <span class="toc-text">.ebignore를 사용하여 파일 무시</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Python-개발환경-설정"><span class="toc-number">3.</span> <span class="toc-text">Python 개발환경 설정</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Elastic-Beanstalk에-대해-Python-프로젝트-구성"><span class="toc-number">3.1.</span> <span class="toc-text">Elastic Beanstalk에 대해 Python 프로젝트 구성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Django"><span class="toc-number">3.2.</span> <span class="toc-text">Django</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Elastic-Beanstalk에-맞게-Django-애플리케이션-구성"><span class="toc-number">3.3.</span> <span class="toc-text">Elastic Beanstalk에 맞게 Django 애플리케이션 구성</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#EB-CLI를-사용하여-사이트-배포"><span class="toc-number">3.3.1.</span> <span class="toc-text">EB CLI를 사용하여 사이트 배포</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#애플리케이션-업데이트"><span class="toc-number">3.4.</span> <span class="toc-text">애플리케이션 업데이트</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#사이트-설정-수정"><span class="toc-number">3.4.1.</span> <span class="toc-text">사이트 설정 수정</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#사이트-관리자-생성"><span class="toc-number">3.4.2.</span> <span class="toc-text">사이트 관리자 생성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#데이터베이스-마이그레이션-구성-파일-추가"><span class="toc-number">3.4.3.</span> <span class="toc-text">데이터베이스 마이그레이션 구성 파일 추가</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#정리"><span class="toc-number">3.5.</span> <span class="toc-text">정리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#기타-구축-방법-사이트"><span class="toc-number">3.6.</span> <span class="toc-text">기타 구축 방법 사이트</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#오류"><span class="toc-number">4.</span> <span class="toc-text">오류</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sudo"><span class="toc-number">4.1.</span> <span class="toc-text">sudo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#로드-밸런서-S3와-IP가-바뀜"><span class="toc-number">4.2.</span> <span class="toc-text">로드 밸런서, S3와 IP가 바뀜</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#해결1"><span class="toc-number">4.2.1.</span> <span class="toc-text">해결1.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#해결2"><span class="toc-number">4.2.2.</span> <span class="toc-text">해결2.</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#다중-계정-사용시"><span class="toc-number">4.3.</span> <span class="toc-text">다중 계정 사용시</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#꼭-참고하기"><span class="toc-number">4.4.</span> <span class="toc-text">꼭 참고하기</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 113
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/02</span><a class="archive-post-title" href= "/2020/10/02/mysql/" >Mysql 기본 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-command/" >우분투 자주 쓰는 명령어</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

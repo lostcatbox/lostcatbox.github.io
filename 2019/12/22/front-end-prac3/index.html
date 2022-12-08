@@ -1,0 +1,3458 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>프론트엔드 기본편 3 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">프론트엔드 기본편 3</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            프론트엔드 기본편 3
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Django">Django</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Frontend">Frontend</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Ajax">Ajax</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">4.2k</span>Reading time: <span class="post-count reading-time">26 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/12/22</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="Ajax-with-Django-3"><a href="#Ajax-with-Django-3" class="headerlink" title="Ajax with Django #3"></a>Ajax with Django #3</h1><h2 id="코드-구현"><a href="#코드-구현" class="headerlink" title="코드 구현"></a>코드 구현</h2><ul>
+<li>STEP #1) Detail 페이지에서 댓글 쓰기</li>
+<li>STEP #2) validation 에러가 발생한다면?</li>
+<li>STEP #3) Post Detail 댓글창에 Ajax 숨결을 ~</li>
+<li>STEP #4) Bootstrap4 Modal을 통한 댓글 쓰기</li>
+<li>STEP #5) Bootstrap4 Modal을 통한 댓글 수정</li>
+<li>STEP #6) MEDIA 프로젝트 셋팅</li>
+<li>STEP #7) 댓글 Ajax 파일 업로드</li>
+<li>STEP #8) 댓글 목록에 이미지를 노출시켜봅시다</li>
+</ul>
+<h2 id="댓글-Ajax-쓰기"><a href="#댓글-Ajax-쓰기" class="headerlink" title="댓글 Ajax 쓰기"></a>댓글 Ajax 쓰기</h2><h3 id="STEP-1-Detail-페이지에서-댓글-쓰기"><a href="#STEP-1-Detail-페이지에서-댓글-쓰기" class="headerlink" title="STEP #1) Detail 페이지에서 댓글 쓰기"></a>STEP #1) Detail 페이지에서 댓글 쓰기</h3><p>아직은 JavaScript를 사용하지 않아요.</p>
+<p>Tip: 클래스에 오버라이드 할경우 ctrl+o누르면 뭐가 가능한지 알려줌</p>
+<ul>
+<li>기존 댓글쓰기는<ul>
+<li>comment_new:GET 요청 시에 : 빈 Comment Form HTML을 보여주 고, 댓글을 써서 comment_new에서 POST요청을 받도록 함. </li>
+<li>comment_new:POST 요청 시에 : 받은 POST 데이터를 통해 Form 처리 </li>
+</ul>
+</li>
+<li>지금 바꿔볼 내용은<ul>
+<li>post_detail뷰:GET 에서 빈 Comment Form HTM</li>
+</ul>
+</li>
+</ul>
+<p>기존 CommentCreateView/CommentUpdateView CBV에서는 Form Class를 지정하지 않고, 내부적으로 자동생성토록 했었음. </p>
+<p>그런데, PostDetailView에서 Comment Form 노출을 위해서는 CommentForm 이 필요.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;forms.py</span><br><span class="line">from django import forms</span><br><span class="line">from .models import Comment</span><br><span class="line">class CommentForm(forms.ModelForm):</span><br><span class="line">     class Meta:</span><br><span class="line">         model &#x3D; Comment</span><br><span class="line">         fields &#x3D; [&#39;message&#39;]</span><br><span class="line"></span><br><span class="line"># blog&#x2F;views.py</span><br><span class="line">from .forms import CommentForm</span><br><span class="line"></span><br><span class="line">class PostDetailView(DetailView):</span><br><span class="line">     model &#x3D; Post</span><br><span class="line">     # 중략</span><br><span class="line">     def get_context_data(self, **kwargs):</span><br><span class="line">         context &#x3D; super().get_context_data(**kwargs)</span><br><span class="line">         context[&#39;comment_form&#39;] &#x3D; CommentForm() # 빈 CommentForm을 만들기만 할 뿐, 입력된 데이터는 CommentCreateView에서 처리, 빈 모델폼인자 생성후 넘기는과정</span><br><span class="line">         return context</span><br><span class="line">         </span><br><span class="line">class CommentCreateView(CreateView):</span><br><span class="line">     model &#x3D; Comment</span><br><span class="line">     # fields &#x3D; [&#39;message&#39;] # 제거하고, form_class 지정</span><br><span class="line">     form_class &#x3D; CommentForm</span><br><span class="line">     # 생략</span><br><span class="line"></span><br><span class="line">class CommentUpdateView(UpdateView):</span><br><span class="line">     model &#x3D; Comment</span><br><span class="line">     # fields &#x3D; [&#39;message&#39;] # 제거하고, form_class 지정</span><br><span class="line">     form_class &#x3D; CommentForm</span><br><span class="line">     # 생략</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;post_detail.html</span><br><span class="line"></span><br><span class="line">&#123;% load bootstrap3 %&#125;</span><br><span class="line">&lt;!-- 중략 --&gt;</span><br><span class="line">&lt;form id&#x3D;&quot;comment-form&quot; action&#x3D;&quot;&#123;% url &quot;blog:comment_new&quot; post.pk %&#125;&quot; method&#x3D;&quot;post&quot;&gt; &#x2F;&#x2F; 아주중요!!! 지금까지는 post를 같은 url로 보내서 같은 view cbv에서 처리했었음, 하지만 action에 url를 지정하여 post요청을 다른 곳으로 보내서 다른 view cbv가 처리가능</span><br><span class="line">     &#123;% csrf_token %&#125;</span><br><span class="line">     &#123;% bootstrap_form comment_form %&#125;</span><br><span class="line">     &lt;input type&#x3D;&quot;submit&quot; class&#x3D;&quot;btn btn-primary btn-block&quot; value&#x3D;&quot;댓글쓰기&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;form&gt;</span><br><span class="line">아래 링크는 제거</span><br><span class="line"></span><br><span class="line">&#123;# &lt;a href&#x3D;&quot;&#123;% url &quot;blog:comment_new&quot; post.pk %&#125;&quot; class&#x3D;&quot;btn btn-primary btn-block&quot;&gt;댓글쓰기&lt;&#x2F;a&gt; #&#125; &#123;# 장고 탬플릿 주석문법 #&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>이제 Post Detail 화면에 댓글을 쓸 수 있어요</strong></p>
+<h3 id="STEP-2-validation-에러가-발생한다면"><a href="#STEP-2-validation-에러가-발생한다면" class="headerlink" title="STEP #2) validation 에러가 발생한다면?"></a>STEP #2) validation 에러가 발생한다면?</h3><p>에러 발생을 위해 Form 클래스에 validator를 추가했습니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import re</span><br><span class="line">from django import forms</span><br><span class="line">from .models import Comment</span><br><span class="line"></span><br><span class="line">class CommentForm(forms.ModelForm):</span><br><span class="line">     class Meta:</span><br><span class="line">         model &#x3D; Comment</span><br><span class="line">         fields &#x3D; [&#39;message&#39;]</span><br><span class="line">         </span><br><span class="line">     def clean_message(self):</span><br><span class="line">         message &#x3D; self.cleaned_data.get(&#39;message&#39;, None)</span><br><span class="line">         if message:</span><br><span class="line">             if not re.search(r&#39;[ㄱ-힣]&#39;, message):</span><br><span class="line">		             raise forms.ValidationError(&#39;메세지에 한글이 필요합니다.&#39;)</span><br><span class="line">         return message</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>/pk/comments/new/ 주소에서 에러가 발생합니다.</li>
+<li>그런데, 매번 스크롤이 TOP에 위치해있어요. :( 좀 더 개선해보죠.<ul>
+<li>즉 댓글을 쓰고나면 url로 다시 이동되어 scroll에 top으로 다시 돌아감.</li>
+</ul>
+</li>
+</ul>
+<h3 id="STEP-3-Post-Detail-댓글창에-Ajax-숨결을"><a href="#STEP-3-Post-Detail-댓글창에-Ajax-숨결을" class="headerlink" title="STEP #3) Post Detail 댓글창에 Ajax 숨결을 ~"></a>STEP #3) Post Detail 댓글창에 Ajax 숨결을 ~</h3><p>댓글을 입력하는 창 넘어가는것 자체는 그냥 전부 detail에서 해버리면 전환없이 그대로일듯</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;views.py</span><br><span class="line">class CommentCreateView(CreateView):</span><br><span class="line">     model &#x3D; Comment</span><br><span class="line">     form_class &#x3D; CommentForm</span><br><span class="line">     def form_valid(self, form):</span><br><span class="line">     comment &#x3D; form.save(commit&#x3D;False)</span><br><span class="line">     comment.post &#x3D; get_object_or_404(Post, pk&#x3D;self.kwargs[&#39;post_pk&#39;])</span><br><span class="line">     response &#x3D; super().form_valid(form)</span><br><span class="line">     if self.request.is_ajax():  #ajax요청일때는 jsonresponse로 응답!</span><br><span class="line">         return JsonResponse(&#123;</span><br><span class="line">             &#39;id&#39;: comment.id,</span><br><span class="line">             &#39;message&#39;: comment.message,</span><br><span class="line">             &#39;updated_at&#39;: comment.updated_at,</span><br><span class="line">             &#39;edit_url&#39;: resolve_url(&#39;blog:comment_edit&#39;, comment.post.pk, comment.pk),</span><br><span class="line">             &#39;delete_url&#39;: resolve_url(&#39;blog:comment_delete&#39;, comment.post.pk, comment.pk),</span><br><span class="line">             &#125;) &#x2F;&#x2F;js단에서 url reverse를 할수없으니까 같이 넘겨줘야됨!</span><br><span class="line">     return response</span><br><span class="line">     </span><br><span class="line">     def form_invalid(self, form):  # ajax로 valid아닐때도 ajax로 응답</span><br><span class="line">         if self.request.is_ajax():</span><br><span class="line">                 return JsonResponse(dict(form.errors, is_success&#x3D;False)) #사전형태로 응답, js에서 is_success를 보고 내가 처리기준으로둘것이다</span><br><span class="line">              return super().form_invalid(form)</span><br><span class="line"></span><br><span class="line">     def get_success_url(self):</span><br><span class="line">     		return resolve_url(self.object.post)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;post_detail.html</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">$(function() &#123;</span><br><span class="line"> 		$(&#39;#comment-form&#39;).submit(function(e) &#123;</span><br><span class="line"> 				e.preventDefault();</span><br><span class="line">         var $form &#x3D; $(this);   &#x2F;&#x2F;this는 현재 폼 요소를 지징함&gt;&gt;jquery객체로만듬</span><br><span class="line">         var url &#x3D; $form.attr(&#39;action&#39;);  &#x2F;&#x2F;attr중에 action에는 어디로보낼지 경로 담겨있는것을 가져옴</span><br><span class="line">         var data &#x3D; $form.serialize();  &#x2F;&#x2F;csrfmiddlewaretoken과 message를 담고있는 url encoded된 문자열을 반환해줌</span><br><span class="line">         </span><br><span class="line">         $.post(url, data)  &#x2F;&#x2F;ajax로 post함! 클래스뷰에서 판단가능</span><br><span class="line"> 						.done(function(obj) &#123;   &#x2F;&#x2F;post해서 응답받은것을 아직 전체 레이아웃이 포함된 html을 받음,</span><br><span class="line">                 if ( obj.is_success &#x3D;&#x3D;&#x3D; false ) &#123;</span><br><span class="line">                 		alert(obj.message);</span><br><span class="line">                 &#125;</span><br><span class="line">                 else &#123;</span><br><span class="line">                 		console.log(obj);</span><br><span class="line">                 		</span><br><span class="line">                     $(&#39;#comment-list&#39;).prepend([</span><br><span class="line">                         &#39;&lt;li id&#x3D;&quot;comment-&#39; + obj.id + &#39;&quot;&gt;&#39;,</span><br><span class="line">                             obj.message,</span><br><span class="line">                             &#39;&amp;dash;&#39;,</span><br><span class="line">                             &#39;&lt;a href&#x3D;&quot;&#39; + obj.edit_url + &#39;&quot;&gt;&#39;,</span><br><span class="line">                             		&#39;&lt;small&gt;&#39; + obj.updated_at + &#39;&lt;&#x2F;small&gt;&#39;,</span><br><span class="line">                             &#39;&lt;&#x2F;a&gt;&#39;,</span><br><span class="line">                            &#39;&lt;a href&#x3D;&quot;&#39; + obj.delete_url + &#39;&quot; class&#x3D;&quot;ajax-post-confirm&quot; data-target-id&#x3D;&quot;comment-&#39; + obj.id + &#39;&quot; data-message&#x3D;&quot;정말 삭제하시겠습니까?&quot;&gt;&#39;,</span><br><span class="line">                             		&#39;&lt;small&gt;삭제&lt;&#x2F;small&gt;&#39;,</span><br><span class="line">                             &#39;&lt;&#x2F;a&gt;&#39;,</span><br><span class="line">                         &#39;&lt;&#x2F;li&gt;&#39;</span><br><span class="line">                 ].join(&#39;&#39;));</span><br><span class="line">                 </span><br><span class="line">                 $form[0].reset(); &#x2F;&#x2F;현재form에 0번째 js에 reset()씀 즉,form에있는 내용들 삭제해줌.</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125;)</span><br><span class="line">             .fail(function(xhr, textStatus, error) &#123;</span><br><span class="line">                 console.log(&quot;fail&quot;);</span><br><span class="line">                 alert(&#39;failed : &#39; + error);</span><br><span class="line">             &#125;);</span><br><span class="line">     &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>하지만 이렇게 js로 모두 짜는건 현실적으로 힘듬</p>
+<h4 id="Underscorejs-Template으로-변경"><a href="#Underscorejs-Template으로-변경" class="headerlink" title="Underscorejs Template으로 변경"></a>Underscorejs Template으로 변경</h4><p>bower.json 에 추가</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">     &quot;name&quot;: &quot;askdjango&quot;,</span><br><span class="line">     &quot;dependencies&quot;: &#123;</span><br><span class="line">         &quot;jquery&quot;: &quot;~3.2.1&quot;,</span><br><span class="line">         &quot;bootstrap&quot;: &quot;~3.3.7&quot;,</span><br><span class="line">         &quot;underscore&quot;: &quot;~1.8.3&quot;</span><br><span class="line">     &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="레이아웃-템플릿에-추가"><a href="#레이아웃-템플릿에-추가" class="headerlink" title="레이아웃 템플릿에 추가"></a>레이아웃 템플릿에 추가</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src&#x3D;&quot;&#123;% static &quot;jquery&#x2F;dist&#x2F;jquery.min.js&quot; %&#125;&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;&#123;% static &quot;bootstrap&#x2F;dist&#x2F;js&#x2F;bootstrap.min.js&quot; %&#125;&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;&#123;% static &quot;jquery.csrf.js&quot; %&#125;&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;&#123;% static &quot;underscore&#x2F;underscore-min.js&quot; %&#125;&quot;&gt;&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="underscore-js-템플릿-정의"><a href="#underscore-js-템플릿-정의" class="headerlink" title="underscore.js 템플릿 정의"></a>underscore.js 템플릿 정의</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#blog&#x2F;templates&#x2F;post_detail.html</span><br><span class="line">&lt;script type&#x3D;&quot;text&#x2F;x-template&quot; id&#x3D;&quot;comment-template&quot;&gt;</span><br><span class="line">     &lt;li id&#x3D;&quot;comment-&lt;%&#x3D; id %&gt;&quot;&gt;  &#x2F;&#x2F;underscroe변수 정의방법</span><br><span class="line">         &lt;%&#x3D; message %&gt;</span><br><span class="line">         &amp;dash;</span><br><span class="line">         &lt;a href&#x3D;&quot;&lt;%&#x3D; edit_url %&gt;&quot;&gt;</span><br><span class="line">		         &lt;small&gt;&lt;%&#x3D; updated_at %&gt;&lt;&#x2F;small&gt;</span><br><span class="line">         &lt;&#x2F;a&gt;</span><br><span class="line">         </span><br><span class="line">         &lt;a href&#x3D;&quot;&lt;%&#x3D; delete_url %&gt;&quot;</span><br><span class="line">             class&#x3D;&quot;ajax-post-confirm&quot;</span><br><span class="line">             data-target-id&#x3D;&quot;comment-&lt;%&#x3D; id %&gt;&quot;</span><br><span class="line">             data-message&#x3D;&quot;정말 삭제하시겠습니까?&quot;&gt;</span><br><span class="line">             		&lt;small&gt;삭제&lt;&#x2F;small&gt;</span><br><span class="line">         &lt;&#x2F;a&gt;</span><br><span class="line">     &lt;&#x2F;li&gt;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="submit-콜백에서-underscore-js-템플릿-활용"><a href="#submit-콜백에서-underscore-js-템플릿-활용" class="headerlink" title="submit 콜백에서 underscore.js 템플릿 활용"></a>submit 콜백에서 underscore.js 템플릿 활용</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">$(function()&#123;</span><br><span class="line">     var raw_template &#x3D; $(&#39;#comment-template&#39;).html();  &#x2F;&#x2F; 코멘트 템플릿에있는문자열을 모두 가져옴</span><br><span class="line">     var tpl &#x3D; _.template(raw_template);  &#x2F;&#x2F;이걸로 underscrore 템플릿생성</span><br><span class="line">		 $(&#39;#comment-form&#39;).submit(function(e)&#123;</span><br><span class="line"> 			  e.preventDefault();</span><br><span class="line"> 					</span><br><span class="line">         var $form &#x3D; $(this);</span><br><span class="line">         var url &#x3D; $form.attr(&#39;action&#39;);</span><br><span class="line">         var data &#x3D; $form.serialize();</span><br><span class="line">         </span><br><span class="line">         $.post(url, data)</span><br><span class="line">             .done(function(obj)&#123;</span><br><span class="line">                 if ( obj.is_success &#x3D;&#x3D;&#x3D; false ) &#123;</span><br><span class="line">                    alert(obj.message);</span><br><span class="line">                 &#125;</span><br><span class="line">                 else &#123;</span><br><span class="line">                     console.log(obj);</span><br><span class="line">                     $(&#39;#comment-list&#39;).prepend(tpl(obj));</span><br><span class="line">                     $form[0].reset();</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125;)</span><br><span class="line">				     .fail(function(xhr, textStatus, error)&#123;</span><br><span class="line">										console.log(&quot;fail&quot;);</span><br><span class="line">										alert(&#39;failed : &#39; + error);</span><br><span class="line"> 					 	&#125;);</span><br><span class="line">		 &#125;);</span><br><span class="line"> &#x2F;&#x2F; 생략</span><br><span class="line">&#125;);</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="submit-버튼-중복-클릭을-막아봅시다"><a href="#submit-버튼-중복-클릭을-막아봅시다" class="headerlink" title="submit 버튼 중복 클릭을 막아봅시다."></a>submit 버튼 중복 클릭을 막아봅시다.</h4><p>submit ajax 요청처리시간이 길어질 경우, 유저는 submit 버튼을 여러 번 누를 수 있습니다. 이때 유저가 누 른 수만큼 ajax 요청이 추가로 전달되게 됩니다. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">js에서 함수를 딜레이 주는 방법 </span><br><span class="line">setTimeout(function() &#123; 함수넣기</span><br><span class="line">&#125;, 3000);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>submit 요청을 처리 중에는 submit 버튼을 비활성화하여, 이를 방지할 수 있습니다.</p>
+<p>아래 코드 추가해주기</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#blog&#x2F;templates&#x2F;post_detail.html</span><br><span class="line">$(&#39;#comment-form&#39;).submit(function(e) &#123;</span><br><span class="line">     e.preventDefault();</span><br><span class="line">     var $form &#x3D; $(this);</span><br><span class="line">     var $submit &#x3D; $form.find(&#39;[type&#x3D;submit]&#39;);</span><br><span class="line">     </span><br><span class="line">     $submit.prop(&#39;disabled&#39;, true); &#x2F;&#x2F; post요청 전에 , form에 type&#x3D;submit들이 disabled로서 기능못하게막음, prop는 선택한 한곳 의 script의 속성값 추가</span><br><span class="line">     </span><br><span class="line">     &#x2F;&#x2F; 중략</span><br><span class="line">     </span><br><span class="line">     .always(function () &#123;</span><br><span class="line">                $submit.prop(&#39;disabled&#39;, false);</span><br><span class="line">                &#125;) &#x2F;&#x2F;post요청이 끝나고 나서, 항상 다시 기능가능하게만듬</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="STEP-4-Bootstrap4-Modal을-통한-댓글-쓰기"><a href="#STEP-4-Bootstrap4-Modal을-통한-댓글-쓰기" class="headerlink" title="STEP #4) Bootstrap4 Modal을 통한 댓글 쓰기"></a>STEP #4) Bootstrap4 Modal을 통한 댓글 쓰기</h3><p>요즘은 json으로 백엔드에서 응답해주고 그것을 js로 처리하지만 </p>
+<p>서버 응답은 JSON이 아닌 HTML로 처리해보겠습니다. (JavaScript는 Ajax요청에만 최소화)</p>
+<p>comment-form JSON 관련 JavaScript/뷰 코드 모두 제거하고, Ajax 요청에 대한 응답 시에는 템플릿에서 레이아웃을 제거</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;views.py</span><br><span class="line">class CommentCreateView(CreateView):</span><br><span class="line">     model &#x3D; Comment</span><br><span class="line">     form_class &#x3D; CommentForm</span><br><span class="line">     </span><br><span class="line">     def form_valid(self, form):</span><br><span class="line">         comment &#x3D; form.save(commit&#x3D;False)</span><br><span class="line">         comment.post &#x3D; get_object_or_404(Post, pk&#x3D;self.kwargs[&#39;post_pk&#39;])</span><br><span class="line">         response &#x3D; super().form_valid(form)</span><br><span class="line">         </span><br><span class="line">         if self.request.is_ajax(): # render_to_response가 호출되지 않습니다.</span><br><span class="line">             return render(self.request, &#39;blog&#x2F;_comment.html&#39;, &#123;</span><br><span class="line">             		&#39;comment&#39;: comment,</span><br><span class="line">             &#125;)</span><br><span class="line">             </span><br><span class="line">             </span><br><span class="line">         return response</span><br><span class="line">         </span><br><span class="line">         </span><br><span class="line">     def get_success_url(self):</span><br><span class="line">    		 return resolve_url(self.object.post)</span><br><span class="line">    		 </span><br><span class="line">     def get_template_names(self):</span><br><span class="line">         if self.request.is_ajax():</span><br><span class="line">         		return [&#39;blog&#x2F;_comment_form.html&#39;]  &#x2F;&#x2F;우리가 추가할 폼</span><br><span class="line">         return [&#39;blog&#x2F;comment_form.html&#39;]  &#x2F;&#x2F;원래 쓰던 폼</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;_comment_form.html</span><br><span class="line"></span><br><span class="line">&#123;% load bootstrap3 %&#125;</span><br><span class="line"></span><br><span class="line">&lt;form action&#x3D;&quot;&quot; method&#x3D;&quot;post&quot;&gt;</span><br><span class="line">     &#123;% csrf_token %&#125;</span><br><span class="line">     &#123;% bootstrap_form form %&#125;</span><br><span class="line">     &lt;input type&#x3D;&quot;submit&quot; class&#x3D;&quot;btn btn-primary&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;form&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;comment_form.html</span><br><span class="line"></span><br><span class="line">&#123;% extends &quot;blog&#x2F;layout.html&quot; %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% block content %&#125;</span><br><span class="line">&lt;div class&#x3D;&quot;container&quot;&gt;</span><br><span class="line">     &lt;div class&#x3D;&quot;row&quot;&gt;</span><br><span class="line">         &lt;div class&#x3D;&quot;col-sm-12&quot;&gt;</span><br><span class="line">    		     &#123;% include &quot;blog&#x2F;_comment_form.html&quot; %&#125;  따로 빼놓고 view에서는 각자선택가능</span><br><span class="line">		     &lt;&#x2F;div&gt;</span><br><span class="line">     &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br><span class="line">&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;tempaltes&#x2F;blog&#x2F;post_detail.html : Modal Markup</span><br><span class="line"></span><br><span class="line">&lt;div class&#x3D;&quot;modal fade&quot; id&#x3D;&quot;comment-form-modal&quot; tabindex&#x3D;&quot;-1&quot;&gt;</span><br><span class="line">     &lt;div class&#x3D;&quot;modal-dialog&quot;&gt;</span><br><span class="line">         &lt;div class&#x3D;&quot;modal-content&quot;&gt;</span><br><span class="line">             &lt;div class&#x3D;&quot;modal-header&quot;&gt;</span><br><span class="line">                 &lt;h5 class&#x3D;&quot;modal-title&quot;&gt;Comment Form&lt;&#x2F;h5&gt;</span><br><span class="line">                 &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;close&quot; data-dismiss&#x3D;&quot;modal&quot;&gt;</span><br><span class="line">                 		&lt;span&gt;&amp;times;&lt;&#x2F;span&gt;</span><br><span class="line">                 &lt;&#x2F;button&gt;</span><br><span class="line">             &lt;&#x2F;div&gt;</span><br><span class="line">             &lt;div class&#x3D;&quot;modal-body&quot;&gt;</span><br><span class="line">                 ...&lt;br&#x2F;&gt;</span><br><span class="line">                 ...&lt;br&#x2F;&gt;</span><br><span class="line">                 ...&lt;br&#x2F;&gt;</span><br><span class="line">                 ...&lt;br&#x2F;&gt;</span><br><span class="line">             &lt;&#x2F;div&gt;</span><br><span class="line">         &lt;&#x2F;div&gt;</span><br><span class="line">     &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>blog/templates/blog/post_detail.html 템플릿에서 댓글 개별 HTML 마크업(li&gt;안에 삭제등등버튼들)을 blog/_comment.html로 이관합니다. _</p>
+<p>이는 댓글 Ajax 생성 후에 응답으로서 blog/_comment.html 템플릿을 활용하기 위함입니다. </p>
+<p>이관후 원래있던자리엔 아래 코드 중간 한줄 추가</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% for comment in post.comment_set.all %&#125; </span><br><span class="line">   &#123;% include &quot;blog&#x2F;_comment.html&quot; %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>기존 post_detail.html 코드를 그대로 옮기되, 이 템플릿 처리시에는 comment 변수 하나만 넘겨도 처리되도록, post.pk 코드를 comment.post.pk로 수정합니다.=</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templatges&#x2F;blog&#x2F;_comment.html  &#x2F;&#x2F;이는 서버에서 렌더링까지해서 html을 응답으로주는 컨셉에 맞춘것</span><br><span class="line"></span><br><span class="line">&lt;li id&#x3D;&quot;comment-&#123;&#123; comment.pk &#125;&#125;&quot;&gt;</span><br><span class="line">     &#123;&#123; comment.message &#125;&#125;</span><br><span class="line">     &amp;dash;</span><br><span class="line">     &lt;a href&#x3D;&quot;&#123;% url &quot;blog:comment_edit&quot; comment.post.pk comment.pk %&#125;&quot;&gt;</span><br><span class="line">     		&lt;small&gt;&#123;&#123; comment.updated_at &#125;&#125;&lt;&#x2F;small&gt;</span><br><span class="line">     &lt;&#x2F;a&gt;</span><br><span class="line"></span><br><span class="line">     &lt;a href&#x3D;&quot;&#123;% url &quot;blog:comment_delete&quot; comment.post.pk comment.pk %&#125;&quot;</span><br><span class="line">         class&#x3D;&quot;ajax-post-confirm&quot;</span><br><span class="line">         data-target-id&#x3D;&quot;comment-&#123;&#123; comment.pk &#125;&#125;&quot;</span><br><span class="line">         data-message&#x3D;&quot;정말 삭제하시겠습니까?&quot;&gt;</span><br><span class="line">          &lt;small&gt;삭제&lt;&#x2F;small&gt;</span><br><span class="line">     &lt;&#x2F;a&gt;</span><br><span class="line">&lt;&#x2F;li&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;post_detail.html</span><br><span class="line"></span><br><span class="line">&lt;a href&#x3D;&quot;&#123;% url &quot;blog:comment_new&quot; post.pk %&#125;&quot; class&#x3D;&quot;btn btn-primary btn-block comment-form-btn&quot;&gt;댓글쓰기&lt;&#x2F;a&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">$(function()&#123;</span><br><span class="line">     &#x2F;&#x2F; modal 창의 form submit 이벤트에 대한 리스너</span><br><span class="line">     $(document).on(&#39;submit&#39;, &#39;#comment-form-modal form&#39;, function(e)&#123; &#x2F;&#x2F;comment-form-modal에서 form태그에서 submit이벤트 발생시,</span><br><span class="line">         e.preventDefault();</span><br><span class="line">         console.log(&quot;Submit&quot;);</span><br><span class="line">         </span><br><span class="line">         var $form &#x3D; $(this);</span><br><span class="line">         var url &#x3D; $form.attr(&#39;action&#39;);</span><br><span class="line">         var data &#x3D; $form.serialize();</span><br><span class="line">         </span><br><span class="line">         $.post(url, data)</span><br><span class="line">             .done(function(html)&#123;</span><br><span class="line">                 console.log(&quot;---- done ----&quot;);</span><br><span class="line">                 console.log(html);</span><br><span class="line">                 </span><br><span class="line">             var $resp &#x3D; $(html);  &#x2F;&#x2F;응답으로 받은 html을 랩핑해서 jquery object만듬</span><br><span class="line">             </span><br><span class="line">             if ( $resp.find(&#39;.has-error&#39;).length &gt; 0 ) &#123; &#x2F;&#x2F;에러가 있다면 .has-error에 들어있다.</span><br><span class="line">                 &#x2F;&#x2F; validation 에러일 경우, 에러 HTML 응답</span><br><span class="line">                 &#x2F;&#x2F; form 태그의 속성정보는 그대로 유지하고, 필드 HTML</span><br><span class="line">                만 변경</span><br><span class="line">                 var fields_html &#x3D; $resp.html();</span><br><span class="line">                 $(&#39;#comment-form-modal .modal-body form&#39;).html(fields_html);</span><br><span class="line">             &#125;</span><br><span class="line">             else &#123;                               &#x2F;&#x2F;에러가없는경우</span><br><span class="line">                 $resp.prependTo(&#39;#comment-list&#39;);</span><br><span class="line">                 $(&#39;#comment-form-modal&#39;).modal(&#39;hide&#39;);</span><br><span class="line">                 $form[0].reset();</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;)</span><br><span class="line">         .fail(function(xhr, textStatus, error)&#123;</span><br><span class="line">         		alert(&#39;failed : &#39; + error);</span><br><span class="line">         &#125;);</span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>“댓글 쓰기” 버튼이 클릭되면, Comment Form HTML을 서버로부터 받아와서, 그 내용으로 Modal 창을 띄웁니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">$(document).on(&#39;click&#39;, &#39;.comment-form-btn&#39;, function(e) &#123;</span><br><span class="line"> 		e.preventDefault();</span><br><span class="line"> 		</span><br><span class="line"> 		var action_url &#x3D; $(this).attr(&#39;href&#39;);</span><br><span class="line"> 		</span><br><span class="line">    &#x2F;&#x2F; 저장 후, 업데이트할 엘리먼트의 ID</span><br><span class="line">    &#x2F;&#x2F; - 새 &quot;댓글쓰기&quot;에서는 undefined</span><br><span class="line">    var target_id &#x3D; $(this).data(&#39;target-id&#39;);  &#x2F;&#x2F;target-id값 가져옴</span><br><span class="line">    </span><br><span class="line">    $.get(action_url)</span><br><span class="line">    </span><br><span class="line">         .done(function(form_html) &#123;</span><br><span class="line">             var $modal &#x3D; $(&#39;#comment-form-modal&#39;);</span><br><span class="line">             </span><br><span class="line">             $modal.find(&#39;.modal-body&#39;).html(form_html); &#x2F;&#x2F;form에서 내용을 작성에서 submit으로 두면,,(???)</span><br><span class="line">             </span><br><span class="line">             $form &#x3D; $modal.find(&#39;.modal-body form&#39;);</span><br><span class="line">             $form.attr(&#39;action&#39;, action_url);   &#x2F;&#x2F;action url로 post요청보낼꺼임</span><br><span class="line">             </span><br><span class="line">             if ( target_id ) &#123;  &#x2F;&#x2F;target_id값 존재시</span><br><span class="line">                 &#x2F;&#x2F; modal form에 data-target-id속성 기록</span><br><span class="line">                 &#x2F;&#x2F; - $form.data(&#39;target-id&#39;, target_id); 를 써봤으나,</span><br><span class="line">                 &#x2F;&#x2F; 지정이 되지않아서 attr로 변경</span><br><span class="line">                 $form.attr(&#39;data-target-id&#39;, target_id);</span><br><span class="line">                 &#x2F;&#x2F; 이렇게 하면 submit일때 target_id값 있는건 id맞추는 수정 없는건 prependTo로넘김</span><br><span class="line">             &#125;</span><br><span class="line">             else &#123;</span><br><span class="line">		             $form.removeData(&#39;target-id&#39;);</span><br><span class="line">             &#125;</span><br><span class="line">             </span><br><span class="line">             $modal.on(&#39;shown.bs.modal&#39;, function(e) &#123;</span><br><span class="line">             		$(this).find(&#39;textarea:first&#39;).focus();</span><br><span class="line">             &#125;);</span><br><span class="line">             $modal.modal();</span><br><span class="line">         &#125;)</span><br><span class="line">         .fail(function(xhr, textStatus, error) &#123;</span><br><span class="line">		         alert(&#39;failed : &#39; + error);</span><br><span class="line">         &#125;);</span><br><span class="line">   &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="STEP-5-Bootstrap4-Modal을-통한-댓글-수정"><a href="#STEP-5-Bootstrap4-Modal을-통한-댓글-수정" class="headerlink" title="STEP #5) Bootstrap4 Modal을 통한 댓글 수정"></a>STEP #5) Bootstrap4 Modal을 통한 댓글 수정</h3><p>blog/templates/blog/_comment.html 에서 수정링크에 comment</p>
+<p>form-btn Class Name 추가 </p>
+<p>수정 완료시, 내용 갱신을 위해 data-target-id 지정</p>
+<p>(참고사항은 class=comment-form-btn은 두개지만 하나는 detail에 있고 하나는 템플릿에서의 detail이다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;li id&#x3D;&quot;comment-&#123;&#123; comment.pk &#125;&#125;&quot;&gt;</span><br><span class="line">     &#123;&#123; comment.message &#125;&#125;</span><br><span class="line">     &amp;dash;</span><br><span class="line">     &lt;a href&#x3D;&quot;&#123;% url &quot;blog:comment_edit&quot; comment.post.pk comment.pk %&#125;&quot; class&#x3D;&quot;comment-form-btn&quot; data-target-id&#x3D;&quot;comment-&#123;&#123; comment.pk &#125;&#125;&quot;&gt;</span><br><span class="line">		     &lt;small&gt;&#123;&#123; comment.updated_at &#125;&#125;&lt;&#x2F;small&gt;</span><br><span class="line">     &lt;&#x2F;a&gt;</span><br><span class="line">     </span><br><span class="line">     &lt;a href&#x3D;&quot;&#123;% url &quot;blog:comment_delete&quot; comment.post.pk comment.pk %&#125;&quot;</span><br><span class="line">         class&#x3D;&quot;ajax-post-confirm&quot;</span><br><span class="line">         data-target-id&#x3D;&quot;comment-&#123;&#123; comment.pk &#125;&#125;&quot; &#x2F;&#x2F;수정시에 반드시 id값을 맞춰서 들어가야됨</span><br><span class="line">         data-message&#x3D;&quot;정말 삭제하시겠습니까?&quot;&gt;</span><br><span class="line">          &lt;small&gt;삭제&lt;&#x2F;small&gt;</span><br><span class="line">     &lt;&#x2F;a&gt;</span><br><span class="line">&lt;&#x2F;li&gt;</span><br></pre></td></tr></table></figure>
+
+<p>뷰에서 템플릿 렌더링 수정</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">class CommentCreatView(CreateView):</span><br><span class="line">    model &#x3D; Comment</span><br><span class="line">    form_class &#x3D; CommentForm</span><br><span class="line"></span><br><span class="line">    def form_valid(self, form):</span><br><span class="line">        comment &#x3D; form.save(commit&#x3D;False) #여기에서 아직세이브안됫으므로 comment_pk값이 지정이 안됫으므로 아래에서 super().form_valid(form)으로 저장후에 if절 적용</span><br><span class="line">        comment.post &#x3D; get_object_or_404(Post, pk&#x3D;self.kwargs[&#39;post_pk&#39;]) #kwargs는 url인자</span><br><span class="line">        response &#x3D; super().form_valid(form)</span><br><span class="line"></span><br><span class="line">        if self.request.is_ajax():  # render_to_response가 호출되지 않습니다.</span><br><span class="line">            return render(self.request, &#39;blog&#x2F;_comment.html&#39;, &#123;</span><br><span class="line">                &#39;comment&#39;: comment,</span><br><span class="line">            &#125;)</span><br><span class="line">        return response</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def get_success_url(self):</span><br><span class="line">        #현재 저장한 object가 self.object에 존재함!!!</span><br><span class="line">        return resolve_url(self.object.post)</span><br><span class="line"></span><br><span class="line">    def get_template_names(self): &#x2F;&#x2F;updateview에서도 구별해서!</span><br><span class="line">        if self.request.is_ajax():</span><br><span class="line">            return [&#39;blog&#x2F;_comment_form.html&#39;]</span><br><span class="line">        return [&#39;blog&#x2F;comment_form.html&#39;]</span><br><span class="line"></span><br><span class="line">comment_new &#x3D; CommentCreatView.as_view()</span><br></pre></td></tr></table></figure>
+
+<p>blog/templates/blog/post_detail.html 템플릿에서 data-target-id 처리</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">$(document).on(&#39;click&#39;, &#39;.comment-form-btn&#39;, function(e) &#123;</span><br><span class="line">     e.preventDefault();</span><br><span class="line">     var action_url &#x3D; $(this).attr(&#39;href&#39;);</span><br><span class="line">     var target_id &#x3D; $(this).data(&#39;target-id&#39;);</span><br><span class="line">     </span><br><span class="line">     $.get(action_url)</span><br><span class="line">         .done(function(form_html) &#123;</span><br><span class="line">             var $modal &#x3D; $(&#39;#comment-form-modal&#39;);</span><br><span class="line">             </span><br><span class="line">             $modal.find(&#39;.modal-body&#39;).html(form_html);</span><br><span class="line">             </span><br><span class="line">             $form &#x3D; $modal.find(&#39;.modal-body form&#39;);</span><br><span class="line">             $form.attr(&#39;action&#39;, action_url);</span><br><span class="line">             </span><br><span class="line">             if ( target_id ) &#123;  &#x2F;&#x2F;target_id가 있다면 true</span><br><span class="line">                 $form.attr(&#39;data-target-id&#39;, target_id);</span><br><span class="line">                 &#125;</span><br><span class="line">             else &#123;</span><br><span class="line">             		$form.removeData(&#39;data-target-id&#39;); &#x2F;&#x2F; modal창이 뜰때마다 form태그가 새로이 지정되어서 불필요</span><br><span class="line">             &#125;</span><br><span class="line">             </span><br><span class="line">             $modal.on(&#39;shown.bs.modal&#39;, function(e) &#123; &#x2F;&#x2F;모달창 보여진후, 그때에 textarea:firt를 찾아서 커서를!! ㄲ</span><br><span class="line">             		$(this).find(&#39;textarea:first&#39;).focus();</span><br><span class="line">             &#125;);</span><br><span class="line">             $modal.modal();</span><br><span class="line">         &#125;)</span><br><span class="line">         .fail(function(xhr, textStatus, error) &#123;</span><br><span class="line">         		alert(&#39;failed : &#39; + error);</span><br><span class="line">         &#125;);</span><br><span class="line"> &#125;);</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;post_detail.html</span><br><span class="line"></span><br><span class="line">&lt;a href&#x3D;&quot;&#123;% url &quot;blog:comment_new&quot; post.pk %&#125;&quot; class&#x3D;&quot;btn btn-primary btn-block comment-form-btn&quot;&gt;댓글쓰기&lt;&#x2F;a&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">$(function()&#123;</span><br><span class="line">     &#x2F;&#x2F; modal 창의 form submit 이벤트에 대한 리스너</span><br><span class="line">     $(document).on(&#39;submit&#39;, &#39;#comment-form-modal form&#39;, function(e)&#123;</span><br><span class="line">         e.preventDefault();</span><br><span class="line">         console.log(&quot;Submit&quot;);</span><br><span class="line">         </span><br><span class="line">         var $form &#x3D; $(this);</span><br><span class="line">         var url &#x3D; $form.attr(&#39;action&#39;);</span><br><span class="line">         var data &#x3D; $form.serialize();</span><br><span class="line">         </span><br><span class="line">         $.post(url, data)</span><br><span class="line">             .done(function(html)&#123;</span><br><span class="line">                     console.log(&quot;---- done ----&quot;);</span><br><span class="line">                     console.log(html);</span><br><span class="line"></span><br><span class="line">                 var $resp &#x3D; $(html);</span><br><span class="line">                 var target_id &#x3D; $form.data(&#39;target-id&#39;); &#x2F;&#x2F;target-id</span><br><span class="line"></span><br><span class="line">                 if ( $resp.find(&#39;.has-error&#39;).length &gt; 0 ) &#123;</span><br><span class="line">                     &#x2F;&#x2F; validation 에러일 경우, 에러 HTML 응답</span><br><span class="line">                     &#x2F;&#x2F; form 태그의 속성정보는 그대로 유지하고, 필드 HTML</span><br><span class="line">                    만 변경</span><br><span class="line">                     var fields_html &#x3D; $resp.html();</span><br><span class="line">                     $(&#39;#comment-form-modal .modal-body form&#39;).html(fields_html);</span><br><span class="line">                 &#125;</span><br><span class="line">                 else &#123;</span><br><span class="line">                     if ( target_id ) &#123;  &#x2F;&#x2F;target_id있으면 해당 id값찾아서 그곳의 html을 $resp.html()값으로 바꿔줌</span><br><span class="line">                  		   $(&#39;#&#39; + target_id).html($resp.html());</span><br><span class="line">                     &#125;</span><br><span class="line">                     else &#123;</span><br><span class="line">                  		   $resp.prependTo(&#39;#comment-list&#39;); &#x2F;&#x2F;없다면 그냥목록추가</span><br><span class="line">                     &#125;</span><br><span class="line">                     $(&#39;#comment-form-modal&#39;).modal(&#39;hide&#39;);</span><br><span class="line">                     $form[0].reset();</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125;)</span><br><span class="line">             .fail(function(xhr, textStatus, error)&#123;</span><br><span class="line">                alert(&#39;failed : &#39; + error);</span><br><span class="line">             &#125;);</span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="STEP-6-다음-STEP에서는-파일업로드를-할텐데"><a href="#STEP-6-다음-STEP에서는-파일업로드를-할텐데" class="headerlink" title="STEP #6) 다음 STEP에서는 파일업로드를 할텐데"></a>STEP #6) 다음 STEP에서는 파일업로드를 할텐데</h3><p>일단 MEDIA 관련 최소 처리를 해봅시다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># askdjango&#x2F;settings.py</span><br><span class="line">MEDIA_URL &#x3D; &#39;&#x2F;media&#x2F;&#39;</span><br><span class="line">MEDIA_ROOT &#x3D; os.path.join(BASE_DIR, &#39;media&#39;)</span><br><span class="line"></span><br><span class="line"># askdjango&#x2F;urls.py</span><br><span class="line">from django.conf import settings</span><br><span class="line">from django.conf.urls.static import static</span><br><span class="line"></span><br><span class="line"># 중략</span><br><span class="line">urlpatterns +&#x3D; static(settings.MEDIA_URL, document_root&#x3D;settings.MEDIA_ROOT)</span><br></pre></td></tr></table></figure>
+
+<p>MEDIA 관련 내용은 장고 기본편 - Media Files 유저가 업로드한 파일은 어떻 게 관리될까요?를 참고하세요.</p>
+<h3 id="STEP-7-댓글-Ajax-파일-업로드"><a href="#STEP-7-댓글-Ajax-파일-업로드" class="headerlink" title="STEP #7) 댓글 Ajax 파일 업로드"></a>STEP #7) 댓글 Ajax 파일 업로드</h3><p>모델에 photo필드 추가</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;models.py</span><br><span class="line">class Comment(models.Model):</span><br><span class="line">     post &#x3D; models.ForeignKey(Post)</span><br><span class="line">     message &#x3D; models.TextField()</span><br><span class="line">     photo &#x3D; models.ImageField(blank&#x3D;True)</span><br><span class="line">     created_at &#x3D; models.DateTimeField(auto_now_add&#x3D;True)</span><br><span class="line">     updated_at &#x3D; models.DateTimeField(auto_now&#x3D;True)</span><br><span class="line">     </span><br><span class="line">     class Meta:</span><br><span class="line">		     ordering &#x3D; [&#39;-id&#39;]</span><br></pre></td></tr></table></figure>
+
+<p>폼에 photo필드 추가</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;forms.py</span><br><span class="line"></span><br><span class="line">import re</span><br><span class="line">from django import forms</span><br><span class="line">from .models import Comment</span><br><span class="line"></span><br><span class="line">class CommentForm(forms.ModelForm):</span><br><span class="line">     class Meta:</span><br><span class="line">         model &#x3D; Comment</span><br><span class="line">         fields &#x3D; [&#39;message&#39;, &#39;photo&#39;]</span><br><span class="line">     </span><br><span class="line">     def clean_message(self):</span><br><span class="line">         message &#x3D; self.cleaned_data.get(&#39;message&#39;, None)</span><br><span class="line">         if message:</span><br><span class="line">        		 if not re.search(r&#39;[ㄱ-힣]&#39;, message):</span><br><span class="line">         					raise forms.ValidationError(&#39;메세지에 한글이 필요합니다.&#39;)</span><br><span class="line">         return message</span><br></pre></td></tr></table></figure>
+
+<p>Comment Form 템플릿에 enctype 변경 CBV는 이미 파일 업로드를 받도록 되어있습니다</p>
+<p><strong>파일 업로드이므로 꼭 enctype변경</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;% load bootstrap3 %&#125;</span><br><span class="line"></span><br><span class="line">&lt;form action&#x3D;&quot;&quot; method&#x3D;&quot;post&quot; enctype&#x3D;&quot;multipart&#x2F;form-data&quot;&gt;</span><br><span class="line">     &#123;% csrf_token %&#125;</span><br><span class="line">     &#123;% bootstrap_form form %&#125;</span><br><span class="line">     &lt;input type&#x3D;&quot;submit&quot; class&#x3D;&quot;btn btn-primary&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;form&gt;</span><br></pre></td></tr></table></figure>
+
+<p>그런데, 댓글 작성 시에 파일을 지정해서 올려도 admin을 통해 확인해보면 파일이 저장되어있지 않습니다.</p>
+<p><strong>자바스크립트 단에서 파일도 같이 전송하기 jQuery의 serialize()는 urlencoded방식으로 form data를 직렬화하기 때문에, 파일전송은 불가합니다</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; $(&#39;form&#39;).serialize();</span><br><span class="line">&quot;csrfmiddlewaretoken&#x3D;MKzLxrvoY4VVWcmsgfzjKQf9OQ7wpkGedKjPfLgHNSzb0aKc6qGf3wzymqJkbO7C&amp;message&#x3D;%EC%82%AC%EC%A7%841&quot;</span><br></pre></td></tr></table></figure>
+
+<p>이를 처리해주는 파일업로드 라이브러리를 추가로 사용해주시는 것이 좋습니다</p>
+<ul>
+<li>jQuery Form Plugin</li>
+<li>jQuery File Upload 라이브러리 (only 파일업로드)</li>
+</ul>
+<h4 id="jQuery-Form-Plugin"><a href="#jQuery-Form-Plugin" class="headerlink" title="jQuery Form Plugin"></a>jQuery Form Plugin</h4><p>bower.json 수정 후에, bower install</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">     &quot;name&quot;: &quot;askdjango&quot;</span><br><span class="line">    ,</span><br><span class="line">     &quot;dependencies&quot;: &#123;</span><br><span class="line">         &quot;jquery&quot;: &quot;~3.2.1&quot;</span><br><span class="line">        ,</span><br><span class="line">         &quot;bootstrap&quot;: &quot;~3.3.7&quot;</span><br><span class="line">        ,</span><br><span class="line">         &quot;underscore&quot;: &quot;~1.8.3&quot;</span><br><span class="line">        ,</span><br><span class="line">         &quot;jquery-form&quot;: &quot;~4.2.2&quot;</span><br><span class="line">     &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># askdjango&#x2F;templates&#x2F;layout.html</span><br><span class="line"></span><br><span class="line">&lt;script src&#x3D;&quot;&#123;% static &quot;jquery&#x2F;dist&#x2F;jquery.min.js&quot; %&#125;&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;&#123;% static &quot;bootstrap&#x2F;dist&#x2F;js&#x2F;bootstrap.min.js&quot; %&#125;&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;&#123;% static &quot;jquery.csrf.js&quot; %&#125;&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;&#123;% static &quot;underscore&#x2F;underscore-min.js&quot; %&#125;&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;&#123;% static &quot;jquery-form&#x2F;dist&#x2F;jquery.form.min.js&quot; %&#125;&quot;&gt;&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Comment Form, submit 핸들러를 ajaxSubmit으로 변경</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"># post_detail.html일부분</span><br><span class="line">$(document).on(&#39;submit&#39;, &#39;#comment-form-modal form&#39;, function(e) &#123;</span><br><span class="line">        e.preventDefault();</span><br><span class="line">        console.log(&quot;Submit&quot;);</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; jQuery Form Plugin의 ajaxSubmit을 활용 : ajax로 파일까지 모두 전달</span><br><span class="line">        $(this).ajaxSubmit(&#123;</span><br><span class="line">                success: function(response, statusText, xhr, $form) &#123;</span><br><span class="line">                        console.log(&quot;---- done ----&quot;);</span><br><span class="line">                        var html &#x3D; response;</span><br><span class="line">                        console.log(html);</span><br><span class="line"></span><br><span class="line">                        var $resp &#x3D; $(html);</span><br><span class="line">                        var target_id &#x3D; $form.data(&#39;target-id&#39;);</span><br><span class="line"></span><br><span class="line">                        if ( $resp.find(&#39;.has-error&#39;).length &gt; 0 ) &#123;</span><br><span class="line">                                var fields_html &#x3D; $resp.html();</span><br><span class="line">                                $(&#39;#comment-form-modal .modal-body form&#39;).html(fields_html);</span><br><span class="line">                        &#125;</span><br><span class="line">                        else &#123;</span><br><span class="line">                            if (target_id) &#123;</span><br><span class="line">                                $(&#39;#&#39; + target_id).html($resp.html());</span><br><span class="line">                            &#125;</span><br><span class="line">                            else &#123;</span><br><span class="line">                                $resp.prependTo(&#39;#comment-list&#39;);</span><br><span class="line">                            &#125;</span><br><span class="line"></span><br><span class="line">                            $(&#39;#comment-form-modal&#39;).modal(&#39;hide&#39;);</span><br><span class="line">                            $form[0].reset();</span><br><span class="line">                        &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                error: function(xhr, textStatus, error) &#123;</span><br><span class="line">                    alert(&#39;failed : &#39; + error);</span><br><span class="line">                &#125;,</span><br><span class="line">                complete: function(xhr, textStatus) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>($.post(url, data)를 쓰면 encode로 (문자열)로 보내줘서 이미지 파일자체도 파일명만들어간다</p>
+<p>따라 post처리를 ajaxSubmit으로 바꿈) </p>
+<p><strong>이제 파일 업로드까지 Ajax로 모두 잘 처리됩니다.</strong></p>
+<h3 id="STEP-8-댓글-목록에-이미지를-노출시켜봅시다"><a href="#STEP-8-댓글-목록에-이미지를-노출시켜봅시다" class="headerlink" title="STEP #8) 댓글 목록에 이미지를 노출시켜봅시다."></a>STEP #8) 댓글 목록에 이미지를 노출시켜봅시다.</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">blog&#x2F;templates&#x2F;blog&#x2F;_comment.html</span><br><span class="line"></span><br><span class="line">&lt;li id&#x3D;&quot;comment-&#123;&#123; comment.pk &#125;&#125;&quot;&gt;</span><br><span class="line">     &#123;% if comment.photo %&#125; &#x2F;&#x2F;모두가 photo가 있는 것이 아니므로 꼭 해주기</span><br><span class="line">    		 &lt;img src&#x3D;&quot;&#123;&#123; comment.photo.url &#125;&#125;&quot; style&#x3D;&quot;width: 100px;&quot; &#x2F;&gt;</span><br><span class="line">     &#123;% endif %&#125;</span><br><span class="line">     </span><br><span class="line">     &#123;&#123; comment.message &#125;&#125;</span><br><span class="line">     &amp;dash;</span><br><span class="line">     &lt;a href&#x3D;&quot;&#123;% url &quot;blog:comment_edit&quot; comment.post.pk comment.pk %&#125;&quot; class&#x3D;&quot;comment-form-btn&quot; data-target-id&#x3D;&quot;comment-&#123;&#123; comment.pk &#125;&#125;&quot;&gt;</span><br><span class="line">    		 &lt;small&gt;&#123;&#123; comment.updated_at &#125;&#125;&lt;&#x2F;small&gt;</span><br><span class="line">     &lt;&#x2F;a&gt;</span><br><span class="line">     </span><br><span class="line">     &lt;a href&#x3D;&quot;&#123;% url &quot;blog:comment_delete&quot; comment.post.pk comment.pk %&#125;&quot;</span><br><span class="line">         class&#x3D;&quot;ajax-post-confirm&quot;</span><br><span class="line">         data-target-id&#x3D;&quot;comment-&#123;&#123; comment.pk &#125;&#125;&quot;</span><br><span class="line">         data-message&#x3D;&quot;정말 삭제하시겠습니까?&quot;&gt;</span><br><span class="line">          &lt;small&gt;삭제&lt;&#x2F;small&gt;</span><br><span class="line">     &lt;&#x2F;a&gt;</span><br><span class="line">&lt;&#x2F;li&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="다음-시간은-본-코스-마지막-시간"><a href="#다음-시간은-본-코스-마지막-시간" class="headerlink" title="다음 시간은 본 코스 마지막 시간."></a>다음 시간은 본 코스 마지막 시간.</h3><ul>
+<li>이미지 썸네일 처리 • 댓글 레이아웃 개선 • 댓글 페이징처리 • 댓글 Ajax 새로고침 • 사용자 인증 연동</li>
+</ul>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/01/02/front-end-prac4/" title= "프론트엔드 기본편 4">
+                    <div class="nextTitle">프론트엔드 기본편 4</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2019/12/15/front-end-prac2/" title= "프론트엔드 기본편 2">
+                    <div class="prevTitle">프론트엔드 기본편 2</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ajax-with-Django-3"><span class="toc-number">1.</span> <span class="toc-text">Ajax with Django #3</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#코드-구현"><span class="toc-number">1.1.</span> <span class="toc-text">코드 구현</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#댓글-Ajax-쓰기"><span class="toc-number">1.2.</span> <span class="toc-text">댓글 Ajax 쓰기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#STEP-1-Detail-페이지에서-댓글-쓰기"><span class="toc-number">1.2.1.</span> <span class="toc-text">STEP #1) Detail 페이지에서 댓글 쓰기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#STEP-2-validation-에러가-발생한다면"><span class="toc-number">1.2.2.</span> <span class="toc-text">STEP #2) validation 에러가 발생한다면?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#STEP-3-Post-Detail-댓글창에-Ajax-숨결을"><span class="toc-number">1.2.3.</span> <span class="toc-text">STEP #3) Post Detail 댓글창에 Ajax 숨결을 ~</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Underscorejs-Template으로-변경"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">Underscorejs Template으로 변경</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#레이아웃-템플릿에-추가"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">레이아웃 템플릿에 추가</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#underscore-js-템플릿-정의"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">underscore.js 템플릿 정의</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#submit-콜백에서-underscore-js-템플릿-활용"><span class="toc-number">1.2.3.4.</span> <span class="toc-text">submit 콜백에서 underscore.js 템플릿 활용</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#submit-버튼-중복-클릭을-막아봅시다"><span class="toc-number">1.2.3.5.</span> <span class="toc-text">submit 버튼 중복 클릭을 막아봅시다.</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#STEP-4-Bootstrap4-Modal을-통한-댓글-쓰기"><span class="toc-number">1.2.4.</span> <span class="toc-text">STEP #4) Bootstrap4 Modal을 통한 댓글 쓰기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#STEP-5-Bootstrap4-Modal을-통한-댓글-수정"><span class="toc-number">1.2.5.</span> <span class="toc-text">STEP #5) Bootstrap4 Modal을 통한 댓글 수정</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#STEP-6-다음-STEP에서는-파일업로드를-할텐데"><span class="toc-number">1.2.6.</span> <span class="toc-text">STEP #6) 다음 STEP에서는 파일업로드를 할텐데</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#STEP-7-댓글-Ajax-파일-업로드"><span class="toc-number">1.2.7.</span> <span class="toc-text">STEP #7) 댓글 Ajax 파일 업로드</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#jQuery-Form-Plugin"><span class="toc-number">1.2.7.1.</span> <span class="toc-text">jQuery Form Plugin</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#STEP-8-댓글-목록에-이미지를-노출시켜봅시다"><span class="toc-number">1.2.8.</span> <span class="toc-text">STEP #8) 댓글 목록에 이미지를 노출시켜봅시다.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#다음-시간은-본-코스-마지막-시간"><span class="toc-number">1.2.9.</span> <span class="toc-text">다음 시간은 본 코스 마지막 시간.</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 113
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/02</span><a class="archive-post-title" href= "/2020/10/02/mysql/" >Mysql 기본 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-command/" >우분투 자주 쓰는 명령어</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

@@ -1,0 +1,3431 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>프론트엔드 기본편 4 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">프론트엔드 기본편 4</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            프론트엔드 기본편 4
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Django">Django</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Frontend">Frontend</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Ajax">Ajax</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">3.5k</span>Reading time: <span class="post-count reading-time">22 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/01/02</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="Ajax-with-Django-4"><a href="#Ajax-with-Django-4" class="headerlink" title="Ajax with Django #4"></a>Ajax with Django #4</h1><h2 id="이미지-썸네일-처리"><a href="#이미지-썸네일-처리" class="headerlink" title="이미지 썸네일 처리"></a>이미지 썸네일 처리</h2><p>큰 이미지를 CSS로 이미지 크기만 줄이는 것은 도움이 되지 않습니다.<strong>실제 서버에서 다운받을 때부터 적절히 조절하는 것이 좋습니다.</strong></p>
+<ul>
+<li>이미지 업로드 받을 때 미리 조절해서 한 버전 혹은 여러 버전으로 저장 해두거나</li>
+<li>이미지를 서빙받을 때 동적으로 조절해서 내려주거나</li>
+</ul>
+<h3 id="Image-Libraries"><a href="#Image-Libraries" class="headerlink" title="Image Libraries"></a>Image Libraries</h3><ul>
+<li>sorl-thumbnail</li>
+<li>easy-thumbnails</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pip3 install easy-thumbnails</span><br><span class="line"></span><br><span class="line">settings.py 에 easy_thumbnails 추가</span><br><span class="line">python3 manage.py migrate 필수</span><br></pre></td></tr></table></figure>
+
+<p>사용법은 예시를 통해!</p>
+<p>예시</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;% load thumbnail %&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;li id&#x3D;&quot;comment-&#123;&#123; comment.pk &#125;&#125;&quot;&gt;</span><br><span class="line">    &#123;%  if comment.photo %&#125;</span><br><span class="line">        &lt;img src&#x3D;&quot;&#123;&#123; thumbnail comment.photo.url &#125;&#125;&quot; style&#x3D;&quot;width: 100px;&quot;&#x2F;&gt;</span><br><span class="line">    &#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>위에 코드를 아래처럼 바꿀수있다</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;% load thumbnail %&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;li id&#x3D;&quot;comment-&#123;&#123; comment.pk &#125;&#125;&quot;&gt;</span><br><span class="line">    &#123;%  if comment.photo %&#125;</span><br><span class="line">        &lt;img src&#x3D;&quot;&#123;% thumbnail comment.photo 100x100 crop %&#125;&quot;&#x2F;&gt; &#x2F;&#x2F;인자 3개넘김</span><br><span class="line">    &#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#post_detail.html 에서</span><br><span class="line"></span><br><span class="line">    $.get(&#39;&#123;% url &quot;blog:comment_list&quot; post.pk %&#125;&#39;)</span><br><span class="line">        .done(function (html) &#123;</span><br><span class="line">            $(&#39;#comment-list&#39;).html(html);</span><br><span class="line">        &#125;)</span><br><span class="line">        .fail(function (xhr, textStatus, error) &#123;</span><br><span class="line">            alert(&#39;failed:&#39; + error);</span><br><span class="line">        &#125;)</span><br><span class="line">        </span><br><span class="line">추가해준다면 현재 html에서 id&#x3D; &#39;comment-list&#39;를 찾아서 거기안에 html을 get요청으로 받아온 html을 넣어줌 즉, ajax로 댓글 리스트를 구현함.</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="댓글-레이아웃-개선"><a href="#댓글-레이아웃-개선" class="headerlink" title="댓글 레이아웃 개선"></a>댓글 레이아웃 개선</h2><p>bootstrap에서 양식따와서 수정함 </p>
+<p>왼쪽 사진 오른쪽 댓글로 구성됨.</p>
+<h2 id="댓글-페이징처리"><a href="#댓글-페이징처리" class="headerlink" title="댓글 페이징처리"></a>댓글 페이징처리</h2><p>blog템플릿에 post_detail에 있던내용중 comment-list를 따로 blog템플릿Comment_list.html 뺌</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id&#x3D;&quot;&#39;comment-list&quot;&gt;</span><br><span class="line">        &#123;% for comment in comment_list %&#125;</span><br><span class="line">            &#123;% include &quot;blog&#x2F;_comment.html&quot; %&#125;</span><br><span class="line">        &#123;% endfor %&#125;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>따로 만들어줌</p>
+<h2 id="댓글-Ajax-새로고침"><a href="#댓글-Ajax-새로고침" class="headerlink" title="댓글 Ajax 새로고침"></a>댓글 Ajax 새로고침</h2><p>Comment-id를 추출해서 이 id값이 더 높은 값이 있다면 새로고침을 하는 방식으로 구현</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#blog&#x2F;templates&#x2F;_comment.html</span><br><span class="line">&lt;div id&#x3D;&quot;comment-&#123;&#123; comment.pk &#125;&#125;&quot; class&#x3D;&quot;media comment&quot; data-comment-id&#x3D;&quot;&#123;&#123; comment.id &#125;&#125;&quot;&gt;</span><br><span class="line"></span><br><span class="line">data-comment-id속성을 추가하므로서 댓글 구별, 삭제, 새로고침들에 이용가능</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"># post_detail.html 글쓰기 아래 부분에 추가 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;a id&#x3D;&quot;check-comment&quot; class&#x3D;&quot;btn btn-primary btn-block&quot;&gt;</span><br><span class="line">                새 댓글 체크</span><br><span class="line">&lt;&#x2F;a&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    $(&#39;#check-comment&#39;).click(function(e) &#123;</span><br><span class="line">        e.preventDefault();</span><br><span class="line"></span><br><span class="line">        var comment_id &#x3D; $(&#39;#comment-list .comment:first&#39;).data(&#39;comment-id&#39;);</span><br><span class="line">        console.log(comment_id);</span><br><span class="line"></span><br><span class="line">         $.get(&#39;&#123;% url &quot;blog:comment_list&quot; post.pk %&#125;&#39;, &#123;last_comment_id: comment_id&#125;) &#x2F;&#x2F;get요청의 인자로 보냄</span><br><span class="line">             .done(function(html) &#123;</span><br><span class="line">                 console.log(html);</span><br><span class="line">                     $(&#39;#comment-list&#39;).prepend(html); &#x2F;&#x2F;최상단에 html넣기</span><br><span class="line"></span><br><span class="line">             &#125;)</span><br><span class="line">             .fail(function(xhr, textStatus, error) &#123;</span><br><span class="line">               alert(&#39;failed:&#39; + error);</span><br><span class="line">             &#125;);</span><br><span class="line"></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">view.py </span><br><span class="line"></span><br><span class="line">class CommentListView(ListView):</span><br><span class="line">    model &#x3D; Comment</span><br><span class="line"></span><br><span class="line">    def get_queryset(self):</span><br><span class="line">        #self.kwargs를 가져오면 url에서 post_ argu를 다 가져옴!!!</span><br><span class="line">        qs &#x3D; super().get_queryset()</span><br><span class="line">        qs &#x3D; qs.filter(post__id &#x3D; self.kwargs[&#39;post_pk&#39;])</span><br><span class="line"></span><br><span class="line">        latest_comment_id &#x3D; self.request.GET.get(&#39;latest_comment_id&#39;, None)</span><br><span class="line">        if latest_comment_id:</span><br><span class="line">            # lt : less than &lt;</span><br><span class="line">            # gt : greater than &gt;</span><br><span class="line">            qs &#x3D; qs.filter(id__gt&#x3D;latest_comment_id)</span><br><span class="line">        return qs</span><br><span class="line"></span><br><span class="line">comment_list &#x3D; CommentListView.as_view()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="사용자-인증-연동"><a href="#사용자-인증-연동" class="headerlink" title="사용자 인증 연동"></a>사용자 인증 연동</h2><h3 id="로그인-로그아웃-next인자를-넣어준다면-그전-url로-자동으로-돌아감"><a href="#로그인-로그아웃-next인자를-넣어준다면-그전-url로-자동으로-돌아감" class="headerlink" title="로그인 로그아웃. next인자를 넣어준다면 그전 url로 자동으로 돌아감"></a>로그인 로그아웃. next인자를 넣어준다면 그전 url로 자동으로 돌아감</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id&#x3D;&quot;navbar&quot; class&#x3D;&quot;collapse navbar-collapse&quot;&gt;</span><br><span class="line">    &lt;ul class&#x3D;&quot;nav navbar-nav&quot;&gt;</span><br><span class="line">  		  &lt;li class&#x3D;&quot;active&quot;&gt;&lt;a href&#x3D;&quot;&#123;% url &quot;blog:index&quot; %&#125;&quot;&gt;Home&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;</span><br><span class="line">    &lt;&#x2F;ul&gt;</span><br><span class="line">    &lt;ul class&#x3D;&quot;nav navbar-nav navbar-right&quot;&gt;</span><br><span class="line">    </span><br><span class="line">        &#123;% if not user.is_authenticated %&#125;</span><br><span class="line">        &lt;li&gt;&lt;a href&#x3D;&quot;&#123;% url &quot;login&quot; %&#125;&quot;?next&#x3D;&#123;&#123; request.path &#125;&#125;&gt;로그인&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href&#x3D;&quot;&#123;% url &quot;signup&quot; %&#125;&quot;&gt;회원가입&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;</span><br><span class="line">        &#123;% else %&#125;</span><br><span class="line"></span><br><span class="line">        &lt;li&gt;&lt;a href&#x3D;&quot;&#123;% url &quot;profile&quot; %&#125;&quot;&gt;프로필&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href&#x3D;&quot;&#123;% url &quot;logout&quot; %&#125;?next&#x3D;&#123;&#123; request.path &#125;&#125;&quot; class&#x3D;&quot;disabled&quot;&gt;로그아웃&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;</span><br><span class="line">        &#123;% endif %&#125;</span><br><span class="line"></span><br><span class="line">        &lt;li&gt;&lt;a href&#x3D;&quot;#about&quot;&gt;About&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href&#x3D;&quot;#contact&quot;&gt;Contact&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;</span><br><span class="line">    &lt;&#x2F;ul&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="loginview-logoutview에-인자-넘기는-법"><a href="#loginview-logoutview에-인자-넘기는-법" class="headerlink" title="loginview, logoutview에 인자 넘기는 법"></a>loginview, logoutview에 인자 넘기는 법</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">urls.py 에서</span><br><span class="line"></span><br><span class="line">from django.contrib.auth import views as auth_views</span><br><span class="line">from django.conf import settings</span><br><span class="line">from django.urls import path, include</span><br><span class="line">from . import views</span><br><span class="line"></span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line">    path(&#39;signup&#x2F;&#39;, views.SignupFormView.as_view(), name&#x3D;&quot;signup&quot;),</span><br><span class="line">    path(&#39;login&#x2F;&#39;, auth_views.LoginView.as_view(template_name&#x3D;&#39;accounts&#x2F;login.html&#39;), name&#x3D;&quot;login&quot;),</span><br><span class="line">    path(&#39;logout&#x2F;&#39;, auth_views.LogoutView.as_view(next_page&#x3D;settings.LOGIN_URL), name&#x3D;&quot;logout&quot;),</span><br><span class="line">    path(&#39;profile&#x2F;&#39;, views.profile, name&#x3D;&#39;profile&#39;),</span><br><span class="line"></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="로그인-창-또한-ajax로-처리하는-방법"><a href="#로그인-창-또한-ajax로-처리하는-방법" class="headerlink" title="로그인 창 또한 ajax로 처리하는 방법"></a>로그인 창 또한 ajax로 처리하는 방법</h3><ul>
+<li>modal을 이용해야하는데 이미 앞에서 class=comment-form-btn을 click이벤트가 발생하면 ajax로 처리하는 일반화된 것을 만들어놓음 따라서 로그인 버튼에 class=comment-form-btn이라고 지정만 해주면 처리가 될것이다 (앞에서는 detail안에만 있지만 이것을 일반화시키면 모두 modal로 띄워줄수있다)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line">comment-form에 관한 모든것을 다 modal-form으로 바꾸고 일반화</span><br><span class="line"># 프젝&#x2F;layout.html에 아래내용 추가 (기존 detail내용들은 삭재)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &lt;script&gt;</span><br><span class="line">            $(document).on(&#39;click&#39;, &#39;.modal-form-btn&#39;, function(e) &#123;</span><br><span class="line">        e.preventDefault();</span><br><span class="line"></span><br><span class="line">        var action_url &#x3D; $(this).attr(&#39;href&#39;);</span><br><span class="line">        var target_id &#x3D; $(this).data(&#39;target-id&#39;);</span><br><span class="line"></span><br><span class="line">        $.get(action_url)</span><br><span class="line">            .done(function (form_html) &#123;</span><br><span class="line">                var $modal &#x3D; $(&#39;#modal-form-modal&#39;);</span><br><span class="line"></span><br><span class="line">                $modal.find(&#39;.modal-body&#39;).html(form_html);</span><br><span class="line"></span><br><span class="line">                $form &#x3D; $modal.find(&#39;.modal-body form&#39;);</span><br><span class="line">                $form.attr(&#39;action&#39;, action_url);</span><br><span class="line"></span><br><span class="line">                if ( target_id ) &#123;  &#x2F;&#x2F;target_id값 존재시</span><br><span class="line">                 &#x2F;&#x2F; modal form에 data-target-id속성을 기록</span><br><span class="line">                 &#x2F;&#x2F; - $form.data(&#39;target-id&#39;, target_id); 를 써봤으나,</span><br><span class="line">                 &#x2F;&#x2F; 지정이 되지않아서 attr로 변경</span><br><span class="line">                     $form.attr(&#39;data-target-id&#39;, target_id);</span><br><span class="line">                &#125;</span><br><span class="line">                else &#123;</span><br><span class="line">		             $form.removeData(&#39;target-id&#39;); &#x2F;&#x2F;target-id정보 제거</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                $modal.modal();</span><br><span class="line">            &#125;)</span><br><span class="line">            .fail(function (xhr, textStatus, error) &#123;</span><br><span class="line">                alert(&#39;failed:&#39; + error);</span><br><span class="line"></span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; $(&#39;#comment-form-modal&#39;).modal();</span><br><span class="line"></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    $(document).on(&#39;submit&#39;, &#39;#modal-form-modal form&#39;, function(e) &#123;</span><br><span class="line">        e.preventDefault();</span><br><span class="line">        console.log(&quot;Submit&quot;);</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; jQuery Form Plugin의 ajaxSubmit을 활용 : ajax로 파일까지 모두 전달</span><br><span class="line">        $(this).ajaxSubmit(&#123;</span><br><span class="line">                success: function(response, statusText, xhr, $form) &#123;</span><br><span class="line">                        console.log(&quot;---- done ----&quot;);</span><br><span class="line">                        var html &#x3D; response;</span><br><span class="line">                        console.log(html);</span><br><span class="line"></span><br><span class="line">                        var $resp &#x3D; $(html);</span><br><span class="line">                        var target_id &#x3D; $form.data(&#39;target-id&#39;);</span><br><span class="line"></span><br><span class="line">                        if ( $resp.find(&#39;.has-error&#39;).length &gt; 0 ) &#123;</span><br><span class="line">                                var fields_html &#x3D; $resp.html();</span><br><span class="line">                                $(&#39;#modal-form-modal .modal-body form&#39;).html(fields_html);</span><br><span class="line">                        &#125;</span><br><span class="line">                        else &#123;</span><br><span class="line">                            if (target_id) &#123;</span><br><span class="line">                                $(&#39;#&#39; + target_id).html($resp.html());</span><br><span class="line">                            &#125;</span><br><span class="line">                            else &#123;</span><br><span class="line">                                $resp.prependTo(&#39;#comment-list&#39;);</span><br><span class="line">                            &#125;</span><br><span class="line"></span><br><span class="line">                            $(&#39;#modal-form-modal&#39;).modal(&#39;hide&#39;);</span><br><span class="line">                            $form[0].reset();</span><br><span class="line">                        &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                error: function(xhr, textStatus, error) &#123;</span><br><span class="line">                    alert(&#39;failed : &#39; + error);</span><br><span class="line">                &#125;,</span><br><span class="line">                complete: function(xhr, textStatus) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        $(document).on(&#39;click&#39;, &#39;.ajax-post-confirm&#39;, function (e) &#123;</span><br><span class="line">            e.preventDefault();</span><br><span class="line"></span><br><span class="line">            var url &#x3D; $(this).attr(&quot;href&quot;);</span><br><span class="line">            var target_id &#x3D; $(this).data(&#39;target-id&#39;); &#x2F;&#x2F;현재 링크에 data속성을 가져올떄</span><br><span class="line">            var message &#x3D; $(this).data(&#39;message&#39;);</span><br><span class="line"></span><br><span class="line">            if (confirm(message)) &#123; &#x2F;&#x2F;confirm자체가 확인 취소를 물어보고 이는 true false로 입력된다.</span><br><span class="line">                $.post(url)</span><br><span class="line">                    .done(function () &#123;</span><br><span class="line">                        $(&#39;#&#39; + target_id).remove();</span><br><span class="line">                    &#125;)</span><br><span class="line">                    .fail(function (xhr, textStatus, error) &#123;</span><br><span class="line">                        alert(&quot;failed&quot;)</span><br><span class="line">                    &#125;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            alert(&#39;clicked:&#39; + message);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>위에 처럼 바꾸면 로그인을 하는순간 ajax post로 보냈으므로 html로 응답되기를 기대되는데 로그인 성공하면 post_detail로 redirect가 일어나 일어난것에 대해 ajax요청이니까 post에 대한 json응답을 받아버림</p>
+<ul>
+<li>ajax로 처리하는과정</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class LoginView(AuthLoginView):</span><br><span class="line"></span><br><span class="line">    def form_valid(self, form):</span><br><span class="line">        response &#x3D; super().form_valid(form)</span><br><span class="line">        if self.request.is_ajax():</span><br><span class="line">            return JsonResponse(&#123;&#39;next_url&#39;: self.get_success_url()&#125;)</span><br><span class="line">        return response</span><br><span class="line"></span><br><span class="line">    def get_template_names(self):</span><br><span class="line">        if self.request.is_ajax():</span><br><span class="line">            return [&#39;accounts&#x2F;_login.html&#39;]</span><br><span class="line">        return [&#39;accounts&#x2F;login.html&#39;]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">프젝&#x2F;layout.html  내용 추가</span><br><span class="line"></span><br><span class="line">$(document).on(&#39;submit&#39;, &#39;#modal-form-modal form&#39;, function(e) &#123;</span><br><span class="line">        e.preventDefault();</span><br><span class="line">        console.log(&quot;Submit&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; jQuery Form Plugin의 ajaxSubmit을 활용 : ajax로 파일까지 모두 전달</span><br><span class="line">        $(this).ajaxSubmit(&#123;</span><br><span class="line">                success: function(response, statusText, xhr, $form) &#123;</span><br><span class="line">                        if ( response.next_url ) &#123; &#x2F;&#x2F;response안에 nex_url인자 존재시</span><br><span class="line">                            window.location &#x3D; response.next_url &#x2F;&#x2F;window.location에 주소로이동임</span><br><span class="line">                            return; &#x2F;&#x2F; 함수종료</span><br><span class="line">                        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>지금까지 modal 사용, ajax연결 등을 자세히 배웠음</p>
+<h1 id="JavaScript-Chart-데이터-연동"><a href="#JavaScript-Chart-데이터-연동" class="headerlink" title="JavaScript Chart 데이터 연동"></a>JavaScript Chart 데이터 연동</h1><h2 id="다양한-JavaScript-차트"><a href="#다양한-JavaScript-차트" class="headerlink" title="다양한 JavaScript 차트"></a>다양한 JavaScript 차트</h2><ul>
+<li>Chart.js #home</li>
+<li>D3.js</li>
+<li>Highcharts.js</li>
+<li>Chartist.js </li>
+<li>Google Chart</li>
+<li>이 외에도 수많은 라이브러리가 있습니다.</li>
+</ul>
+<h2 id="장고와의-연동에서-주안점"><a href="#장고와의-연동에서-주안점" class="headerlink" title="장고와의 연동에서 주안점"></a>장고와의 연동에서 주안점</h2><ol>
+<li>Chart 라이브러리 static 연결 <ul>
+<li>CDN 버전 연결 </li>
+<li>static 직접 호스팅 1</li>
+</ul>
+</li>
+<li>데이터 연동 : 데이터가 고정된 차트를 보고 싶지 않습니다.<ul>
+<li>Inline JavaScript를 통한 데이터 공급</li>
+<li>Ajax를 통한 데이터 공급</li>
+</ul>
+</li>
+</ol>
+<p>Tip: 참고: [장고 기본편] StaticFiles - CSS/JavaScript 파일을 어떻게 관리해야할까요?</p>
+<h3 id="django-chart-앱"><a href="#django-chart-앱" class="headerlink" title="django chart 앱"></a>django chart 앱</h3><ul>
+<li>django-chartjs: Django Class Based Views to generate Ajax charts js parameters. This is compatible with Chart.js and Highcharts JS libraries.</li>
+<li>django-jchart: This Django app enables you to configure and render Chart.JS charts directly from your Django codebase.</li>
+<li>django-chart-tools: django-chart-tools is a simple app for creating charts in django templates using Google Chart API.</li>
+<li>django-rest-pandas: Serves up Pandas dataframes via the Django REST Framework for use in client-side (i.e. d3.js) visualizations and offline analysis (e.g. Excel)</li>
+</ul>
+<h2 id="javascript-chart-활용법을-먼저-익히세요"><a href="#javascript-chart-활용법을-먼저-익히세요" class="headerlink" title="javascript chart 활용법을 먼저 익히세요."></a>javascript chart 활용법을 먼저 익히세요.</h2><ul>
+<li>django chart 앱을 통해, 장고에서 손쉽게 차트를 사용하실 수는 있습니다.</li>
+<li>하지만 django chart 앱과 연동된 차트 외에 더 많은 JavaScript 차트가 있습니다.</li>
+<li>게다가 django chart 앱에서는 본연의 JavaScript의 모든 기능을 활용하 지 못하고 있을 가능성도 있습니다. </li>
+<li>JavaScript 차트를 직접 활용하실 줄 아셔야 합니다.</li>
+</ul>
+<h2 id="백엔드-도움없이-프론트엔드-단에서만-차트-그리기"><a href="#백엔드-도움없이-프론트엔드-단에서만-차트-그리기" class="headerlink" title="백엔드 도움없이 프론트엔드 단에서만 차트 그리기"></a>백엔드 도움없이 프론트엔드 단에서만 차트 그리기</h2><h3 id="Chart-js-간단-샘플"><a href="#Chart-js-간단-샘플" class="headerlink" title="Chart.js 간단 샘플"></a>Chart.js 간단 샘플</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">     &lt;meta charset&#x3D;&quot;utf-8&quot; &#x2F;&gt;</span><br><span class="line">     &lt;script src&#x3D;&quot;http:&#x2F;&#x2F;www.chartjs.org&#x2F;dist&#x2F;2.7.0&#x2F;Chart.bundle.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;canvas id&#x3D;&quot;canvas&quot;&gt;&lt;&#x2F;canvas&gt;  &#x2F;&#x2F;웹에서의 그림판임!! 여기에다가 chart.js가 그림</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">var chartData &#x3D; &#123;  &#x2F;&#x2F; 현재 chartData 객체에 들어있는 지금값들은 chart.js가 요구하는 스펙으로 구성함 (label과 data만 넣어도 작동은함)</span><br><span class="line">     labels: [&#39;January&#39;, &#39;February&#39;, &#39;March&#39;, &#39;April&#39;, &#39;May&#39;, &#39;June&#39;, &#39;July&#39;],</span><br><span class="line">     datasets: [&#123;</span><br><span class="line">         label: &#39;Dataset 1&#39;,</span><br><span class="line">         backgroundColor: &quot;rgba(255, 99, 132, 0.5)&quot;,</span><br><span class="line">         borderColor: &quot;rgba(255, 99, 132, 1)&quot;,</span><br><span class="line">         pointBackgroundColor: &quot;rgba(255, 99, 132, 1)&quot;,</span><br><span class="line">         pointBorderColor: &quot;#fff&quot;,</span><br><span class="line">         data: [</span><br><span class="line">             parseInt(Math.random() * 100), parseInt(Math.random() * 100), parseInt(Math.random() * 100), parseInt(Math.random() * 100),</span><br><span class="line">             parseInt(Math.random() * 100), parseInt(Math.random() * 100), parseInt(Math.random() * 100)</span><br><span class="line">         ]</span><br><span class="line">     &#125;]</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">window.onload &#x3D; function() &#123; &#x2F;&#x2F;현재 jquery를 안썻으므로 이방식으로 함수지정해서쓰면 페이지로딩다되면 함수호출됨</span><br><span class="line"></span><br><span class="line">     var ctx &#x3D; document.getElementById(&#39;canvas&#39;).getContext(&#39;2d&#39;); &#x2F;&#x2F;2d context가져옴</span><br><span class="line">     </span><br><span class="line">     &#x2F;&#x2F; chart.js에서 지원해주는 Chart로 ctx넘겨주고, 필수 객체넘겨주면 인자만들어줌</span><br><span class="line">     window.chart &#x3D; new Chart(ctx, &#123;</span><br><span class="line">     </span><br><span class="line">         type: &#39;line&#39;,</span><br><span class="line">         data: chartData</span><br><span class="line">     &#125;);</span><br><span class="line">&#125;;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="백엔드에서-데이터-넘겨주기-1-템플릿-렌더링-시에-데이터-넘겨주기"><a href="#백엔드에서-데이터-넘겨주기-1-템플릿-렌더링-시에-데이터-넘겨주기" class="headerlink" title="백엔드에서 데이터 넘겨주기 (1) 템플릿 렌더링 시에 데이터 넘겨주기"></a>백엔드에서 데이터 넘겨주기 (1) 템플릿 렌더링 시에 데이터 넘겨주기</h2><h3 id="유틸리티-코드-웹툰-평점-크롤링"><a href="#유틸리티-코드-웹툰-평점-크롤링" class="headerlink" title="유틸리티 코드) 웹툰 평점 크롤링"></a>유틸리티 코드) 웹툰 평점 크롤링</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">from urllib.parse import urljoin</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_comic_info(comic_id, comic_title):</span><br><span class="line">    ep_list &#x3D; []</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    for page in range(1, 3):  # 최대 5페이지</span><br><span class="line">        params &#x3D; &#123;</span><br><span class="line">            &#39;titleId&#39;: comic_id,</span><br><span class="line">            &#39;page&#39;: page,</span><br><span class="line">        &#125;</span><br><span class="line">        resp &#x3D; requests.get(&#39;http:&#x2F;&#x2F;comic.naver.com&#x2F;webtoon&#x2F;list.nhn&#39;, params&#x3D;params)</span><br><span class="line">        html &#x3D; resp.text</span><br><span class="line">        soup &#x3D; BeautifulSoup(html, &#39;html.parser&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        for tr in soup.select(&#39;#content table tr&#39;):  # 아래 크롤링 하는목록 죄회하</span><br><span class="line">            try:</span><br><span class="line">                link &#x3D; tr.select(&#39;.title a[href*&#x3D;detail]&#39;)[0]  #.title이 class 이름이고 a에 href가 포함된것을 긁어옴</span><br><span class="line">                rating &#x3D; tr.select(&#39;.rating_type strong&#39;)[0].text</span><br><span class="line">                date &#x3D; tr.select(&#39;.num&#39;)[0].text</span><br><span class="line">            except IndexError:</span><br><span class="line">                continue</span><br><span class="line"></span><br><span class="line">            title &#x3D; link.text</span><br><span class="line">            url &#x3D; urljoin(resp.request.url, link[&#39;href&#39;])</span><br><span class="line">            ep &#x3D; &#123;</span><br><span class="line">                &#39;title&#39;: title,</span><br><span class="line">                &#39;url&#39;: url,</span><br><span class="line">                &#39;rating&#39;: rating,</span><br><span class="line">                &#39;date&#39;: date,</span><br><span class="line">            &#125;</span><br><span class="line">            if ep in ep_list: #같은게 나와버리면 지금 함수 끝냄</span><br><span class="line">                return ep_list</span><br><span class="line"></span><br><span class="line">            ep_list.append(ep)</span><br><span class="line"></span><br><span class="line">    return &#123;</span><br><span class="line">            &#39;title&#39;: comic_title,</span><br><span class="line">            &#39;ep_list&#39;: ep_list,</span><br><span class="line">            &#39;soup&#39;: soup,</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="뷰-코드"><a href="#뷰-코드" class="headerlink" title="뷰 코드"></a>뷰 코드</h3><p>차트 데이터들을 server side에서 javascript 형식으로 렌더링하기</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from django.shortcuts import render</span><br><span class="line">from .utils import get_comic_info</span><br><span class="line"></span><br><span class="line">def index(request):</span><br><span class="line">     comic &#x3D; get_comic_info(20853,</span><br><span class="line">    &#39;마음의 소리&#39;)</span><br><span class="line">     return render(request, &#39;mychart&#x2F;index.html&#39;, &#123;</span><br><span class="line">     		&#39;comic&#39;: comic,</span><br><span class="line">     &#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="뷰-render에서-넘겨진-comic-사전-활용-템플릿"><a href="#뷰-render에서-넘겨진-comic-사전-활용-템플릿" class="headerlink" title="뷰 render에서 넘겨진 comic 사전 활용 템플릿"></a>뷰 render에서 넘겨진 comic 사전 활용 템플릿</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; comic &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>위에 호출은 django단에서 처리되고 script태그 안에있는것은 django한테는 그냥 문자열이지</p>
+<p>django문법 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>를 써서 javascript문자열들을 만들어줌</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">     &lt;meta charset&#x3D;&quot;utf-8&quot; &#x2F;&gt;</span><br><span class="line">     &lt;script src&#x3D;&quot;http:&#x2F;&#x2F;www.chartjs.org&#x2F;dist&#x2F;2.7.0&#x2F;Chart.bundle.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;canvas id&#x3D;&quot;canvas&quot;&gt;&lt;&#x2F;canvas&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">var chartData &#x3D; &#123;</span><br><span class="line">     labels: [</span><br><span class="line">         &#123;% for ep in comic.ep_list %&#125;</span><br><span class="line">             &#39;&#123;&#123; ep.title &#125;&#125;&#39;</span><br><span class="line">             &#123;% if not forloop.last %&#125;,&#123;% endif %&#125;  &#x2F;&#x2F;마지막 loop의 마지막이 아닐경우 ,를 붙인다</span><br><span class="line">         &#123;% endfor %&#125;</span><br><span class="line">     ],</span><br><span class="line">     datasets: [&#123;</span><br><span class="line">         label: &#39;평점&#39;,</span><br><span class="line">         backgroundColor: &quot;rgba(255, 99, 132, 0.5)&quot;,</span><br><span class="line">         borderColor: &quot;rgba(255, 99, 132, 1)&quot;,</span><br><span class="line">         pointBackgroundColor: &quot;rgba(255, 99, 132, 1)&quot;,</span><br><span class="line">         pointBorderColor: &quot;#fff&quot;,</span><br><span class="line">         data: [</span><br><span class="line">             &#123;% for ep in comic.ep_list %&#125;</span><br><span class="line">                 &#123;&#123; ep.rating &#125;&#125;</span><br><span class="line">                 &#123;% if not forloop.last %&#125;,&#123;% endif %&#125;  &#x2F;&#x2F;마지막 loop의 마지막이 아닐경우 ,를 붙인다</span><br><span class="line">             &#123;% endfor %&#125;</span><br><span class="line">         ]</span><br><span class="line">     &#125;]</span><br><span class="line">&#125;;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">window.onload &#x3D; function() &#123;</span><br><span class="line">     var ctx &#x3D; document.getElementById(&#39;canvas&#39;).getContext(&#39;2d&#39;);</span><br><span class="line">     var chart &#x3D; new Chart(ctx, &#123;</span><br><span class="line">     type: &#39;line&#39;,</span><br><span class="line">     data: chartData</span><br><span class="line">		 &#125;);</span><br><span class="line">&#125;;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br><span class="line">EP 9. JavaScript Chart</span><br></pre></td></tr></table></figure>
+
+<h2 id="백엔드에서-데이터-넘겨주기-2-Ajax-활용"><a href="#백엔드에서-데이터-넘겨주기-2-Ajax-활용" class="headerlink" title="백엔드에서 데이터 넘겨주기 (2) Ajax 활용"></a>백엔드에서 데이터 넘겨주기 (2) Ajax 활용</h2><h3 id="urls-py"><a href="#urls-py" class="headerlink" title="urls.py"></a>urls.py</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns &#x3D; [</span><br><span class="line">		 # 중략</span><br><span class="line"> 		url(r&#39;^data.json$&#39;, views.data_json, name&#x3D;&#39;data_json&#39;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="뷰-코드-1"><a href="#뷰-코드-1" class="headerlink" title="뷰 코드"></a>뷰 코드</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">from django.shortcuts import render</span><br><span class="line">from .utils import get_comic_info</span><br><span class="line">from django.http import JsonResponse</span><br><span class="line"></span><br><span class="line">def index(request):</span><br><span class="line"></span><br><span class="line">    comic &#x3D; get_comic_info(20853, &#39;마음의 소리&#39;)</span><br><span class="line"></span><br><span class="line">    return render(request, &#39;mychart&#x2F;index.html&#39;, &#123;&#39;soup&#39;: comic&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def data_json(request):</span><br><span class="line">    comic &#x3D; get_comic_info(20853, &#39;마음의 소리&#39;)</span><br><span class="line"></span><br><span class="line">    return JsonResponse(&#123;</span><br><span class="line">        &#39;labels&#39;: [ep[&#39;title&#39;] for ep in comic[&#39;ep_list&#39;]],</span><br><span class="line">        &#39;datasets&#39;: [&#123;</span><br><span class="line">            &#39;label&#39;: &#39;평점&#39;,</span><br><span class="line">            &#39;backgroundColor&#39;: &quot;rgba(255, 99, 132, 0.5)&quot;,</span><br><span class="line">            &#39;borderColor&#39;: &quot;rgba(255, 99, 132, 1)&quot;,</span><br><span class="line">            &#39;pointBackgroundColor&#39;: &quot;rgba(255, 99, 132, 1)&quot;,</span><br><span class="line">            &#39;pointBorderColor&#39;: &quot;#fff&quot;,</span><br><span class="line">            &#39;data&#39;: [ep[&#39;rating&#39;] for ep in comic[&#39;ep_list&#39;]]</span><br><span class="line">        &#125;],</span><br><span class="line"></span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="템플릿-코드"><a href="#템플릿-코드" class="headerlink" title="템플릿 코드"></a>템플릿 코드</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&#123;% load static %&#125;</span><br><span class="line">&lt;!doctype html&gt;</span><br><span class="line"></span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">     &lt;meta charset&#x3D;&quot;utf-8&quot; &#x2F;&gt;</span><br><span class="line">     &lt;script src&#x3D;&quot;http:&#x2F;&#x2F;www.chartjs.org&#x2F;dist&#x2F;2.7.0&#x2F;Chart.bundle.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">     &lt;script src&#x3D;&quot;&#123;% static &#39;jquery&#x2F;dist&#x2F;jquery.min.js&#39; %&#125;&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">        &lt;canvas id&#x3D;&quot;canvas&quot;&gt;&lt;&#x2F;canvas&gt;</span><br><span class="line"></span><br><span class="line">&lt;ul&gt;</span><br><span class="line">&#123;#    &#123;&#123; soup &#125;&#125;#&#125;  &#x2F;&#x2F;로우데이터보고싶을때 활용</span><br><span class="line">&lt;&#x2F;ul&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &lt;script&gt;</span><br><span class="line">            $(function() &#123;</span><br><span class="line"></span><br><span class="line">                $.get(&#39;&#123;% url &quot;mychart:data_json&quot; %&#125;&#39;)</span><br><span class="line">                    .done(function(chartData) &#123;</span><br><span class="line">                        console.log(chartData)</span><br><span class="line">                         var ctx &#x3D; document.getElementById(&#39;canvas&#39;).getContext(&#39;2d&#39;);</span><br><span class="line">                         window.chart &#x3D; new Chart(ctx, &#123;</span><br><span class="line">                             type: &#39;line&#39;,</span><br><span class="line">                             data: chartData</span><br><span class="line">                         &#125;);</span><br><span class="line">                    &#125;)</span><br><span class="line">                    .fail(function (xhr, textStatus, error) &#123;</span><br><span class="line">                        alert(&#39;failed:&#39;+ error);</span><br><span class="line"></span><br><span class="line">                    &#125;);</span><br><span class="line">            &#125;);</span><br><span class="line">        &lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="백엔드에서-데이터-넘겨주기-3-django-chartjs-활용-추천안함"><a href="#백엔드에서-데이터-넘겨주기-3-django-chartjs-활용-추천안함" class="headerlink" title="백엔드에서 데이터 넘겨주기 (3) django-chartjs 활용(추천안함)"></a><del>백엔드에서 데이터 넘겨주기 (3) django-chartjs 활용(추천안함)</del></h2><h3 id="django-chartjs-활용-뷰코드"><a href="#django-chartjs-활용-뷰코드" class="headerlink" title="django-chartjs 활용 뷰코드"></a>django-chartjs 활용 뷰코드</h3><p>data_json 뷰를 django-chartjs를 통해 만들기</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">from chartjs.views.lines import BaseLineChartView</span><br><span class="line"></span><br><span class="line">class WebtoonChartJSONView(BaseLineChartView):</span><br><span class="line">     def __init__(self):</span><br><span class="line">         super().__init__()</span><br><span class="line">         self.comic &#x3D; get_comic_info(20853, &#39;마음의 소리&#39;)</span><br><span class="line">         </span><br><span class="line">     def get_labels(self):</span><br><span class="line">     		 return [ep[&#39;title&#39;] for ep in self.comic[&#39;ep_list&#39;]]</span><br><span class="line">     		 </span><br><span class="line">     def get_providers(self):</span><br><span class="line">     		 return [&#39;평점&#39;]</span><br><span class="line">     		 </span><br><span class="line">     def get_data(self):</span><br><span class="line">     		 return [</span><br><span class="line">     				 [ep[&#39;rating&#39;] for ep in self.comic[&#39;ep_list&#39;]],</span><br><span class="line">         ]</span><br><span class="line">         </span><br><span class="line">     def get_colors(self):</span><br><span class="line">         yield (255, 99, 132)</span><br><span class="line">         </span><br><span class="line">data_json &#x3D; WebtoonChartJSONView.as_view()</span><br></pre></td></tr></table></figure>
+
+<h2 id="Tip"><a href="#Tip" class="headerlink" title="Tip"></a>Tip</h2><p>javascript chart를 장고와 연동하기 전에, html/css/javascript만으로 javascript chart를 우선 익혀보세요. </p>
+<p>그래야만 자유자재로 chart를 활용하실 수 있습니다. </p>
+<p>그 후에, django chart 앱을 활용하시며, 소스코드도 까보세요.</p>
+<h3 id="크롤링-로우-데이터"><a href="#크롤링-로우-데이터" class="headerlink" title="크롤링 로우 데이터"></a>크롤링 로우 데이터</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#39;title&#39;: &#39;마음의 소리&#39;, &#39;ep_list&#39;: [&#123;&#39;title&#39;: &#39;1203. 그 동상&#39;, &#39;url&#39;: &#39;https:&#x2F;&#x2F;comic.naver.com&#x2F;webtoon&#x2F;detail.nhn?titleId&#x3D;20853&amp;no&#x3D;1207&amp;weekday&#x3D;tue&#39;, &#39;rating&#39;: &#39;9.73&#39;, &#39;date&#39;: &#39;2019.12.30&#39;&#125;, &#123;&#39;title&#39;: &#39;1202. 당숙 어르신&#39;, &#39;url&#39;: &#39;https:&#x2F;&#x2F;comic.naver.com&#x2F;webtoon&#x2F;detail.nhn?titleId&#x3D;20853&amp;no&#x3D;1206&amp;weekday&#x3D;tue&#39;, &#39;rating&#39;: &#39;9.77&#39;, &#39;date&#39;: &#39;2019.12.23&#39;&#125;, &#123;&#39;title&#39;: &#39;1201. 겨울 옷차림&#39;, &#39;url&#39;: &#39;https:&#x2F;&#x2F;comic.naver.com&#x2F;webtoon&#x2F;detail.nhn?titleId&#x3D;20853&amp;no&#x3D;1205&amp;weekday&#x3D;tue&#39;, &#39;rating&#39;: &#39;9.85&#39;, &#39;date&#39;: &#39;2019.12.16&#39;&#125;, &#123;&#39;title&#39;: &#39;1200. 양심의소리&#39;, &#39;url&#39;: &#39;https:&#x2F;&#x2F;comic.naver.com&#x2F;webtoon&#x2F;detail.nhn?titleId&#x3D;20853&amp;no&#x3D;1204&amp;weekday&#x3D;tue&#39;, &#39;rating&#39;: &#39;9.95&#39;, &#39;date&#39;: &#39;2019.12.09&#39;&#125;, &#123;&#39;title&#39;: &#39;1199. 백야&#39;, &#39;url&#39;: &#39;https:&#x2F;&#x2F;comic.naver.com&#x2F;webtoon&#x2F;detail.nhn?titleId&#x3D;20853&amp;no&#x3D;1203&amp;weekday&#x3D;tue&#39;, &#39;rating&#39;: &#39;9.81&#39;, &#39;date&#39;: &#39;2019.12.02&#39;&#125;, &#123;&#39;title&#39;: &#39;1198. 성함이…?&#39;, &#39;url&#39;: &#39;https:&#x2F;&#x2F;comic.naver.com&#x2F;webtoon&#x2F;detail.nhn?titleId&#x3D;20853&amp;no&#x3D;1202&amp;weekday&#x3D;tue&#39;, &#39;rating&#39;: &#39;9.93&#39;, &#39;date&#39;: &#39;2019.11.25&#39;&#125;, &#123;&#39;title&#39;: &#39;1197. 학예회&#39;, &#39;url&#39;: &#39;https:&#x2F;&#x2F;comic.naver.com&#x2F;webtoon&#x2F;detail.nhn?titleId&#x3D;20853&amp;no&#x3D;1201&amp;weekday&#x3D;tue&#39;, &#39;rating&#39;: &#39;9.85&#39;, &#39;date&#39;: &#39;2019.11.18&#39;&#125;, &#123;&#39;title&#39;: &#39;1196. 키아누 X브스&#39;, &#39;url&#39;: &#39;https:&#x2F;&#x2F;comic.naver.com&#x2F;webtoon&#x2F;detail.nhn?titleId&#x3D;20853&amp;no&#x3D;1200&amp;weekday&#x3D;tue&#39;, &#39;rating&#39;: &#39;9.80&#39;, &#39;date&#39;: &#39;2019.11.11&#39;&#125;, &#123;&#39;title&#39;: &#39;1195. 상의&#39;, &#39;url&#39;: &#39;https:&#x2F;&#x2F;comic.naver.com&#x2F;webtoon&#x2F;detail.nhn?titleId&#x3D;20853&amp;no&#x3D;1199&amp;weekday&#x3D;tue&#39;, &#39;rating&#39;: &#39;9.73&#39;, &#39;date&#39;: &#39;2019.11.04&#39;&#125;, &#123;&#39;title&#39;: &#39;1194. 불법스캔&#39;, &#39;url&#39;: &#39;https:&#x2F;&#x2F;comic.naver.com&#x2F;webtoon&#x2F;detail.nhn?titleId&#x3D;20853&amp;no&#x3D;1198&amp;weekday&#x3D;tue&#39;, &#39;rating&#39;: &#39;9.54&#39;, &#39;date&#39;: &#39;2019.10.28&#39;&#125;]</span><br></pre></td></tr></table></figure>
+
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/01/07/DRF01/" title= "DRF 기본편 1">
+                    <div class="nextTitle">DRF 기본편 1</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2019/12/22/front-end-prac3/" title= "프론트엔드 기본편 3">
+                    <div class="prevTitle">프론트엔드 기본편 3</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ajax-with-Django-4"><span class="toc-number">1.</span> <span class="toc-text">Ajax with Django #4</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#이미지-썸네일-처리"><span class="toc-number">1.1.</span> <span class="toc-text">이미지 썸네일 처리</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Image-Libraries"><span class="toc-number">1.1.1.</span> <span class="toc-text">Image Libraries</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#댓글-레이아웃-개선"><span class="toc-number">1.2.</span> <span class="toc-text">댓글 레이아웃 개선</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#댓글-페이징처리"><span class="toc-number">1.3.</span> <span class="toc-text">댓글 페이징처리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#댓글-Ajax-새로고침"><span class="toc-number">1.4.</span> <span class="toc-text">댓글 Ajax 새로고침</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#사용자-인증-연동"><span class="toc-number">1.5.</span> <span class="toc-text">사용자 인증 연동</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#로그인-로그아웃-next인자를-넣어준다면-그전-url로-자동으로-돌아감"><span class="toc-number">1.5.1.</span> <span class="toc-text">로그인 로그아웃. next인자를 넣어준다면 그전 url로 자동으로 돌아감</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#loginview-logoutview에-인자-넘기는-법"><span class="toc-number">1.5.2.</span> <span class="toc-text">loginview, logoutview에 인자 넘기는 법</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#로그인-창-또한-ajax로-처리하는-방법"><span class="toc-number">1.5.3.</span> <span class="toc-text">로그인 창 또한 ajax로 처리하는 방법</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaScript-Chart-데이터-연동"><span class="toc-number">2.</span> <span class="toc-text">JavaScript Chart 데이터 연동</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#다양한-JavaScript-차트"><span class="toc-number">2.1.</span> <span class="toc-text">다양한 JavaScript 차트</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#장고와의-연동에서-주안점"><span class="toc-number">2.2.</span> <span class="toc-text">장고와의 연동에서 주안점</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#django-chart-앱"><span class="toc-number">2.2.1.</span> <span class="toc-text">django chart 앱</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#javascript-chart-활용법을-먼저-익히세요"><span class="toc-number">2.3.</span> <span class="toc-text">javascript chart 활용법을 먼저 익히세요.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#백엔드-도움없이-프론트엔드-단에서만-차트-그리기"><span class="toc-number">2.4.</span> <span class="toc-text">백엔드 도움없이 프론트엔드 단에서만 차트 그리기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Chart-js-간단-샘플"><span class="toc-number">2.4.1.</span> <span class="toc-text">Chart.js 간단 샘플</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#백엔드에서-데이터-넘겨주기-1-템플릿-렌더링-시에-데이터-넘겨주기"><span class="toc-number">2.5.</span> <span class="toc-text">백엔드에서 데이터 넘겨주기 (1) 템플릿 렌더링 시에 데이터 넘겨주기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#유틸리티-코드-웹툰-평점-크롤링"><span class="toc-number">2.5.1.</span> <span class="toc-text">유틸리티 코드) 웹툰 평점 크롤링</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#뷰-코드"><span class="toc-number">2.5.2.</span> <span class="toc-text">뷰 코드</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#뷰-render에서-넘겨진-comic-사전-활용-템플릿"><span class="toc-number">2.6.</span> <span class="toc-text">뷰 render에서 넘겨진 comic 사전 활용 템플릿</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#백엔드에서-데이터-넘겨주기-2-Ajax-활용"><span class="toc-number">2.7.</span> <span class="toc-text">백엔드에서 데이터 넘겨주기 (2) Ajax 활용</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#urls-py"><span class="toc-number">2.7.1.</span> <span class="toc-text">urls.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#뷰-코드-1"><span class="toc-number">2.7.2.</span> <span class="toc-text">뷰 코드</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#템플릿-코드"><span class="toc-number">2.7.3.</span> <span class="toc-text">템플릿 코드</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#백엔드에서-데이터-넘겨주기-3-django-chartjs-활용-추천안함"><span class="toc-number">2.8.</span> <span class="toc-text">백엔드에서 데이터 넘겨주기 (3) django-chartjs 활용(추천안함)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#django-chartjs-활용-뷰코드"><span class="toc-number">2.8.1.</span> <span class="toc-text">django-chartjs 활용 뷰코드</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tip"><span class="toc-number">2.9.</span> <span class="toc-text">Tip</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#크롤링-로우-데이터"><span class="toc-number">2.9.1.</span> <span class="toc-text">크롤링 로우 데이터</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 113
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/02</span><a class="archive-post-title" href= "/2020/10/02/mysql/" >Mysql 기본 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-command/" >우분투 자주 쓰는 명령어</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

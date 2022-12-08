@@ -1,0 +1,3584 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>클래스뷰 정확히 쓰기 2 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">클래스뷰 정확히 쓰기 2</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            클래스뷰 정확히 쓰기 2
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Django">Django</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "ClassView">ClassView</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">2.7k</span>Reading time: <span class="post-count reading-time">16 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/12/06</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="Generic-Display-CBV-뷰"><a href="#Generic-Display-CBV-뷰" class="headerlink" title="Generic Display CBV 뷰"></a>Generic Display CBV 뷰</h1><h2 id="Built-in-CBV-API"><a href="#Built-in-CBV-API" class="headerlink" title="Built-in CBV API"></a>Built-in CBV API</h2><ul>
+<li><p>Generic Display Views</p>
+<ul>
+<li>ListView, DetailView </li>
+</ul>
+</li>
+<li><p>Generic Date Views</p>
+<ul>
+<li>ArchiveIndexView, YearArchiveView, MonthArchiveView, WeekArchiveView, DayArchiveView, TodayArchiveView, DateDetailView </li>
+</ul>
+</li>
+<li><p>Generic Editing Views</p>
+<ul>
+<li>FormView, CreateView, UpdateView, DeleteView</li>
+</ul>
+</li>
+</ul>
+<h2 id="Generic-Display-Views"><a href="#Generic-Display-Views" class="headerlink" title="Generic Display Views"></a>Generic Display Views</h2><h3 id="CBV에서-공통적으로-지원하는-옵션"><a href="#CBV에서-공통적으로-지원하는-옵션" class="headerlink" title="CBV에서 공통적으로 지원하는 옵션"></a>CBV에서 공통적으로 지원하는 옵션</h3><ul>
+<li>템플릿을 사용하는 CBV <ul>
+<li>template_name : 디폴트 템플릿경로가 제공되지만 이를 변경코자 할 때</li>
+</ul>
+</li>
+<li>리스트 형<ul>
+<li>allow_empty (디폴트 False) : 조회할 데이터가 없을 경우, 404 예외</li>
+<li>paginate_by (디폴트 None) : 페이지당 갯수 지정<ul>
+<li>지정시 페이징 처리 (페이지 인자 예: ?page=1)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>페이징 관련 클래스 : Page1 , Paginator2</li>
+</ul>
+<h3 id="ListView"><a href="#ListView" class="headerlink" title="ListView"></a>ListView</h3><ul>
+<li>지정 모델에 대한 전체 목록을 조회</li>
+<li>디폴트 템플릿 경로 : “앱이름/모델명소문자_list.html” _</li>
+<li>디폴트 context_object_name     #context는 즉 템플릿에서 넘겨받아쓸수있는 인스턴스명들<ul>
+<li>“모델명소문자_list” : ex) post_list, comment_list, tag_list </li>
+<li>혹은 “object_list”</li>
+</ul>
+</li>
+</ul>
+<h4 id="뷰-구현"><a href="#뷰-구현" class="headerlink" title="뷰 구현"></a>뷰 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">from django.http import Http404</span><br><span class="line">from django.views.generic import ListView</span><br><span class="line">from .models import Post</span><br><span class="line"></span><br><span class="line"># 구현 1-1) FBV</span><br><span class="line">로 직접 간단 구현</span><br><span class="line">def post_list(request):</span><br><span class="line">     qs &#x3D; Post.objects.all()</span><br><span class="line">     allow_empty &#x3D; False</span><br><span class="line">     if not allow_empty and not qs.exists():</span><br><span class="line">     				raise Http404</span><br><span class="line">     return render(request, &#39;blog&#x2F;post_list.html&#39;, &#123;</span><br><span class="line">     			&#39;post_list&#39;: Post.objects.all(),</span><br><span class="line">     &#125;)</span><br><span class="line">     </span><br><span class="line"># 구현 1-2) CBV로 페이징없이 구현. QuerySet은 Model.objects.all()로 지정됨.</span><br><span class="line">post_list &#x3D; ListView.as_view(model&#x3D;Post)</span><br><span class="line"></span><br><span class="line"># 구현 2) QuerySet을 직접 지정</span><br><span class="line">post_list &#x3D; ListView.as_view(model&#x3D;Post, queryset&#x3D;Post.objects.all().order_by(&#39;-id&#39;))</span><br><span class="line"></span><br><span class="line"># 구현 3-1) CBV로 페이징 처리</span><br><span class="line">post_list &#x3D; ListView.as_view(model&#x3D;Post, paginate_by&#x3D;10)</span><br><span class="line"></span><br><span class="line"># 구현 3-2) 상속을 통한 CBV 구현 (모든 CBV에서 가능)</span><br><span class="line">class PostListView(ListView):</span><br><span class="line">     model &#x3D; Post</span><br><span class="line">     paginate_by &#x3D; 10</span><br><span class="line">     queryset &#x3D; Post.objects.all().ordered_by(&#39;id&#39;)    #쿼리셋 커스텀</span><br><span class="line">     또는</span><br><span class="line">     def get_queryset(self):  #쿼리셋 커스텀 (특정 맴버 함수 재정의</span><br><span class="line">         qs &#x3D; super().get_queryset()</span><br><span class="line">         return qs.filter(id__lte&#x3D;2)</span><br><span class="line">     </span><br><span class="line">post_list &#x3D; PostListView.as_view()</span><br></pre></td></tr></table></figure>
+
+<h4 id="템플릿-구현-이전-다음-페이지-구현"><a href="#템플릿-구현-이전-다음-페이지-구현" class="headerlink" title="템플릿 구현 (이전, 다음 페이지 구현)"></a>템플릿 구현 (이전, 다음 페이지 구현)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;post_list.html</span><br><span class="line"></span><br><span class="line">&lt;ul&gt;</span><br><span class="line">     &#123;% for post in post_list %&#125;</span><br><span class="line">         &lt;li&gt;&#123;&#123; post.title &#125;&#125;&lt;&#x2F;li&gt;</span><br><span class="line">     &#123;% endfor %&#125;</span><br><span class="line">&lt;&#x2F;ul&gt;</span><br><span class="line"></span><br><span class="line">&#123;% if is_paginated %&#125;  #paginated_by 설정하면 이부분이 True됨</span><br><span class="line"></span><br><span class="line">     &#123;% if page_obj.has_previous %&#125;</span><br><span class="line">     		&lt;a href&#x3D;&quot;?page&#x3D;&#123;&#123; page_obj.previous_page_number &#125;&#125;&quot;&gt;이전&lt;&#x2F;a&gt;</span><br><span class="line">     &#123;% endif %&#125;</span><br><span class="line">     </span><br><span class="line">     &#123;&#123; page_obj.number &#125;&#125;페이지</span><br><span class="line">     </span><br><span class="line">     &#123;% if page_obj.has_next %&#125;</span><br><span class="line">    		 &lt;a href&#x3D;&quot;?page&#x3D;&#123;&#123; page_obj.next_page_number &#125;&#125;&quot;&gt;다음&lt;&#x2F;a&gt;</span><br><span class="line">     &#123;% endif %&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="DetailView"><a href="#DetailView" class="headerlink" title="DetailView"></a>DetailView</h3><ul>
+<li>지정 pk 혹은 slug의 모델 인스턴스에 대한 Detail</li>
+<li>디폴트 템플릿 경로 : “앱이름/모델명소문자_detail.html”</li>
+<li>디폴트 context_object_name <ul>
+<li>“모델명소문자” : ex) post, comment, tag</li>
+<li>혹은 “object”</li>
+</ul>
+</li>
+</ul>
+<h4 id="뷰-구현-1"><a href="#뷰-구현-1" class="headerlink" title="뷰 구현"></a>뷰 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#blog&#x2F;views.py</span><br><span class="line"></span><br><span class="line">from django.views.generic import DetailView</span><br><span class="line">from django.shortcuts import get_object_or_404</span><br><span class="line">from .models import Post</span><br><span class="line"></span><br><span class="line"># 구현 1) FBV로 구현</span><br><span class="line">def post_detail(request, pk):</span><br><span class="line">     post &#x3D; get_object_or_404(Post, pk&#x3D;pk)</span><br><span class="line">     return render(request, &#39;blog&#x2F;post_list.html&#39;, &#123;</span><br><span class="line">		     &#39;post&#39;: post,</span><br><span class="line">     &#125;)</span><br><span class="line">     </span><br><span class="line"># 구현 2) CBV로 구현</span><br><span class="line">post_detail &#x3D; DetailView.as_view(model&#x3D;Post)</span><br></pre></td></tr></table></figure>
+
+<h4 id="템플릿-구현"><a href="#템플릿-구현" class="headerlink" title="템플릿 구현"></a>템플릿 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#blog&#x2F;templates&#x2F;blog&#x2F;post_detail.html</span><br><span class="line">&lt;h1&gt;&#123;&#123; post.title &#125;&#125;&lt;&#x2F;h1&gt;</span><br><span class="line">&#123;&#123; post.content|linebreaks &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Generic-Date-Views"><a href="#Generic-Date-Views" class="headerlink" title="Generic Date Views"></a>Generic Date Views</h2><ul>
+<li>공통 옵션 <ul>
+<li>allow_future (디폴트: False) <ul>
+<li>False : 현재시간 이후의 Record는 제외</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="ArchiveIndexView"><a href="#ArchiveIndexView" class="headerlink" title="ArchiveIndexView"></a>ArchiveIndexView</h3><ul>
+<li><p>지정 날짜필드 역순으로 정렬된 목록</p>
+</li>
+<li><p>필수 옵션</p>
+<ul>
+<li>date_field : 지정 날짜필드</li>
+</ul>
+</li>
+<li><p>디폴트 템플릿 경로 </p>
+<ul>
+<li><p>“앱이름/모델명소문자_archive.html” </p>
+<p>ex) “blog/post_archive.html” </p>
+</li>
+</ul>
+</li>
+<li><p>context </p>
+<ul>
+<li><p>latest (디폴트 context_object_name) : 지정날짜 필드 역순으로 정렬된 QuerySet </p>
+</li>
+<li><p>date_list : 년도별 포스팅의 지정 날짜필드 </p>
+<p>ex) [2016-01-01 00:00:00, 2017-01-01 00:00:00, …]</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="URLConf-구현"><a href="#URLConf-구현" class="headerlink" title="URLConf 구현"></a>URLConf 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns &#x3D; [</span><br><span class="line"> url(r&#39;^archive&#x2F;$&#39;, views.post_archive),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h4 id="뷰-구현-2"><a href="#뷰-구현-2" class="headerlink" title="뷰 구현"></a>뷰 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from django.views.generic import ArchiveIndexView</span><br><span class="line">from .models import Post</span><br><span class="line"></span><br><span class="line">post_archive &#x3D; ArchiveIndexView.as_view(model&#x3D;Post, date_field&#x3D;&#39;updated_at&#39;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="템플릿-구현-1"><a href="#템플릿-구현-1" class="headerlink" title="템플릿 구현"></a>템플릿 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;post_archive.html </span><br><span class="line"></span><br><span class="line">&lt;h3&gt;등록된 포스팅의 년도 (모두 1월 1일)&lt;&#x2F;h3&gt;</span><br><span class="line">&#123;% for date in date_list %&#125;</span><br><span class="line"> &#123;&#123; date|date:&quot;Y&quot; &#125;&#125; &lt;!-- ex) 2017 --&gt;  #date인자에는 다양한값존재,연도값만 뽑아냄</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&lt;h3&gt;updated_at 역순으로 정렬된 전체 포스팅&lt;&#x2F;h3&gt;</span><br><span class="line">&lt;ul&gt;</span><br><span class="line">     &#123;% for post in latest %&#125;</span><br><span class="line"></span><br><span class="line">    &lt;li&gt;</span><br><span class="line">     &#123;&#123; post &#125;&#125;</span><br><span class="line">     &lt;&#x2F;li&gt;</span><br><span class="line">     &#123;% endfor %&#125;</span><br><span class="line">&lt;&#x2F;ul&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="YearArchiveView"><a href="#YearArchiveView" class="headerlink" title="YearArchiveView"></a>YearArchiveView</h3><ul>
+<li><p>URL Rule의 지정 year년도의 목록 </p>
+</li>
+<li><p>디폴트 옵션 </p>
+<ul>
+<li>date_list_period (디폴트 ‘month’) : 지정 년도에서 월 단위로 레코드가 있는 날짜를 뽑음. </li>
+<li>make_object_list (디폴트 False) : 거짓일 경우, object_list를 비움. (본 CBV에만 있는 옵 션) (년도에 해당된 post가 너무 많음을 방지)</li>
+</ul>
+</li>
+<li><p>디폴트 템플릿 경로 : “앱이름/모델명소문자_archive_year.html”</p>
+</li>
+<li><p>context </p>
+<ul>
+<li><p>date_list : 해당 년도의 월별 포스팅의 지정 날짜필드 </p>
+<p>ex) [2016-01-01 00:00:00, 2017-02-01 00:00:00, …]</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="URLConf-구현-1"><a href="#URLConf-구현-1" class="headerlink" title="URLConf 구현"></a>URLConf 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from . import views</span><br><span class="line"># year이라는 인자를 받는다!!</span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line">     url(r&#39;^archive&#x2F;(?P&lt;year&gt;\d&#123;4&#125;)&#x2F;$&#39;, views.PostYearArchiveView.as_view(), name&#x3D;&#39;post_archive_year&#39;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h4 id="뷰-구현-3"><a href="#뷰-구현-3" class="headerlink" title="뷰 구현"></a>뷰 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from django.views.generic.dates import YearArchiveView</span><br><span class="line">from .models import Post</span><br><span class="line"></span><br><span class="line">class PostArchiveYearView(YearArchiveView):</span><br><span class="line">     model &#x3D; Post</span><br><span class="line">     date_field &#x3D; &#39;created_at&#39;</span><br><span class="line">     # make_object_list &#x3D; False</span><br></pre></td></tr></table></figure>
+
+<h4 id="템플릿-구현-2"><a href="#템플릿-구현-2" class="headerlink" title="템플릿 구현"></a>템플릿 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;post_archive_year.html</span><br><span class="line"></span><br><span class="line">&lt;h3&gt;&#123;&#123; year|date:&quot;Y&quot; &#125;&#125;&lt;&#x2F;h3&gt;</span><br><span class="line"></span><br><span class="line">&#123;% for post in object_list %&#125;</span><br><span class="line"> 		&#123;&#123; post &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&lt;h4&gt;레코드가 있는 월&lt;&#x2F;h4&gt;</span><br><span class="line"></span><br><span class="line">&#123;% for date in date_list %&#125;</span><br><span class="line"> 		&lt;a href&#x3D;&quot;&#123;% url &quot;blog:post_archive_month&quot; date|date:&quot;Y&quot; date|date:&quot;m&quot; %&#125;&quot;&gt;  #이렇게 인자를 각자 해줘야 url작성됨!!</span><br><span class="line">        &#123;&#123; date|date:&quot;Y-m&quot; &#125;&#125; &lt;!-- ex) 2017-01 --&gt;</span><br><span class="line">        &lt;&#x2F;a&gt;</span><br><span class="line"></span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&lt;hr&#x2F;&gt;</span><br><span class="line"></span><br><span class="line">&#123;% if previous_year %&#125;  #cbv에서 자동으로 만들어줌.</span><br><span class="line">		 &lt;a href&#x3D;&quot;&#123;% url &quot;blog:post_archive_year&quot; previous_year|date:&quot;Y&quot; %&#125;&quot;&gt;</span><br><span class="line">				 &#123;&#123; previous_year|date:&quot;Y년&quot; &#125;&#125;</span><br><span class="line">		 &lt;&#x2F;a&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% if next_year %&#125;   #cbv에서 자동으로 만들어줌.</span><br><span class="line">		 &lt;a href&#x3D;&quot;&#123;% url &quot;blog:post_archive_year&quot; next_year|date:&quot;Y&quot; %&#125;&quot;&gt;</span><br><span class="line"> 				&#123;&#123; next_year|date:&quot;Y년&quot; &#125;&#125;</span><br><span class="line">		 &lt;&#x2F;a&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="MonthArchiveView"><a href="#MonthArchiveView" class="headerlink" title="MonthArchiveView"></a>MonthArchiveView</h3><ul>
+<li>URL Rule의 지정 year/month 년/월의 목록 </li>
+<li>디폴트 템플릿 경로 : “앱이름/모델명소문자_archive_month.html” </li>
+<li>인자 <ul>
+<li>month_format (디폴트 %b]) 3 : 숫자포맷은 %m</li>
+</ul>
+</li>
+</ul>
+<h4 id="URLConf-구현-2"><a href="#URLConf-구현-2" class="headerlink" title="URLConf 구현"></a>URLConf 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from . import views</span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line"> re_path(r&#39;^archive&#x2F;(?P&lt;year&gt;\d&#123;4&#125;)&#x2F;(?P&lt;month&gt;\d&#123;1,2&#125;)&#x2F;$&#39;, views.PostMonthArchiveView.as_view(), name&#x3D;&#39;post_archive_month&#39;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h4 id="뷰-구현-4"><a href="#뷰-구현-4" class="headerlink" title="뷰  구현"></a>뷰  구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#blog&#x2F;views.py</span><br><span class="line"></span><br><span class="line">from django.views.generic.dates import MonthArchiveView</span><br><span class="line">from .models import Post</span><br><span class="line"></span><br><span class="line">class PostMonthArchiveView(MonthArchiveView):</span><br><span class="line">       model &#x3D; Post</span><br><span class="line">       date_field &#x3D; &#39;updated_at&#39;</span><br><span class="line">       month_format &#x3D; &#39;%m&#39;  #이걸해야 jan이렇게안나오고 숫자로 나옴</span><br></pre></td></tr></table></figure>
+
+<h4 id="템플릿-구현-3"><a href="#템플릿-구현-3" class="headerlink" title="템플릿 구현"></a>템플릿 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;post_archive_month.html</span><br><span class="line"></span><br><span class="line">&lt;h3&gt;&#123;&#123; month|date:&quot;Y년 m월&quot; &#125;&#125;&lt;&#x2F;h3&gt;</span><br><span class="line"></span><br><span class="line">&#123;% for date in date_list %&#125;</span><br><span class="line">		 &#123;&#123; date|date:&quot;Y-m-d&quot; &#125;&#125; &lt;!-- ex) 2017-01-01 --&gt;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&lt;hr&#x2F;&gt;</span><br><span class="line"></span><br><span class="line">&#123;% for post in object_list %&#125;</span><br><span class="line"> &#123;&#123; post.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&lt;hr&#x2F;&gt;</span><br><span class="line"></span><br><span class="line">&#123;% if previous_month %&#125;</span><br><span class="line">     &lt;a href&#x3D;&quot;&#123;% url &quot;blog:post_archive_month&quot; previous_month|date:&quot;Y&quot; previous_month|date:&quot;m&quot; %&#125;&quot;&gt;   </span><br><span class="line">         &#123;&#123; previous_month|date:&quot;Y년 m월&quot; &#125;&#125;</span><br><span class="line"> &lt;&#x2F;a&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% if next_month %&#125;</span><br><span class="line">     &lt;a href&#x3D;&quot;&#123;% url &quot;blog:post_archive_month&quot; next_month|date:&quot;Y&quot; next_month|date:&quot;m&quot; %&#125;&quot;&gt;</span><br><span class="line">  		   &#123;&#123; next_month|date:&quot;Y년 m월&quot; &#125;&#125;</span><br><span class="line"> &lt;&#x2F;a&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="WeekArchiveView"><a href="#WeekArchiveView" class="headerlink" title="WeekArchiveView"></a>WeekArchiveView</h3><ul>
+<li>URL Rule의 지정 year/week 년/주의 목록 </li>
+<li>디폴트 템플릿 경로 : 앱이름/모델명소문자_archive_week.html” </li>
+<li>인자 week_format <ul>
+<li>%U (디폴트) : 한 주의 시작을 일요일로 지정</li>
+<li>%W : 한 주의 시작을 월요일로 지정</li>
+</ul>
+</li>
+</ul>
+<h4 id="URLConf-구현-3"><a href="#URLConf-구현-3" class="headerlink" title="URLConf 구현"></a>URLConf 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from . import views</span><br><span class="line"></span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line">     url(r&#39;^archive&#x2F;(?P&lt;year&gt;\d&#123;4&#125;)&#x2F;week&#x2F;(?P&lt;week&gt;\d&#123;1,2&#125;)&#x2F;$&#39;, views.PostWeeArchivekView.as_view(), name&#x3D;&#39;post_archive_week&#39;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h4 id="뷰-구현-5"><a href="#뷰-구현-5" class="headerlink" title="뷰 구현"></a>뷰 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;views.py</span><br><span class="line"></span><br><span class="line">from django.views.generic.dates import WeekArchiveView</span><br><span class="line">from .models import Post</span><br><span class="line"></span><br><span class="line">class PostWeekArchiveView(WeekArchiveView):</span><br><span class="line">     model &#x3D; Post</span><br><span class="line">     date_field &#x3D; &#39;created_at&#39;</span><br></pre></td></tr></table></figure>
+
+<h4 id="템플릿-구현-4"><a href="#템플릿-구현-4" class="headerlink" title="템플릿 구현"></a>템플릿 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;tempaltes&#x2F;blog&#x2F;post_archive_week.html</span><br><span class="line"></span><br><span class="line">&#123;% for post in object_list %&#125;</span><br><span class="line"> 		&#123;&#123; post &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&lt;hr&#x2F;&gt;</span><br><span class="line">&lt;% if previous_week%&gt;</span><br><span class="line">&lt;a href&#x3D;&quot;&#123;% url &quot;blog:post_archive_week&quot; previous_week|date:&quot;Y&quot; previous_week|date:&quot;W&quot; %&#125;&quot;&gt;</span><br><span class="line">		 &#123;&#123; previous_week|date:&quot;Y년 W주&quot; &#125;&#125;</span><br><span class="line">&lt;&#x2F;a&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123; week|date:&quot;Y년 W주&quot; &#125;&#125;</span><br><span class="line"></span><br><span class="line">&lt;% if next_week%&gt;</span><br><span class="line">&lt;a href&#x3D;&quot;&#123;% url &quot;blog:post_archive_week&quot; next_week|date:&quot;Y&quot; next_week|date:&quot;W&quot; %&#125;&quot;&gt;</span><br><span class="line"> &#123;&#123; next_week|date:&quot;Y년 W주&quot; &#125;&#125;</span><br><span class="line">&lt;&#x2F;a&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="DayArchiveView-에러뜸"><a href="#DayArchiveView-에러뜸" class="headerlink" title="DayArchiveView (??? 에러뜸)"></a>DayArchiveView (??? 에러뜸)</h3><ul>
+<li>URL Rule의 지정 year/month/day 년/월/일의 목록 </li>
+<li>디폴트 템플릿 경로 : “앱이름/모델명소문자_archive_day.html”</li>
+</ul>
+<h4 id="URLConf구현"><a href="#URLConf구현" class="headerlink" title="URLConf구현"></a>URLConf구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from . import views</span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line"> url(r&#39;^archive&#x2F;(?P&lt;year&gt;\d&#123;4&#125;)&#x2F;(?P&lt;week&gt;\d&#123;1,2&#125;)&#x2F;(?P&lt;day&gt;\d&#123;1,2&#125;)&#x2F;$&#39;, views.PostDayArchiveView.as_view(), name&#x3D;&#39;post_archive_day&#39;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h4 id="뷰-구현-6"><a href="#뷰-구현-6" class="headerlink" title="뷰 구현"></a>뷰 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from django.views.generic.dates import DayArchiveView</span><br><span class="line">from .models import Post</span><br><span class="line"></span><br><span class="line">class PostDayArchiveView(DayArchiveView):</span><br><span class="line">     model &#x3D; Post</span><br><span class="line">     date_field &#x3D; &#39;updated_at&#39;</span><br><span class="line">     month_format &#x3D; &#39;%m&#39;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="템플릿-구현-5"><a href="#템플릿-구현-5" class="headerlink" title="템플릿 구현"></a>템플릿 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;post_archive_day.html</span><br><span class="line"></span><br><span class="line">&lt;h3&gt;&#123;&#123; day|date:&quot;Y년 m월 d일&quot; &#125;&#125;&lt;&#x2F;h3&gt;</span><br><span class="line"></span><br><span class="line">  &#123;% for post in object_list %&#125;</span><br><span class="line">   &#123;&#123; post &#125;&#125;</span><br><span class="line">  &#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&lt;hr&#x2F;&gt;</span><br><span class="line">&lt;% if previous_day %&gt;</span><br><span class="line">&lt;a href&#x3D;&quot;&#123;% url &quot;blog:post_archive_day&quot; previous_day|date:&quot;Y&quot; previous_day|date:&quot;m&quot; previous_day|date:&quot;d&quot; %&#125;&quot;&gt;</span><br><span class="line"> &#123;&#123; previous_day|date:&quot;Y년 m월 d일&quot; &#125;&#125;</span><br><span class="line">&lt;&#x2F;a&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line"></span><br><span class="line">&lt;% if next_day %&gt;</span><br><span class="line">&lt;a href&#x3D;&quot;&#123;% url &quot;blog:post_archive_day&quot; next_day|date:&quot;Y&quot; next_day|date:&quot;m&quot; next_day|date:&quot;d&quot; %&#125;&quot;&gt;</span><br><span class="line"> &#123;&#123; next_day|date:&quot;Y년 m월 d일&quot; &#125;&#125;</span><br><span class="line">&lt;&#x2F;a&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="TodayArchiveView"><a href="#TodayArchiveView" class="headerlink" title="TodayArchiveView"></a>TodayArchiveView</h3><ul>
+<li>오늘 날짜에 해당되는 목록</li>
+<li>디폴트 템플릿 경로 : “앱이름/모델명소문자_archive_day.html” <ul>
+<li>DayArchiveView 뷰와 동일한 템플릿 경로 </li>
+</ul>
+</li>
+<li>DayArchiveView와 다르게 이전/다음 날 datetime 인스턴스가 제공 되지 않습니다</li>
+</ul>
+<h4 id="URLConf-구현-4"><a href="#URLConf-구현-4" class="headerlink" title="URLConf 구현"></a>URLConf 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from . import views</span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line"> url(r&#39;^archive&#x2F;today&#x2F;$&#39;, views.PostTodayArchiveView.as_view(), name&#x3D;&#39;post_archive_today&#39;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h4 id="뷰-구현-7"><a href="#뷰-구현-7" class="headerlink" title="뷰 구현"></a>뷰 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from django.views.generic.dates import TodayArchiveView</span><br><span class="line">from .models import Post</span><br><span class="line"></span><br><span class="line">class PostTodayArchiveView(TodayArchiveView):</span><br><span class="line">     model &#x3D; Post</span><br><span class="line">     date_field &#x3D; &#39;created_at&#39;</span><br></pre></td></tr></table></figure>
+
+<h4 id="템플릿-구현-6"><a href="#템플릿-구현-6" class="headerlink" title="템플릿 구현"></a>템플릿 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;post_archive_day.html</span><br><span class="line"></span><br><span class="line">&lt;h3&gt;&#123;&#123; day|date:&quot;Y년 m월 d일&quot; &#125;&#125;&lt;&#x2F;h3&gt;</span><br><span class="line">    &#123;% for post in object_list %&#125;</span><br><span class="line">     &#123;&#123; post &#125;&#125;</span><br><span class="line">    &#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="DateDetailView"><a href="#DateDetailView" class="headerlink" title="DateDetailView (???)"></a>DateDetailView (???)</h3><ul>
+<li>URL Rule의 year/month/day 목록 중에서 특정 pk의 detail<ul>
+<li>URL에 year/month/day 를 쓰고 싶을 경우</li>
+</ul>
+</li>
+<li>디폴트 템플릿 경로 : “앱이름/모델명소문자_detail.html”</li>
+</ul>
+<h4 id="URLConf-구현-5"><a href="#URLConf-구현-5" class="headerlink" title="URLConf 구현"></a>URLConf 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from . import views</span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line"> url(r&#39;^archive&#x2F;(?P&lt;year&gt;\d&#123;4&#125;)&#x2F;(?P&lt;month&gt;\d&#123;1,2&#125;)&#x2F;(?P&lt;day&gt;\d&#123;1,2&#125;)&#x2F;(?P&lt;pk&gt;\d+)&#x2F;$&#39;, views.PostDateDetailView.as_view(), name&#x3D;&#39;post_archive_today&#39;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="뷰-구현-8"><a href="#뷰-구현-8" class="headerlink" title="뷰 구현"></a>뷰 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from django.views.generic.dates import DateDetailView</span><br><span class="line">from .models import Post</span><br><span class="line">class PostDateDetailView(DateDetailView):</span><br><span class="line">     model &#x3D; Post</span><br><span class="line">     date_field &#x3D; &#39;created_at&#39;</span><br><span class="line">     month_format &#x3D; &#39;%m&#39;</span><br></pre></td></tr></table></figure>
+
+<h4 id="템플릿-구현-7"><a href="#템플릿-구현-7" class="headerlink" title="템플릿 구현"></a>템플릿 구현</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#blog&#x2F;templates&#x2F;blog&#x2F;post_detail.html</span><br><span class="line"></span><br><span class="line">&lt;h3&gt;&#123;&#123; post.title &#125;&#125;&lt;&#x2F;h3&gt;</span><br><span class="line">&#123;&#123; post.content|linebreaks &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Generic-Editing-CBV-Views"><a href="#Generic-Editing-CBV-Views" class="headerlink" title="Generic Editing CBV Views"></a>Generic Editing CBV Views</h1><h2 id="FormView"><a href="#FormView" class="headerlink" title="FormView"></a>FormView</h2><p>form을 처리하는 CBV</p>
+<ul>
+<li><p>유효성 검사에 실패하면 오류정보를 노출하고</p>
+</li>
+<li><p>성공하면 form_valid()를 처리하고 Success URL로 이동 </p>
+</li>
+<li><p>옵션 </p>
+<ul>
+<li><p>form_class 옵션 (필수) : Form 클래스 지정 </p>
+</li>
+<li><p>success_url 옵션 (필수) : 유효성 검사 성공 시 이동할 URL 지정 </p>
+<ul>
+<li>url reverse를 수행해주지 않습니다. </li>
+</ul>
+</li>
+<li><p>template_name 옵션 (필수) </p>
+</li>
+<li><p>form_valid, form_invalid 멤버함수를 통해 form valid/invalid 시의 처리 구현</p>
+<p>즉 각 valid invalid 상황 나눠서 구현가능</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="뷰-구현-9"><a href="#뷰-구현-9" class="headerlink" title="뷰 구현"></a>뷰 구현</h2><p>아래에 form.save()가 된거보면 분명cbv안에 form = PostForm(request.POST, request.FILES)가 있을것이다. 이것을 self.post인자에 담는 이유는 다른qs를 더할수있으므로 그런듯,</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#blog&#x2F;views.py</span><br><span class="line"></span><br><span class="line">from django.urls import reverse</span><br><span class="line">from django.shortcuts import resolve_url</span><br><span class="line">from django.views.generic import FormView</span><br><span class="line">from .forms import PostForm</span><br><span class="line"></span><br><span class="line">class PostCreateView(FormView):</span><br><span class="line">     form_class &#x3D; PostForm</span><br><span class="line">     template_name &#x3D; &#39;blog&#x2F;post_form.html&#39;</span><br><span class="line">     </span><br><span class="line">     def form_valid(self, form):</span><br><span class="line">         &#39;form.is_valid() 시에 호출&#39;</span><br><span class="line">         self.post &#x3D; form.save()</span><br><span class="line">         return super().form_valid(form) #오버라이딩 했으므로 이부분 꼭 필요</span><br><span class="line">         </span><br><span class="line">     def get_success_url(self):</span><br><span class="line">         &#39;form_valid(form) 처리 후에, 이동할 URL을 획득&#39;</span><br><span class="line">         return resolve_url(self.post) # resolve_url사용하려면, Post모델에 get_absolute_url() 멤버함수 구현 필요</span><br><span class="line">         # return self.post.get_absolute_url() # 대안 1</span><br><span class="line">         # return reverse(&#39;blog:post_detail&#39;, args&#x3D;[self.post.id]) # 대안 2</span><br></pre></td></tr></table></figure>
+
+<h3 id="URLConf-구현-6"><a href="#URLConf-구현-6" class="headerlink" title="URLConf 구현"></a>URLConf 구현</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from django.conf.urls import url</span><br><span class="line">from . import views</span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line"> url(r&#39;^new&#x2F;$&#39;, views.PostCreateView.as_view(), name&#x3D;&#39;post_new&#39;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="템플릿-구현-8"><a href="#템플릿-구현-8" class="headerlink" title="템플릿 구현"></a>템플릿 구현</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;post_form.html</span><br><span class="line"></span><br><span class="line">&lt;form action&#x3D;&quot;&quot; method&#x3D;&quot;post&quot;&gt;</span><br><span class="line">     &#123;% csrf_token %&#125;</span><br><span class="line">     &lt;table&gt;</span><br><span class="line">     &#123;&#123; form &#125;&#125;</span><br><span class="line">     &lt;&#x2F;table&gt;</span><br><span class="line">     &lt;input type&#x3D;&quot;submit&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;form&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="CreateView"><a href="#CreateView" class="headerlink" title="CreateView"></a>CreateView</h2><p>Model Instance를 생성</p>
+<ul>
+<li>옵션 <ul>
+<li>model 옵션 (필수)</li>
+<li>form_class 옵션 : 제공하지 않을 경우, Model로부터 ModelForm을 생성/적용</li>
+<li>fields 옵션 : 지정 field에 대해서만 Form 처리</li>
+<li>success_url 옵션 : 제공하지 않을 경우, model_instance.get_absolute_url() 획득을 시도 </li>
+<li>디폴트 템플릿 경로 : “앱이름/모델명소문자_form.html”</li>
+</ul>
+</li>
+</ul>
+<h3 id="뷰-구현-10"><a href="#뷰-구현-10" class="headerlink" title="뷰 구현"></a>뷰 구현</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from django.views.generic import CreateView</span><br><span class="line">from .models import Post</span><br><span class="line">from .forms import PostForm</span><br><span class="line"></span><br><span class="line">#아래처럼 짜면 newpost하면 각자 해당하는 detail로 감!</span><br><span class="line">#하지만 이것보다 더 좋은건 해당 모델에 get_absolute_url구현해놓는것!</span><br><span class="line">class PostCreateView(CreateView):</span><br><span class="line">     model &#x3D; Post</span><br><span class="line">     </span><br><span class="line">     fields &#x3D; &#39;__all__&#39;</span><br><span class="line">     # success_url &#x3D; reverse_lazy(&#39;blog:post_index&#39;) 경로 변경 불가 detail로 이동하고싶다</span><br><span class="line"></span><br><span class="line">     #def get_success_url(self):</span><br><span class="line">     #    return resolve_url(&#39;blog:post_detail&#39;, self.object.id)</span><br><span class="line">     </span><br><span class="line">urls&#x2F;template은 위 FormView 구성을 이용 가능</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#models.py</span><br><span class="line">#get_absolute_url 구성!</span><br><span class="line"></span><br><span class="line">from django.db import models</span><br><span class="line">from django.urls import reverse</span><br><span class="line"></span><br><span class="line">class Post(models.Model):</span><br><span class="line">    title &#x3D; models.CharField(max_length&#x3D;100)</span><br><span class="line">    content &#x3D; models.TextField()</span><br><span class="line">    updated_at &#x3D; models.DateTimeField(auto_now&#x3D;True)</span><br><span class="line"></span><br><span class="line">    def get_absolute_url(self):</span><br><span class="line">        return reverse(&#39;blog:post_detail&#39;, args&#x3D;[self.id])</span><br><span class="line"></span><br><span class="line"># Create your models here.</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="UpdateView"><a href="#UpdateView" class="headerlink" title="UpdateView"></a>UpdateView</h2><p>Model Instance를 수정</p>
+<p>옵션은 위 CreateView와 동일</p>
+<h3 id="URLConf-구현-7"><a href="#URLConf-구현-7" class="headerlink" title="URLConf 구현"></a>URLConf 구현</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from django.conf.urls import url</span><br><span class="line">from . import views</span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line"> url(r&#39;^(?P&lt;pk&gt;\d+)&#x2F;edit&#x2F;$&#39;, views.PostUpdateView.as_view(), name&#x3D;&#39;post_edit&#39;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="뷰-구현-11"><a href="#뷰-구현-11" class="headerlink" title="뷰 구현"></a>뷰 구현</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from django.views.generic import UpdateView</span><br><span class="line">from .models import Post</span><br><span class="line">from .forms import PostForm</span><br><span class="line"></span><br><span class="line">class PostUpdateView(UpdateView):</span><br><span class="line">     model &#x3D; Post</span><br><span class="line">     form_class &#x3D; PostForm</span><br><span class="line">템플릿은 범용 템플릿을 그대로 활용</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="DeleteView"><a href="#DeleteView" class="headerlink" title="DeleteView"></a>DeleteView</h2><p>지정 Model Instance 삭제확인 및 삭제 </p>
+<ul>
+<li>옵션 • model 옵션 (필수) <ul>
+<li>success_url 옵션 (필수) </li>
+<li>디폴트 템플릿 경로 : “앱이름/모델명소문자 _confirm_delete.html”</li>
+</ul>
+</li>
+</ul>
+<h3 id="URLConf-구현-8"><a href="#URLConf-구현-8" class="headerlink" title="URLConf 구현"></a>URLConf 구현</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from django.conf.urls import url</span><br><span class="line">from . import views</span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line"> path(&#39;&lt;int:pk&gt;&#x2F;delete&#x2F;$&#39;, views.PostDeleteView.as_view(), name&#x3D;&#39;post_delete&#39;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="뷰-구현-12"><a href="#뷰-구현-12" class="headerlink" title="뷰 구현"></a>뷰 구현</h3><p>   Tip: 전역변수/클래스 변수에서 url reverse가 필요할 때 reverse_lazy를 사용</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from django.views.generic import DeleteView</span><br><span class="line">from .models import Post</span><br><span class="line">class PostDeleteView(DeleteView):</span><br><span class="line">     model &#x3D; Post</span><br><span class="line">     success_url &#x3D; reverse_lazy(&#39;blog:post_list&#39;) #이것도 가능</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="템플릿-구현-9"><a href="#템플릿-구현-9" class="headerlink" title="템플릿 구현"></a>템플릿 구현</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># blog&#x2F;templates&#x2F;blog&#x2F;post_confirm_delete.html</span><br><span class="line"></span><br><span class="line">&lt;form action&#x3D;&quot;&quot; method&#x3D;&quot;post&quot;&gt;</span><br><span class="line">     &#123;% csrf_token %&#125;</span><br><span class="line">     정말 삭제하시겠습니까?</span><br><span class="line">     &lt;input type&#x3D;&quot;submit&quot; value&#x3D;&quot;삭제하겠습니다.&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;form&gt;</span><br></pre></td></tr></table></figure>
+
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2019/12/08/front-end-prac-1/" title= "프론트엔드 기본편 1">
+                    <div class="nextTitle">프론트엔드 기본편 1</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2019/12/03/class-view1/" title= "클래스뷰 정확히 쓰기 1">
+                    <div class="prevTitle">클래스뷰 정확히 쓰기 1</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Generic-Display-CBV-뷰"><span class="toc-number">1.</span> <span class="toc-text">Generic Display CBV 뷰</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Built-in-CBV-API"><span class="toc-number">1.1.</span> <span class="toc-text">Built-in CBV API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Generic-Display-Views"><span class="toc-number">1.2.</span> <span class="toc-text">Generic Display Views</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CBV에서-공통적으로-지원하는-옵션"><span class="toc-number">1.2.1.</span> <span class="toc-text">CBV에서 공통적으로 지원하는 옵션</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ListView"><span class="toc-number">1.2.2.</span> <span class="toc-text">ListView</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#뷰-구현"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">뷰 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#템플릿-구현-이전-다음-페이지-구현"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">템플릿 구현 (이전, 다음 페이지 구현)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DetailView"><span class="toc-number">1.2.3.</span> <span class="toc-text">DetailView</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#뷰-구현-1"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">뷰 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#템플릿-구현"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">템플릿 구현</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Generic-Date-Views"><span class="toc-number">1.3.</span> <span class="toc-text">Generic Date Views</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ArchiveIndexView"><span class="toc-number">1.3.1.</span> <span class="toc-text">ArchiveIndexView</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#URLConf-구현"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">URLConf 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#뷰-구현-2"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">뷰 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#템플릿-구현-1"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">템플릿 구현</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#YearArchiveView"><span class="toc-number">1.3.2.</span> <span class="toc-text">YearArchiveView</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#URLConf-구현-1"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">URLConf 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#뷰-구현-3"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">뷰 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#템플릿-구현-2"><span class="toc-number">1.3.2.3.</span> <span class="toc-text">템플릿 구현</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MonthArchiveView"><span class="toc-number">1.3.3.</span> <span class="toc-text">MonthArchiveView</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#URLConf-구현-2"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">URLConf 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#뷰-구현-4"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">뷰  구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#템플릿-구현-3"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">템플릿 구현</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WeekArchiveView"><span class="toc-number">1.3.4.</span> <span class="toc-text">WeekArchiveView</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#URLConf-구현-3"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">URLConf 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#뷰-구현-5"><span class="toc-number">1.3.4.2.</span> <span class="toc-text">뷰 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#템플릿-구현-4"><span class="toc-number">1.3.4.3.</span> <span class="toc-text">템플릿 구현</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DayArchiveView-에러뜸"><span class="toc-number">1.3.5.</span> <span class="toc-text">DayArchiveView (??? 에러뜸)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#URLConf구현"><span class="toc-number">1.3.5.1.</span> <span class="toc-text">URLConf구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#뷰-구현-6"><span class="toc-number">1.3.5.2.</span> <span class="toc-text">뷰 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#템플릿-구현-5"><span class="toc-number">1.3.5.3.</span> <span class="toc-text">템플릿 구현</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TodayArchiveView"><span class="toc-number">1.3.6.</span> <span class="toc-text">TodayArchiveView</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#URLConf-구현-4"><span class="toc-number">1.3.6.1.</span> <span class="toc-text">URLConf 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#뷰-구현-7"><span class="toc-number">1.3.6.2.</span> <span class="toc-text">뷰 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#템플릿-구현-6"><span class="toc-number">1.3.6.3.</span> <span class="toc-text">템플릿 구현</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DateDetailView"><span class="toc-number">1.3.7.</span> <span class="toc-text">DateDetailView (???)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#URLConf-구현-5"><span class="toc-number">1.3.7.1.</span> <span class="toc-text">URLConf 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#뷰-구현-8"><span class="toc-number">1.3.7.2.</span> <span class="toc-text">뷰 구현</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#템플릿-구현-7"><span class="toc-number">1.3.7.3.</span> <span class="toc-text">템플릿 구현</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Generic-Editing-CBV-Views"><span class="toc-number">2.</span> <span class="toc-text">Generic Editing CBV Views</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#FormView"><span class="toc-number">2.1.</span> <span class="toc-text">FormView</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#뷰-구현-9"><span class="toc-number">2.2.</span> <span class="toc-text">뷰 구현</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#URLConf-구현-6"><span class="toc-number">2.2.1.</span> <span class="toc-text">URLConf 구현</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#템플릿-구현-8"><span class="toc-number">2.2.2.</span> <span class="toc-text">템플릿 구현</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CreateView"><span class="toc-number">2.3.</span> <span class="toc-text">CreateView</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#뷰-구현-10"><span class="toc-number">2.3.1.</span> <span class="toc-text">뷰 구현</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UpdateView"><span class="toc-number">2.4.</span> <span class="toc-text">UpdateView</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#URLConf-구현-7"><span class="toc-number">2.4.1.</span> <span class="toc-text">URLConf 구현</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#뷰-구현-11"><span class="toc-number">2.4.2.</span> <span class="toc-text">뷰 구현</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DeleteView"><span class="toc-number">2.5.</span> <span class="toc-text">DeleteView</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#URLConf-구현-8"><span class="toc-number">2.5.1.</span> <span class="toc-text">URLConf 구현</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#뷰-구현-12"><span class="toc-number">2.5.2.</span> <span class="toc-text">뷰 구현</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#템플릿-구현-9"><span class="toc-number">2.5.3.</span> <span class="toc-text">템플릿 구현</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 113
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/02</span><a class="archive-post-title" href= "/2020/10/02/mysql/" >Mysql 기본 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-command/" >우분투 자주 쓰는 명령어</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

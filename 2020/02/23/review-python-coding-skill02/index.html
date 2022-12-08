@@ -1,0 +1,3686 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>파이썬 코딩의 스킬 리뷰 2 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">파이썬 코딩의 스킬 리뷰 2</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            파이썬 코딩의 스킬 리뷰 2
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Review">Review</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Tip">Tip</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Skill">Skill</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">5.2k</span>Reading time: <span class="post-count reading-time">32 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/02/23</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="2장-함수"><a href="#2장-함수" class="headerlink" title="2장 - 함수"></a>2장 - 함수</h1><p>함수는 큰 프로그램을 작고 단순한 조각으로 나눌 수 있게 해준다.</p>
+<p>함수를 사용하면 가독성이 높아지고 코드를 더 이해하기 쉬워진다. </p>
+<p><strong>재사용 + 리팩토링까지 가능</strong></p>
+<p>파이썬에서 제공하는 함수들에는 다양한 부가 기능이 있다.</p>
+<p>이러한 부가기능들은 함수의 목적을 분명하게 하고, 불필요한 요소 제거, 호출자의 의도를 보여주며, 찾기 어려운 버그를 줄여준다.</p>
+<h2 id="None을-반환하기보다는-예외를-일으키자"><a href="#None을-반환하기보다는-예외를-일으키자" class="headerlink" title="None을 반환하기보다는 예외를 일으키자"></a>None을 반환하기보다는 예외를 일으키자</h2><blockquote>
+<p>None이 의미를 가져서 return값이달라지면</p>
+<p>0, []등 모두 false가 뜨고 None 또한 if 문에서 모두 if문 동작이 가능하므로 구별할수없게된다. 따라서 None보다 예외를 일으키자</p>
+</blockquote>
+<p>파이썬 프로그래머들은 유틸리티 함수를 작성할 때 반환 값 None에 특별한 의미를 부여하는 경향이 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Example 1</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">divide</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">return</span> a / b</span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">assert</span> divide(<span class="number">4</span>, <span class="number">2</span>) == <span class="number">2</span></span><br><span class="line"><span class="keyword">assert</span> divide(<span class="number">0</span>, <span class="number">1</span>) == <span class="number">0</span></span><br><span class="line"><span class="keyword">assert</span> divide(<span class="number">3</span>, <span class="number">6</span>) == <span class="number">0.5</span></span><br><span class="line"><span class="keyword">assert</span> divide(<span class="number">1</span>, <span class="number">0</span>) == <span class="literal">None</span> <span class="comment"># 분모로 0은 ZeroDivisionError가 남</span></span><br></pre></td></tr></table></figure>
+
+<p>그런데 분자가 0이 되어버리면 반환값도 0이 되어버린다.</p>
+<p>즉 <strong>빈 문자열, 빈 리스트, 0이 모두 암시적으로 False로 인식</strong> 되어버린다.</p>
+<p>오류인지 알아내려고 None 대신 실수로 False에 해당하는 값을 검사할 수 있다.(???)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x, y = <span class="number">0</span>, <span class="number">5</span>   <span class="comment">#x, y = 5,0 만 zerodivisionError로서 None받아서 not result의도함.</span></span><br><span class="line">result = divide(x, y)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> result:</span><br><span class="line">    print(<span class="string">'Invalid inputs'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>위에 코드처럼 0/5도 0을 반환하면서 false취급되므로 Invalid inputs이 결과값이 되어버린다.</p>
+<p><strong>위에 예시는 None에 특별한 의미가 있을 떄 파이썬 코드에서 흔히 하는 실수다.</strong></p>
+<p>바로 이 상황이 함수에서 None을 반환하면 오류가 일어나기 쉬운 이유다.</p>
+<p>다음 두가지 방법을 통해 이런 오류상황을 줄일수있다</p>
+<ul>
+<li><p>첫 번쨰 방법은 반환 값을 두개로 나눠서 튜플에 담는 것이다.</p>
+<p>처음 파라미터에서 작업을 성공했는지 알려주고, 두번째 파라미터에서 계산된 실제 결과를 반환한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">divide</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span>, a / b</span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span>, <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+
+<p>이렇게 하면 분자가 0인 경우 True에 0값이 리턴된다.</p>
+<p>이 함수를 호출하는 쪽에서 튜플을 풀어야한다.!!!</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x, y = <span class="number">5</span>, <span class="number">0</span></span><br><span class="line">success, result = divide(x, y)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> success:</span><br><span class="line">    print(<span class="string">'Invalid inputs'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>문제는 호출자가 (파이썬에서 사용하지 않을 변수에 붙이는 관례인 밎줄(_) 변수 이름을 사용해서) 튜플의 첫 번째 파라미터의 첫 번째 부분을 쉽게 무시할 수 있다는 점이다</p>
+<p>얼핏 보기에는 괜찮아보이지만, 결과는 그냥 None을 반환하는 것만큼이나 나쁘다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">x, y = <span class="number">5</span>, <span class="number">0</span></span><br><span class="line">_, result = divide(x, y)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> result:</span><br><span class="line">    print(<span class="string">'Invalid inputs'</span>)  <span class="comment"># This is right</span></span><br><span class="line">    </span><br><span class="line">x, y = <span class="number">0</span>, <span class="number">5</span></span><br><span class="line">_, result = divide(x, y)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> result:</span><br><span class="line">    print(<span class="string">'Invalid inputs'</span>)  </span><br><span class="line">    </span><br><span class="line"><span class="comment"># This is wrong, 결국 문제 또 발생 result가0이므로</span></span><br><span class="line">Invalid inputs</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>두 번째 방법은 절대로 None을 반환하지 않는 것이다</p>
+<p><strong>대신 호출하는 쪽에 예외를 일으켜서 호출하는 쪽에서 그 예외를 처리하게 하는 것이다.</strong></p>
+<p>여기서는 호출하는 쪽에 입력값이 잘못됏음을 알리려고 ZeroDivisionError를 ValueError로 변경하였다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">divide</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">return</span> a / b</span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="comment">#오류메세지와, 에러명 변경</span></span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'Invalid inputs'</span>) <span class="keyword">from</span> e</span><br></pre></td></tr></table></figure>
+
+<p>이제 호출하는 쪽에서는 잘못된 입력에 대한 예외를 처리해야 한다.</p>
+<p>(이런 동작에 대해서는 “모든 함수, 클래스, 모듈에 docstring을 작성하자” 참고)</p>
+<p>호출하는 쪽에서 더는 함수의 반환값을 조건식으로 검사할 필요가 없다. 함수가 예외를 일으키지 않는다면 반환 값은 문제가 없다. 예외를 처리하는 코드 또한 깔끔해진다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">x, y = <span class="number">5</span>, <span class="number">2</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = divide(x, y)</span><br><span class="line"><span class="keyword">except</span> ValueError:  <span class="comment">#divide함수에서 ZeroDivisionError발생시 ValueError로 뜸</span></span><br><span class="line">    print(<span class="string">'Invalid inputs'</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'Result is %.1f'</span> % result)</span><br></pre></td></tr></table></figure>
+
+<p><strong>반드시 특별한 상황을 알릴 떄 None값을 반환하는 대신 예외를 읽으키자, 문서화 되어있다면 호출하는 코드에서 예외를 적절하게 처리할 것이다</strong></p>
+</li>
+</ul>
+<h2 id="클로저가-변수-스코프와-상호-작용하는-방법을-알자"><a href="#클로저가-변수-스코프와-상호-작용하는-방법을-알자" class="headerlink" title="클로저가 변수 스코프와 상호 작용하는 방법을 알자(!!!)"></a>클로저가 변수 스코프와 상호 작용하는 방법을 알자(!!!)</h2><blockquote>
+<p>클로저 <a href="https://whatisthenext.tistory.com/112" target="_blank" rel="noopener">자세히</a></p>
+<p>클로저 <a href="https://yes90.tistory.com/50" target="_blank" rel="noopener">자세히2</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">say_words</span><span class="params">(msg)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">say_sentence</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"와 msg변수 살아있다: %s"</span> %(msg,)</span><br><span class="line">    <span class="keyword">return</span> say_sentence   <span class="comment">#즉 내장함수가 반환됨, 지역변수 msg도 살아있음.. 이게 클로저</span></span><br><span class="line"></span><br><span class="line">a = say_words(<span class="string">"출출하다"</span>)</span><br><span class="line">print(dir(a)) <span class="comment">#dir(a) : 객체(a)가 자체적으로 가지고 있는 변수나 함수를 보여준다. 가장 큰 단위의 조사라고 보면 된다.</span></span><br><span class="line">print(type(a.__closure__)) <span class="comment">#dir()이라는 내장함수가 변수나 함수를 보여준다고 했으니까, 변수인지 함수인지 타입을 찍어보자.</span></span><br><span class="line">print(a.__closure__) <span class="comment">#cell이 뭔가 찾아보니 여러 범위(scope)에서 참조할 수 있는 값을 저장할 수 있는 객체라고 한다., &lt;cell~~&gt;하나밖에없으므로 [0]불러보자</span></span><br><span class="line">print(dir(a.__closure__[<span class="number">0</span>])) <span class="comment">#마지막에 cell_contents를 숨기고 있었다.</span></span><br><span class="line">print(a.__closure__[<span class="number">0</span>].cell_contents) <span class="comment">#클로져인 출출하다가 출력됨</span></span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">[<span class="string">'__annotations__'</span>, <span class="string">'__call__'</span>, <span class="string">'__class__'</span>, <span class="string">'__closure__'</span>, <span class="string">'__code__'</span>, <span class="string">'__defaults__'</span>, <span class="string">'__delattr__'</span>, <span class="string">'__dict__'</span>, <span class="string">'__dir__'</span>, <span class="string">'__doc__'</span>, <span class="string">'__eq__'</span>, <span class="string">'__format__'</span>, <span class="string">'__ge__'</span>, <span class="string">'__get__'</span>, <span class="string">'__getattribute__'</span>, <span class="string">'__globals__'</span>, <span class="string">'__gt__'</span>, <span class="string">'__hash__'</span>, <span class="string">'__init__'</span>, <span class="string">'__init_subclass__'</span>, <span class="string">'__kwdefaults__'</span>, <span class="string">'__le__'</span>, <span class="string">'__lt__'</span>, <span class="string">'__module__'</span>, <span class="string">'__name__'</span>, <span class="string">'__ne__'</span>, <span class="string">'__new__'</span>, <span class="string">'__qualname__'</span>, <span class="string">'__reduce__'</span>, <span class="string">'__reduce_ex__'</span>, <span class="string">'__repr__'</span>, <span class="string">'__setattr__'</span>, <span class="string">'__sizeof__'</span>, <span class="string">'__str__'</span>, <span class="string">'__subclasshook__'</span>]</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">tuple</span>'&gt;</span></span><br><span class="line"><span class="class"><span class="params">(&lt;cell at <span class="number">0x10b763890</span>: str object at <span class="number">0x10b766210</span>&gt;,)</span></span></span><br><span class="line">['__class__', '__delattr__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', 'cell_contents']</span><br><span class="line">출출하다</span><br></pre></td></tr></table></figure>
+
+<p><strong>클로저의</strong> <strong>목적</strong>: 전역변수 사용 빈도를 줄이기 위함</p>
+<p>즉, 전통적인 프로그래밍에서 한 변수를 특정 함수의 종료 여부와 관계없이 여러 함수에서 사용하려면 보통 변수를 전역변수로 선언한다. 그러나 전역변수를 무작정 생성하다 보면 간섭현상(side effect)가 발생하기 쉽다.전역 변수를 사용하면 프로그래밍 자체는 쉬워지나, 사용 빈도수가 높아지면 간섭현상이 생기면서 프로그램에 문제가 생겼을 때 디버깅 하기가 어려워진다. 함수 클로저를 만들기 위해선 내가 함수 클로저로 만들고 싶은 함수를 다른 함수로 감싸면 된다. 이때 함수 클로저를 감싸주는 함수의 반환형은 함수 클로저가 된다</p>
+<p><strong>전역변수, 지역변수</strong></p>
+<ul>
+<li><strong>전역변수</strong>: 함수 밖, 전역 이름공간에 정의된 변수</li>
+<li><strong>지역변수</strong>: 함수 안, 지역 이름공간에 정의된 변수</li>
+<li>지역변수는 그 변수가 정의된 함수 안에서만 읽을 수 있다.</li>
+<li>전역변수는 프로그램 어디서든 읽을 수 있다. 단, 함수 안에서 전역변수에 새로운 값을 대입할 수는 없다.</li>
+</ul>
+<p>햇갈리지말아야할것</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#cat함수의 스코프 차이로 발생하는 것, cat2 스코프에서는 변수가 정의되어버림 (값변경x)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cat</span><span class="params">()</span>:</span></span><br><span class="line">    rhdiddl = <span class="literal">True</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cat2</span><span class="params">()</span>:</span></span><br><span class="line">        rhdiddl = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> cat2(), rhdiddl</span><br><span class="line">        </span><br><span class="line">a= cat()</span><br><span class="line">print(a)</span><br><span class="line">(<span class="literal">None</span>, <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#함수안에 for, if 문이 끝나서  변수 변경은 해당함수 스코프 안에있으므로 변수 값 변경으로 처리됨.</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>숫자 리스트를 정렬할 때 특정 그룹의 숫자들이 먼저 오도록 우선순위를 매기려고 한다.</p>
+<p>이런 패턴은 사용자 인터페이스를 표현하거나, 다른 것보다 중요한 메세지나 예외 이벤트를 먼저 보여줘야 할 떄 유용하다. </p>
+<p>이렇게 만드는 일반적인 방법은 리스트의  sort 메서드에 헬퍼 함수를 key 인수로 넘기는 것이다. 헬퍼의 반환 값은 리스트에  있는 각 아이템을 정렬하는 값으로 사용된다. 헬퍼는 주어진 아이템이 중요한 그룹에 있는지 확인하고 그에 따라 정렬 키를 다르게 할 수 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sort_priority</span><span class="params">(values, group)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">helper</span><span class="params">(x)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> x <span class="keyword">in</span> group:  <span class="comment">#x가 특정한 그룹에있다면</span></span><br><span class="line">            <span class="keyword">return</span> (<span class="number">0</span>, x) </span><br><span class="line">        <span class="keyword">return</span> (<span class="number">1</span>, x)</span><br><span class="line">    values.sort(key=helper) <span class="comment">#key에 있는 함수는 기준을 반환하면됨. 튜플이니까 자동으로 첫번째 인덱스를 기준으로 values를 정렬하겠지. 그리고 두번째 기준이 두번째 인덱스 값이 됨</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">numbers = [<span class="number">8</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">7</span>, <span class="number">6</span>]</span><br><span class="line">group = &#123;<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>&#125;</span><br><span class="line">sort_priority(numbers, group)</span><br><span class="line">print(numbers)</span><br></pre></td></tr></table></figure>
+
+<p>함수가 예상대로 동작한 이유는 세 가지다.</p>
+<ul>
+<li>파이썬은 클로저(closure)를 지원하다. 클로저란 자신이 정의된 범위(스코프)에 있던 변수를 참조하는 함수다. 바로  이 점 덕분에 helper 함수가 sort_priority의 group인수에 접근할 수 있다.(함수안에 함수에서 안에있는 함수가 변수를 쓸수있다는이야기)(지역변수는 모두 스코프되는듯???)</li>
+<li><strong>함수는 파이썬에서 일급 객체(first-class object)다. 이 말은 함수를 직접 참조하고, 변수에 할당하고, 다른 함수의 인수로 전달하고, 표현식과 if 문 등에서 비교할 수 있다는 의미다.</strong> 따라서 sort 메서드에서 클로저 함수를 key인수로 받을 수 있다</li>
+<li>파이썬에서 튜플을 비교하는 특정한 규칙이 있다. 먼저 인덱스 0으로 아이템을 비교하고 그 다음으로 인덱스 1, 다음은 인덱스 2와 같이 진행한다. helper 클로저의 반환 값이 정렬 순서를 분리된 두 그룹으로 나뉘게 한 건이 규칙 떄문이다. (여기서 말하는 인덱스는 튜플 안에 왼쪽부터 인덱스 0라고 부르는듯.)</li>
+</ul>
+<p>함수에서 우선순위가 높은 아이템을 발견했는지 여부를 반환해서 사용자 인터페이스 코드가 그에 따라 동작하게 하면 좋을 것이다.</p>
+<p>이런 동작을 추가하는 일은 쉬워 보인다. 이미 각 숫자가 어느 그룹에 포함되어 있는지 판별하는 클로저 함수가있다.</p>
+<p>우선순위가 높은 아이템을 발견했을때 플래그(아래 예시에서 found객체)를 뒤집는 데도 클로저(현재 자신이 정의된 범위(스코프)에 있던 변수를 참조하는 해서 변경역할하는 함수임)를 사용하는 건 어떨까? 그러면 함수는 클로저가 수정한 플래그 값을 반환할 수 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sort_priority2</span><span class="params">(numbers, group)</span>:</span></span><br><span class="line">    found = <span class="literal">False</span> <span class="comment">#플래그</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">helper</span><span class="params">(x)</span>:</span> <span class="comment">#클로저</span></span><br><span class="line">        <span class="keyword">if</span> x <span class="keyword">in</span> group:</span><br><span class="line">            found = <span class="literal">True</span>  <span class="comment"># Seems simple #클로저의 역할 #지역변수니까 당연히 변경가능</span></span><br><span class="line">            <span class="keyword">return</span> (<span class="number">0</span>, x)</span><br><span class="line">        <span class="keyword">return</span> (<span class="number">1</span>, x)</span><br><span class="line">    numbers.sort(key=helper)</span><br><span class="line">    <span class="keyword">return</span> found</span><br></pre></td></tr></table></figure>
+
+<p>사용해보자</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">found = sort_priority2(numbers, group)</span><br><span class="line">print(<span class="string">'Found:'</span>, found)</span><br><span class="line">print(numbers)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Found: <span class="literal">False</span></span><br><span class="line">[<span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]</span><br></pre></td></tr></table></figure>
+
+<p><strong>왜 found값이 false가 나와버렸을까?</strong></p>
+<p><strong>표현식에서 변수를 참조할 때</strong> 파이썬 인터프리터는 참조를 해결하려고 다음과 같은 수서로 유효 범위(scope)를 탐색한다.</p>
+<ol>
+<li>현재 함수의 스코프</li>
+<li>(현재 스코프를 담고있는 다른 함수 같은) 감싸고 있는 스코프</li>
+<li>코드를 포함하고 있는 모듈의 스코프(전역 스코프라고도함)</li>
+<li>(len이나 str 같은 함수를 담고 있는) 내장 스코프</li>
+</ol>
+<p>이 주 어느 스코프에도 참조한 이름으로 된 변수가 정의되어 있지 않으면 NameError 예외가 일어난다</p>
+<p><strong>변수에 값을 할당할 때</strong>는 다른 방식으로 동작한다. 변수가 이미 현재 스코프에 정의되어 있다면 새로운 값을 얻는다</p>
+<p>__파이썬은 변수가 현재 스코프에 존재하지 않으면 변수 정의로 취급한다. __</p>
+<p><strong>새로 정의되는 변수의 스코프는 그 할당을 포함하고 있는 함수가 된다.</strong></p>
+<p><strong>(즉, 새로 정의된 변수는 정의되었던 스코프밖을 나가지못함, 지금은 found=True가 helper함수 밖을 나가지 못함 )</strong></p>
+<p>즉, sort_priority2함수의 반환 값이 잘못된이유는 found변수는 helper 클로저에서 True로 할당되도록 설계하려고 햇으나, 실제로 클로저 할당은 sort_priority2에서  일어나는 할당이 아닌 helper함수에서 일어나는 새 변수 정의가 되어버렸기때문이다.</p>
+<p>이런 점은 초보자들을 놀라게한다. (‘스코프 버그’라고함)</p>
+<p>하지만 이 동작은 함수의 지역 변수가 자신을 포함하는 모듈을 오염시키는 문제를 막아준다. 그렇지 않았다면 함수 안에서 일어나는 모든 할당이 전역 모듈 스코프에 쓰레기를 넣는 결과로 이어졌을 것이다.</p>
+<p>그렇게 되면 불필요한 할당에 그치지 않고 결과로 만들어지는 전역 변수들의 상호 작용으로 알기 힘든 버그가 생긴다.</p>
+<h3 id="데이터-얻어오기"><a href="#데이터-얻어오기" class="headerlink" title="데이터 얻어오기"></a>데이터 얻어오기</h3><p>파이썬 3에는 클로저에서 &gt;&gt;&gt; 데이터를 얻어오는 특별한 문법이 있다. nonlocal문은 특정 변수 이름에 할당할 때 __스코프 탐색이 일어나야 함을 나타낸다. __(이렇게 하면 탐색후 할당)</p>
+<p>유일한 제약은 nonlocal이 (전역 변수 오염 피하려고) 모듈 수준 스코프까지는 탐색할 수 없다는 점이다.</p>
+<p>다음은 nonlocal을 사용하여 같은 함수를 다시 정의한 예다.</p>
+<p>(nonlocal문을 사용하여 클로저를 감싸는 스코프의 변수를 수정할 수있음을 알린다.)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sort_priority3</span><span class="params">(numbers, group)</span>:</span></span><br><span class="line">    found = <span class="literal">False</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">helper</span><span class="params">(x)</span>:</span></span><br><span class="line">        <span class="keyword">nonlocal</span> found</span><br><span class="line">        <span class="keyword">if</span> x <span class="keyword">in</span> group:</span><br><span class="line">            found = <span class="literal">True</span>  <span class="comment">#nonlocal이라고 알려줬기때문에 탐색 먼저진행 후 값 바뀜</span></span><br><span class="line">            <span class="keyword">return</span> (<span class="number">0</span>, x)</span><br><span class="line">        <span class="keyword">return</span> (<span class="number">1</span>, x)</span><br><span class="line">    numbers.sort(key=helper)</span><br><span class="line">    <span class="keyword">return</span> found</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">found = sort_priority3(numbers, group)</span><br><span class="line">print(<span class="string">'Found:'</span>, found)</span><br><span class="line">print(numbers)</span><br></pre></td></tr></table></figure>
+
+<p>nonlocal 문은 클로저에서 데이터를 다른 스코프에 할당하는 시점을 알아보기 쉽게 해준다.</p>
+<p>nonlocal문은 변수 할당이 모듈 스코프에 직접 들어가게 하는 global문을 보안한다(모듈 스코프는안됨.)</p>
+<p><strong>하지만 전역 변수의 안티패턴(anti-pattern)과 마찬가지로 간단한 함수 이외에는 nonlocal을 사용하지 않도록 주의해야 한다. nonlocal의 부작용은 알아내기가 상당히 어렵다.</strong></p>
+<p>특히 nonlocal문과 관련 변수에 대한 할당이 멀리 떨어진 긴 함수에서는 이해하기가 더욱 어렵다</p>
+<p>nonlocal을 사용할 때 복잡해지기 시작하면 헬퍼 클래스로 상태를 감싸는 방법을 이용하는 게 낫다.</p>
+<p>이제 nonlocal을 사용할 때와 같은 결과를 얻는 클래스를 정의해 보자</p>
+<p>코드는 약간 더 길지만 이해하기는 훨씬 쉽다(“인터페이스가 간단하면 클래스 대신 함수를 받자”에서 __call__ 이라는 특별한 메서를 자세히 설명한다.)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sorter</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, group)</span>:</span></span><br><span class="line">        self.group = group</span><br><span class="line">        self.found = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, x)</span>:</span>   <span class="comment">#클래스 호출할경우 동작 함수정의</span></span><br><span class="line">        <span class="keyword">if</span> x <span class="keyword">in</span> self.group:</span><br><span class="line">            self.found = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">return</span> (<span class="number">0</span>, x)</span><br><span class="line">        <span class="keyword">return</span> (<span class="number">1</span>, x)</span><br><span class="line"></span><br><span class="line">sorter = Sorter(group)</span><br><span class="line">numbers.sort(key=sorter)</span><br><span class="line"><span class="keyword">assert</span> sorter.found <span class="keyword">is</span> <span class="literal">True</span></span><br><span class="line">print(<span class="string">'Found:'</span>, found)</span><br><span class="line">print(numbers)</span><br></pre></td></tr></table></figure>
+
+<h3 id="파이썬2의-스코프"><a href="#파이썬2의-스코프" class="headerlink" title="파이썬2의 스코프"></a>파이썬2의 스코프</h3><p>nonlocal지원안함.. pass</p>
+<p>found = [False]로 줘서 수정가능한 helper함수안에 found[0] = Ture를 하면 탐색이 일어나므로 변경은 가능….</p>
+<h4 id="list-본체-정렬"><a href="#list-본체-정렬" class="headerlink" title="list 본체 정렬"></a>list 본체 정렬</h4><ul>
+<li>reverse : 리스트를 거꾸로 뒤집는다. desc 정렬이 아님</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">1</span>, <span class="number">10</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">6</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.reverse()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">6</span>, <span class="number">7</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>sort : 정렬, 기본값은 오름차순 정렬, reverse옵션 True는 내림차순 정렬</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">1</span>, <span class="number">10</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">6</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.sort()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">1</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">10</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">1</span>, <span class="number">10</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">6</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.sort(reverse=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">10</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>sort의 key 옵션, key 옵션에 지정된 함수의 결과에따라 정렬, 아래는 원소의 길이</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>m = <span class="string">'나는 파이썬을 잘하고 싶다'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m = m.split()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m</span><br><span class="line">[<span class="string">'나는'</span>, <span class="string">'파이썬을'</span>, <span class="string">'잘하고'</span>, <span class="string">'싶다'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m.sort(key=len)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m</span><br><span class="line">[<span class="string">'나는'</span>, <span class="string">'싶다'</span>, <span class="string">'잘하고'</span>, <span class="string">'파이썬을'</span>]</span><br></pre></td></tr></table></figure>
+
+<h4 id="list-정렬된-결과-반환"><a href="#list-정렬된-결과-반환" class="headerlink" title="list 정렬된 결과 반환"></a>list 정렬된 결과 반환</h4><ul>
+<li>정렬된 결과를 반환하는 함수는 본체는 변형하지 않습니다.</li>
+<li>sorted : 순서대로 정렬, 정렬된 리스트를 반환</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; x &#x3D; [1 ,11, 2, 3]</span><br><span class="line">&gt;&gt;&gt; y &#x3D; sorted(x)</span><br><span class="line">&gt;&gt;&gt; x</span><br><span class="line">[1, 11, 2, 3]</span><br><span class="line">&gt;&gt;&gt; y</span><br><span class="line">[1, 2, 3, 11]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>reversed : 거꾸로 뒤집기, iterable한 객체를 반환, 확인을 위해서는 list로 한번 더 변형 필요</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; x &#x3D; [1 ,11, 2, 3]</span><br><span class="line">&gt;&gt;&gt; y &#x3D; reversed(x)</span><br><span class="line">&gt;&gt;&gt; x</span><br><span class="line">[1, 11, 2, 3]</span><br><span class="line">&gt;&gt;&gt; y</span><br><span class="line">&lt;list_reverseiterator object at 0x1060c9fd0&gt;</span><br><span class="line">&gt;&gt;&gt; list(y)</span><br><span class="line">[3, 2, 11, 1]</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="리스트를-반환하는-대신-제너레이터를-고려하자-B16"><a href="#리스트를-반환하는-대신-제너레이터를-고려하자-B16" class="headerlink" title="리스트를 반환하는 대신 제너레이터를 고려하자(B16)"></a>리스트를 반환하는 대신 제너레이터를 고려하자(B16)</h2><blockquote>
+<p>일련의 결과를 생성하는 함수에서 택할 가장 간단한 방법은 아이템의 리스트를 반환하는 것이다. </p>
+</blockquote>
+<p>예를 들어 문자열에 있는 모든 단어의 인덱스를 출력하고 싶다(띄어쓰기를 기준으로 나누면됨)</p>
+<p>다음 코드에서 append 메서드로 리스트에 결과들을 누적하고 함수가 끝날 때 해당 리스트를 반환한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index_words</span><span class="params">(text)</span>:</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">if</span> text:</span><br><span class="line">        result.append(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">for</span> index, letter <span class="keyword">in</span> enumerate(text):</span><br><span class="line">        <span class="keyword">if</span> letter == <span class="string">' '</span>:</span><br><span class="line">            result.append(index + <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<p>샘플 입력이 몇 개뿐일 때는 함수가 기대한 대로 동작한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">address = <span class="string">'Four score and seven years ago our fathers brought forth on this continent a new nation, conceived in liberty, and dedicated to the proposition that all men are created equal.'</span></span><br><span class="line">result = index_words(address)</span><br><span class="line">print(result[:<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[<span class="number">0</span>, <span class="number">5</span>, <span class="number">11</span>]</span><br></pre></td></tr></table></figure>
+
+<p>하지만 index_words 함수에는 두 가지 문제가 있다.</p>
+<ul>
+<li><p>첫 번째 문제는 코드가 약간 복잡하고 깔끔하지 않다는 것이다. 새로운 결과가 나올 때마다 append 메서드를 호출해야 한다. 메서드 호출(result.append)이 많아서 리스트에 가하는 값(index+1)이 덜 중요해 보인다. 결과 리스트를 생성하는 데 한 줄이 필요하고, 그 값을 반환하는 데도 한 줄이 필요하다. 함수 몸체에 문자가 130개 가량(공백 제외)있지만 그중에서 중요한 문자는 약 75개다</p>
+<p>이 함수를 작성하는 더 좋은 방법은 제너레이터(generator)를 사용하는것이다</p>
+</li>
+</ul>
+<p>  <strong>제너레이터는 yield 표현식을 사용하는 함수다.</strong> </p>
+<p>  __제너레이터 함수는 호출되면 실제로 실행하지 않고 바로 이터레이터(iterator)를 반환한다. __</p>
+<p>  <strong>내장 함수 next를 호출할 때마다 이터레이터는 제너레이터가 다음 yield 표현식으로 진행하게 한다.</strong></p>
+<p>   제너레이터에서 yield에 전달한 값을 이터레이터86가 호출하는 쪽으로 반환한다.</p>
+<p>  동일결과를 내는 제너레이터 함수</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">index_words_iter</span><span class="params">(text)</span>:</span></span><br><span class="line">      <span class="keyword">if</span> text:</span><br><span class="line">          <span class="keyword">yield</span> <span class="number">0</span></span><br><span class="line">      <span class="keyword">for</span> index, letter <span class="keyword">in</span> enumerate(text):</span><br><span class="line">          <span class="keyword">if</span> letter == <span class="string">' '</span>:</span><br><span class="line">              <span class="keyword">yield</span> index + <span class="number">1</span></span><br><span class="line">              </span><br><span class="line">  my_result = index_words_iter(<span class="string">"고양이 최고 귀엽다"</span>) <span class="comment">#1</span></span><br><span class="line">  <span class="keyword">print</span> my_result <span class="comment"># 호출안되고 누군가 값을 물어보기를 기다리는 대기상태 #1</span></span><br><span class="line"><span class="keyword">print</span> next(my_result) <span class="comment">#이때 호출됨</span></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  &lt;generator object index_words_iter at <span class="number">0x10c4aa7d0</span>&gt;</span><br><span class="line">  <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>  제너레이터는 자신이 리턴할 모든 값을 메모리에 저장하지 않기 때문에 조금 전 일반 함수의 결과와 같이 한번에 리스트로 보이지 않는 것입니다. <strong>제너레이터는 한 번 호출될때마다 하나의 값만을 전달(yield)합니다.</strong> 즉, 위의 #1까지는 아직 아무런 계산을 하지 않고 누군가가 다음 값에 대해서 물어보기를 기다리고 있는 상태입니다.</p>
+<p>  결과 리스트와 연동하는 부분이 사라져서 훨씬 이해하기 쉽다. 결과는 리스트가 아닌 yield 표현식으로 전달된다.</p>
+<p>  제너레이터 호출로 반환되는 이터레이터를 내장 함수 list에 전달하면 손쉽게 리스트로 변환할 수 있다.(B9 참조)</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myresult=list(index_words_iter(<span class="string">'rhdiddlsms 최고다 rhddd'</span>))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>두번째 문제는</p>
+<p>반환하기 전에 모든 결과를 리스트에 저장해야한다는 점이다. 입력이 매우 많다면 프로그램 실행 중에 메모리가 고갈되어 동작을 멈추는 원인이 된다. 반면 <strong>제너레이터로 작성한 버전은 다양한 길이의 입력에도 쉽게 이용가능</strong></p>
+</li>
+</ul>
+<p>다른 예시로 또 차이를 보자</p>
+<p>아래 함수는 파일에서 입력을 한 번에 한 줄씩 읽어서 한 번에 한 단어씩 출력을 내어주는 제너레이터다. 이 함수가 동작할 때 사용하는 메모리는 입력 한 줄의 최대 길이까지다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index_file</span><span class="params">(handle)</span>:</span></span><br><span class="line">    offset = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> handle:</span><br><span class="line">        <span class="keyword">if</span> line:</span><br><span class="line">            <span class="keyword">yield</span> offset</span><br><span class="line">        <span class="keyword">for</span> letter <span class="keyword">in</span> line:</span><br><span class="line">            offset += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> letter == <span class="string">' '</span>:</span><br><span class="line">                <span class="keyword">yield</span> offset</span><br><span class="line">                </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> islice</span><br><span class="line"><span class="keyword">with</span> open (<span class="string">'파일경로/rhdiddl.txt'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    re=islice(index_file(f),<span class="number">0</span>,<span class="number">3</span>)              </span><br><span class="line">    print(list(re))</span><br><span class="line">    </span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">[<span class="number">0</span>, <span class="number">11</span>, <span class="number">15</span>]</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>islice는 이터레이너 객체가 반환하는 제너레이터를 처음(0), 마지막(3)으로  슬라이스침</p>
+<p>이터레이터는 반복가능한 객체를 말한다(next()가 가능한 객체)</p>
+<p>제너레이터(반복가능한 객체를 만들어주는 행위)</p>
+<p>yield(제너레이터에서의 return과 동일한 역할을 수행,, )</p>
+</blockquote>
+<p>이와 같이 제너레이터를 정의할 때 알아둬야 할 단 하나는 반환되는 이터레이터에 상태가 있고 재사용할 수 없다는 사실을 호출하는 쪽에서 알아야 한다는 점이다(B17 참조)</p>
+<h3 id="정리"><a href="#정리" class="headerlink" title="정리"></a>정리</h3><ul>
+<li>제너레이터에서 반환한 이터레이터는 제너레이터 함수의 본문에 있는 yield 표현식에 전달된 값들의 집합이다.</li>
+<li>제너레이터는 모든 입력과 출력을 메모리에 저장하지 않으므로 입력값의 양을 알기 어려울 때도 연속된 출력을 만들 수 있다.</li>
+</ul>
+<h2 id="인수를-순회할-때는-방어적으로-하자-B17"><a href="#인수를-순회할-때는-방어적으로-하자-B17" class="headerlink" title="인수를 순회할 때는 방어적으로 하자(B17)"></a>인수를 순회할 때는 방어적으로 하자(B17)</h2><p>파라미터로 객체의 리스트를 받는 함수에서 리스트를 여러 번 순회해야 할 때가 종종있다.</p>
+<p>예를 들어 미국 텍사스주의 여행자 수를 분석하자</p>
+<p>데이터 집합은 각 도시의 방문자수라고 하자</p>
+<p>각 도시에서 전체 여행자 중 몇 퍼센트를 받아들이는지 알고 싶을 것이다</p>
+<p>이런 작업을 하려면 정규화 함수가 필요하다. 정규화 함수에서는 입력을 합산해서 연도별 총 여행자 수를 구한다.</p>
+<p>그러고 나서 각 도시의 방문자 수를 전체 방문자 수로 나누어 각 도시가 전체에서 차지하는 비중을 알아낸다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">normalize</span><span class="params">(numbers)</span>:</span></span><br><span class="line">    total = sum(numbers)  <span class="comment">#여기서도 numbers호출</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">for</span> value <span class="keyword">in</span> numbers:   <span class="comment">#여기서도 numbers호출</span></span><br><span class="line">        percent = <span class="number">100</span> * value / total</span><br><span class="line">        result.append(percent)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<p>방문 리스트를 확대하려면 모든 도시가 들어 있는 파일에서 데이터를 읽어야한다.</p>
+<p>모든 데이터의 리스트를 메모리에 넣는건 무리..</p>
+<p>나중에 같은 함수를 재사용하여 더 큰 데이터 세트인 전 세계의 여행자 수를 계산할 수 있기 때문에 리스트보다 제너레이터로구현한다</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_visits</span><span class="params">(data_path)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(data_path) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">            <span class="keyword">yield</span> int(line)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">it = read_visits(<span class="string">'my_numbers.txt'</span>)</span><br><span class="line">percentages = normalize(it)</span><br><span class="line">print(percentages)</span><br></pre></td></tr></table></figure>
+
+<p>위 함수를 해보면 안된다. 그 이유는 이터레이터가 결과를 한 번만 생성하기 때문이다</p>
+<p>이미 StopIteration 예외를 일으킨 이터레이터나 제너레이터를 순회하면 어떤 결과도 얻을수없다. 아래 참조하자</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">it = read_visits(<span class="string">'my_numbers.txt'</span>)</span><br><span class="line">print(list(it))   <span class="comment">#정상 데이터리스트</span></span><br><span class="line">print(list(it))  <span class="comment">#결과는 빈 리스트가 나와버림</span></span><br></pre></td></tr></table></figure>
+
+<p>이를 해결하려면 입력 이터레이터를 명시적으로 소진하고 전체 콘텐츠의 복사본을 리스트에 저장해야 한다.</p>
+<p>(없어지는 값을 일단 복사)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">normalize_copy</span><span class="params">(numbers)</span>:</span></span><br><span class="line">    numbers = list(numbers)  <span class="comment"># Copy the iterator</span></span><br><span class="line">    total = sum(numbers)</span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">for</span> value <span class="keyword">in</span> numbers:</span><br><span class="line">        percent = <span class="number">100</span> * value / total</span><br><span class="line">        result.append(percent)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<p>이 방법의 문제점은 입력받은 이터레이터 콘텐츠의 복사본이 클 수도 있다는 점이다</p>
+<p>이런 이터레이터를 복사하면 프로그램의 메모리가 고갈되어 동작을 멈출 수도있다.</p>
+<p>이런 문제를 피하는 한가지 방법은 호출될 때마다 새 이터레이터를 반환하는 함수를 받게 만드는 것이다</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">normalize_func</span><span class="params">(get_iter)</span>:</span></span><br><span class="line">    total = sum(get_iter())   <span class="comment"># New iterator</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">for</span> value <span class="keyword">in</span> get_iter():  <span class="comment"># New iterator </span></span><br><span class="line">        percent = <span class="number">100</span> * value / total</span><br><span class="line">        result.append(percent)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<p><code>normalize_func</code> 을 사용하려면 제너레이터를 호출해서 매번 새 이터레이터를 생성하는 람다 표현식을 넘겨주면 된다.</p>
+<p>(위에 나왔던방식은 이터레이터가 한번만 소모될수있었으므로 안됬으니까 이렇게 함수안에서 호출을 두번 새롭게 해주면된다.)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">percentages = normalize_func(<span class="keyword">lambda</span>: read_visits(path)) </span><br><span class="line"><span class="comment">#lambda로 임시 함수를 만들었으니까 normalize_func안에서는 호출해야됨 그게 get_iter() 에서  ()가 붙은이유</span></span><br><span class="line">print(percentages)</span><br></pre></td></tr></table></figure>
+
+<p>코드가 잘 동작하긴 하지만, 이렇게 람다 함수를 넘겨주는 방법은 세련되지 못하다. 같은 결과를 얻는 더 좋은 방법은 이터레이터 프로토콜을 구현한 새 컨테이너 클래스를 제공하는 것이다.</p>
+<p>이터레이터 프로토콜은 파이썬의 for 루프와 관련 표현식이 컨테이너 타입의 콘텐츠를 탐색하는 방법을 나타낸다</p>
+<p>파이썬은 <code>for x in foo</code>  같은 문장을 만나면 실제로는 iter(foo)를 호출한다. 그러면 내장 함수 iter는 특별한 메서드인 foo.__iter__ 를 호출한다.  __iter__ 메서드는 (__next__ 라는 특별한 메서드를 구현하는) 이터레이터 객체를 반환해야 한다. 마지막으로 for 루프는 이터레이터를 모두 소진할 때까지 (그래서 StopIteration 예외가 발생할 때까지) 이터레이터 객체에 내장 함수 <code>next</code> 를 계속 호출한다. <a href="https://dojang.io/mod/page/view.php?id=2406" target="_blank" rel="noopener">자세히</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#__iter__ 써보자</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, stop)</span>:</span></span><br><span class="line">        self.current = <span class="number">0</span>    <span class="comment"># 현재 숫자 유지, 0부터 지정된 숫자 직전까지 반복</span></span><br><span class="line">        self.stop = stop    <span class="comment"># 반복을 끝낼 숫자</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self         <span class="comment"># 현재 인스턴스를 반환</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.current &lt; self.stop:    <span class="comment"># 현재 숫자가 반복을 끝낼 숫자보다 작을 때</span></span><br><span class="line">            r = self.current            <span class="comment"># 반환할 숫자를 변수에 저장</span></span><br><span class="line">            self.current += <span class="number">1</span>           <span class="comment"># 현재 숫자를 1 증가시킴</span></span><br><span class="line">            <span class="keyword">return</span> r                    <span class="comment"># 숫자를 반환</span></span><br><span class="line">        <span class="keyword">else</span>:                           <span class="comment"># 현재 숫자가 반복을 끝낼 숫자보다 크거나 같을 때</span></span><br><span class="line">            <span class="keyword">raise</span> StopIteration         <span class="comment"># 예외 발생</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> Counter(<span class="number">3</span>): </span><br><span class="line">    print(i, end=<span class="string">' '</span>)</span><br><span class="line"><span class="comment">###아래 내용은 추측.</span></span><br><span class="line"><span class="comment"># __init__는 클래스 객체 생성할때.</span></span><br><span class="line"><span class="comment"># __iter__는 for문에서 iter(x)를 처음에 호출하므로 이때 메서드가 호출된다. 즉 이때 반환되는 객체가 이터레이터(돌수있는것)이여야한다.</span></span><br><span class="line"><span class="comment"># __next__는 for문에서 루프는 __next__를 호출하면서</span></span><br></pre></td></tr></table></figure>
+
+<p>복잡해 보이지만 사실 클래스의 __iter__ 메서드를 제너레이터로 구현하면 이렇게 동작을 만들 수 있다.</p>
+<p>다음은 여행자 데이터를 담은 파일을 읽는 이터러블(iterable:순회가능)컨테이너 클래스다</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ReadVisits</span><span class="params">(object)</span>:</span>  <span class="comment">#object는 필요없지안나???</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, data_path)</span>:</span></span><br><span class="line">        self.data_path = data_path</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">with</span> open(self.data_path) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">                <span class="keyword">yield</span> int(line)</span><br></pre></td></tr></table></figure>
+
+<p>새로 정의한 컨테이너 타입은 원래의 함수에 수정을 가하지 않고 넘겨도 제대로 동작한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">visits = ReadVisits(<span class="string">"rhdiddl.txt"</span>)</span><br><span class="line">percentages = normalize(visits)</span><br><span class="line">print(percentages)</span><br></pre></td></tr></table></figure>
+
+<p>normalize를 쓸수있는 이유는 normalize의 sum메서드가 새 이터레이터 객체를 할당하려고 ReadVisits.__iter__ 를 호출하기때문이다. (새 이터레이터 만듬)</p>
+<p>또한 숫자를 정규화하는 for 루프도 두 번째 이터레이터 객체를 할당할때 __iter__ 를 호출한다. 따라서 두 이터레이터는 독립적으로 동작하므로 각각의 순회 과정에서 모든 입력 데이터 값을 얻을 수 있다. 이 방법의 유일한 단점은 입력 데이터를 여러번 읽는다는 점이다</p>
+<p>이제 ReadVisits와 같은 컨테이너의 작동방법을 안다.</p>
+<p>파라미터가 단순한 이터레이터가 아님을 보장하는 함수를 작성할 차례다.</p>
+<p>프로토콜에 따르면 내장 함수 iter에 이터레이터를 넘기면 이터레이터 자체가 반환된다. 반면 iter에 컨테이너 타입을 넘기면 매번 새 이터레이터 객체가 반환된다. 따라서 이 동작으로 입력값을 테스트해서 이터레이터면 TypeError를 일으켜 거부하게 만들면 된다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">normalize_defensive</span><span class="params">(numbers)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> iter(numbers) <span class="keyword">is</span> iter(numbers):  <span class="comment"># 이터레이터 거부</span></span><br><span class="line">        <span class="keyword">raise</span> TypeError(<span class="string">'Must supply a container'</span>)</span><br><span class="line">    total = sum(numbers)</span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">for</span> value <span class="keyword">in</span> numbers:</span><br><span class="line">        percent = <span class="number">100</span> * value / total</span><br><span class="line">        result.append(percent)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<p>normalize_defensive는 normalize_copy처럼 입력 이터레이터 전체를 복사하고 싶지 않지만, 입력 데이터를 여러번 순회해야 할 때, 사용하면 좋다. 이 함수는 list와 ReadVisits를 입력으로 받으면 입력이 컨테이너이므로 기대한 대로 동작한다. 이터레이터 프로토콜을 따르면 어떤 컨테이너 타입에 대해서도 제대로 동작할 것이다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">visits = [<span class="number">15</span>, <span class="number">35</span>, <span class="number">80</span>]</span><br><span class="line">normalize_defensive(visits)  <span class="comment"># No error</span></span><br><span class="line">visits = ReadVisits(path)</span><br><span class="line">normalize_defensive(visits)  <span class="comment"># No error</span></span><br></pre></td></tr></table></figure>
+
+<p>하지만 입력이 이터러블이어도 컨테이너가 아니면 예외를 일으킨다</p>
+<blockquote>
+<p> 이 함수를 사용할때 그냥 이터레이터가 들어오면 순환하지 못하므로 그것을 방지하기위해 if절로 구별함</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">it = iter(visits)</span><br><span class="line">normalize_defensive(it)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">TypeError</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="정리-1"><a href="#정리-1" class="headerlink" title="정리"></a>정리</h3><ul>
+<li>입력 인수를 여러번 순회하는 함수를 작성할 때 주의하자. 입력인수가 이터레이터라면 이상하게 동작(한번만 호출되고 사라지므로)해서 값 잃어버림</li>
+<li>파이썬의 이터레이터 프로토콜은 컨테이너와 이터레이터가 내장함수 iter, next와 for 루프 및 관련 표현식과 상호작용하는 방법을 정의한다</li>
+<li>_<strong>_iter__ 메서드를 제너레이터로 구현하면 자신만의 이터러블 컨테이너 타입을 쉽게 정의할 수있다</strong></li>
+<li>어떤 값에 iter를 두번 호출했을때 같은 결과(id,위치까지같고, 변한게없음)가 나오고 내장 함수 next로 전진시킬 수 있다면 그 값은 컨테이너가 아닌 이터레이터다.</li>
+</ul>
+<h2 id="가변-위치-인수로-깔끔하게-보이게-하자-B18"><a href="#가변-위치-인수로-깔끔하게-보이게-하자-B18" class="headerlink" title="가변 위치 인수로 깔끔하게 보이게 하자(B18)"></a>가변 위치 인수로 깔끔하게 보이게 하자(B18)</h2><p>선택적인 위치 인수(이런 파라미터의 이름을 보통 *arg라 한다. ‘star args’라고도함)를 받게 만들면 함수 호출을 더 명확하게 할 수 있고 보기에 방해가 되는 요소를 없앨 수 있다.</p>
+<p>예를 들어 디버그 정보 몇 개를 로그남기자. 인수의 개수가 고정되어 있다면 메시지와 값 리스트를 받는 함수를 구현</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log</span><span class="params">(message, values)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> values:</span><br><span class="line">        print(message)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        values_str = <span class="string">', '</span>.join(str(x) <span class="keyword">for</span> x <span class="keyword">in</span> values)</span><br><span class="line">        print(<span class="string">'%s: %s'</span> % (message, values_str))</span><br><span class="line"></span><br><span class="line">log(<span class="string">'My numbers are'</span>, [<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line">log(<span class="string">'Hi there'</span>, [])</span><br></pre></td></tr></table></figure>
+
+<p>로그로 남길 값이 없을 때 빈 리스트를 넘겨야 한다는 것은 불편함.</p>
+<p>두 번째 인수를 아예 남겨주면 좋을 것이다. 파이썬에서의 *기호를 마지막 위치 파라미터 이름 앞에 붙이면된다.</p>
+<p>로그 메세지(log함수의 message인수)를 의미하는 첫 번째 파라미터는 필수지만, 다음의 나오는 위치 인수는 몇개든 선택적이다. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log</span><span class="params">(message, *values)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> values:</span><br><span class="line">        print(message)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">      </span><br><span class="line">        values_str = <span class="string">', '</span>.join(str(x) <span class="keyword">for</span> x <span class="keyword">in</span> values)</span><br><span class="line">        print(<span class="string">'%s: %s'</span> % (message, values_str))</span><br><span class="line">        </span><br><span class="line">log(<span class="string">'My numbers are'</span>, <span class="number">1</span>, <span class="number">2</span>) <span class="comment">#여기서 중간에 values를 보면 튜플로 가져오는것을 볼수있다(1,2)</span></span><br><span class="line">log(<span class="string">'Hi there'</span>)  <span class="comment">#훨씬 간결함</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#아래처럼 실행하면 리스트 풀리고 튜플로 다시 묶여서 진행하는것확인</span></span><br><span class="line">favorites = [<span class="number">7</span>, <span class="number">33</span>, <span class="number">99</span>]</span><br><span class="line">log(<span class="string">'Favorite colors'</span>, *favorites)</span><br></pre></td></tr></table></figure>
+
+<p>가변 개수의 위치 인수를 받는 방법에는 두 가지 문제가 있다</p>
+<p><strong>첫번째는 가변 인수가 함수에 전달되기에 앞서 항상 튜플로 변환된다는 점이다.</strong>(즉 값이 일단 다 풀려있어야함.이 튜플을 예시에서는 for문이 도니까,)</p>
+<p><strong>이는 함수를 호출하는 쪽에서 제너레이터에 *연상자를 쓰면 제너레이터가 모두 소진될 떄까지 순회됨을 의미한다. 결과로 만들어지는 튜플은 제너레이터로부터 생성된 모든 값을 담으므로 메모리를 많이 차지해서 프로그램 망가짐.</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_generator</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        <span class="keyword">yield</span> i</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_func</span><span class="params">(*args)</span>:</span></span><br><span class="line">    print(args)</span><br><span class="line"></span><br><span class="line">it = my_generator()</span><br><span class="line">my_func(*it)</span><br></pre></td></tr></table></figure>
+
+<p>*arg를 받는 함수는 인수 리스트에 있는 입력의 수가 적당히 적다는 사실을 아는 상황에서 가장 좋은 방법이다. 이런 함수는 많은 리터럴이나 변수 이름을 한꺼번에 넘기는 함수 호출에 이상적이다. 개발자들을 편하게하고 가독성 높임</p>
+<p><strong>두 번째는 추후에 호출 코드를 모두 변경하지 않고서는 새 위치 인수를 추가할 수 없다는 것이다.</strong> 인수 리스트의 앞쪽에 위치 인수를 추가하면 기존의 호출 코드가 수정 없이는 이상하게 동작함(사용법까지 바꿔야함)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#앞에 sequence인수추가</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log</span><span class="params">(sequence, message, *values)</span>:</span>  </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> values:</span><br><span class="line">        print(<span class="string">'%s: %s'</span> % (sequence, message))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        values_str = <span class="string">', '</span>.join(str(x) <span class="keyword">for</span> x <span class="keyword">in</span> values)</span><br><span class="line">        print(<span class="string">'%s: %s: %s'</span> % (sequence, message, values_str))</span><br><span class="line"></span><br><span class="line">log(<span class="number">1</span>, <span class="string">'Favorites'</span>, <span class="number">7</span>, <span class="number">33</span>)      <span class="comment"># New usage is OK</span></span><br><span class="line">log(<span class="string">'Favorite numbers'</span>, <span class="number">7</span>, <span class="number">33</span>)  <span class="comment"># Old usage breaks</span></span><br></pre></td></tr></table></figure>
+
+<p>이 코드의 문제는 두 번째 호출이 sequence인수를 받지 못했기때문에 7을 message파라미터로 사용해버렸다. 이런 버그는 예외를 발생시키지 않으면 찾기 매우 어렵다. 완전히 없애려면 *arg를 받는 함수를 확장할 때 키워드 전용(*krewg)인수를 사용해야한다(B21참조)</p>
+<h3 id="정리-2"><a href="#정리-2" class="headerlink" title="정리"></a>정리</h3><ul>
+<li>def문에서 *arg사용시 가변 개수의 위치 인수를 받을수있다</li>
+<li><strong>제너레이터와 *연산자를 같이 사용시 메모리 부족으로 프로그램망가짐가능</strong></li>
+<li>*args를 받는 함수에 새 위치 파라미터를 추가하면 찾기 어려운 버그생성가능</li>
+</ul>
+<h2 id="키워드-인수로-선택적인-동작을-제공하자-B19"><a href="#키워드-인수로-선택적인-동작을-제공하자-B19" class="headerlink" title="키워드 인수로 선택적인 동작을 제공하자 (B19)"></a>키워드 인수로 선택적인 동작을 제공하자 (B19)</h2><p>대부분의 프로그래밍 언어처럼 파이썬에서도 함수를 호출시 인수를 위치로 전달할 수 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">remainder</span><span class="params">(number, divisor)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> number % divisor</span><br><span class="line"></span><br><span class="line"><span class="keyword">assert</span> remainder(<span class="number">20</span>, <span class="number">7</span>) == <span class="number">6</span></span><br></pre></td></tr></table></figure>
+
+<p>파이썬 함수의 위치 인수를 모두 키워드로 전달도 가능하다. 이때 인수의 이름을 함수 호출의 광호 안에 있는 할당문에서 사용한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">remainder(<span class="number">20</span>, <span class="number">7</span>)</span><br><span class="line">remainder(<span class="number">20</span>, divisor=<span class="number">7</span>)</span><br><span class="line">remainder(number=<span class="number">20</span>, divisor=<span class="number">7</span>) <span class="comment">#키워드 인수로 전달됨.</span></span><br><span class="line">remainder(divisor=<span class="number">7</span>, number=<span class="number">20</span>)</span><br></pre></td></tr></table></figure>
+
+<p>위치 인수는 반드시 키워드 인수 앞에서 먼저 지정되어야한다</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">remainder(number=<span class="number">20</span>,<span class="number">2</span>) <span class="comment">#말도안되는짓</span></span><br></pre></td></tr></table></figure>
+
+<p>키워드 인수의 유연성은 세 가지 중요한 이점이 있다.</p>
+<p>첫번째는 코드를 보는 사람이 함수 호출을 명확하게 이해할수있다</p>
+<p>두번째는 함수를 정의할 때 기본값을 설정할수있다.(덕분에 다들 기본값써서 간결하게 호출가능)</p>
+<p>아래와 같이 period값을 호출시 주어지지않아도 함수는 동작할수있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">flow_rate</span><span class="params">(weight_diff, time_diff, period=<span class="number">1</span>)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> (weight_diff / time_diff) * period</span><br></pre></td></tr></table></figure>
+
+<p>동적 기본 인수를 지정하려면 (B20참조)</p>
+<p>세번째는 기존의 호출 코드와 호환성을 유지하면서도 함수의 파라미터를 확장할 수 있는 강력한 수단이 된다는 점이다.(*args와 큰 차이)</p>
+<blockquote>
+<p>이러면 반대로 인수들이 깔끔해보이지 않는데 더 좋은 방법으로 키워드 전용 인수를 활용하자(B21참조)</p>
+</blockquote>
+<h3 id="정리-3"><a href="#정리-3" class="headerlink" title="정리"></a>정리</h3><ul>
+<li>함수의 인수를 위치나 키워드로 지정가능</li>
+<li>위치 인수만으로는 이해하기 어려울때 키워드쓰면 목적명확</li>
+<li>키워드 인수에 기본값을 지정하면 호출이 쉬워짐</li>
+<li>선택적인 키워드 인수는 항상 위치가 아닌 키워드로 넘겨야 한다</li>
+</ul>
+<h2 id="동적-기본-인수를-지정하려면-None과-docstring을-이용하자-B20"><a href="#동적-기본-인수를-지정하려면-None과-docstring을-이용하자-B20" class="headerlink" title="동적 기본 인수를 지정하려면 None과 docstring을 이용하자(B20)(???)"></a>동적 기본 인수를 지정하려면 None과 docstring을 이용하자(B20)(???)</h2><p>키워드 인수의 기본값으로 비정적타입을 사용해야 할 때가 있다.</p>
+<p>예를 들어 이벤트 발생시각까지 포함해 로깅 메세지를 출력한다고하자</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log</span><span class="params">(message, when=datetime.now<span class="params">()</span>)</span>:</span></span><br><span class="line">    print(<span class="string">'%s: %s'</span> % (when, message))</span><br><span class="line"></span><br><span class="line">log(<span class="string">'Hi there!'</span>)</span><br><span class="line">sleep(<span class="number">0.1</span>)</span><br><span class="line">log(<span class="string">'Hi again!'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>위 코드에 문제는 datetime.now는 함수를 정의할 때 딱 한번만 실행되므로 타임스탬프가 동일하게 출력된다. <strong>기본 인수의 값은 모듈이 로드될 때 한 번만 평가되며 프로그램 시작시 일어난다.</strong> 모듈이 로드된후 그때 딱 한번만 평가되고 기본 인수인 datetime.now를 다시 평가하지 않는다. </p>
+<p>파이썬에서 우리가 기대한 결과가 나오게 하려면 기본값을 None으로 설정하고 docstring(문서화 문자열)으로 실제 동작을 문서화하는 게 관례다 (B49참조)</p>
+<p>코드에서 인수 값으로 None이 나타나면 알맞는 기본값을 할당하면 된다</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log</span><span class="params">(message, when=None)</span>:</span></span><br><span class="line">    <span class="string">"""Log a message with a timestamp.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        message: Message to print.</span></span><br><span class="line"><span class="string">        when: datetime of when the message occurred.</span></span><br><span class="line"><span class="string">            Defaults to the present time.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    when = datetime.now() <span class="keyword">if</span> when <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> when</span><br><span class="line">    print(<span class="string">'%s: %s'</span> % (when, message))</span><br></pre></td></tr></table></figure>
+
+<p>기본 인수 값으로 None을 사용하는 방법은 인수가 수정가능(mutable)할 때 특히 중요하다.</p>
+<p>예를 들어 JSON데이터로 인코드된 값을 로드한다고 해보자. 데이터 디코딩이 실패하면 기본값으로 빈 딕셔너리를 반환하려고 한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decode</span><span class="params">(data, default=&#123;&#125;)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">return</span> json.loads(data)</span><br><span class="line">    <span class="keyword">except</span> ValueError:</span><br><span class="line">        <span class="keyword">return</span> default</span><br></pre></td></tr></table></figure>
+
+<p>위의 코드에는 datetime.now 예제와 같은 문제가 있다. 기본 인수 값은 (모듈이 로드될 때) 딱 한번만 평가되므로, 기본값으로 설정한 딕셔너리를 모든 decode 호출에서 공유한다. 이 문제가 나타는 오류를 보자</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">foo = decode(<span class="string">'bad data'</span>)</span><br><span class="line">foo[<span class="string">'stuff'</span>] = <span class="number">5</span></span><br><span class="line">bar = decode(<span class="string">'also bad'</span>)</span><br><span class="line">bar[<span class="string">'meep'</span>] = <span class="number">1</span></span><br><span class="line">print(<span class="string">'Foo:'</span>, foo)</span><br><span class="line">print(<span class="string">'Bar:'</span>, bar)</span><br><span class="line"><span class="keyword">assert</span> foo <span class="keyword">is</span> bar</span><br></pre></td></tr></table></figure>
+
+<p>아마 각각 단일 키와 값을 담은 서로 다른 딕셔너리 두 개를 예상했을 것이다.</p>
+<p>하지만 하나를 수정하면 다른 하나도 수정되는 것처럼 보인다. 이런 문제의 원인은 foo와 bar 둘다 기본 파라미터와 같다는 점이다. 즉, 이 둘은 같은 딕셔너리 객체이다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assert</span> foo <span class="keyword">is</span> bar</span><br></pre></td></tr></table></figure>
+
+<p>키워드 인수의 기본값을 None으로 설정하고 함수의 docstring에 동작을 문서화해서 이 문제를 고친다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decode</span><span class="params">(data, default=None)</span>:</span></span><br><span class="line">    <span class="string">"""Load JSON data from a string.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        data: JSON data to decode.</span></span><br><span class="line"><span class="string">        default: Value to return if decoding fails.</span></span><br><span class="line"><span class="string">            Defaults to an empty dictionary.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> default <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        default = &#123;&#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">return</span> json.loads(data)</span><br><span class="line">    <span class="keyword">except</span> ValueError:</span><br><span class="line">        <span class="keyword">return</span> default</span><br></pre></td></tr></table></figure>
+
+<p>위에 코드를 보면 알수있는것은 default=None이 모듈 로딩 때 객체 하나의 객체가됨. 그래서 decode(data, 1)이렇게 입력하면 1을 default=1이 그때 메모리에 할당하고, decode(data)를 하면 default=None으로 함수호출됨(메모리에 없음).</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">foo = decode(<span class="string">'bad data'</span>)</span><br><span class="line">foo[<span class="string">'stuff'</span>] = <span class="number">5</span></span><br><span class="line">bar = decode(<span class="string">'also bad'</span>)</span><br><span class="line">bar[<span class="string">'meep'</span>] = <span class="number">1</span></span><br><span class="line">print(<span class="string">'Foo:'</span>, foo)</span><br><span class="line">print(<span class="string">'Bar:'</span>, bar)</span><br></pre></td></tr></table></figure>
+
+<h3 id="정리-4"><a href="#정리-4" class="headerlink" title="정리"></a>정리</h3><ul>
+<li>기본 인수는 모듈 로드 시점에 함수 정의 과정에서 딱 한번만 평가된다. 따라서 {},[]같은 동적 값에는 이상하게 작동가능</li>
+<li>값이 동적인 키워드 인수에는 기본값으로 None을 사용하자. 그러고 나서 함수의 docstring에 실제 기본 동작을 문서화하자</li>
+</ul>
+<h2 id="키워드-전용-인수로-명료성을-강요하자-B21"><a href="#키워드-전용-인수로-명료성을-강요하자-B21" class="headerlink" title="키워드 전용 인수로 명료성을 강요하자 (B21)"></a>키워드 전용 인수로 명료성을 강요하자 (B21)</h2><p>키워드로 인수를 넘기는 방법은 파이썬 함수의 강력한 기능이다 (B19 참조)</p>
+<p>이 덕분에 쓰임새가 분명한 코드를 작성가능</p>
+<p>예를 들어 어떤 숫자를 다른 숫자를 나눈다고 해보자. 하지만 특별한 경우를 매우 주의해야한다. 때로는 ZeroDivisionError예외를 무시하고 무한대 값을 반환하고 싶을 수 있다. 어떨 때는 OverflowError예외를 무시하고 0을 반환하고 싶을수있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">safe_division</span><span class="params">(number, divisor, ignore_overflow,</span></span></span><br><span class="line"><span class="function"><span class="params">                  ignore_zero_division)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">return</span> number / divisor</span><br><span class="line">    <span class="keyword">except</span> OverflowError: <span class="comment">#산술 연산의 결과가 너무 커서 표현할 수 없을 때 발생합니다. </span></span><br><span class="line">        <span class="keyword">if</span> ignore_overflow:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span></span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError: <span class="comment">#영으로 나눌때 에러</span></span><br><span class="line">        <span class="keyword">if</span> ignore_zero_division:</span><br><span class="line">            <span class="keyword">return</span> float(<span class="string">'inf'</span>)  <span class="comment">#float는 소수점 존재 숫자, float('inf')는 양의 무한대를 나타내는 데이터를 나타내는법</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
+
+<p>위의 함수 사용은 함수 호출은 나눗셈에서 일어나는 float오버플로우를 무시하고 0을 반환한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">result = safe_division(<span class="number">1.0</span>, <span class="number">10</span>**<span class="number">500</span>, <span class="literal">True</span>, <span class="literal">False</span>)</span><br><span class="line">print(result)</span><br><span class="line"><span class="keyword">assert</span> result <span class="keyword">is</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">result = safe_division(<span class="number">1.0</span>, <span class="number">0</span>, <span class="literal">False</span>, <span class="literal">True</span>)</span><br><span class="line">print(result)</span><br><span class="line"><span class="keyword">assert</span> result == float(<span class="string">'inf'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>각각의 예시를 실행하면 assert가 뜨지않는다</p>
+<p>문제는 예외 무시 동작을 제어하는 두 불 인수의 위치를 혼동하기 쉽다. 따라서 키워드 인수를 사용하자.(가독성도 높아짐)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">safe_division_b</span><span class="params">(number, divisor, ignore_overflow=False,</span></span></span><br><span class="line"><span class="function"><span class="params">                  ignore_zero_division=False)</span>:</span></span><br><span class="line">  <span class="comment">#...</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">safe_division_b(<span class="number">1.0</span>, <span class="number">10</span>**<span class="number">500</span>, ignore_overflow=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>위처럼 위치상관없이, 선택적인 동작이라서 함수를 호출하는 쪽에 키워드 인수로 의도를 명확하게 드러내라고 강요할 방법이 없다는점이 문제이다. 여전히 위치 인수로도 사용이 가능하기때문이다.</p>
+<p>이처럼 복잡한 함수를 작성할 때는 호출하는 쪽에서 의도를 명확히 드러내는 인수를 넘기도록 요구하는 것이 좋다.</p>
+<p><strong>파이썬3에서는 키워드 전용 인수로 함수를 정의해서 의도를 명확히 드러내도록 요구할수있다.(키워드 전용 인수는 키워드로만 넘길 뿐, 위치로는 절대 넘길 수 없다)</strong></p>
+<p>다음은 키워드 전용 인수로 safe_division_c 함수를 다시 정의한 버전이다. <strong>인수 리스트에 있는 <code>*</code> 기호는 위치 인수의 끝과 키워드 전용 인수의 시작을 가르킨다.</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">safe_division_c</span><span class="params">(number, divisor, *,</span></span></span><br><span class="line"><span class="function"><span class="params">                    ignore_overflow=False,</span></span></span><br><span class="line"><span class="function"><span class="params">                    ignore_zero_division=False)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">return</span> number / divisor</span><br><span class="line">    <span class="keyword">except</span> OverflowError:</span><br><span class="line">        <span class="keyword">if</span> ignore_overflow:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span></span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="keyword">if</span> ignore_zero_division:</span><br><span class="line">            <span class="keyword">return</span> float(<span class="string">'inf'</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
+
+<p>이제 키워드 인수가 아닌 위치 인수를 사용하는 함수 호출은 동작못한다</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">safe_division_c(<span class="number">1.0</span>, <span class="number">10</span>**<span class="number">500</span>, ignore_overflow=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">TypeError: safe_division_c() takes <span class="number">2</span> positional arguments but <span class="number">4</span> were given</span><br></pre></td></tr></table></figure>
+
+<h3 id="파이썬-2의-키워드-전용-인수"><a href="#파이썬-2의-키워드-전용-인수" class="headerlink" title="파이썬 2의 키워드 전용 인수"></a>파이썬 2의 키워드 전용 인수</h3><p>인수 리스트에 <code>**</code> 연산자를 사용해 올바르지 않은 함수 호출을 할 때 TypeError를 일으키는 방법으로 같은 동작을 만들 수 있다. 가변 개수의 위치 인수 대신에 키어드 인수를 몇 개든 받을수있다는 점만 빼면  <code>**</code> 연산자는 <code>*</code> 연산자와 비슷하다(B 18 참조 )</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_args</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'Positional:'</span>, args)</span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'Keyword:'</span>, kwargs)</span><br><span class="line"></span><br><span class="line">print_args(<span class="number">1</span>, <span class="number">2</span>, foo=<span class="string">'bar'</span>, stuff=<span class="string">'meep'</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span></span><br><span class="line">Positional: (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">Keyword: &#123;<span class="string">'foo'</span>: <span class="string">'bar'</span>, <span class="string">'stuff'</span>: <span class="string">'meep'</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>파이썬2에서는 safe_division이 **kwargs를 받게 만들어서 키워드 전용 인수를 받게 한다. 그런 다음 pop메서드로 kwargs딕셔너리에서 원하는 키워드 인수를 꺼낸다. 키가 없을 때의 기본값은 pop메서드의 두번째 인수로 지정한다. 마지막으로 kwargs에 더는 남아 있는 키워드가 없을을 환이하여 호출하는 쪽에서 올바르지 않는 인수를 넘기지 않게 한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">safe_division_d</span><span class="params">(number, divisor, **kwargs)</span>:</span></span><br><span class="line">    ignore_overflow = kwargs.pop(<span class="string">'ignore_overflow'</span>, <span class="literal">False</span>)</span><br><span class="line">    ignore_zero_div = kwargs.pop(<span class="string">'ignore_zero_division'</span>, <span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">if</span> kwargs:</span><br><span class="line">        <span class="keyword">raise</span> TypeError(<span class="string">'Unexpected **kwargs: %r'</span> % kwargs)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">return</span> number / divisor</span><br><span class="line">    <span class="keyword">except</span> OverflowError:</span><br><span class="line">        <span class="keyword">if</span> ignore_overflow:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span></span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="keyword">if</span> ignore_zero_div:</span><br><span class="line">            <span class="keyword">return</span> float(<span class="string">'inf'</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">assert</span> safe_division_d(<span class="number">1.0</span>, <span class="number">10</span>) == <span class="number">0.1</span></span><br><span class="line"><span class="keyword">assert</span> safe_division_d(<span class="number">1.0</span>, <span class="number">0</span>, ignore_zero_division=<span class="literal">True</span>) == float(<span class="string">'inf'</span>)</span><br><span class="line"><span class="keyword">assert</span> safe_division_d(<span class="number">1.0</span>, <span class="number">10</span>**<span class="number">500</span>, ignore_overflow=<span class="literal">True</span>) <span class="keyword">is</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>이렇 구성하면 키워드 인수를 위로 넘기려 하면 파이썬 3와 마찬가지로 제대로 동작하지 않습니다.</p>
+<h3 id="정리-5"><a href="#정리-5" class="headerlink" title="정리"></a>정리</h3><ul>
+<li>키워드 인수는 함수 호출의 의도를 더 명확하게 해준다</li>
+<li>불 플래그를 여러 개 받는 함수처럼 햇갈리기 휘운 함수는 키워드 전용 인수를 사용하자</li>
+<li>파이썬 3는 함수의 키워드 전용 인수 문법을 명시적으로 지원한다</li>
+<li>파이썬 2에선 **kwargs를 사용하고 TypeError에외를 직접 일으키는 방법으로 함수의 키워드 전용 인수를 흉내 낼수있다</li>
+</ul>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/03/05/outsoucing-impactstation/" title= "처음 외주를 시작하며">
+                    <div class="nextTitle">처음 외주를 시작하며</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/02/18/review-python-coding-skill01/" title= "파이썬 코딩의 스킬 리뷰 1">
+                    <div class="prevTitle">파이썬 코딩의 스킬 리뷰 1</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2장-함수"><span class="toc-number">1.</span> <span class="toc-text">2장 - 함수</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#None을-반환하기보다는-예외를-일으키자"><span class="toc-number">1.1.</span> <span class="toc-text">None을 반환하기보다는 예외를 일으키자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#클로저가-변수-스코프와-상호-작용하는-방법을-알자"><span class="toc-number">1.2.</span> <span class="toc-text">클로저가 변수 스코프와 상호 작용하는 방법을 알자(!!!)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#데이터-얻어오기"><span class="toc-number">1.2.1.</span> <span class="toc-text">데이터 얻어오기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#파이썬2의-스코프"><span class="toc-number">1.2.2.</span> <span class="toc-text">파이썬2의 스코프</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#list-본체-정렬"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">list 본체 정렬</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list-정렬된-결과-반환"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">list 정렬된 결과 반환</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#리스트를-반환하는-대신-제너레이터를-고려하자-B16"><span class="toc-number">1.3.</span> <span class="toc-text">리스트를 반환하는 대신 제너레이터를 고려하자(B16)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정리"><span class="toc-number">1.3.1.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#인수를-순회할-때는-방어적으로-하자-B17"><span class="toc-number">1.4.</span> <span class="toc-text">인수를 순회할 때는 방어적으로 하자(B17)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정리-1"><span class="toc-number">1.4.1.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#가변-위치-인수로-깔끔하게-보이게-하자-B18"><span class="toc-number">1.5.</span> <span class="toc-text">가변 위치 인수로 깔끔하게 보이게 하자(B18)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정리-2"><span class="toc-number">1.5.1.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#키워드-인수로-선택적인-동작을-제공하자-B19"><span class="toc-number">1.6.</span> <span class="toc-text">키워드 인수로 선택적인 동작을 제공하자 (B19)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정리-3"><span class="toc-number">1.6.1.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#동적-기본-인수를-지정하려면-None과-docstring을-이용하자-B20"><span class="toc-number">1.7.</span> <span class="toc-text">동적 기본 인수를 지정하려면 None과 docstring을 이용하자(B20)(???)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정리-4"><span class="toc-number">1.7.1.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#키워드-전용-인수로-명료성을-강요하자-B21"><span class="toc-number">1.8.</span> <span class="toc-text">키워드 전용 인수로 명료성을 강요하자 (B21)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#파이썬-2의-키워드-전용-인수"><span class="toc-number">1.8.1.</span> <span class="toc-text">파이썬 2의 키워드 전용 인수</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#정리-5"><span class="toc-number">1.8.2.</span> <span class="toc-text">정리</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 113
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/02</span><a class="archive-post-title" href= "/2020/10/02/mysql/" >Mysql 기본 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-command/" >우분투 자주 쓰는 명령어</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
