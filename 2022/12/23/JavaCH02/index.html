@@ -1,0 +1,3884 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>Java 배우기 CH02 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Java 배우기 CH02</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Java 배우기 CH02
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Java">Java</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">1.1k</span>Reading time: <span class="post-count reading-time">7 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2022/12/23</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="자바-Java-CH02"><a href="#자바-Java-CH02" class="headerlink" title="자바(Java) CH02"></a>자바(Java) CH02</h1><p>Created Time: May 11, 2022 3:16 PM<br>Last Edited Time: August 28, 2022 12:22 AM<br>Tags: Java, Computer</p>
+<h1 id="단축키"><a href="#단축키" class="headerlink" title="단축키"></a>단축키</h1><ul>
+<li>command +shift + L (단축키 목록)</li>
+<li>command +D (한줄삭제)</li>
+<li>command +option+down (행단위 복사)</li>
+<li>option+command+A (멀티 컬럼 편집)</li>
+<li>option+up,down(행단위이동</li>
+<li>control + i(자동들여쓰기)</li>
+<li>control + / (주석처리)</li>
+<li>/*  <del>~</del>*/ (여러 행 모두 주석처리 감싸기)</li>
+<li>control+space 자동완성</li>
+<li>preferences에서 content assist 등록에 .a~z적어놓기</li>
+</ul>
+<p>알아두기</p>
+<ul>
+<li>printin() - 출력후 줄바꿈안함</li>
+<li>println() - 출력후 줄바꿈</li>
+</ul>
+<h1 id="변수"><a href="#변수" class="headerlink" title="변수"></a>변수</h1><h2 id="변수란"><a href="#변수란" class="headerlink" title="변수란?"></a>변수란?</h2><ul>
+<li>하나의 값을 저장할수있는 메모리 공간</li>
+<li>해당 메모리에 값을 저장하고 주소 대신 변수로 이름을 붙임.</li>
+</ul>
+<h2 id="변수-선언"><a href="#변수-선언" class="headerlink" title="변수 선언"></a>변수 선언</h2><ul>
+<li><code>변수 타입 변수이름;</code><br>int age</li>
+<li>이유:값을 저장할 공간을 마련하기위해!!</li>
+</ul>
+<h2 id="변수에-값-저장"><a href="#변수에-값-저장" class="headerlink" title="변수에 값 저장"></a>변수에 값 저장</h2><ul>
+<li>변수에 값 저장하기</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> age;  <span class="comment">//정수(int) 타입의 변수 age선언</span></span><br><span class="line">age = <span class="number">25</span>  <span class="comment">//변수 age에 25를 저장</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> age =<span class="number">25</span>; <span class="comment">// 한줄로 표현</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>변수의 초기화<br>변수에 처음으로 값을 저장</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> y = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> x = <span class="number">0</span>,y = <span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>변수의 종류<ul>
+<li>클래스 변수</li>
+<li>인스턴스 변수</li>
+<li>지역 변수<strong>(지역 변수는 읽기 전에 꼭! 초기화해야한다.)(자동 초기화 X)</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="변수의-값-읽어오기"><a href="#변수의-값-읽어오기" class="headerlink" title="변수의 값 읽어오기"></a>변수의 값 읽어오기</h2><ul>
+<li>변수 값이 필요한 곳에 변수 이름을 적는다</li>
+</ul>
+<h1 id="변수-타입"><a href="#변수-타입" class="headerlink" title="변수 타입"></a>변수 타입</h1><h2 id="변수타입"><a href="#변수타입" class="headerlink" title="변수타입"></a>변수타입</h2><ul>
+<li>변수의 타입은 저장할 값의 타입에 의해 결정된다.</li>
+<li>저장할 값의 타입과 일치하는 타입으로 변수를 선언</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> age = <span class="number">25</span>;   <span class="comment">// int 는 정수타입</span></span><br><span class="line"><span class="keyword">char</span> ch = <span class="string">"가"</span>;  <span class="comment">//char 는 문자타입</span></span><br><span class="line"><span class="keyword">double</span> pi= <span class="number">3.14</span>; <span class="comment">//double은 실수타입</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212231751987.png" alt="Untitled"></p>
+<h2 id="변수-상수-리터럴"><a href="#변수-상수-리터럴" class="headerlink" title="변수, 상수, 리터럴"></a>변수, 상수, 리터럴</h2><ul>
+<li>변수(variable): 하나의 값을 저장하기 위한 공간 (변경가능)</li>
+<li>상수(constant): 한번만 값을 저장 가능한 변수  (변경 불가)</li>
+<li>리터럴(literal): 그 자체로 값을 의미하는 것 (기존 일반적 상수와 개념 같음)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> score = <span class="number">100</span>; </span><br><span class="line">    score = <span class="number">200</span>; <span class="comment">//메모리값이 200으로 변경됨</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">int</span> MAX =<span class="number">100</span> <span class="comment">// MAX는 상수</span></span><br><span class="line">          MAX =<span class="number">200</span> <span class="comment">//에러</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> ch = <span class="string">"A"</span></span><br><span class="line">String str= <span class="string">"abc"</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>리터럴(100,200,A,abc)</li>
+<li>변수( score, ch, str)</li>
+<li>상수(MAX)</li>
+</ul>
+<h2 id="리터럴의-타입과-접미사"><a href="#리터럴의-타입과-접미사" class="headerlink" title="리터럴의 타입과 접미사"></a>리터럴의 타입과 접미사</h2><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212231751980.png" alt="Untitled"></p>
+<ul>
+<li>리터럴에 따라 저장할 값의 타입 구별됨</li>
+<li>정수형의 Long타입만 접미사 L<br>(나머지는 int 타입이고 byte, short리터럴은없다)</li>
+<li>실수형의 float타입 접미사 f<br>(double타입은 생략가능, 접미사 d)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">boolean</span> power = <span class="keyword">true</span>; <span class="comment">//false, true만 가능</span></span><br><span class="line"><span class="keyword">char</span> ch = <span class="string">'A'</span>; <span class="comment">// 따옴포 1개,,1개의 문자만 저장가능, '\n'도 이에포함</span></span><br><span class="line">String str= <span class="string">"ABC"</span>; <span class="comment">// 타옴포 2개,, 문자열은 1개이상 저장가능</span></span><br><span class="line"><span class="keyword">byte</span> b = <span class="number">127</span>; <span class="comment">//정수인데 L없으니까 int타입임, byte타입의 리터럴은따로없음</span></span><br><span class="line"><span class="keyword">int</span> i = <span class="number">100</span>; <span class="comment">// 10진수</span></span><br><span class="line"><span class="keyword">int</span> oct = <span class="number">0100</span>; <span class="comment">// 8진수</span></span><br><span class="line"><span class="keyword">int</span> bex = <span class="number">0x100</span>; <span class="comment">//16진수</span></span><br><span class="line"><span class="keyword">int</span> twe = <span class="number">0b0101</span> <span class="comment">// 2진수</span></span><br><span class="line"><span class="keyword">long</span> l = <span class="number">10_000_000_000L</span> <span class="comment">// Long타입 접미사 L확인!!, int는 최대 20억까지밖에안됨, _은 안해도됨</span></span><br><span class="line"><span class="keyword">long</span> l = <span class="number">100</span>; <span class="comment">// int 리터럴도 가능하긴함</span></span><br><span class="line"><span class="keyword">float</span> f = <span class="number">3.14f</span>; <span class="comment">// 3.14에서 f 생략 불가</span></span><br><span class="line"><span class="keyword">double</span> d = <span class="number">3.14</span>d; <span class="comment">// d 생략가능</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>기본적으로 변수의 타입과 리터럴의 타입이 일치해야함</li>
+<li>일치하지 않지만 허용되는 경우도 존재함</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">10</span>. == <span class="number">10.0</span> <span class="comment">//d타입</span></span><br><span class="line">.<span class="number">10</span> == <span class="number">0.10</span>  <span class="comment">//d 타입</span></span><br><span class="line"><span class="number">10f</span> == <span class="number">10.0f</span> <span class="comment">//f 타입</span></span><br><span class="line"><span class="number">1e3</span> == <span class="number">1000.0</span> <span class="comment">//d타입, e는 실수형사용하며, 10^n을 의미함</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="변수와-리터럴의-타입-불일치"><a href="#변수와-리터럴의-타입-불일치" class="headerlink" title="변수와 리터럴의 타입 불일치"></a>변수와 리터럴의 타입 불일치</h2><ul>
+<li>범위가 변수(그릇)&gt;리터럴(물건) 인 경우 가능</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="string">'A'</span> ; <span class="comment">// int&gt; char  저장범위 더 넒음, 문자코드인 65가 저장됨</span></span><br><span class="line"><span class="keyword">long</span> l = <span class="number">123</span>; <span class="comment">// long&gt;int </span></span><br><span class="line"><span class="keyword">double</span> d = <span class="number">3.14f</span> <span class="comment">//double &gt; float</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>범위가 변수&lt;리터럴 인 경우 에러</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">30_0000_0000</span>; <span class="comment">// int의 범위 (+-20억) 벗어남(L안붙이면 int니까..)</span></span><br><span class="line"><span class="keyword">long</span> l = <span class="number">3.14f</span> ; <span class="comment">// long&lt;float</span></span><br><span class="line"><span class="keyword">float</span> f = <span class="number">3.14</span>; <span class="comment">// float &lt; double</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>byte, short 변수에 int리터럴 저장가능<br>(단, 변수의 타입의ㅏ 범위 이내이여야 함</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span> b = <span class="number">100</span>; <span class="comment">// 가능, byte의 범위 -128~127에 속함</span></span><br><span class="line"><span class="keyword">byte</span> b = <span class="number">128</span>; <span class="comment">// 범위 초과</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="문자와-문자열"><a href="#문자와-문자열" class="headerlink" title="문자와 문자열"></a>문자와 문자열</h1><ul>
+<li>문자 char는 반드시 하나의 문자만 가능하고</li>
+<li>String은 문자열을 저장가능하다</li>
+<li>문자열은 연속된 여러문자지만</li>
+<li>String은 빈문자열, 문자하나도 저장가능</li>
+<li>문자열 + any-type ⇒ 문자열<br>any-type + 문자열 ⇒ 문자열<br>””+7+7&gt;&gt;”77”<br>7+7+””&gt;&gt;”14”</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> ch = <span class="string">'A'</span>;</span><br><span class="line"><span class="keyword">char</span> ch = <span class="string">'AB'</span> ;<span class="comment">//에러</span></span><br><span class="line">String s = <span class="string">"ABC"</span>;</span><br><span class="line"></span><br><span class="line">String s2 = <span class="keyword">new</span> String(<span class="string">"AB"</span>); <span class="comment">//String은 클래스인데 원래는 이렇게 선언해야 사용가능,하지만 예외적으로 </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">byte</span> b = <span class="number">127</span>;</span><br><span class="line"><span class="keyword">char</span> x = <span class="string">'A'</span>;</span><br><span class="line">String y = <span class="string">"ABC"</span>;</span><br><span class="line"></span><br><span class="line">System.out.println(x); <span class="comment">//A</span></span><br><span class="line">System.out.println(b+b+y); <span class="comment">//254ABC</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="두-변수의-값-바꾸기"><a href="#두-변수의-값-바꾸기" class="headerlink" title="두 변수의 값 바꾸기"></a>두 변수의 값 바꾸기</h1><ul>
+<li>새로운 하나의 변수 필요함</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String y = <span class="string">"ABC"</span>,z = <span class="string">"sds"</span>;</span><br><span class="line">String tmp = <span class="string">""</span>;</span><br><span class="line">tmp=y;</span><br><span class="line">y=z;</span><br><span class="line">z=tmp;</span><br></pre></td></tr></table></figure>
+
+<h1 id="값의-타입"><a href="#값의-타입" class="headerlink" title="값의 타입"></a>값의 타입</h1><ul>
+<li>기본형 값(data)<ul>
+<li>문자(char)</li>
+<li>숫자<ul>
+<li>정수(byte, short, int, long)</li>
+<li>실수(float, double)</li>
+</ul>
+</li>
+<li>논리(bollean)</li>
+</ul>
+</li>
+</ul>
+<h2 id="기본형과-참조형"><a href="#기본형과-참조형" class="headerlink" title="기본형과 참조형"></a>기본형과 참조형</h2><ul>
+<li>기본형<ul>
+<li>(오직 8개)</li>
+<li>(char, byte,short, int, long, float, double, bollean)</li>
+<li><strong>실제 값을 저장</strong></li>
+</ul>
+</li>
+<li>참조형<ul>
+<li>(기본형을 제외한 나머지)</li>
+<li>(String, System등)</li>
+<li>메모리 주소를 저장(4byte 또는 8byte)</li>
+<li>(32bit JVM은 40억byte 메모리사용가능&gt;&gt;실제사용은 2GB남짓</li>
+<li>64bit JVM은 160경 byte 메모리사용가능</li>
+<li><strong>참조변수는 객체의 주소를 저장하기 위한것</strong></li>
+</ul>
+</li>
+</ul>
+<h1 id="자바의-기본형-종류와-범위"><a href="#자바의-기본형-종류와-범위" class="headerlink" title="자바의 기본형 종류와 범위"></a>자바의 기본형 종류와 범위</h1><h2 id="기본형"><a href="#기본형" class="headerlink" title="기본형"></a>기본형</h2><ul>
+<li>논리형: ture, false</li>
+<li>문자형: 문자를 저장하는데사용되며, 변수당 하나의 문자만을 저장 가능</li>
+<li>정수형: 정수 값을 저장하는데 사용된다. 주로 int, long</li>
+<li>실수형: 실수 값을 저장하는데 사용된다. float와 double</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212231751999.png" alt="Untitled"></p>
+<ul>
+<li>default는 각각 int, double</li>
+</ul>
+<h2 id="기본형-표현범위-1-3"><a href="#기본형-표현범위-1-3" class="headerlink" title="기본형 표현범위(1/3)"></a>기본형 표현범위(1/3)</h2><ul>
+<li>n비트로 표현할수있는 값의 개수: 2^n개</li>
+<li>n비트로 표현할 수있는 부호없는 정수의범위(0을 포함): 0~ 2^n-1</li>
+<li>n비트로 표현할 수있는 부호 있는 정수의 범위(0을 포함): -2^(n-1)~2^(n-1) -1</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212231751993.png" alt="Untitled"></p>
+<h2 id="기본형-표현범위-2-3"><a href="#기본형-표현범위-2-3" class="headerlink" title="기본형 표현범위(2/3)"></a>기본형 표현범위(2/3)</h2><ul>
+<li>byte타입은 1bit의 부호비트 + 7bit 저장공간<br>-128<del>0</del>+127 ⇒ 256개</li>
+<li>short 1bit의 부호비트 + 15bit 저장공간<br>-32768<del>0</del>+32767 ⇒ 2^16개 표현가능</li>
+<li>char 16bit로 구성<br>0~65535 ⇒ 2^16개</li>
+<li>int 1bit의 부호비트 + 31bit 저장공간  (약 -20억~20억)<br>-2^(32-1) ~0 ~+2^(32-1) -1 ⇒ 2^32개</li>
+<li>long 1bit의 부호비트 + 63bit 저장공간<br>-2^(64-1) ~0 ~+2^(64-1) -1 ⇒ 2^64개</li>
+<li>각타입의 크기만 알면 구할수있다. java 정수형에는 모두 부호가존재</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212231751462.png" alt="Untitled"></p>
+<h2 id="기본형-표현범위-3-3"><a href="#기본형-표현범위-3-3" class="headerlink" title="기본형 표현범위(3/3)"></a>기본형 표현범위(3/3)</h2><ul>
+<li>부호, 지수(10^n), 가수로 나눠서 저장되기때문에, 훨씬더 큰 수를 기록가능함</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212231751008.png" alt="Untitled"></p>
+<h1 id="printf를-이용한-출력"><a href="#printf를-이용한-출력" class="headerlink" title="printf를 이용한 출력"></a>printf를 이용한 출력</h1><ul>
+<li><p>println() 의 단점 (출력형식 지정불가)</p>
+<ul>
+<li>실수의 자리수 조절 불가<br>10.0/3; ⇒ 3.33333333</li>
+<li>10진수로만 출력된다.<br>8진수, 16진수로 출력을 10진수변환됨</li>
+</ul>
+</li>
+<li><p>printf()로 출력형식 지정가능 (”지시자”사용을 통해)</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">System.out.printf(<span class="string">"%.2f"</span>, <span class="number">10.0</span>/<span class="number">3</span>); <span class="comment">//소수점둘째자리까지 출력</span></span><br><span class="line">System.out.printf(<span class="string">"%d"</span>, <span class="number">0x1A</span>);  <span class="comment">//10진수 출력 </span></span><br><span class="line">System.out.printf(<span class="string">"%X"</span>, <span class="number">0x1A</span>);  <span class="comment">//16진수출력</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="printf-의-지시자-1-3"><a href="#printf-의-지시자-1-3" class="headerlink" title="printf()의 지시자(1/3)"></a>printf()의 지시자(1/3)</h2><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212231751618.png" alt="Untitled"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.printf(<span class="string">"age:%d year:%d%n"</span>, <span class="number">14</span>, <span class="number">2017</span>); <span class="comment">//순서대로 들어가며, %n개행문자 쓰기</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>%n</code>개행문자 활용!!</li>
+</ul>
+<h2 id="printf-의-지시자-2-3"><a href="#printf-의-지시자-2-3" class="headerlink" title="printf()의 지시자(2/3)"></a>printf()의 지시자(2/3)</h2><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212231751107.png" alt="Untitled"></p>
+<h2 id="printf-의-지시자-3-3"><a href="#printf-의-지시자-3-3" class="headerlink" title="printf()의 지시자(3/3)"></a>printf()의 지시자(3/3)</h2><ul>
+<li>10진수 %d를 지시자로 활용, 자리수 지정가능</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212231752165.png" alt="Untitled"></p>
+<h1 id="화면에서-입력받기-Scanner"><a href="#화면에서-입력받기-Scanner" class="headerlink" title="화면에서 입력받기 - Scanner"></a>화면에서 입력받기 - Scanner</h1><h2 id="Scanner란"><a href="#Scanner란" class="headerlink" title="Scanner란?"></a>Scanner란?</h2><ul>
+<li>화면으로부터 데이터를 입력받는 기능을 제공하는 클래스</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.*</span><br><span class="line">Scanner scanner = <span class="keyword">new</span> Scanner(System.in);<span class="comment">// Scanner객체 생성 System.in은 화면입력 받는법</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//아래처럼 Scanner객체 사용</span></span><br><span class="line"><span class="keyword">int</span> num = scanner.nextInt(); <span class="comment">//화면에서 입력받는 정수를 num에 저장</span></span><br><span class="line">String input = scanner.nextLine(); <span class="comment">// 화면에서 입력받은 내용을 input에 저장</span></span><br><span class="line"><span class="keyword">int</span> num = Integer.parseInt(input); <span class="comment">// 문자열(input)을 숫자(num)으로 변환</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="계수기-counter"><a href="#계수기-counter" class="headerlink" title="계수기(counter)"></a>계수기(counter)</h1><ul>
+<li>오버플로우 발생시, 이진수 0000&gt;&gt; 1111&gt;&gt;오버플로우 발생&gt;&gt;0000으로됨</li>
+<li>최대값 +1 ⇒최소값</li>
+<li>최소값 -1 ⇒최대값</li>
+<li>결국 순환하게됨</li>
+<li>똑같이 부호없는정수(4bit) 0 -1 ⇒15</li>
+<li>똑같이 부호있는정수(4bit) -8 -1 ⇒+7</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212231751602.png" alt="Untitled"></p>
+<h1 id="타입간의-변환방법"><a href="#타입간의-변환방법" class="headerlink" title="타입간의 변환방법"></a>타입간의 변환방법</h1><h2 id="문자와-숫자간의-변환"><a href="#문자와-숫자간의-변환" class="headerlink" title="문자와 숫자간의 변환"></a>문자와 숫자간의 변환</h2><ul>
+<li>문자’0’을 더하면 숫자가됨</li>
+<li>문자’0’을 빼면 문자가됨</li>
+</ul>
+<h2 id="문자열로-변환"><a href="#문자열로-변환" class="headerlink" title="문자열로 변환"></a>문자열로 변환</h2><ul>
+<li>문자열 + any-type ⇒ 문자열</li>
+<li>any-type + 문자열 ⇒ 문자열</li>
+</ul>
+<h2 id="문자열을-숫자로-변환"><a href="#문자열을-숫자로-변환" class="headerlink" title="문자열을 숫자로 변환"></a>문자열을 숫자로 변환</h2><ul>
+<li>“3” ⇒ 3<br>Integer.parseInt(”3”) 사용</li>
+<li>“3.4” ⇒ 3.4<br>Double.parseDouble(”3.4”) 사용</li>
+</ul>
+<h2 id="문자열을-문자로-변환"><a href="#문자열을-문자로-변환" class="headerlink" title="문자열을 문자로 변환"></a>문자열을 문자로 변환</h2><ul>
+<li>“3”⇒’3’<br>”3”.charAt(0)</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212231751678.png" alt="Untitled"></p>
+<ul>
+<li>순서대로 [3,4,4,31,51] 출력됨</li>
+</ul>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2022/12/23/JavaCH03/" title= "Java 배우기 CH03">
+                    <div class="nextTitle">Java 배우기 CH03</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2022/12/23/JavaCH01/" title= "Java 배우기 CH01">
+                    <div class="prevTitle">Java 배우기 CH01</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#자바-Java-CH02"><span class="toc-number">1.</span> <span class="toc-text">자바(Java) CH02</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#단축키"><span class="toc-number">2.</span> <span class="toc-text">단축키</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#변수"><span class="toc-number">3.</span> <span class="toc-text">변수</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#변수란"><span class="toc-number">3.1.</span> <span class="toc-text">변수란?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#변수-선언"><span class="toc-number">3.2.</span> <span class="toc-text">변수 선언</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#변수에-값-저장"><span class="toc-number">3.3.</span> <span class="toc-text">변수에 값 저장</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#변수의-값-읽어오기"><span class="toc-number">3.4.</span> <span class="toc-text">변수의 값 읽어오기</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#변수-타입"><span class="toc-number">4.</span> <span class="toc-text">변수 타입</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#변수타입"><span class="toc-number">4.1.</span> <span class="toc-text">변수타입</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#변수-상수-리터럴"><span class="toc-number">4.2.</span> <span class="toc-text">변수, 상수, 리터럴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#리터럴의-타입과-접미사"><span class="toc-number">4.3.</span> <span class="toc-text">리터럴의 타입과 접미사</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#변수와-리터럴의-타입-불일치"><span class="toc-number">4.4.</span> <span class="toc-text">변수와 리터럴의 타입 불일치</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#문자와-문자열"><span class="toc-number">5.</span> <span class="toc-text">문자와 문자열</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#두-변수의-값-바꾸기"><span class="toc-number">6.</span> <span class="toc-text">두 변수의 값 바꾸기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#값의-타입"><span class="toc-number">7.</span> <span class="toc-text">값의 타입</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#기본형과-참조형"><span class="toc-number">7.1.</span> <span class="toc-text">기본형과 참조형</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#자바의-기본형-종류와-범위"><span class="toc-number">8.</span> <span class="toc-text">자바의 기본형 종류와 범위</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#기본형"><span class="toc-number">8.1.</span> <span class="toc-text">기본형</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#기본형-표현범위-1-3"><span class="toc-number">8.2.</span> <span class="toc-text">기본형 표현범위(1&#x2F;3)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#기본형-표현범위-2-3"><span class="toc-number">8.3.</span> <span class="toc-text">기본형 표현범위(2&#x2F;3)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#기본형-표현범위-3-3"><span class="toc-number">8.4.</span> <span class="toc-text">기본형 표현범위(3&#x2F;3)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#printf를-이용한-출력"><span class="toc-number">9.</span> <span class="toc-text">printf를 이용한 출력</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#printf-의-지시자-1-3"><span class="toc-number">9.1.</span> <span class="toc-text">printf()의 지시자(1&#x2F;3)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#printf-의-지시자-2-3"><span class="toc-number">9.2.</span> <span class="toc-text">printf()의 지시자(2&#x2F;3)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#printf-의-지시자-3-3"><span class="toc-number">9.3.</span> <span class="toc-text">printf()의 지시자(3&#x2F;3)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#화면에서-입력받기-Scanner"><span class="toc-number">10.</span> <span class="toc-text">화면에서 입력받기 - Scanner</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Scanner란"><span class="toc-number">10.1.</span> <span class="toc-text">Scanner란?</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#계수기-counter"><span class="toc-number">11.</span> <span class="toc-text">계수기(counter)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#타입간의-변환방법"><span class="toc-number">12.</span> <span class="toc-text">타입간의 변환방법</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#문자와-숫자간의-변환"><span class="toc-number">12.1.</span> <span class="toc-text">문자와 숫자간의 변환</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#문자열로-변환"><span class="toc-number">12.2.</span> <span class="toc-text">문자열로 변환</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#문자열을-숫자로-변환"><span class="toc-number">12.3.</span> <span class="toc-text">문자열을 숫자로 변환</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#문자열을-문자로-변환"><span class="toc-number">12.4.</span> <span class="toc-text">문자열을 문자로 변환</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 129
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH01/" >Java 배우기 CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH02/" >Java 배우기 CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH04/" >Java 배우기 CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH03/" >Java 배우기 CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH05/" >Java 배우기 CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH07/" >Java 배우기 CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH08/" >Java 배우기 CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH10/" >Java 배우기 CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH09/" >Java 배우기 CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH13/" >Java 배우기 CH13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH06/" >Java 배우기 CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH12/" >Java 배우기 CH12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH14/" >Java 배우기CH14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH11/" >Java 배우기 CH11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/ConnectDomainToNotion/" >Notion과 개인 Domain 연결하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/OSI7layer/" >OSI7계층과 TCP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/02</span><a class="archive-post-title" href= "/2020/10/02/mysql/" >Mysql 기본 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-command/" >우분투 자주 쓰는 명령어</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Notion"><span class="iconfont-archer">&#xe606;</span>Notion</span>
+    
+        <span class="sidebar-tag-name" data-tags="Domain"><span class="iconfont-archer">&#xe606;</span>Domain</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Tips"><span class="iconfont-archer">&#xe60a;</span>Tips</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="Java"><span class="iconfont-archer">&#xe60a;</span>Java</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
