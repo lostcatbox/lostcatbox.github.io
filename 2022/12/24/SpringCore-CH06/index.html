@@ -1,0 +1,4626 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>SpringCore CH06 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">SpringCore CH06</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            SpringCore CH06
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">5.3k</span>Reading time: <span class="post-count reading-time">33 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2022/12/24</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="스프링-MVC-1편-CH06"><a href="#스프링-MVC-1편-CH06" class="headerlink" title="스프링 MVC 1편 CH06"></a>스프링 MVC 1편 CH06</h1><p>Created Time: June 29, 2022 3:31 PM<br>Last Edited Time: December 23, 2022 5:06 PM</p>
+<h1 id="프로-젝트-생성"><a href="#프로-젝트-생성" class="headerlink" title="프로 젝트 생성"></a>프로 젝트 생성</h1><ul>
+<li>start.spring</li>
+<li>Project: Gradle Project<br>Language: Java<br>Spring Boot: 2.4.x</li>
+<li>Project Metadata<br>Group: hello</li>
+<li>Artifact: springmvc<br>Name: springmvc<br>Package name: hello.springmvc</li>
+<li>Packaging: <strong>Jar (주의!)</strong><br>Java: 11</li>
+<li>Dependencies: <strong>Spring Web</strong>, <strong>Thymeleaf</strong>, <strong>Lombok</strong></li>
+<li>Lombok은 설정에서 annotation 검색후 build에 enable설정해주기</li>
+</ul>
+<h2 id="Welcome페이지-만들기"><a href="#Welcome페이지-만들기" class="headerlink" title="Welcome페이지 만들기"></a>Welcome페이지 만들기</h2><ul>
+<li>스프링 부트에 Jar 를 사용하면 /resources/static/ 위치에 index.html 파일을 두면 Welcome 페이지로 처리해준다. (스프링 부트가 지원하는 정적 컨텐츠 위치에 /index.html 이 있으면 된다.</li>
+</ul>
+<hr>
+<h1 id="로깅-간단히-알아보기"><a href="#로깅-간단히-알아보기" class="headerlink" title="로깅 간단히 알아보기"></a>로깅 간단히 알아보기</h1><h2 id="로깅-라이브러리"><a href="#로깅-라이브러리" class="headerlink" title="로깅 라이브러리"></a><strong>로깅 라이브러리</strong></h2><ul>
+<li>스프링 부트 라이브러리를 사용하면 스프링 부트 로깅 라이브러리( spring-boot-starter-logging )가 함께 포함된다. 스프링 부트 로깅 라이브러리는 기본으로 다음 로깅 라이브러리를 사용한다.</li>
+<li>SLF4J - <a href="http://www.slf4j.org/" target="_blank" rel="noopener">http://www.slf4j.org</a><br>Logback - <a href="http://logback.qos.ch/" target="_blank" rel="noopener">http://logback.qos.ch</a></li>
+<li>로그 라이브러리는 Logback, Log4J, Log4J2 등등 수 많은 라이브러리가 있는데, 그것을 통합해서 인터페이스로 제공하는 것이 바로 SLF4J 라이브러리다.<br>쉽게 이야기해서 SLF4J는 인터페이스이고, 그 구현체로 Logback 같은 로그 라이브러리를 선택하면 된다. 실무에서는 스프링 부트가 기본으로 제공하는 Logback을 대부분 사용한다.</li>
+</ul>
+<h2 id="로그-정보"><a href="#로그-정보" class="headerlink" title="로그 정보"></a>로그 정보</h2><ul>
+<li>로그가 출력되는 포멧 확인<ul>
+<li>시간, 로그 레벨, 프로세스 ID, 쓰레드 명, 클래스명, 로그 메시지</li>
+</ul>
+</li>
+<li>로그 레벨 설정을 변경해서 출력 결과를 보자.<ul>
+<li>LEVEL: TRACE &gt; DEBUG &gt; INFO &gt; WARN &gt; ERROR</li>
+<li>개발 서버는 debug 출력(debug보다 상위는 모두 출력)</li>
+<li>운영 서버는 info 출력(info보다 상위는 모두 출력)</li>
+</ul>
+</li>
+<li>@Slf4j 로 변경</li>
+</ul>
+<h2 id="로그-선언"><a href="#로그-선언" class="headerlink" title="로그 선언"></a>로그 선언</h2><ul>
+<li>private Logger log = LoggerFactory.getLogger(getClass());</li>
+<li>private static final Logger log = LoggerFactory.getLogger(Xxx.class)</li>
+<li>@Slf4j : 롬복 사용 가능</li>
+</ul>
+<h2 id="로그-호출"><a href="#로그-호출" class="headerlink" title="로그 호출"></a>로그 호출</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogTestController</span> </span>&#123;</span><br><span class="line">      <span class="keyword">private</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(getClass());</span><br><span class="line">      <span class="meta">@RequestMapping</span>(<span class="string">"/log-test"</span>)</span><br><span class="line">      <span class="function"><span class="keyword">public</span> String <span class="title">logTest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          String name = <span class="string">"Spring"</span>;</span><br><span class="line">          log.trace(<span class="string">"trace log=&#123;&#125;"</span>, name);</span><br><span class="line">          log.debug(<span class="string">"debug log=&#123;&#125;"</span>, name);</span><br><span class="line">          log.info(<span class="string">" info log=&#123;&#125;"</span>, name);</span><br><span class="line">          log.warn(<span class="string">" warn log=&#123;&#125;"</span>, name);</span><br><span class="line">          log.error(<span class="string">"error log=&#123;&#125;"</span>, name);</span><br><span class="line"><span class="comment">//로그를 사용하지 않아도 a+b 계산 로직이 먼저 실행됨, 이런 방식으로 사용하면 X log.debug("String concat log=" + name);</span></span><br><span class="line"><span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">&#125; &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>잘못된예시) 로그를 사용하지 않아도 a+b 계산 로직이 먼저 실행됨, 이런 방식으로 사용하면 X<ul>
+<li>log.debug(“String concat log=” + name);</li>
+</ul>
+</li>
+</ul>
+<h2 id="매핑-정보"><a href="#매핑-정보" class="headerlink" title="매핑 정보"></a><strong>매핑 정보</strong></h2><ul>
+<li>@RestController<ul>
+<li>@Controller 는 반환 값이 String 이면 뷰 이름으로 인식된다. 그래서 <strong>뷰를 찾고 뷰가 랜더링</strong> 된다.</li>
+<li>@RestController 는 반환 값으로 뷰를 찾는 것이 아니라, <strong>HTTP 메시지 바디에 바로 입력</strong>한다.</li>
+<li>따라서 실행 결과로 ok 메세지를 받을 수 있다. @ResponseBody 와 관련이 있는데, 뒤에서 더 자세히 설명한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="로그레벨-설정"><a href="#로그레벨-설정" class="headerlink" title="로그레벨 설정"></a>로그레벨 설정</h2><ul>
+<li>application.properties</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#전체 로그 레벨 설정(기본 info)(root이므로 변경시 spring 실행때 log들도 다찍힘)</span><br><span class="line">logging.level.root=info</span><br><span class="line"></span><br><span class="line">#hello.springmvc 패키지와 그 하위 로그 레벨 설정 </span><br><span class="line">logging.level.hello.springmvc=debug</span><br></pre></td></tr></table></figure>
+
+<h2 id="올바른-로그-사용법"><a href="#올바른-로그-사용법" class="headerlink" title="올바른 로그 사용법"></a>올바른 로그 사용법</h2><ul>
+<li>log.debug(“data=”+data)<br>로그 출력 레벨을 info로 설정해도 해당 코드에 있는 “data=”+data가 실제 실행이 되어 버린다. 결과적으로 문자 더하기 연산이 발생한다. (연산자 실행되므로, 메모리사용O)</li>
+<li>log.debug(“data={}”, data)<br>로그 출력 레벨을 info로 설정하면 아무일도 발생하지 않는다. 따라서 앞과 같은 의미없는 연산이 발생하지 않는다.(debug()함수 호출시, 파라미터보고 해당안되면 바로 반환, 메모리사용X)</li>
+</ul>
+<h2 id="로그-사용시-장점"><a href="#로그-사용시-장점" class="headerlink" title="로그 사용시 장점"></a>로그 사용시 장점</h2><ul>
+<li>쓰레드 정보, 클래스 이름 같은 부가 정보를 함께 볼 수 있고, 출력 모양을 조정할 수 있다.</li>
+<li>로그 레벨에 따라 개발 서버에서는 모든 로그를 출력하고, 운영서버에서는 출력하지 않는 등 로그를 상황에 맞게 조절할 수 있다.(출력 범위 조절가능)</li>
+<li>시스템 아웃 콘솔에만 출력하는 것이 아니라, 파일이나 네트워크 등, 로그를 별도의 위치에 남길 수 있다.</li>
+<li>특히 파일로 남길 때는 일별, 특정 용량에 따라 로그를 분할하는 것도 가능하다.</li>
+<li>성능도 일반 System.out보다 좋다. (내부 버퍼링, 멀티 쓰레드 등등) 그래서 실무에서는 꼭 로그를 사용해야한다.</li>
+</ul>
+<h2 id="추가자료"><a href="#추가자료" class="headerlink" title="추가자료 (!!!)"></a>추가자료 (!!!)</h2><ul>
+<li>로그에 대해서 더 자세한 내용은 slf4j, logback을 검색해보자.<ul>
+<li>SLF4J - <a href="http://www.slf4j.org" target="_blank" rel="noopener">http://www.slf4j.org</a></li>
+<li>Logback - <a href="http://logback.qos.ch" target="_blank" rel="noopener">http://logback.qos.ch</a></li>
+</ul>
+</li>
+<li>스프링 부트가 제공하는 로그 기능은 다음을 참고하자.<ul>
+<li><a href="https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-" target="_blank" rel="noopener">https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-</a><br>features.html#boot-features-logging</li>
+</ul>
+</li>
+</ul>
+<h1 id="요청-매핑"><a href="#요청-매핑" class="headerlink" title="요청 매핑"></a>요청 매핑</h1><ul>
+<li>컨트롤러</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Mappingcontroller</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Logger log = LoggerFactory.getLogger(getClass());</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/hello-basic"</span>,method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">helloBasic</span><span class="params">()</span></span>&#123;</span><br><span class="line">        log.info(<span class="string">"basic"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="매핑-정보-1"><a href="#매핑-정보-1" class="headerlink" title="매핑 정보"></a>매핑 정보</h2><ul>
+<li>@RestController<ul>
+<li>@Controller 는 반환 값이 String 이면 뷰 이름으로 인식된다. 그래서 <strong>뷰를 찾고 뷰가 랜더링</strong> 된다.</li>
+<li>@RestController 는 반환 값으로 뷰를 찾는 것이 아니라, <strong>HTTP 메시지 바디에 바로 입력</strong>한다.</li>
+<li>따라서 실행 결과로 ok 메세지를 받을 수 있다. @ResponseBody 와 관련이 있는데, 뒤에서 더 자세히 설명한다.</li>
+</ul>
+</li>
+<li>@RequestMapping(“/hello-basic”)<ul>
+<li>/hello-basic URL 호출이 오면 이 메서드가 실행되도록 매핑한다.</li>
+<li>대부분의 속성을 배열[] 로 제공하므로 다중 설정이 가능하다. {“/hello-basic”, “/hello-go”}</li>
+</ul>
+</li>
+<li><strong>둘다 허용</strong><ul>
+<li>다음 두가지 요청은 다른 URL이지만, 스프링은 다음 URL 요청들을 같은 요청으로 매핑한다.<ul>
+<li>URL 요청: /hello-basic , /hello-basic/</li>
+<li>매핑: /hello-basic</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>HTTP 메서드</strong><ul>
+<li>@RequestMapping 에 method 속성으로 HTTP 메서드를 지정하지 않으면 HTTP 메서드와 무관하게 호출된다.</li>
+<li>모두 허용 GET, HEAD, POST, PUT, PATCH, DELETE</li>
+</ul>
+</li>
+</ul>
+<h2 id="HTTP-메서드-매핑"><a href="#HTTP-메서드-매핑" class="headerlink" title="HTTP 메서드 매핑"></a>HTTP 메서드 매핑</h2><ul>
+<li>만약 method아닌 다른 요청시 405반환</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* method 특정 HTTP 메서드 요청만 허용</span></span><br><span class="line"><span class="comment">* GET, HEAD, POST, PUT, PATCH, DELETE */</span></span><br><span class="line">  <span class="meta">@RequestMapping</span>(value = <span class="string">"/mapping-get-v1"</span>, method = RequestMethod.GET)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">mappingGetV1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      log.info(<span class="string">"mappingGetV1"</span>);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="HTTP-메서드-매핑-축약"><a href="#HTTP-메서드-매핑-축약" class="headerlink" title="HTTP 메서드 매핑 축약"></a><strong>HTTP 메서드 매핑 축약</strong></h2><ul>
+<li>아래처럼 사용해보자, 좀더 직관적이다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 편리한 축약 애노테이션 (코드보기) * <span class="doctag">@GetMapping</span></span></span><br><span class="line"><span class="comment">* <span class="doctag">@PostMapping</span></span></span><br><span class="line"><span class="comment">* <span class="doctag">@PutMapping</span></span></span><br><span class="line"><span class="comment">* <span class="doctag">@DeleteMapping</span></span></span><br><span class="line"><span class="comment">* <span class="doctag">@PatchMapping</span></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@GetMapping</span>(value = <span class="string">"/mapping-get-v2"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">mappingGetV2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  log.info(<span class="string">"mapping-get-v2"</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="PathVariable-경로-변수-사용"><a href="#PathVariable-경로-변수-사용" class="headerlink" title="PathVariable(경로 변수) 사용(!!!)"></a><strong>PathVariable(경로 변수) 사용(!!!)</strong></h2><ul>
+<li>최근 HTTP API는 다음과 같이 리소스 경로에 식별자를 넣는 스타일을 선호한다.</li>
+<li>@RequestMapping 은 URL 경로를 템플릿화 &gt;&gt; 매칭된 부분 편리한조회</li>
+<li>@PathVariable 의 이름과 파라미터 이름이 같으면 생략할 수 있다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * PathVariable 사용</span></span><br><span class="line"><span class="comment">     * 변수명이 같으면 생략 가능</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@PathVariable</span>("userId") String userId -&gt; <span class="doctag">@PathVariable</span> userId</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/mapping/&#123;userId&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">mappingPath</span><span class="params">(@PathVariable(<span class="string">"userId"</span>)</span> String data)</span>&#123;</span><br><span class="line">        log.info(<span class="string">"mappingPath userId=&#123;&#125;"</span>,data);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="PathVariable-사용-다중"><a href="#PathVariable-사용-다중" class="headerlink" title="PathVariable 사용 - 다중"></a><strong>PathVariable 사용 - 다중</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * PathVariable 사용 다중</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/mapping/users/&#123;userId&#125;/orders/&#123;orderId&#125;"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">mappingPath</span><span class="params">(@PathVariable String userId, @PathVariable Long</span></span></span><br><span class="line"><span class="function"><span class="params">        orderId)</span> </span>&#123;</span><br><span class="line">    log.info(<span class="string">"mappingPath userId=&#123;&#125;, orderId=&#123;&#125;"</span>, userId, orderId);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="특정-파라미터-조건-매핑"><a href="#특정-파라미터-조건-매핑" class="headerlink" title="특정 파라미터 조건 매핑"></a>특정 파라미터 조건 매핑</h2><ul>
+<li>사용빈도 낮음</li>
+<li>특정 파라미터가 있거나 없는 조건을 추가할 수 있다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *파라미터로 추가 매핑</span></span><br><span class="line"><span class="comment">* params="mode",</span></span><br><span class="line"><span class="comment"> * params="!mode"</span></span><br><span class="line"><span class="comment"> * params="mode=debug"</span></span><br><span class="line"><span class="comment"> * params="mode!=debug" (! = )</span></span><br><span class="line"><span class="comment"> * params = &#123;"mode=debug","data=good"&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@GetMapping</span>(value = <span class="string">"/mapping-param"</span>, params = <span class="string">"mode=debug"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">mappingParam</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    log.info(<span class="string">"mappingParam"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="특정-헤더-조건-매핑"><a href="#특정-헤더-조건-매핑" class="headerlink" title="특정 헤더 조건 매핑"></a>특정 헤더 조건 매핑</h2><ul>
+<li>잘사용하지않음</li>
+<li>파라미터 매핑과 비슷하지만, HTTP 헤더를 사용한다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *특정 헤더로 추가 매핑</span></span><br><span class="line"><span class="comment"> * headers="mode",</span></span><br><span class="line"><span class="comment"> * headers="!mode"</span></span><br><span class="line"><span class="comment"> * headers="mode=debug"</span></span><br><span class="line"><span class="comment"> * headers="mode!=debug" (! = )</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@GetMapping</span>(value = <span class="string">"/mapping-header"</span>, headers = <span class="string">"mode=debug"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">mappingHeader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    log.info(<span class="string">"mappingHeader"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="미디어-타입-조건-매핑-HTTP-요청-Content-Type-consume"><a href="#미디어-타입-조건-매핑-HTTP-요청-Content-Type-consume" class="headerlink" title="미디어 타입 조건 매핑 - HTTP 요청 Content-Type, consume"></a><strong>미디어 타입 조건 매핑 - HTTP 요청 Content-Type, consume</strong></h2><ul>
+<li>HTTP 요청의 Content-Type 헤더를 기반으로 미디어 타입으로 매핑한다.</li>
+<li>맞지 않으면 415 상태코드 반환</li>
+<li>consume인 이유: controller가 요청에 타입을 소비(조회)하여, 응답하므로</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping</span>(value = <span class="string">"/mapping-consume"</span>, consumes = <span class="string">"application/json"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">mappingConsumes</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">"mappingConsumes"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="미디어-타입-조건-매핑-HTTP-요청-Accept-produce"><a href="#미디어-타입-조건-매핑-HTTP-요청-Accept-produce" class="headerlink" title="미디어 타입 조건 매핑 - HTTP 요청 Accept, produce"></a><strong>미디어 타입 조건 매핑 - HTTP 요청 Accept, produce</strong></h2><ul>
+<li>HTTP 요청의 Accept 헤더를 기반으로 미디어 타입으로 매핑한다.</li>
+<li>맞지 않으면 406 상태코드 반환한다</li>
+<li>produces인 이유: Accept는 요청자가 받을수있는 형식을 담고있다. produces와 일치하는 것이 있어야 해당 형식으로 응답</li>
+<li>Accept에 맞는것이 없다면 406상태코드 반환</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 요청에서 Accept헤더 필요 (요청이 받을수있는 유형을 넣어둠)</span></span><br><span class="line"><span class="comment">     * Accept 헤더 기반 Media Type * produces = "text/html"</span></span><br><span class="line"><span class="comment">     * produces = "!text/html" * produces = "text/*"</span></span><br><span class="line"><span class="comment">     * produces = "*\/*"</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@PostMapping</span>(value = <span class="string">"/mapping-produce"</span>, produces = <span class="string">"text/html"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">mappingProduces</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">"mappingProduces"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="요청-매핑-API예시"><a href="#요청-매핑-API예시" class="headerlink" title="요청 매핑 - API예시"></a>요청 매핑 - API예시</h1><ul>
+<li>회원 관리를 HTTP API로 만든다 생각하고 매핑을 어떻게 하는지 알아보자.<br>(실제 데이터가 넘어가는 부분은 생략하고 URL 매핑만)</li>
+<li><strong>회원 관리 API</strong><ul>
+<li>회원 목록 조회: GET <code>/users</code></li>
+<li>회원 등록: POST <code>/users</code></li>
+<li>회원 조회: GET <code>/users/{userId}</code></li>
+<li>회원수정: PATCH <code>/users/{userId}</code></li>
+<li>회원 삭제: DELETE <code>/users/{userId}</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="실습"><a href="#실습" class="headerlink" title="실습"></a>실습</h2><ul>
+<li><strong>MappingClassController</strong><ul>
+<li>요즘 스타일, 공통되는 uri부분은 클래스쪽으로 뺀다</li>
+<li>PathVariable사용</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/mapping/users"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MappingClassController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">user</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"get users"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@PostMapping</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">addUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"add user"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/&#123;userId&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">finderUser</span><span class="params">(@PathVariable String userId)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"get userId="</span>+userId;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@PatchMapping</span>(<span class="string">"/&#123;userId&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">updateUser</span><span class="params">(@PathVariable String userId)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"update userId="</span>+userId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@DeleteMapping</span>(<span class="string">"/&#123;userId&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">deleteUser</span><span class="params">(@PathVariable String userId)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"delete userId="</span>+userId;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>/mapping :는 강의의 다른 예제들과 구분하기 위해 사용했다.</li>
+<li>@RequestMapping(“/mapping/users”)<br>클래스 레벨에 매핑 정보를 두면 메서드 레벨에서 해당 정보를 조합해서 사용한다.</li>
+</ul>
+<h1 id="HTTP-요청-기본-헤더-조회"><a href="#HTTP-요청-기본-헤더-조회" class="headerlink" title="HTTP 요청 - 기본, 헤더 조회"></a><strong>HTTP 요청 - 기본, 헤더 조회</strong></h1><ul>
+<li>애노테이션 기반의 스프링 컨트롤러는 다양한 파라미터를 지원한다.<br>이번 시간에는 HTTP 헤더 정보를 조회하는 방법을 알아보자.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RequestHeaderController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/headers"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">headers</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            HttpServletRequest request,</span></span></span><br><span class="line"><span class="function"><span class="params">            HttpServletResponse response,</span></span></span><br><span class="line"><span class="function"><span class="params">            HttpMethod httpMethod,</span></span></span><br><span class="line"><span class="function"><span class="params">            Locale locale,</span></span></span><br><span class="line"><span class="function"><span class="params">            @RequestHeader MultiValueMap&lt;String, String&gt; headerMap,</span></span></span><br><span class="line"><span class="function"><span class="params">            @RequestHeader(<span class="string">"host"</span>)</span> String host,</span></span><br><span class="line"><span class="function">            @<span class="title">CookieValue</span><span class="params">(value = <span class="string">"myCookie"</span>, required = <span class="keyword">false</span>)</span> String cookie</span></span><br><span class="line"><span class="function">            )</span>&#123;</span><br><span class="line">        log.info(<span class="string">"request=&#123;&#125;"</span>, request);</span><br><span class="line">        log.info(<span class="string">"response=&#123;&#125;"</span>, response);</span><br><span class="line">        log.info(<span class="string">"httpMethod=&#123;&#125;"</span>, httpMethod);</span><br><span class="line">        log.info(<span class="string">"locale=&#123;&#125;"</span>, locale);</span><br><span class="line">        log.info(<span class="string">"headerMap=&#123;&#125;"</span>, headerMap);</span><br><span class="line">        log.info(<span class="string">"header host=&#123;&#125;"</span>, host);</span><br><span class="line">        log.info(<span class="string">"myCookie=&#123;&#125;"</span>, cookie);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>HttpServletRequest</p>
+</li>
+<li><p>HttpServletResponse</p>
+</li>
+<li><p>HttpMethod : HTTP 메서드를 조회한다. org.springframework.http.HttpMethod</p>
+</li>
+<li><p>Locale : Locale 정보를 조회한다.</p>
+</li>
+<li><p>@RequestHeader MultiValueMap&lt;String, String&gt; headerMap</p>
+<ul>
+<li>모든 HTTP 헤더를 MultiValueMap 형식으로 조회한다.</li>
+</ul>
+</li>
+<li><p>@RequestHeader(“host”) String host</p>
+<ul>
+<li>특정 HTTP 헤더를 조회한다.</li>
+<li>속성<ul>
+<li>필수 값 여부: required</li>
+<li>기본 값 속성: defaultValue</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>@CookieValue(value = “myCookie”, required = false) String cookie</p>
+<ul>
+<li>특정 쿠키를 조회한다.</li>
+<li>속성<ul>
+<li>필수 값 여부: required</li>
+<li>기본 값: defaultValue</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>MultiValueMap 이란?</p>
+<ul>
+<li>MAP과 유사한데, 하나의 키에 여러 값을 받을 수 있다.<br>HTTP header, HTTP 쿼리 파라미터와 같이 하나의 키에 여러 값을 받을 때 사용한다.</li>
+<li><strong>keyA=value1&amp;keyA=value2</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MultiValueMap&lt;String, String&gt; map = <span class="keyword">new</span> LinkedMultiValueMap();</span><br><span class="line">    map.add(<span class="string">"keyA"</span>, <span class="string">"value1"</span>);</span><br><span class="line">    map.add(<span class="string">"keyA"</span>, <span class="string">"value2"</span>);</span><br><span class="line">    <span class="comment">//[value1,value2]</span></span><br><span class="line">    List&lt;String&gt; values = map.get(<span class="string">"keyA"</span>);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<blockquote>
+<p><strong>참고</strong>&gt; @Conroller 의 사용 가능한 파라미터 목록은 다음 공식 메뉴얼에서 확인할 수 있다. <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-arguments" target="_blank" rel="noopener">https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-arguments</a></p>
+</blockquote>
+<blockquote>
+<p>@Conroller 의 사용 가능한 응답 값 목록은 다음 공식 메뉴얼에서 확인할 수 있다.<br><a href="https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-return-types" target="_blank" rel="noopener">https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-return-types</a></p>
+</blockquote>
+<h1 id="HTTP-요청-파라미터"><a href="#HTTP-요청-파라미터" class="headerlink" title="HTTP 요청 파라미터"></a>HTTP 요청 파라미터</h1><h2 id="쿼리-파라미터-HTML-Form"><a href="#쿼리-파라미터-HTML-Form" class="headerlink" title="쿼리 파라미터, HTML Form"></a>쿼리 파라미터, HTML Form</h2><h3 id="개요"><a href="#개요" class="headerlink" title="개요"></a>개요</h3><ul>
+<li><p>HTTP 요청 메시지를 통해 클라이언트에서 서버로 데이터를 전달하는 방법을 알아보자.</p>
+</li>
+<li><p><strong>클라이언트에서 서버로 요청 데이터를 전달할 때는 주로 다음 3가지 방법을 사용한다.</strong></p>
+<ul>
+<li><strong>GET - 쿼리 파라미터</strong><br>/url<strong>?username=hello&amp;age=20</strong>메시지 바디 없이, URL의 쿼리 파라미터에 데이터를 포함해서 전달<br>예) 검색, 필터, 페이징등에서 많이 사용하는 방식</li>
+<li><strong>POST - HTML Form</strong><br>content-type: application/x-www-form-urlencoded<br>메시지 바디에 쿼리 파리미터 형식으로 전달 username=hello&amp;age=20<br>예) 회원 가입, 상품 주문, HTML Form 사용</li>
+<li><strong>HTTP message body</strong>에 데이터를 직접 담아서 요청<br>HTTP API에서 주로 사용, JSON, XML, TEXT<br>데이터 형식은 주로 JSON 사용<br>POST, PUT, PATCH</li>
+</ul>
+</li>
+<li><p>요청 파라미터 - 쿼리 파라미터, HTML Form</p>
+<ul>
+<li>HttpServletRequest 의 request.getParameter() 를 사용하면 다음 두가지 요청 파라미터를 조회할 수 있다.</li>
+<li>GET 쿼리 파리미터 전송 방식이든, POST HTML Form 전송 방식이든 둘다 형식이 같으므로 구분없이 조회할 수 있다.<br>이것을 간단히 <strong>요청 파라미터(request parameter) 조회</strong>라 한다.</li>
+</ul>
+</li>
+<li><p>RequestParamController</p>
+<ul>
+<li>void 메서드이며, response.getWriter().write() 호출한다면, view조회안하고 응답값 직접 가능하다.</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RequestParamController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		* 반환 타입이 없으면서 이렇게 응답에 값을 직접 집어넣으면, view 조회X</span></span><br><span class="line"><span class="comment">		*/</span></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/request-param-v1"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">requestParamV1</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        String username = request.getParameter(<span class="string">"username"</span>);</span><br><span class="line">        <span class="keyword">int</span> age = Integer.parseInt(request.getParameter(<span class="string">"age"</span>));</span><br><span class="line">        log.info(<span class="string">"username=&#123;&#125;, age=&#123;&#125;"</span>, username, age);</span><br><span class="line"></span><br><span class="line">        response.getWriter().write(<span class="string">"ok"</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>리소스는 /resources/static 아래에 두면 스프링 부트가 자동으로 인식한다.<br>경로아래 hello-form.html을 만들고 post도 테스트 해보자</p>
+</blockquote>
+<h2 id="RequestParam-사용"><a href="#RequestParam-사용" class="headerlink" title="@RequestParam 사용"></a>@RequestParam 사용</h2><ul>
+<li>스프링이 제공하는 @RequestParam 을 사용하면 요청 파라미터를 매우 편리하게 사용할 수 있다.</li>
+<li>v2<ul>
+<li>@RequestParam : 파라미터 이름으로 바인딩</li>
+<li>@ResponseBody : View 조회를 무시하고, HTTP message body에 직접 해당 내용 입력</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/request-param-v2"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">requestParamV2</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            @RequestParam(<span class="string">"username"</span>)</span> String memberName,</span></span><br><span class="line"><span class="function">            @<span class="title">RequestParam</span><span class="params">(<span class="string">"age"</span>)</span> <span class="keyword">int</span> memberAge)</span>&#123;</span><br><span class="line">        log.info(<span class="string">"username=&#123;&#125;, age=&#123;&#125;"</span>, memberName, memberAge);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>v3<ul>
+<li>HTTP 파라미터 이름이 변수 이름과 같으면 @RequestParam(name=”xx”) 생략 가능</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/request-param-v3"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">requestParamV3</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            @RequestParam String username,</span></span></span><br><span class="line"><span class="function"><span class="params">            @RequestParam <span class="keyword">int</span> age)</span></span>&#123;</span><br><span class="line">        log.info(<span class="string">"username=&#123;&#125;, age=&#123;&#125;"</span>, username, age);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>v4</p>
+<ul>
+<li>String , int , Integer 등의 단순 타입이면 @RequestParam 도 생략 가능</li>
+<li>하지만 이는 너무 과하다는 생각이다. 명확하게 표시하는 @RequestParam! 준수하자</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/request-param-v4"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">requestParamV4</span><span class="params">(String username, <span class="keyword">int</span> age)</span></span>&#123;</span><br><span class="line">        log.info(<span class="string">"username=&#123;&#125;, age=&#123;&#125;"</span>, username, age);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>v5</p>
+<ul>
+<li><strong>파라미터 필수 여부 - requestParamRequired</strong></li>
+<li>@RequestParam.required<ul>
+<li>파라미터 필수 여부</li>
+<li>기본값이 파라미터 필수( true )이다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/request-param-required"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">requestParamRequired</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            @RequestParam(required = <span class="keyword">true</span>)</span> String username,</span></span><br><span class="line"><span class="function">            @<span class="title">RequestParam</span><span class="params">(required = <span class="keyword">true</span>)</span> Integer age)</span>&#123;  <span class="comment">//int는 기본형 타입이기때문에 null불가능, 안적을시 오류500 &gt;&gt;Integer 변경해야함</span></span><br><span class="line">        <span class="comment">// 참고로 null, ""은 다름, null은 안되지만, ""는 가능</span></span><br><span class="line">        log.info(<span class="string">"username=&#123;&#125;, age=&#123;&#125;"</span>, username, age);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>v5주의 할점<ul>
+<li><strong>주의! - 파라미터 이름만 사용</strong><ul>
+<li>/request-param?username=</li>
+<li>****파라미터 이름만 있고 값이 없는 경우 빈문자 통과</li>
+</ul>
+</li>
+<li><strong>주의! - 기본형(primitive)에 null 입력</strong><ul>
+<li>/request-param 요청<br>@RequestParam(required = false) int age</li>
+<li>null 을 int 에 입력하는 것은 불가능(500 예외 발생)</li>
+<li>따라서 null 을 받을 수 있는 Integer 로 변경하거나, 또는 다음에 나오는 defaultValue 사용</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>requestParamDefault</strong><ul>
+<li>defaultValue설정시 빈문자열, null값일때 자동으로 디폴트 값 반영함</li>
+<li>required의미가 없어짐</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="meta">@RequestMapping</span>(<span class="string">"/request-param-default"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">requestParamDefault</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">          @RequestParam(required = <span class="keyword">true</span>, defaultValue = <span class="string">"guest"</span>)</span> String username,</span></span><br><span class="line"><span class="function">          @<span class="title">RequestParam</span><span class="params">(required = <span class="keyword">false</span>, defaultValue = <span class="string">"-1"</span>)</span> <span class="keyword">int</span> age) </span>&#123;</span><br><span class="line">      log.info(<span class="string">"username=&#123;&#125;, age=&#123;&#125;"</span>, username, age);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>파라미터를 Map으로 조회하기 - requestParamMap</strong><ul>
+<li>@RequestParam Map (보통사용!)<ul>
+<li>Map(key=value)</li>
+</ul>
+</li>
+<li>@RequestParam MultiValueMap<ul>
+<li>MultiValueMap(key=[value1, value2, …] ex) (key=userIds, value=[id1, id2])</li>
+</ul>
+</li>
+<li>파라미터의 값이 1개가 확실하다면 Map 을 사용해도 되지만, 그렇지 않다면 MultiValueMap 을 사용하자.</li>
+</ul>
+</li>
+</ul>
+<h2 id="HTTP-요청-파라미터-ModelAttribute"><a href="#HTTP-요청-파라미터-ModelAttribute" class="headerlink" title="HTTP 요청 파라미터 - @ModelAttribute"></a><strong>HTTP 요청 파라미터 - @ModelAttribute</strong></h2><ul>
+<li>실제 개발을 하면 요청 파라미터를 받아서 필요한 객체를 만들고 그 객체에 값을 넣어주어야 한다. 보통 다음과 같이 코드를 작성할 것이다.</li>
+<li>HelloModel<ul>
+<li>lombok을 사용하여, @Data 애노테이션사용</li>
+<li>@Getter , @Setter , @ToString , @EqualsAndHashCode , @RequiredArgsConstructor 를 자동으로 적용해준다.</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloData</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ModelAttribute적용전"><a href="#ModelAttribute적용전" class="headerlink" title="@ModelAttribute적용전"></a>@ModelAttribute적용전</h3><ul>
+<li>직접 요청 파라미터에서 찾아서 직접 바인딩해주는 과정이 필요하다</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/model-attribute-v1"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">modelAttributeV1</span><span class="params">(@RequestParam String username, @RequestParam <span class="keyword">int</span> age)</span></span>&#123;</span><br><span class="line">    HelloData helloData = <span class="keyword">new</span> HelloData();</span><br><span class="line">    helloData.setUsername(username);</span><br><span class="line">    helloData.setAge(age);</span><br><span class="line"></span><br><span class="line">log.info(<span class="string">"username=&#123;&#125;, age=&#123;&#125;"</span>, helloData.getUsername(),helloData.getAge());</span><br><span class="line">log.info(<span class="string">"helloData=&#123;&#125;"</span>, helloData);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ModelAttribute적용후"><a href="#ModelAttribute적용후" class="headerlink" title="@ModelAttribute적용후"></a>@ModelAttribute적용후</h3><ul>
+<li>HelloData 객체를 생성한다.</li>
+<li>요청 파라미터의 이름으로 HelloData 객체의 프로퍼티를 찾는다. 그리고 해당 프로퍼티의 setter를 호출해서 파라미터의 값을 입력(바인딩) 한다.<br>예) 파라미터 이름이 username 이면 setUsername() 메서드를 찾아서 호출하면서 값을 입력한다.</li>
+<li><strong>바인딩 오류</strong><ul>
+<li>age=abc 처럼 숫자가 들어가야 할 곳에 문자를 넣으면 BindException 이 발생한다. 이런 바인딩 오류를 처리하는 방법은 검증 부분에서 다룬다.</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>프로퍼티(!!!)</strong><br>일부 객체 지향 프로그래밍 언어에서 필드(데이터 멤버)와 메소드 간 기능의 중간인 클래스 멤버의 특수한 유형이다.<br>객체에 getUsername() , setUsername() 메서드가 있으면, 이 객체는 username 이라는 프로퍼티를 가지고 있다. username 프로퍼티의 값을 변경하면 setUsername() 이 호출되고, 조회하면 getUsername() 이 호출된다.</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/model-attribute-v1-1"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">modelAttributeV1_1</span><span class="params">(@ModelAttribute HelloData helloData)</span></span>&#123;</span><br><span class="line">        log.info(<span class="string">"helloData=&#123;&#125;"</span>, helloData);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ModelAttribute적용후-v2"><a href="#ModelAttribute적용후-v2" class="headerlink" title="@ModelAttribute적용후 v2"></a>@ModelAttribute적용후 v2</h3><ul>
+<li>아예 애노테이션을 제거해도 가능하다</li>
+<li>@ModelAttribute 는 생략할 수 있다.<br>그런데 @RequestParam 도 생략할 수 있으니 혼란이 발생할 수 있다.</li>
+<li>스프링은 해당 생략시 다음과 같은 규칙을 적용한다.<br>String , int , Integer 같은 단순 타입 = @RequestParam</li>
+<li>나머지 = @ModelAttribute (argument resolver 로 지정해둔 타입 외)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/model-attribute-v2"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">modelAttributeV2</span><span class="params">(HelloData helloData)</span></span>&#123;</span><br><span class="line">    log.info(<span class="string">"helloData=&#123;di&#125;"</span>, helloData);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="HTTP-요청-메시지"><a href="#HTTP-요청-메시지" class="headerlink" title="HTTP 요청 메시지"></a>HTTP 요청 메시지</h1><h2 id="단순-텍스트"><a href="#단순-텍스트" class="headerlink" title="단순 텍스트(!!!)"></a>단순 텍스트(!!!)</h2><ul>
+<li><strong>HTTP message body</strong>에 데이터를 직접 담아서 요청<ul>
+<li>HTTP API에서 주로 사용, JSON, XML, TEXT</li>
+<li>데이터 형식은 주로 JSON 사용</li>
+<li>POST, PUT, PATCH</li>
+</ul>
+</li>
+<li><strong>요청 파라미터와 다르게, HTTP 메시지 바디를 통해 데이터가 직접 넘어오는 경우는 @RequestParam , @ModelAttribute 를 사용할 수 없다.</strong> (물론 HTML Form 형식으로 전달되는 경우는 요청 파라미터로 인정된다.)(즉, POST의 <a href="http://www.x-form.com형식으로" target="_blank" rel="noopener">www.x-form.com형식으로</a> 오는 경우는가능)</li>
+<li>HTTP 메시지 바디의 데이터를 InputStream 을 사용해서 직접 읽을 수 있다.<ul>
+<li>Stream은 바이트 코드이므로 이를 인코딩하여 문자열 반영, 이과정필수</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RequestBodyStringController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@PostMapping</span>(<span class="string">"/request-body-string-v1"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">requestBodyString</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ServletInputStream inputStream = request.getInputStream();</span><br><span class="line">        String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);<span class="comment">// Stream은 바이트 코드이므로 이를 인코딩하여 문자열 반영, 이과정필수</span></span><br><span class="line"></span><br><span class="line">        log.info(<span class="string">"MessageBody=&#123;&#125;"</span>, messageBody);</span><br><span class="line"></span><br><span class="line">        response.getWriter().write(<span class="string">"ok"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>Input, Output 스트림, Reader - requestBodyStringV2</strong><ul>
+<li>InputStream(Reader): HTTP 요청 메시지 바디의 내용을 직접 조회</li>
+<li>OutputStream(Writer): HTTP 응답 메시지의 바디에 직접 결과 출력</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping</span>(<span class="string">"/request-body-string-v2"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">requestBodyStringV2</span><span class="params">(InputStream inputStream, Writer responseWriter)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);<span class="comment">// Stream은 바이트 코드이므로 이를 인코딩하여 문자열 반영, 이과정필수</span></span><br><span class="line"></span><br><span class="line">        log.info(<span class="string">"MessageBody=&#123;&#125;"</span>, messageBody);</span><br><span class="line"></span><br><span class="line">        responseWriter.write(<span class="string">"ok"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>HttpEntity - requestBodyStringV3</strong><ul>
+<li><strong>스프링 MVC는 다음 파라미터를 지원한다.</strong></li>
+<li><strong>HttpEntity</strong>: HTTP header, body 정보를 편리하게 조회<ul>
+<li>메시지 바디 정보를 직접 조회(타입적어주면 타입으로변환)</li>
+<li>요청 파라미터를 조회하는 기능과 관계 없음<br>@RequestParam X, @ModelAttribute X</li>
+</ul>
+</li>
+<li><strong>HttpEntity는 응답에도 사용 가능</strong><ul>
+<li>메시지 바디 정보 직접 반환</li>
+<li>헤더 정보 포함 가능</li>
+<li>view 조회X</li>
+</ul>
+</li>
+<li>HttpEntity 를 상속받은 다음 객체들도 같은 기능을 제공한다.<ul>
+<li><strong>RequestEntity</strong><br>HttpMethod, url 정보가 추가, 요청에서 사용</li>
+<li><strong>ResponseEntity</strong><br>HTTP 상태 코드 설정 가능, 응답에서 사용<br><code>return new ResponseEntity&lt;String&gt;(&quot;Hello World&quot;, responseHeaders,HttpStatus.CREATED)</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping</span>(<span class="string">"/request-body-string-v3"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> HttpEntity&lt;String&gt; <span class="title">requestBodyStringV3</span><span class="params">(HttpEntity&lt;String&gt; httpEntity)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        String messageBody = httpEntity.getBody();</span><br><span class="line">        log.info(<span class="string">"MessageBody=&#123;&#125;"</span>, messageBody);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HttpEntity&lt;&gt;(<span class="string">"ok"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>스프링MVC 내부에서 HTTP 메시지 바디를 읽어서 문자나 객체로 변환해서 전달해주는데, 이때 HTTP 메시지 컨버터( HttpMessageConverter )라는 기능을 사용한다. 이것은 조금 뒤에 HTTP 메시지 컨버터에서 자세히 설명한다.</p>
+</blockquote>
+<ul>
+<li><strong>@RequestBody - requestBodyStringV4 (흔하게사용)</strong><ul>
+<li><strong>@RequestBody</strong><br>@RequestBody 를 사용하면 HTTP 메시지 바디 정보를 편리하게 조회할 수 있다. 참고로 헤더 정보가 필요하다면 HttpEntity 를 사용하거나@RequestHeader 를 사용하면 된다. 이렇게 메시지 바디를 직접 조회하는 <strong>기능은 요청 파라미터를 조회하는 @RequestParam ,@ModelAttribute 와는 전혀 관계가 없다.</strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="meta">@PostMapping</span>(<span class="string">"/request-body-string-v4"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">requestBodyStringV4</span><span class="params">(@RequestBody String messageBody)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        log.info(<span class="string">"MessageBody=&#123;&#125;"</span>, messageBody);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="정리"><a href="#정리" class="headerlink" title="정리"></a>정리</h3><ul>
+<li><strong>요청 파라미터 vs HTTP 메시지 바디</strong><ul>
+<li>요청 파라미터를 조회하는 기능: @RequestParam , @ModelAttribute</li>
+<li>HTTP 메시지 바디를 직접 조회하는 기능: @RequestBody</li>
+</ul>
+</li>
+<li><strong>@ResponseBody</strong><ul>
+<li>@ResponseBody 를 사용하면 응답 결과를 HTTP 메시지 바디에 직접 담아서 전달할 수 있다.</li>
+<li>물론 이 경우에도 view를 사용하지 않는다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="HTTP-요청-메시지-JSON"><a href="#HTTP-요청-메시지-JSON" class="headerlink" title="HTTP 요청 메시지 - JSON"></a><strong>HTTP 요청 메시지 - JSON</strong></h2><ul>
+<li>이번에는 HTTP API에서 주로 사용하는 JSON 데이터 형식을 조회해보자.</li>
+<li><strong>RequestBodyJsonController</strong><ul>
+<li>v1 코드</li>
+<li>HttpServletRequest를 사용해서 직접 HTTP 메시지 바디에서 데이터를 읽어와서, 문자로 변환한다.</li>
+<li>문자로 된 JSON 데이터를 Jackson 라이브러리인 objectMapper 를 사용해서 자바 객체로 변환한다.</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RequestBodyJsonController</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ObjectMapper objectMapper = <span class="keyword">new</span> ObjectMapper();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping</span>(<span class="string">"/request-body-json-v1"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">requestBodyJsonV1</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ServletInputStream inputStream = request.getInputStream();</span><br><span class="line">        String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);</span><br><span class="line"></span><br><span class="line">        log.info(<span class="string">"messageBody=&#123;&#125;"</span>, messageBody);</span><br><span class="line">        HelloData helloData = objectMapper.readValue(messageBody, HelloData.class);</span><br><span class="line">        log.info(<span class="string">"username=&#123;&#125;, age=&#123;&#125;"</span>, helloData.getUsername(), helloData.getAge());</span><br><span class="line"></span><br><span class="line">        response.getWriter().write(<span class="string">"ok"</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>requestBodyJsonV2 - @RequestBody 문자 변환</strong><ul>
+<li>@RequestBody<ul>
+<li>HttpMessageConverter 사용 -&gt; StringHttpMessageConverter 적용</li>
+</ul>
+</li>
+<li>@ResponseBody<ul>
+<li>모든 메서드에 @ResponseBody 적용</li>
+<li>메시지 바디 정보 직접 반환(view 조회X)</li>
+<li>HttpMessageConverter 사용 -&gt; StringHttpMessageConverter 적용</li>
+</ul>
+</li>
+<li><strong>문자로 변환하고 다시 json으로 변환하는 과정이 불편하다. @ModelAttribute처럼 한번에 객체로 변환할 수는 없을까?</strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="meta">@PostMapping</span>(<span class="string">"/request-body-json-v2"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">requestBodyJsonV2</span><span class="params">(@RequestBody String messageBody)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        log.info(<span class="string">"messageBody=&#123;&#125;"</span>, messageBody);</span><br><span class="line">        HelloData helloData = objectMapper.readValue(messageBody, HelloData.class);</span><br><span class="line">        log.info(<span class="string">"username=&#123;&#125;, age=&#123;&#125;"</span>, helloData.getUsername(), helloData.getAge());</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>requestBodyJsonV3 - @RequestBody 객체 변환</strong><ul>
+<li>@RequestBody 생략 불가능(@ModelAttribute 가 적용되어 버림)</li>
+<li>HttpMessageConverter 사용 -&gt; MappingJackson2HttpMessageConverter (content-type: application/json)</li>
+<li><strong>@RequestBody 객체 파라미터</strong><ul>
+<li>@RequestBody HelloData data</li>
+<li>@RequestBody 에 직접 만든 객체를 지정할 수 있다</li>
+</ul>
+</li>
+<li>HttpEntity , @RequestBody 를 사용하면 HTTP 메시지 컨버터가 HTTP 메시지 바디의 내용을 우리가원하는 문자나 객체 등으로 변환해준다. HTTP 메시지 컨버터는 문자 뿐만 아니라 JSON도 객체로 변환해주는데, 우리가 방금 V2에서 했던 작업을대신 처리해준다.</li>
+<li>스프링은 @ModelAttribute , @RequestParam 과 같은 해당 애노테이션을 생략시 다음과 같은 규칙을적용한다.<ul>
+<li>String , int , Integer 같은 단순 타입 = @RequestParam</li>
+<li>나머지 = @ModelAttribute (argument resolver 로 지정해둔 타입 외)</li>
+</ul>
+</li>
+<li>HTTP 요청시에 content-type이 application/json인지 꼭! 확인해야 한다. 그래야 JSON을 처리할 수 있는 HTTP 메시지 컨버터가 실행된다.</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="meta">@PostMapping</span>(<span class="string">"/request-body-json-v3"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">requestBodyJsonV3</span><span class="params">(@RequestBody HelloData helloData)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        log.info(<span class="string">"username=&#123;&#125;, age=&#123;&#125;"</span>, helloData.getUsername(), helloData.getAge());</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>requestBodyJsonV4 - HttpEntity</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@PostMapping</span>(<span class="string">"/request-body-json-v4"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">requestBodyJsonV4</span><span class="params">(HttpEntity&lt;HelloData&gt; httpEntity)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    HelloData data = httpEntity.getBody();</span><br><span class="line">log.info(<span class="string">"username=&#123;&#125;, age=&#123;&#125;"</span>, data.getUsername(),data.getAge());</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>requestBodyJsonV5</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="meta">@PostMapping</span>(<span class="string">"/request-body-json-v5"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> HelloData <span class="title">requestBodyJsonV5</span><span class="params">(HttpEntity&lt;HelloData&gt; httpEntity)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        HelloData data = httpEntity.getBody();</span><br><span class="line">        log.info(<span class="string">"username=&#123;&#125;, age=&#123;&#125;"</span>, data.getUsername(),data.getAge());</span><br><span class="line">        <span class="keyword">return</span> data;  <span class="comment">//httpEntity의 객체가 응답을 주는경우.. 자동으로 다시 json전환</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>응답의 경우에도 @ResponseBody 를 사용하면 해당 객체를 HTTP 메시지 바디에 직접 넣어줄 수 있다. 물론 이 경우에도 HttpEntity 를 사용해도 된다.</li>
+<li>@RequestBody 요청<ul>
+<li>JSON 요청 → HTTP 메시지 →컨버터 객체</li>
+</ul>
+</li>
+<li>@ResponseBody 응답<ul>
+<li>객체 →HTTP 메시지 컨버터 → JSON 응답</li>
+</ul>
+</li>
+</ul>
+<h1 id="HTTP-응답"><a href="#HTTP-응답" class="headerlink" title="HTTP 응답"></a>HTTP 응답</h1><h2 id="정적-리소스-뷰-템플릿"><a href="#정적-리소스-뷰-템플릿" class="headerlink" title="정적 리소스, 뷰 템플릿"></a>정적 리소스, 뷰 템플릿</h2><ul>
+<li>응답 부분에 초점맞추어서 정리하자</li>
+<li>스프링(서버)에서 응답 데이터를 만드는 방법은 크게 3가지이다.<ul>
+<li>정적 리소스<br>예) 웹 브라우저에 정적인 HTML, css, js를 제공할 때는, <strong>정적 리소스</strong>를 사용한다.</li>
+<li>뷰 템플릿 사용<br>예) 웹 브라우저에 동적인 HTML을 제공할 때는 뷰 템플릿을 사용한다.</li>
+<li>HTTP 메시지 사용<br>HTTP API를 제공하는 경우에는 HTML이 아니라 데이터를 전달해야 하므로, HTTP 메시지 바디에 JSON 같은 형식으로 데이터를 실어 보낸다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="정적-리소스"><a href="#정적-리소스" class="headerlink" title="정적 리소스"></a><strong>정적 리소스</strong></h3><ul>
+<li>스프링 부트는 클래스패스의 다음 디렉토리에 있는 정적 리소스를 제공한다.<br>/static , /public , /resources , /META-INF/resources</li>
+<li>src/main/resources 는 리소스를 보관하는 곳이고, 또 <strong>클래스패스의 시작 경로이다. 따라서 다음 디렉토리에 리소스를 넣어두면 스프링 부트가 정적 리소스로 서비스를 제공한다.</strong></li>
+<li><strong>정적 리소스 경로</strong><ul>
+<li>src/main/resources/static 다음 경로에 파일이 들어있으면</li>
+<li>src/main/resources/static/basic/hello-form.html</li>
+<li>웹 브라우저에서 다음과 같이 실행하면 된다.<br><a href="http://localhost:8080/basic/hello-form.html" target="_blank" rel="noopener">http://localhost:8080/basic/hello-form.html</a><br>정적 리소스는 해당 파일을 변경 없이 그대로 서비스하는 것이다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="뷰-템플릿-사용"><a href="#뷰-템플릿-사용" class="headerlink" title="뷰 템플릿 사용"></a>뷰 템플릿 사용</h3><ul>
+<li>뷰 템플릿을 거쳐서 HTML이 생성되고, 뷰가 응답을 만들어서 전달한다.<br>일반적으로 HTML을 동적으로 생성하는 용도로 사용하지만, 다른 것들도 가능하다. 뷰 템플릿이 만들 수 있는 것이라면 뭐든지 가능하다.</li>
+<li><strong>뷰 템플릿 경로</strong><ul>
+<li>src/main/resources/templates</li>
+</ul>
+</li>
+<li><strong>뷰 템플릿 생성</strong><ul>
+<li>src/main/resources/templates/response/hello.html</li>
+</ul>
+</li>
+<li>ResponseViewController - 뷰 템플릿을 호출하는 컨트롤러</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ResponseViewController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/response-view-v1"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ModelAndView <span class="title">responseViewV1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        ModelAndView mav = <span class="keyword">new</span> ModelAndView(<span class="string">"response/hello"</span>)</span><br><span class="line">                .addObject(<span class="string">"data"</span>,<span class="string">"hello"</span>);</span><br><span class="line">        <span class="keyword">return</span> mav;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/response-view-v2"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">responseViewV2</span><span class="params">(Model model)</span></span>&#123;</span><br><span class="line">        model.addAttribute(<span class="string">"data"</span>,<span class="string">"hello"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"response/hello"</span>; <span class="comment">// 논리 주소 반환, 나중에 뷰 찾으러 ㄱ</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/response/hello"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">responseViewV3</span><span class="params">(Model model)</span></span>&#123;</span><br><span class="line">        model.addAttribute(<span class="string">"data"</span>,<span class="string">"hello"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>3가지 정도 방법 존재<ul>
+<li>기존 ModelAndView반환</li>
+<li><strong>String을 반환하는 경우</strong><ul>
+<li><strong>View or HTTP 메시지</strong>@ResponseBody 가 없으면 response/hello 로 뷰 리졸버가 실행되어서 뷰를 찾고, 렌더링 한다.</li>
+<li>@ResponseBody 가 있으면 뷰 리졸버를 실행하지 않고, HTTP 메시지 바디에 직접 response/hello 라는<br>문자가 입력된다.</li>
+<li>여기서는 뷰의 논리 이름인 response/hello 를 반환하면 다음 경로의 뷰 템플릿이 렌더링 되는 것을 확인할 수 있다.</li>
+</ul>
+</li>
+<li><strong>Void</strong>를 반환하는 경우(권장안함)<ul>
+<li>@Controller 를 사용하고, HttpServletResponse , OutputStream(Writer) 같은 HTTP 메시지바디를 처리하는 파라미터가 없으면 요청 URL을 참고해서 논리 뷰 이름으로 사용</li>
+<li>요청 URL: /response/hello<br>실행: templates/response/hello.html</li>
+<li><strong>참고로 이 방식은 명시성이 너무 떨어지고 이렇게 딱 맞는 경우도 많이 없어서, 권장하지 않는다.</strong></li>
+</ul>
+</li>
+<li><strong>HTTP 메시지</strong><ul>
+<li>@ResponseBody , HttpEntity 를 사용하면, 뷰 템플릿을 사용하는 것이 아니라, HTTP 메시지 바디에 직접 응답 데이터를 출력할 수 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>Thymeleaf 스프링 부트 설정</strong><br><code>build.gradle</code>implementation ‘org.springframework.boot:spring-boot-starter-thymeleaf’``</p>
+</blockquote>
+<p><code>application.properties
+spring.thymeleaf.prefix=classpath:/templates/
+spring.thymeleaf.suffix=.html</code></p>
+<blockquote>
+</blockquote>
+<blockquote>
+<p>스프링 부트의 타임리프 관련 추가 설정은 다음 공식 사이트를 참고하자. (페이지 안에서 thymeleaf 검색)<br><a href="https://docs.spring.io/spring-boot/docs/2.4.3/reference/html/appendix-application-properties.html#common-application-properties-templating" target="_blank" rel="noopener">https://docs.spring.io/spring-boot/docs/2.4.3/reference/html/appendix-application-properties.html#common-application-properties-templating</a></p>
+</blockquote>
+<h2 id="HTTP-응답-HTTP-API-메시지-바디에-직접-입력"><a href="#HTTP-응답-HTTP-API-메시지-바디에-직접-입력" class="headerlink" title="HTTP 응답 - HTTP API, 메시지 바디에 직접 입력"></a><strong>HTTP 응답 - HTTP API, 메시지 바디에 직접 입력</strong></h2><ul>
+<li>HTTP API를 제공하는 경우에는 HTML이 아니라 데이터를 전달해야 하므로, HTTP 메시지 바디에 JSON 같은 형식으로 데이터를 실어 보낸다.</li>
+<li>추후에 배우겠지만 @ResponseBody인 경우 viewRevoler 대신에 HttpmessageConverter가 동작하며, 대상이<ul>
+<li>string일경우 StringConverter가 동작</li>
+<li>기본 객체 처리는 MappingJackson2HttpMessageConverter가 동작(기본 json반환)</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>HTML이나 뷰 템플릿을 사용해도 HTTP 응답 메시지 바디에 HTML 데이터가 담겨서 전달된다. 여기서 설명하는 내용은 정적 리소스나 뷰 템플릿을 거치지 않고, 직접 HTTP 응답 메시지를 전달하는 경우를말한다.</p>
+</blockquote>
+<ul>
+<li><strong>ResponseBodyController</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@RestController</span> <span class="comment">//@ResponseBody+ @Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ResponseBodyController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/response-body-string-v1"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">responseBodyV1</span><span class="params">(HttpServletResponse response)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        response.getWriter().write(<span class="string">"ok"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/response-body-string-v2"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title">responseBodyV2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(<span class="string">"ok"</span>, HttpStatus.OK);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/response-body-string-v3"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">responseBodyV3</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/response-body-json-v1"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;HelloData&gt; <span class="title">responseBodyJsonV1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        HelloData helloData = <span class="keyword">new</span> HelloData();</span><br><span class="line">        helloData.setUsername(<span class="string">"userA"</span>);</span><br><span class="line">        helloData.setAge(<span class="number">20</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(helloData, HttpStatus.OK);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@ResponseStatus</span>(HttpStatus.OK)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/response-body-json-v2"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> HelloData <span class="title">responseBodyJsonV2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        HelloData helloData = <span class="keyword">new</span> HelloData();</span><br><span class="line">        helloData.setUsername(<span class="string">"userA"</span>);</span><br><span class="line">        helloData.setAge(<span class="number">20</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> helloData;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>responseBodyV1</strong><ul>
+<li>서블릿을 직접 다룰 때 처럼 HttpServletResponse 객체를 통해서 HTTP 메시지 바디에 직접 ok 응답 메시지를 전달한다.</li>
+<li><code>response.getWriter().write(&quot;ok&quot;)</code></li>
+</ul>
+</li>
+<li><strong>responseBodyV2</strong><ul>
+<li>ResponseEntity 엔티티는 HttpEntity 를 상속 받았는데, HttpEntity는 HTTP 메시지의 헤더, 바디 정보를 가지고 있다. ResponseEntity 는 여기에 더해서 HTTP 응답 코드를 설정할 수 있다.</li>
+<li>HttpStatus.CREATED 로 변경하면 201 응답이 나가는 것을 확인할 수 있다.</li>
+</ul>
+</li>
+<li><strong>responseBodyV3</strong><ul>
+<li>@ResponseBody 를 사용하면 view를 사용하지 않고, HTTP 메시지 컨버터를 통해서 HTTP 메시지를 직접 입력할 수 있다. ResponseEntity 도 동일한 방식으로 동작한다.</li>
+</ul>
+</li>
+<li><strong>responseBodyJsonV1</strong><ul>
+<li>ResponseEntity 를 반환한다. HTTP 메시지 컨버터를 통해서 JSON 형식으로 변환되어서 반환된다.</li>
+</ul>
+</li>
+<li><strong>responseBodyJsonV2</strong><ul>
+<li>ResponseEntity 는 HTTP 응답 코드를 설정할 수 있는데, @ResponseBody 를 사용하면 이런 것을 설정하기 까다롭다. @ResponseStatus(HttpStatus.OK) 애노테이션을 사용하면 응답 코드도 설정할 수 있다.</li>
+<li>물론 애노테이션이기 때문에 응답 코드를 동적으로 변경할 수는 없다. 프로그램 조건에 따라서 동적으로 변경하려면 ResponseEntity 를 사용하면 된다.</li>
+</ul>
+</li>
+<li><strong>@RestController</strong><ul>
+<li>@Controller 대신에 @RestController 애노테이션을 사용하면, 해당 컨트롤러에 모두 @ResponseBody 가 적용되는 효과가 있다. 따라서 뷰 템플릿을 사용하는 것이 아니라, HTTP 메시지 바디에 직접 데이터를 입력한다. 이름 그대로 Rest API(HTTP API)를 만들 때 사용하는 컨트롤러이다.</li>
+</ul>
+</li>
+</ul>
+<h1 id="HTTP-메시지-컨버터"><a href="#HTTP-메시지-컨버터" class="headerlink" title="HTTP 메시지 컨버터"></a><strong>HTTP 메시지 컨버터</strong></h1><ul>
+<li>뷰 템플릿으로 HTML을 생성해서 응답하는 것이 아니라, HTTP API처럼 JSON 데이터를 HTTP 메시지 바디에서 직접 읽거나 쓰는 경우 HTTP 메시지 컨버터를 사용하면 편리하다.</li>
+</ul>
+<h2 id="ResponseBody사용원리"><a href="#ResponseBody사용원리" class="headerlink" title="@ResponseBody사용원리"></a>@ResponseBody사용원리</h2><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212241553858.png" alt="스크린샷 2022-06-30 오후 11.35.27.png"></p>
+<h2 id="ResponseBody-를-사용"><a href="#ResponseBody-를-사용" class="headerlink" title="@ResponseBody 를 사용"></a>@ResponseBody 를 사용</h2><ul>
+<li>HTTP의 BODY에 문자 내용을 직접 반환</li>
+<li>viewResolver 대신에 HttpMessageConverter 가 동작</li>
+<li>기본 문자처리: StringHttpMessageConverter</li>
+<li>기본 객체처리: MappingJackson2HttpMessageConverter</li>
+<li>byte 처리 등등 기타 여러 HttpMessageConverter가 기본으로 등록되어 있음</li>
+</ul>
+<blockquote>
+<p>참고: 응답의 경우 클라이언트의 HTTP Accept 해더와 서버의 컨트롤러 반환 타입 정보 둘을 조합해서 HttpMessageConverter 가 선택된다. 더 자세한 내용은 스프링 MVC 강의에서 설명하겠다.</p>
+</blockquote>
+<h2 id="스프링-MVC는-다음의-경우에-HTTP-메시지-컨버터를-적용한다"><a href="#스프링-MVC는-다음의-경우에-HTTP-메시지-컨버터를-적용한다" class="headerlink" title="스프링 MVC는 다음의 경우에 HTTP 메시지 컨버터를 적용한다.(!!!)"></a><strong>스프링 MVC는 다음의 경우에 HTTP 메시지 컨버터를 적용한다.(!!!)</strong></h2><ul>
+<li>HTTP 요청: @RequestBody , HttpEntity(RequestEntity)<ul>
+<li>요청이 들어오면 bodymessage가 있다면 HTTP메시지 컨버터를 사용하여 변환후 @RequestBody 로 객체든, 스트링, 바이트형식이든 넘겨준다.</li>
+</ul>
+</li>
+<li>HTTP 응답: @ResponseBody , HttpEntity(ResponseEntity)<ul>
+<li>응답 전 HTTP메시지 컨버터를 사용하여 객체든, 스트링, 바이트형식을 응답타입으로 변환후 bodymessage에 박아준다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="HTTP-메시지-컨버터-인터페이스"><a href="#HTTP-메시지-컨버터-인터페이스" class="headerlink" title="HTTP 메시지 컨버터 인터페이스"></a><strong>HTTP 메시지 컨버터 인터페이스</strong></h3><ul>
+<li>StringHttpMessageConverter, MappingJackson2HttpMessageConverter 등의 조상</li>
+<li>org.springframework.http.converter.HttpMessageConverter</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.springframework.http.converter;</span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">HttpMessageConverter</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">canRead</span><span class="params">(Class&lt;?&gt; clazz, @Nullable MediaType mediaType)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">canWrite</span><span class="params">(Class&lt;?&gt; clazz, @Nullable MediaType mediaType)</span></span>;</span><br><span class="line">    <span class="function">List&lt;MediaType&gt; <span class="title">getSupportedMediaTypes</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">T <span class="title">read</span><span class="params">(Class&lt;? extends T&gt; clazz, HttpInputMessage inputMessage)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> IOException, HttpMessageNotReadableException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">write</span><span class="params">(T t, @Nullable MediaType contentType, HttpOutputMessage</span></span></span><br><span class="line"><span class="function"><span class="params">  outputMessage)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> IOException, HttpMessageNotWritableException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>HTTP 메시지 컨버터는 HTTP 요청, HTTP 응답 둘 다 사용된다.<ol>
+<li>canRead() , canWrite() : 메시지 컨버터가 해당 클래스, 미디어타입을 지원하는지 체크</li>
+<li>read() , write() : 메시지 컨버터를 통해서 메시지를 읽고 쓰는 기능</li>
+</ol>
+</li>
+</ul>
+<h3 id="스프링-부트-기본-메시지-컨버터"><a href="#스프링-부트-기본-메시지-컨버터" class="headerlink" title="스프링 부트 기본 메시지 컨버터(!!!)"></a><strong>스프링 부트 기본 메시지 컨버터(!!!)</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0 &#x3D; ByteArrayHttpMessageConverter</span><br><span class="line">1 &#x3D; StringHttpMessageConverter</span><br><span class="line">2 &#x3D; MappingJackson2HttpMessageConverter</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>스프링 부트는 다양한 메시지 컨버터를 제공하는데, 대상 클래스 타입과 미디어 타입 둘을 체크해서사용여부를 결정한다. 만약 만족하지 않으면 다음 메시지 컨버터로 우선순위가 넘어간다.</li>
+<li>아래 내용은 요청은 처리과정은 컨트롤러에 @RequestBody byte[] data 확인 → byte[] 클래스 타입 처리가능한 httpmessageconverter canRead()로 찾기 → 해당 httpmessageconverter로 read() 호출 → byte[]로 된 결과 data 객체에 넣음</li>
+</ul>
+<blockquote>
+<p>참고로 요청은 바이트 으로 처음 들어오기때문에 거의 그대로 전달, 하지만 String, 객체 등은 http메시지 컴버터를 통해 바이트를 해당 타입에 맞게 해석한다.!!!</p>
+</blockquote>
+<ul>
+<li>ByteArrayHttpMessageConverter : byte[] 데이터를 처리한다.<ul>
+<li>클래스 타입: byte[] , 미디어타입: <em>/</em><br>요청 예) <code>@RequestBody byte[] data</code><br>응답 예) <code>@ResponseBody</code> <code>return byte[]</code> 쓰기 미디어타입 <code>application/octet-stream</code></li>
+<li>StringHttpMessageConverter : String 문자로 데이터를 처리한다.<br>클래스 타입: String , 미디어타입: <em>/</em><br>요청 예) <code>@RequestBody String data</code><br>응답 예) <code>@ResponseBody</code> <code>return &quot;ok&quot;</code> 쓰기 미디어타입 <code>text/plain</code></li>
+<li>MappingJackson2HttpMessageConverter : <code>application/json</code><br>클래스 타입: 객체 또는 HashMap , 미디어타입 <code>application/json</code> 관련<br>요청 예) <code>@RequestBody HelloData data</code><br>응답 예) <code>@ResponseBody</code> <code>return helloData</code> 쓰기 미디어타입 <code>application/json</code> 관련</li>
+</ul>
+</li>
+</ul>
+<h3 id="다시-정리"><a href="#다시-정리" class="headerlink" title="다시 정리"></a>다시 정리</h3><ul>
+<li><strong>HTTP 요청 데이터 읽기</strong><ul>
+<li>HTTP 요청이 오고, 컨트롤러에서 @RequestBody , HttpEntity 파라미터를 사용한다.</li>
+<li>메시지 컨버터가 메시지를 읽을 수 있는지 확인하기 위해 canRead() 를 호출한다.<ul>
+<li>대상 클래스 타입을 지원하는가.<br>예) @RequestBody 의 대상 클래스 ( byte[] , String , HelloData</li>
+<li>HTTP 요청의 Content-Type 미디어 타입을 지원하는가.<br>예) text/plain , application/json , <em>/</em></li>
+</ul>
+</li>
+<li>canRead() 조건을 만족하면 read() 를 호출해서 객체 생성하고, 반환한다.</li>
+</ul>
+</li>
+<li><strong>HTTP 응답 데이터 생성</strong><ul>
+<li>컨트롤러에서 @ResponseBody , HttpEntity 로 값이 반환된다.<br>메시지 컨버터가 메시지를 쓸 수 있는지 확인하기 위해 canWrite() 를 호출한다.<ul>
+<li>대상 클래스 타입을 지원하는가.<br>예) return의 대상 클래스 ( byte[] , String , HelloData )</li>
+<li>HTTP 요청의 Accept 미디어 타입을 지원하는가.(더 정확히는 @RequestMapping 의 produces )<br>예) text/plain , application/json , <em>/</em></li>
+</ul>
+</li>
+<li>canWrite() 조건을 만족하면 write() 를 호출해서 HTTP 응답 메시지 바디에 데이터를 생성한다.</li>
+</ul>
+</li>
+</ul>
+<h1 id="요청-매핑-헨들러-어뎁터-구조-RequestMappingHandlerAdapter"><a href="#요청-매핑-헨들러-어뎁터-구조-RequestMappingHandlerAdapter" class="headerlink" title="요청 매핑 헨들러 어뎁터 구조 (RequestMappingHandlerAdapter)"></a>요청 매핑 헨들러 어뎁터 구조 (RequestMappingHandlerAdapter)</h1><ul>
+<li>그렇다면 HTTP 메시지 컨버터는 스프링 MVC 어디쯤에서 사용되는 것일까? 다음 그림에서는 보이지 않는다.</li>
+</ul>
+<h2 id="SpringMVC구조"><a href="#SpringMVC구조" class="headerlink" title="SpringMVC구조"></a>SpringMVC구조</h2><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212241553332.png" alt="스크린샷 2022-07-01 오전 2.50.59.png"></p>
+<ul>
+<li>구조를 보면 핸들러가 일처리 직전 직후는 핸들러 어댑터가 항상 먼저있다. 따라서 이곳에 httpessageconverter가있다!</li>
+<li>모든 비밀은 애노테이션 기반의 컨트롤러, 그러니까 <strong>@RequestMapping 을 처리하는 핸들러 어댑터인 RequestMappingHandlerAdapter</strong> (요청 매핑 헨들러 어뎁터)에 있다.</li>
+</ul>
+<h2 id="RequestMappingHandlerAdapter-동작-방식"><a href="#RequestMappingHandlerAdapter-동작-방식" class="headerlink" title="RequestMappingHandlerAdapter 동작 방식"></a><strong>RequestMappingHandlerAdapter 동작 방식</strong></h2><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212241553864.png" alt="스크린샷 2022-07-01 오전 2.53.33.png"></p>
+<ul>
+<li><strong>실제 핸들러(컨트롤러)의 파라미터에있는 것들은 모두 핸들러 어댑터가 데이터를 생성하여 넘겨줘야한다!!!!!!!!</strong></li>
+</ul>
+<h3 id="ArgumentResolver-HandlerMethodArguementResolver"><a href="#ArgumentResolver-HandlerMethodArguementResolver" class="headerlink" title="ArgumentResolver(=HandlerMethodArguementResolver)"></a>A<strong>rgumentResolver(=</strong>HandlerMethodArguementResolver)</h3><ul>
+<li>모든 Argument(매개변수)처리해주는것</li>
+<li>생각해보면, 애노테이션 기반의 컨트롤러는 매우 다양한 파라미터를 사용할 수 있었다. HttpServletRequest , Model은 물론이고, @RequestParam , @ModelAttribute 같은 애노테이션 그리고 @RequestBody , HttpEntity 같은 HTTP 메시지를 처리하는 부분까지 매우 큰 유연함을 보여주었다.<br>이렇게 파라미터를 유연하게 처리할 수 있는 이유가 바로 ArgumentResolver 덕분이다.</li>
+<li><strong>애노테이션 기반 컨트롤러를 처리하는 RequestMappingHandlerAdapter 는 바로 이 ArgumentResolver 를 호출해서 컨트롤러(핸들러)가 필요로 하는 다양한 파라미터의 값(객체)을 생성한다.</strong> 그리고 이렇게 파리미터의 값이 모두 준비되면 컨트롤러를 호출하면서 값을 넘겨준다.<ul>
+<li>스프링은 30개가 넘는 ArgumentResolver 를 기본으로 제공한다.<br>어떤 종류들이 있는지 살짝 코드로 확인만 해보자.</li>
+<li><a href="https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-arguments" target="_blank" rel="noopener">https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-arguments</a></li>
+</ul>
+</li>
+<li>정확히는 HandlerMethodArgumentResolver 인데 줄여서 ArgumentResolver 라고 부른다.</li>
+</ul>
+<h3 id="동작-방식"><a href="#동작-방식" class="headerlink" title="동작 방식"></a>동작 방식</h3><ul>
+<li>ArgumentResolver 의 supportsParameter() 를 호출해서 해당 파라미터를 지원하는지 체크하고, 지원하면 resolveArgument() 를 호출해서 실제 객체를 생성한다. 그리고 이렇게 생성된 객체가 컨트롤러 호출시 넘어가는 것이다.</li>
+<li>그리고 원한다면 여러분이 직접 이 인터페이스를 확장해서 원하는ArgumentResolver 를 만들 수도 있다. 실제 확장하는 예제는 향후 로그인 처리에서 진행하겠다.</li>
+</ul>
+<h3 id="ReturnValueHandler"><a href="#ReturnValueHandler" class="headerlink" title="ReturnValueHandler"></a><strong>ReturnValueHandler</strong></h3><ul>
+<li>HandlerMethodReturnValueHandler 를 줄여서 ReturnValueHandler 라 부른다. ArgumentResolver 와 비슷한데, 이것은 응답 값을 변환하고 처리한다.컨트롤러에서 String으로 뷰 이름을 반환해도, 동작하는 이유가 바로 ReturnValueHandler 덕분이다.</li>
+<li>어떤 종류들이 있는지 살짝 코드로 확인만 해보자.<br>스프링은 10여개가 넘는 ReturnValueHandler 를 지원한다.<br>예) ModelAndView , @ResponseBody , HttpEntity , String</li>
+<li><a href="https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-return-types" target="_blank" rel="noopener">https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-return-types</a></li>
+</ul>
+<h2 id="HTTP-메시지-컨버터-1"><a href="#HTTP-메시지-컨버터-1" class="headerlink" title="HTTP 메시지 컨버터"></a><strong>HTTP 메시지 컨버터</strong></h2><h3 id="HTTP-메시지-컨버터-위치"><a href="#HTTP-메시지-컨버터-위치" class="headerlink" title="HTTP 메시지 컨버터 위치"></a><strong>HTTP 메시지 컨버터 위치</strong></h3><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212241553871.png" alt="스크린샷 2022-07-01 오전 3.13.12.png"></p>
+<ul>
+<li>HTTP 메시지 컨버터는 어디쯤 있을까?<br>HTTP 메시지 컨버터를 사용하는 @RequestBody 도 컨트롤러가 필요로 하는 파라미터의 값에 사용된다. @ResponseBody 의 경우도 컨트롤러의 반환 값을 이용한다.</li>
+<li><strong>요청의 경우</strong><br>@RequestBody 를 처리하는 ArgumentResolver 가 있고, HttpEntity 를 처리하는 ArgumentResolver 가 있다. 이 ArgumentResolver 들이 HTTP 메시지 컨버터를 사용해서 필요한 객체를 생성하는 것이다. (어떤 종류가 있는지 코드로 살짝 확인해보자)</li>
+<li><strong>응답의 경우</strong> @ResponseBody 와 HttpEntity 를 처리하는 ReturnValueHandler 가 있다. 그리고 여기에서 HTTP 메시지 컨버터를 호출해서 응답 결과를 만든다.</li>
+<li>결국 messageBody를 이용하기위해, 쓰기위해선 항상 HTTP 메시지 컨버터가 호출되어 처리한후 반환한다.</li>
+<li>실제로 HttpEntityMethodProcessor 는 HandlerMethodArguemtResolver의 자손이며, 아래와같이 supportsParameter()내용을 보면 HttpEntity.class, RequestEntity.class를 지원하는것을 알수있다. 그리고 객체 생성중에 readWithMessageConverter()안에 HTTP메세지 컨버터를 돌림.</li>
+<li>스프링 MVC는 @RequestBody @ResponseBody 가 있으면<br>RequestResponseBodyMethodProcessor (ArgumentResolver)<br>HttpEntity 가 있으면 HttpEntityMethodProcessor (ArgumentResolver)를 사용한다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpEntityMethodProcessor</span> <span class="keyword">extends</span> <span class="title">AbstractMessageConverterMethodProcessor</span> </span>&#123;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">supportsParameter</span><span class="params">(MethodParameter parameter)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> (HttpEntity.class == parameter.getParameterType() ||</span><br><span class="line">				RequestEntity.class == parameter.getParameterType());</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="확장"><a href="#확장" class="headerlink" title="확장"></a><strong>확장</strong></h3><ul>
+<li>스프링은 다음을 모두 인터페이스로 제공한다. 따라서 필요하면 언제든지 기능을 확장할 수 있다.<ul>
+<li>HandlerMethodArgumentResolver</li>
+<li>HandlerMethodReturnValueHandler</li>
+<li>HttpMessageConverter</li>
+</ul>
+</li>
+<li>스프링이 필요한 대부분의 기능을 제공하기 때문에 실제 기능을 확장할 일이 많지는 않다. 기능 확장은 WebMvcConfigurer 를 상속 받아서 스프링 빈으로 등록하면 된다. 실제 자주 사용하지는 않으니 실제 기능 확장이 필요할 때 WebMvcConfigurer 를 검색해보자.</li>
+</ul>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2022/12/24/SpringCore-CH07/" title= "SpringCore CH07">
+                    <div class="nextTitle">SpringCore CH07</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2022/12/24/SpringCore-CH05/" title= "SpringCore CH05">
+                    <div class="prevTitle">SpringCore CH05</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#스프링-MVC-1편-CH06"><span class="toc-number">1.</span> <span class="toc-text">스프링 MVC 1편 CH06</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#프로-젝트-생성"><span class="toc-number">2.</span> <span class="toc-text">프로 젝트 생성</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Welcome페이지-만들기"><span class="toc-number">2.1.</span> <span class="toc-text">Welcome페이지 만들기</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#로깅-간단히-알아보기"><span class="toc-number">3.</span> <span class="toc-text">로깅 간단히 알아보기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#로깅-라이브러리"><span class="toc-number">3.1.</span> <span class="toc-text">로깅 라이브러리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#로그-정보"><span class="toc-number">3.2.</span> <span class="toc-text">로그 정보</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#로그-선언"><span class="toc-number">3.3.</span> <span class="toc-text">로그 선언</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#로그-호출"><span class="toc-number">3.4.</span> <span class="toc-text">로그 호출</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#매핑-정보"><span class="toc-number">3.5.</span> <span class="toc-text">매핑 정보</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#로그레벨-설정"><span class="toc-number">3.6.</span> <span class="toc-text">로그레벨 설정</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#올바른-로그-사용법"><span class="toc-number">3.7.</span> <span class="toc-text">올바른 로그 사용법</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#로그-사용시-장점"><span class="toc-number">3.8.</span> <span class="toc-text">로그 사용시 장점</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#추가자료"><span class="toc-number">3.9.</span> <span class="toc-text">추가자료 (!!!)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#요청-매핑"><span class="toc-number">4.</span> <span class="toc-text">요청 매핑</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#매핑-정보-1"><span class="toc-number">4.1.</span> <span class="toc-text">매핑 정보</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-메서드-매핑"><span class="toc-number">4.2.</span> <span class="toc-text">HTTP 메서드 매핑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-메서드-매핑-축약"><span class="toc-number">4.3.</span> <span class="toc-text">HTTP 메서드 매핑 축약</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PathVariable-경로-변수-사용"><span class="toc-number">4.4.</span> <span class="toc-text">PathVariable(경로 변수) 사용(!!!)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PathVariable-사용-다중"><span class="toc-number">4.5.</span> <span class="toc-text">PathVariable 사용 - 다중</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#특정-파라미터-조건-매핑"><span class="toc-number">4.6.</span> <span class="toc-text">특정 파라미터 조건 매핑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#특정-헤더-조건-매핑"><span class="toc-number">4.7.</span> <span class="toc-text">특정 헤더 조건 매핑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#미디어-타입-조건-매핑-HTTP-요청-Content-Type-consume"><span class="toc-number">4.8.</span> <span class="toc-text">미디어 타입 조건 매핑 - HTTP 요청 Content-Type, consume</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#미디어-타입-조건-매핑-HTTP-요청-Accept-produce"><span class="toc-number">4.9.</span> <span class="toc-text">미디어 타입 조건 매핑 - HTTP 요청 Accept, produce</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#요청-매핑-API예시"><span class="toc-number">5.</span> <span class="toc-text">요청 매핑 - API예시</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#실습"><span class="toc-number">5.1.</span> <span class="toc-text">실습</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-요청-기본-헤더-조회"><span class="toc-number">6.</span> <span class="toc-text">HTTP 요청 - 기본, 헤더 조회</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-요청-파라미터"><span class="toc-number">7.</span> <span class="toc-text">HTTP 요청 파라미터</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#쿼리-파라미터-HTML-Form"><span class="toc-number">7.1.</span> <span class="toc-text">쿼리 파라미터, HTML Form</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#개요"><span class="toc-number">7.1.1.</span> <span class="toc-text">개요</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RequestParam-사용"><span class="toc-number">7.2.</span> <span class="toc-text">@RequestParam 사용</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-요청-파라미터-ModelAttribute"><span class="toc-number">7.3.</span> <span class="toc-text">HTTP 요청 파라미터 - @ModelAttribute</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ModelAttribute적용전"><span class="toc-number">7.3.1.</span> <span class="toc-text">@ModelAttribute적용전</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ModelAttribute적용후"><span class="toc-number">7.3.2.</span> <span class="toc-text">@ModelAttribute적용후</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ModelAttribute적용후-v2"><span class="toc-number">7.3.3.</span> <span class="toc-text">@ModelAttribute적용후 v2</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-요청-메시지"><span class="toc-number">8.</span> <span class="toc-text">HTTP 요청 메시지</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#단순-텍스트"><span class="toc-number">8.1.</span> <span class="toc-text">단순 텍스트(!!!)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정리"><span class="toc-number">8.1.1.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-요청-메시지-JSON"><span class="toc-number">8.2.</span> <span class="toc-text">HTTP 요청 메시지 - JSON</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-응답"><span class="toc-number">9.</span> <span class="toc-text">HTTP 응답</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#정적-리소스-뷰-템플릿"><span class="toc-number">9.1.</span> <span class="toc-text">정적 리소스, 뷰 템플릿</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#정적-리소스"><span class="toc-number">9.1.1.</span> <span class="toc-text">정적 리소스</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#뷰-템플릿-사용"><span class="toc-number">9.1.2.</span> <span class="toc-text">뷰 템플릿 사용</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-응답-HTTP-API-메시지-바디에-직접-입력"><span class="toc-number">9.2.</span> <span class="toc-text">HTTP 응답 - HTTP API, 메시지 바디에 직접 입력</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-메시지-컨버터"><span class="toc-number">10.</span> <span class="toc-text">HTTP 메시지 컨버터</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ResponseBody사용원리"><span class="toc-number">10.1.</span> <span class="toc-text">@ResponseBody사용원리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ResponseBody-를-사용"><span class="toc-number">10.2.</span> <span class="toc-text">@ResponseBody 를 사용</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#스프링-MVC는-다음의-경우에-HTTP-메시지-컨버터를-적용한다"><span class="toc-number">10.3.</span> <span class="toc-text">스프링 MVC는 다음의 경우에 HTTP 메시지 컨버터를 적용한다.(!!!)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-메시지-컨버터-인터페이스"><span class="toc-number">10.3.1.</span> <span class="toc-text">HTTP 메시지 컨버터 인터페이스</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#스프링-부트-기본-메시지-컨버터"><span class="toc-number">10.3.2.</span> <span class="toc-text">스프링 부트 기본 메시지 컨버터(!!!)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#다시-정리"><span class="toc-number">10.3.3.</span> <span class="toc-text">다시 정리</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#요청-매핑-헨들러-어뎁터-구조-RequestMappingHandlerAdapter"><span class="toc-number">11.</span> <span class="toc-text">요청 매핑 헨들러 어뎁터 구조 (RequestMappingHandlerAdapter)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringMVC구조"><span class="toc-number">11.1.</span> <span class="toc-text">SpringMVC구조</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RequestMappingHandlerAdapter-동작-방식"><span class="toc-number">11.2.</span> <span class="toc-text">RequestMappingHandlerAdapter 동작 방식</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ArgumentResolver-HandlerMethodArguementResolver"><span class="toc-number">11.2.1.</span> <span class="toc-text">ArgumentResolver(&#x3D;HandlerMethodArguementResolver)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#동작-방식"><span class="toc-number">11.2.2.</span> <span class="toc-text">동작 방식</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ReturnValueHandler"><span class="toc-number">11.2.3.</span> <span class="toc-text">ReturnValueHandler</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-메시지-컨버터-1"><span class="toc-number">11.3.</span> <span class="toc-text">HTTP 메시지 컨버터</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-메시지-컨버터-위치"><span class="toc-number">11.3.1.</span> <span class="toc-text">HTTP 메시지 컨버터 위치</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#확장"><span class="toc-number">11.3.2.</span> <span class="toc-text">확장</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 139
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH00/" >SpringCore CH00</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH01/" >SpringCore CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH04/" >SpringCore CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH08/" >SpringCore CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH02-03/" >SpringCore CH02~03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH07/" >SpringCore CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH05/" >SpringCore CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH06/" >SpringCore CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/effective-java-review/" >effective-java-review </a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH09/" >SpringCore CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH01/" >Java 배우기 CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH02/" >Java 배우기 CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH03/" >Java 배우기 CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH04/" >Java 배우기 CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH06/" >Java 배우기 CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH08/" >Java 배우기 CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH09/" >Java 배우기 CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH07/" >Java 배우기 CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH11/" >Java 배우기 CH11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH10/" >Java 배우기 CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH12/" >Java 배우기 CH12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH13/" >Java 배우기 CH13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH14/" >Java 배우기 CH14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH05/" >Java 배우기 CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/ConnectDomainToNotion/" >Notion과 개인 Domain 연결하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/OSI7layer/" >OSI7계층과 TCP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/02</span><a class="archive-post-title" href= "/2020/10/02/mysql/" >Mysql 기본 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-command/" >우분투 자주 쓰는 명령어</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="Notion"><span class="iconfont-archer">&#xe606;</span>Notion</span>
+    
+        <span class="sidebar-tag-name" data-tags="Domain"><span class="iconfont-archer">&#xe606;</span>Domain</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="Tips"><span class="iconfont-archer">&#xe60a;</span>Tips</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="Java"><span class="iconfont-archer">&#xe60a;</span>Java</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+        <span class="sidebar-category-name" data-categories="Spring"><span class="iconfont-archer">&#xe60a;</span>Spring</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

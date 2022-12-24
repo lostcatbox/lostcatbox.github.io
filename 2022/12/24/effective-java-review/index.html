@@ -1,0 +1,4514 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>effective-java-review  · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">effective-java-review </a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            effective-java-review 
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Review">Review</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Java">Java</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">4.1k</span>Reading time: <span class="post-count reading-time">25 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2022/12/24</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="책리뷰-이펙티브-자바-3-E"><a href="#책리뷰-이펙티브-자바-3-E" class="headerlink" title="(책리뷰)이펙티브 자바 3/E"></a>(책리뷰)이펙티브 자바 3/E</h1><p>2022.06.05 처음으로 다읽음.(80%이해못함. 그냥 자바 느낌을 배움)</p>
+<h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>자바라는 언어에 대해 조금이나마 친숙해지기 위해서</p>
+<p>워낙 유명한책이고, 앞으로 자바를 많이 쓸예정이라서, 이해가 되지않는 부분도 일단 읽고 넘어가는식으로 1회독을 목표로 한다.</p>
+<ul>
+<li>해당책의 라이브러리는<ul>
+<li>java.lang</li>
+<li>java.util</li>
+<li>java.io</li>
+<li>java.util.concurrent</li>
+<li>java.util.function</li>
+</ul>
+</li>
+</ul>
+<h1 id="1장-들어가기"><a href="#1장-들어가기" class="headerlink" title="1장 들어가기"></a>1장 들어가기</h1><ul>
+<li>이책은 명료성, 단순성 원칙으로한다</li>
+<li>코드는 복사되는것이 아니라 재사용되어야한다.</li>
+<li>오류는 컴파일 타임에 잡아야한다</li>
+</ul>
+<p>자바의 구성요소</p>
+<ul>
+<li><p>인터페이스</p>
+</li>
+<li><p>클래스</p>
+</li>
+<li><p>배열</p>
+</li>
+<li><p>기본형</p>
+</li>
+<li><p>기본형을 제외한 모든것은 객체</p>
+</li>
+</ul>
+<p>멤버</p>
+<ul>
+<li>메서드</li>
+<li>멤버 클래스</li>
+<li>멤버 인터페이스</li>
+<li>필드</li>
+</ul>
+<p>용어</p>
+<ul>
+<li>상속==서브클래싱</li>
+<li>클래스가 인터페이스 구현</li>
+<li>인터페이스가 다른 인터페이스 확장(extends)</li>
+<li>아무것도 명시하지않았을때는 package-private사용</li>
+<li>공개 API는 프로그래머가 접근할수있는 모든 클래스, 인터페이스 , 패키지에 모든 클래스, 생성자, 멤버, 직렬화된형태를 가르킨다&gt;&gt; 이들 모두 API요소라고한다.</li>
+<li>API를 사용하는 프로그램 작성자를 API사용자<br>API를 사용하는 클래스(코드)는 그 API의 클라이언트라 한다.</li>
+<li>공개 API는 그 API를 정의한 패키지 밖에서 접근할수있는 API요소로 이뤄진다.</li>
+<li>따라서 모든 클라이언트가 접근가능하며, API작성자가 지원하기로 약속한 API요소들이다.</li>
+<li>패키지의 공개 API는 그 패키지의 모든 public 클래스, 인터페이스의 public혹은 protected멤버와 생성자로 구성된다</li>
+</ul>
+<h1 id="2장-객체-생성과-파괴"><a href="#2장-객체-생성과-파괴" class="headerlink" title="2장 객체 생성과 파괴"></a>2장 객체 생성과 파괴</h1><h2 id="아이템-1-생성자-대신-정적-팩터리-메서드를-고려하라"><a href="#아이템-1-생성자-대신-정적-팩터리-메서드를-고려하라" class="headerlink" title="아이템 1. 생성자 대신 정적 팩터리 메서드를 고려하라"></a>아이템 1. 생성자 대신 정적 팩터리 메서드를 고려하라</h2><ul>
+<li>정적 팩터리 메서드== 객체 생성의 역할을 하는 클래스 메서드(return 객체)</li>
+<li>이를 활용시 다양한 장점 존재<ul>
+<li>이름가짐</li>
+<li>호출할 때마다 객체생성안함</li>
+<li>하위 자료형 객체 반환가능</li>
+<li>객체생성 캡슐화가능</li>
+</ul>
+</li>
+</ul>
+<h2 id="아이템-2-생성자에-매개변수가-많다면-빌더를-고려하라"><a href="#아이템-2-생성자에-매개변수가-많다면-빌더를-고려하라" class="headerlink" title="아이템 2. 생성자에 매개변수가 많다면 빌더를 고려하라"></a>아이템 2. 생성자에 매개변수가 많다면 빌더를 고려하라</h2><ul>
+<li>자바빈즈 패턴</li>
+<li>점층적 생성자 패턴</li>
+<li>build 패턴 (세터들이 자신을 리턴하므로 메서드 연쇄가능</li>
+</ul>
+<h2 id="아이템-3-private-생성자나-열거-타입으로-싱글턴임을-보증하라"><a href="#아이템-3-private-생성자나-열거-타입으로-싱글턴임을-보증하라" class="headerlink" title="아이템 3. private 생성자나 열거 타입으로 싱글턴임을 보증하라"></a>아이템 3. private 생성자나 열거 타입으로 싱글턴임을 보증하라</h2><ul>
+<li>싱글턴 만드는법 두가지<ul>
+<li>private 생성자() 후 static final 인스턴스 = new 생성자() 하면, 시스템에서 유일함(static이므로 이미 인스턴스 생성전에 생성자를 통해 인스턴스 만들어져있음)</li>
+<li>private 생성자() 후 static final 인스턴스 = new 생성자() 하면 &gt;&gt;&gt; 이를 getInstance() 함수의 return Instance&gt;&gt;&gt; 항상 같은 객체를 반환하게된다.(유일함)(위에 방법에서 함수에서 그냥 return 변수한것임)</li>
+<li>즉, 제2의 클래스의 인스턴스는 만들어지지않음</li>
+</ul>
+</li>
+</ul>
+<h2 id="아이템-4-인스턴스화를-막으려거든-private-생성자를-사용하라"><a href="#아이템-4-인스턴스화를-막으려거든-private-생성자를-사용하라" class="headerlink" title="아이템 4. 인스턴스화를 막으려거든 private 생성자를 사용하라"></a>아이템 4. 인스턴스화를 막으려거든 private 생성자를 사용하라</h2><ul>
+<li>정적 메서드와 정적 필드만 만들고싶을때!</li>
+<li>Math같은 것들&gt;&gt; 생성자 정의안하면 기본 public생성자 자동생성됨.. 방지!</li>
+<li>해당 클래스로 상속도 불가능하게함&gt;&gt; 기본적으로 하위 클래스는 super()를 통해 상위 생성자를 호출하거되는데.. 이게 불가하니까!</li>
+</ul>
+<h2 id="아이템-5-자원을-직접-명시하지-말고-의존-객체-주입을-사용하라"><a href="#아이템-5-자원을-직접-명시하지-말고-의존-객체-주입을-사용하라" class="headerlink" title="아이템 5. 자원을 직접 명시하지 말고 의존 객체 주입을 사용하라"></a>아이템 5. 자원을 직접 명시하지 말고 의존 객체 주입을 사용하라</h2><ul>
+<li>자원이 하나이상으로 의존하는 클래스는 이 자원을 생성자에서 생성자(){this.자원 = Objects.requireNonNull(자원)} 해줘서 아예 같이 객체에 넣어주는게 좋음</li>
+</ul>
+<h2 id="아이템-6-불필요한-객체-생성을-피하라"><a href="#아이템-6-불필요한-객체-생성을-피하라" class="headerlink" title="아이템 6. 불필요한 객체 생성을 피하라"></a>아이템 6. 불필요한 객체 생성을 피하라</h2><ul>
+<li>String s = new String(”sss”)는 “sss”가 이미 String객체인데 또 객체를 생성하게만들며 실행될때마다 새로운 객체를 만들게한다.&gt;&gt; 이는 String s =”sss”해도 충분하며, 계속실행되도 똑같은 객체를 가르킬 뿐이다..(재사용)</li>
+<li>로마 패턴을 인식해주는것에 대한 자료들도 만약 함수에만 넣는다면 로드후 가비지가 삭제, 매번반복된다. 이러지말고, static final 필드로 해당 로마 패턴을 올린후 함수에서 갖다쓰는것으로 객체를 재사용해 성능이 높아진다</li>
+<li>래퍼클래스 ←—&gt; 기본형 간의 이동인 오토박싱, 언박싱도 주의해야한다. 래퍼클래스가 되는순간 인스턴스가 계속생성됨</li>
+</ul>
+<h2 id="아이템-7-다-쓴-객체-참조를-해제하라"><a href="#아이템-7-다-쓴-객체-참조를-해제하라" class="headerlink" title="아이템 7. 다 쓴 객체 참조를 해제하라"></a>아이템 7. 다 쓴 객체 참조를 해제하라</h2><ul>
+<li>자기 메머로를 직접 관리하는 클래스라면 &gt;&gt;다쓴 참조를 null 처리해야 GC가 제거함</li>
+<li>보통은 scope를 이용하여 유효범위 밖으로 가면 GC가 알아서 제거되니까 신경안써도된다.</li>
+</ul>
+<h2 id="아이템-8-finalizer와-cleaner-사용을-피하라"><a href="#아이템-8-finalizer와-cleaner-사용을-피하라" class="headerlink" title="아이템 8. finalizer와 cleaner 사용을 피하라"></a>아이템 8. finalizer와 cleaner 사용을 피하라</h2><ul>
+<li>두가지 객체 소멸자 finalizer와 cleaner</li>
+<li>둘다 즉시 수행되지않는다. 언제실행될지는 GC만알수잇다.</li>
+<li>내 JVM에서는 잘되도 남의 JVM에서의 순서는 바껴서 안될수도</li>
+<li></li>
+</ul>
+<h2 id="아이템-9-try-finally보다는-try-with-resoure"><a href="#아이템-9-try-finally보다는-try-with-resoure" class="headerlink" title="아이템 9. try-finally보다는 try-with-resoure"></a>아이템 9. try-finally보다는 try-with-resoure</h2><ul>
+<li>자바 라이브러리에는 close메서드를 호출해 직접닫아줘야하는 자원이 많다</li>
+<li>자원을 제대로 닫히는것을 보장하기위해 try-finally많이사용된다 하지만 자원이 두개이상이면 try-finally문 2번사용 복잡</li>
+<li>try-with-resoure를 활용해야하며,  AutoCloseable이 구현되어있는것이여야한다. 대부분의 클래스 라이브러리가 이미구현함.</li>
+<li>매우 간결해지고, close()호출직접안해도됨</li>
+</ul>
+<h1 id="3장-모든-객체의-공통-메서드"><a href="#3장-모든-객체의-공통-메서드" class="headerlink" title="3장 모든 객체의 공통 메서드"></a>3장 모든 객체의 공통 메서드</h1><ul>
+<li>Object 는 모든 클래스의 조상이며, final이 아닌 Object메서드들의 재정의는 약속하에 해야한다.</li>
+<li>Comparable.compareTo도 이와비슷하다.</li>
+</ul>
+<h2 id="아이템-10-equals는-일반-규약을-지켜-재정의하라"><a href="#아이템-10-equals는-일반-규약을-지켜-재정의하라" class="headerlink" title="아이템 10. equals는 일반 규약을 지켜 재정의하라"></a>아이템 10. equals는 일반 규약을 지켜 재정의하라</h2><ul>
+<li>equals의 재정의는 객체 식별성이 아닌 논리적 동치성을 비교가 필요할때다. 주로 값 클래스!(Integer, String)</li>
+<li>즉, 객체가 같은지가 아니라 값이 같은지 물어볼때<br>(값 클래스라고 해도, 값이 같은 인스턴스가 둘 이상만들어지지않을때는 재정의필요없다.어차피 틀림)</li>
+<li>== 연산자를 사용해 입력이 자기자신의 참조인지확인</li>
+<li>instanceof 연산자로 입력이 올바른 타입인지 확인</li>
+<li>입력을 올바른 타입으로 형변환한다.(위에과정에서검사완료)</li>
+<li>입력 객체와 자기 자신의대응되는 핵심필드가 모두 일치시 true</li>
+<li>equals()를 구현했다면 3가지확인하라<ul>
+<li>대칭적?</li>
+<li>추이성?</li>
+<li>일관성?</li>
+</ul>
+</li>
+<li>equals()를 재정의할 땐, hashCode도 반드시 재정의하자</li>
+<li>Object외의 타입을 매개변수로 받는 equals()는 작성하지말자!&gt;&gt; 이렇게하면 재정의(오버라이딩)아니라 오버로딩이다.</li>
+</ul>
+<h2 id="아이템-11-equals를-재정의하려거든-hashCode도-재정의"><a href="#아이템-11-equals를-재정의하려거든-hashCode도-재정의" class="headerlink" title="아이템 11. equals를 재정의하려거든 hashCode도 재정의"></a>아이템 11. equals를 재정의하려거든 hashCode도 재정의</h2><ul>
+<li>equals()를 재정의한 클래스 모두 hashCode()도 재정의해야한다</li>
+<li>equals가 두 객체가 같다고 판단하면 반드시 hashCode()도 같은 판단나와야한다.</li>
+<li>equals가 두 객체가 다르다 판단해도, hashCode()는 같을수도있다.(해쉬값충돌)</li>
+<li>HashMap이나 HachSet에서 hashCode()씀..hashCode()재정의필요</li>
+<li>hashCode(){return Objects.hash(…..)} 활용해도좋다.</li>
+<li>그리고 hashCode()에 캐싱처리해놓는것도좋다</li>
+</ul>
+<h2 id="아이템-12-toString을-항상-재정의하라"><a href="#아이템-12-toString을-항상-재정의하라" class="headerlink" title="아이템 12. toString을 항상 재정의하라"></a>아이템 12. toString을 항상 재정의하라</h2><ul>
+<li>Object의 기본 toString는 단순히 <code>클래스 _이름@16진수로표시한해시코드</code>를 반환한다</li>
+<li>toString은 반드시 재정의해야한다. 그 객체가 가진 주요 정보를 모두 반환해주는 것 이좋다.&gt;&gt;읽기좋은형태로!</li>
+<li>너무 정보가 방대하다면 해당객채가 가진특징요약도좋다<br><code>전화번호부(총 1234개)</code></li>
+<li>상위 클래스에서 이미 알맞게 구현해놨다면 그대로써도된다.</li>
+<li>toString가 어떤형식으로반환하는지 반드시 적어놔야한다.</li>
+</ul>
+<h2 id="아이템-13-clone-재정의는-주의해서-진행하라"><a href="#아이템-13-clone-재정의는-주의해서-진행하라" class="headerlink" title="아이템 13. clone 재정의는 주의해서 진행하라"></a>아이템 13. clone 재정의는 주의해서 진행하라</h2><ul>
+<li>Cloneable인터페이스는 매우 널리쓰인다.</li>
+<li>하지만 final클래스가 아닌이상 다양한 상황을 고려해야한다 따라서 <strong>생성자와 팩터리를 이용하는 게 최고다</strong></li>
+<li>단 배열은 clone활용이 깔끔하다</li>
+</ul>
+<h2 id="아이템-14-Comparable을-구현할지-고려하라"><a href="#아이템-14-Comparable을-구현할지-고려하라" class="headerlink" title="아이템 14. Comparable을 구현할지 고려하라"></a>아이템 14. Comparable을 구현할지 고려하라</h2><ul>
+<li>Comparable 인터페이스의 유일한  메서드 compareTo!!!</li>
+<li>compareTo는 Object메서드가 아니다</li>
+<li>compareTo는 동치성 비교+순서비교+제니릭</li>
+<li>Comparable을 구현했다 == 그 클래스의 인스턴스들에는 자연적 순서있음을 의미</li>
+<li>따라서 Comparable을 구현한 객체의 배열은 Arrays.sort(a);처럼  손쉽게 정렬할수있다.</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212241539233.png" alt="스크린샷 2022-05-31 오전 11.22.07.png"></p>
+<ul>
+<li>자바 플랫폼 라이브러리의 모든 값 클래스와 열거타입이 Comparable을 구현했다. 알파벳, 숫자, 연대등 순서가 명확한 값 클래스를 작성시 반드시 Comparable구현하자</li>
+<li>비교를 활용하는 클래스 = TreeSet, TreeMap,</li>
+<li>검색과 정렬 알고리즘 활용하는 Collections, Arrays</li>
+<li>Comparable은 타입을 인수로 받는 제네릭 인터페이스 이므로, compareTo 메서드의 인수 타입은 컴파일타입에 정해진다.</li>
+<li>Comparable을 구현하지 않은 필드나 표준이 아닌 순서로 비교해야한다면 Comparator를 대신 사용하자</li>
+<li></li>
+</ul>
+<h1 id="4장-클래스와-인터페이스"><a href="#4장-클래스와-인터페이스" class="headerlink" title="4장 클래스와 인터페이스"></a>4장 클래스와 인터페이스</h1><ul>
+<li>추상화의 기본 단위인 클래스와 인터페이스</li>
+</ul>
+<h2 id="아이템-15-클래스와-멤버의-접근-권한을-최소화하라"><a href="#아이템-15-클래스와-멤버의-접근-권한을-최소화하라" class="headerlink" title="아이템 15. 클래스와 멤버의 접근 권한을 최소화하라"></a>아이템 15. 클래스와 멤버의 접근 권한을 최소화하라</h2><ul>
+<li><p>오직 API를 통해서만 다른 컴포넌트와 소통하며, 서로의 내부 동작방식에 전혀 개의치 않는다.&lt;&gt;&gt; 캡슐화</p>
+</li>
+<li><p>장점은 많지만 핵심은 개별 컴포넌트 병행으로 개발가능, 동작 검증가능</p>
+</li>
+<li><p>각 요소의 접근성은 그 요소가 선언된 위치와 접근 제한자(4가지)로 정해진다.</p>
+</li>
+<li><p>기본원칙은 <strong>모든 클래스와 멤버의 접근성을 가능한 한 좁혀야한다.</strong></p>
+</li>
+<li><p>가장 바깥의 톱레벨 클래스와 인터페이스에는 접근 수준이 2가지(package-private, public)가 존재한다<br>이중 public을 선언시, 공개 API가 되며, package-private선언시 , 해당 패키지 안에서만 이용가능하다.<br>즉, 외부에서 안사용하면 package-private바람직&gt;&gt; 내부 구현이므로, 클라이언트와 상관없이 수정, 교체, 제거가능.&gt;&gt; 반면 public일경우 API가되고, 하위 호환을 위해 영원한 관리 필요</p>
+</li>
+<li><p>멤버(필드,메서드, 중첩클래스,중첩 인터페이스) 에 부여할수있는 접근 수준 4가지</p>
+<ul>
+<li>private: 멤버를 선언한 톱레벨 클래스에서만 접근가능</li>
+<li>package-private(deflaut): 멤버가 소속된 패키지 안의 모든 클래스에서 접근가능</li>
+<li>protected: package-private의 접근 버위 포함하고, 이 멤버를 선언한 클래스의 하위 클래스에서도 접근가능</li>
+<li>public: 모든 곳에서 접근 가능</li>
+</ul>
+</li>
+<li><p>public클래스의 private 멤버를 package-private까지 풀어주는건 괜찮지만 그 이후까지 허용하지말자.</p>
+</li>
+<li><p>public클래스의 인스턴스 필드는 되도록 public이 아니여야 한다</p>
+</li>
+</ul>
+<h2 id="아이템-16-public-클래스에서는-public-필드가-아닌-접근자-메서드를-사용하라"><a href="#아이템-16-public-클래스에서는-public-필드가-아닌-접근자-메서드를-사용하라" class="headerlink" title="아이템 16. public 클래스에서는 public 필드가 아닌 접근자 메서드를 사용하라"></a>아이템 16. public 클래스에서는 public 필드가 아닌 접근자 메서드를 사용하라</h2><ul>
+<li>단순한 class {iv인스턴스} 는 데이터 필드에 직접 접근하기에 캡슐화 이점 제공못함&gt;&gt; 불변식을 보장못하고, 외부에서 필드에 접근할떄 부수 작업을 수행할수도없다. &gt;&gt; 따라서 private으로 모두 바꾼후, public 접근자(getter)를 추가한다</li>
+<li>밖에서 접근가능한 클래스라면 접근자를 제공함으로 클래스 내부 표현 방식을 언제든 바꿀수있는 유연성을 얻음<br>public클래스가 필드를 공개하면 이를 사용하는 클라이언트들이 생겨날것이므로 내부 표현 방식을 마음대로 바꿀수없다.</li>
+<li>하지만 package-private 클래스혹은 private 중첩 클래스라면 데이터 필드를 노출해도 문제없다.</li>
+<li>public클래스의 가변 필드는 직접 노출 금지</li>
+</ul>
+<h2 id="아이템-17-변경-가능성을-최소화하라"><a href="#아이템-17-변경-가능성을-최소화하라" class="headerlink" title="아이템 17. 변경 가능성을 최소화하라"></a>아이템 17. 변경 가능성을 최소화하라</h2><ul>
+<li>불변 클래스==그 인스턴스의 내부 값을 수정할수없는 클래스</li>
+<li>만드는법 5가지<ul>
+<li>객체의 상태를 변경하는 메서드를 제공하지않는다</li>
+<li>클래스를 확장할 수 없도록 한다</li>
+<li>모든 필드를 final로 선언한다.</li>
+<li>모든 필드를 private으로 선언한다.</li>
+<li>자신 외에는 내부의 가변 컴포넌트에 접근할수없도록한다.</li>
+</ul>
+</li>
+<li>불변 객체이므로 메서드들의 반환은 결국 결과값을 담은 새로운 객체를 반환함</li>
+<li>불변 객체는 생성된 시점부터 파괴될때까지 그대로 간직한다</li>
+<li>불변 객체는 근복적으로 스레드 안전하여 따로 동기화할 필요없다.</li>
+<li>불변 클래스는 자주 사용되는 인스턴스를 public static final 타입 변수명 = new 타입(자주쓰이는값) static으로 해주면, 캐싱!! 을 통해 , 중복해서 생성할 필요도없어진다.&gt;&gt;&gt; 이런 정적 팩터리르 사용하면 여러 클라이언트가 인스턴스를 공유하여, 메모리 사용량, 가비지 컬렉션 비용줄어든다.</li>
+<li>불변 객체의 단점은 값이 다르면 반드시 독립된 객체로 만들어야한다는 점이다.</li>
+<li>따라서 getter구현한다고 setter를 무조건 만들지 말자</li>
+<li><strong>합당한 이유가 없다면 모든 필드는 private final 이여야한다</strong></li>
+</ul>
+<h2 id="아이템-18-상속보다는-컴포지션을-사용하라"><a href="#아이템-18-상속보다는-컴포지션을-사용하라" class="headerlink" title="아이템 18. 상속보다는 컴포지션을 사용하라"></a>아이템 18. 상속보다는 컴포지션을 사용하라</h2><ul>
+<li>상속은 코드를 재사용하는 강력한 수단이지만, 잘못사용하면 오류를 내기 쉽다</li>
+<li>(지금부터 말하는 상속은 인터페이스 구현 X, 인터페이스 확장X) only 클래스가 클래스로 상속하는것</li>
+<li>메서드 호출과 달리 상속은 캡슐화를 깨뜨린다( 상위 클래스 건드리면 하위클래스에서 문제발생ㄱ)</li>
+<li>상속받은 애의 allAdd()메서드호출시 상속받은 애의 Add()를 호출하므로 allAdd()를 오버라이딩하지않았다면, 오류남… 상속은 즉, 상위 클래스의 내부 구현방식을 알수없다.</li>
+<li>메서드 재정의만 문제아니다. 새로운 메서드를 추가하는것도 위험이다</li>
+<li>상속의 취약점 피하려면 컴포지션과 전달을 사용하자.</li>
+</ul>
+<h2 id="아이템-19-상속을-고려해-설계하고-문서화하라-그러지-않았다면-상속을-금지하라"><a href="#아이템-19-상속을-고려해-설계하고-문서화하라-그러지-않았다면-상속을-금지하라" class="headerlink" title="아이템 19. 상속을 고려해 설계하고 문서화하라. 그러지 않았다면 상속을 금지하라"></a>아이템 19. 상속을 고려해 설계하고 문서화하라. 그러지 않았다면 상속을 금지하라</h2><ul>
+<li>재정의 가능 메서드는 public과 protected메서드중 final이 아닌 모든 메서드를 뜻한다</li>
+<li>상속을 고려하지 않았다면 하위 클래스에도 문제가 됨에 따라 금지하자</li>
+<li>상속금지는 클래스를 final로 선언하거나, 생성자 모두를 외부 접근 금지하자</li>
+</ul>
+<h2 id="아이템-20-추상-클래스보다는-인터페이스를-우선하라"><a href="#아이템-20-추상-클래스보다는-인터페이스를-우선하라" class="headerlink" title="아이템 20. 추상 클래스보다는 인터페이스를 우선하라"></a>아이템 20. 추상 클래스보다는 인터페이스를 우선하라</h2><ul>
+<li>추상 클래스와 인터페이스 차이를 보면, 추상클래스는 반드시 구현하는 클래스가 하위 클래스가 되어야한다는점이다(무조건 1개)</li>
+<li>인터페이스는 믹스인 정의에 안성맞춤이다. &gt;&gt;믹스인이란, 대상 타입의 주된 기능에 선택적 기능을 혼합한다!는의미</li>
+<li>인터페이스로는 계층구조없는 타입 프레임워크 만들수있다.</li>
+<li>추상 골격 구현, 인터페이스 함께 제공.. 템플릿 메서드 패턴</li>
+</ul>
+<h2 id="아이템-21-인터페이스는-구현하는-쪽을-생각해-설계하라"><a href="#아이템-21-인터페이스는-구현하는-쪽을-생각해-설계하라" class="headerlink" title="아이템 21. 인터페이스는 구현하는 쪽을 생각해 설계하라"></a>아이템 21. 인터페이스는 구현하는 쪽을 생각해 설계하라</h2><ul>
+<li>인터페이스는 디폴트 메서드가 들어갈수있게되었다.(하위 호환성때문에)</li>
+<li>인터페이스에 함수추가나, 디폴트 메서드를 추가하는 일은 상당히 다양한 테스트 케이스 진행후 릴리스해야함</li>
+</ul>
+<h2 id="아이템-22-인터페이스는-타입을-정의하는-용도로만-사용하라"><a href="#아이템-22-인터페이스는-타입을-정의하는-용도로만-사용하라" class="headerlink" title="아이템 22. 인터페이스는 타입을 정의하는 용도로만 사용하라"></a>아이템 22. 인터페이스는 타입을 정의하는 용도로만 사용하라</h2><ul>
+<li>인터페이스는 자신을 구현한 클래스의 인스턴스를 참조할 수있는 타입 역할을 한다.! 용도는 이것하나!!</li>
+<li>상수 인스터페이스 안티패턴은 인터페이스를 잘못 사용한 예이다. 마치 내부 구현인 클래스의 상수를 API로 노출시키는 것과 같은 효과다</li>
+<li>상수가 특정 클래스에 강하게 연관된 상수라면, 인스턴스화 할수없는 유틸리티 클래스에 담아서 공개하자(생성자를 private처리!!)</li>
+</ul>
+<h2 id="아이템-23-태그-달린-클래스보다는-클래스-계층구조를-활용하라"><a href="#아이템-23-태그-달린-클래스보다는-클래스-계층구조를-활용하라" class="headerlink" title="아이템 23. 태그 달린 클래스보다는 클래스 계층구조를 활용하라"></a>아이템 23. 태그 달린 클래스보다는 클래스 계층구조를 활용하라</h2><ul>
+<li>상속을 이용하여, 각 상황에 맞게 동작이 달라지는 메서드를 루트 클래스의 추상 메서드로 선언 후 이를 상속받아 각각의 특성있는 클래스를 만든다. 공통인자들도 모두 루트 클래스로 보낸후, 이제 상속받아 특정 변수들은 그곳에서 정의</li>
+</ul>
+<h2 id="아이템-24-멤버-클래스는-되도록-static으로-만들라"><a href="#아이템-24-멤버-클래스는-되도록-static으로-만들라" class="headerlink" title="아이템 24. 멤버 클래스는 되도록 static으로 만들라"></a>아이템 24. 멤버 클래스는 되도록 static으로 만들라</h2><ul>
+<li>중첨 클래스란 다른 클래스 안에 정의된 클래서이며 자신을 감싼 바깥 클래스에서만 쓰여야한다!!</li>
+<li>중첩 클래스<ul>
+<li>정적 멤버 클래스</li>
+<li>멤버 클래스</li>
+<li>익명 클래스</li>
+<li>지역 클래스</li>
+</ul>
+</li>
+<li>첫번째 제외한 나머지는 내부 클래스에 해당된다.</li>
+<li>정적 멤버 클래스는 흔히 바깐 클래스와 함께 쓰일 때만 유용한 public 도우미 클래스로 쓰인다</li>
+<li>비정적 멤버 클래스의 인스턴스는 바깥 클래스의 인스턴스와 암묵적으로 연결된다. 따라서, 비정적 멤버 인스턴스안에서 바깥클래스명.this 형태로 가져올수있다.&gt;&gt; 비정적 멤버 클래스는 바깥 인스턴스없이는 생성불가능</li>
+<li>따라서 개념사 ㅇ중첨 클래스의 인스턴스가 바깥 인스턴스와 독립적으로 존재가능하다면 정적 멤버 클래스로해야한다.</li>
+<li></li>
+</ul>
+<h2 id="아이템-25-톱레벨-클래스는-한-파일에-하나만-담으라"><a href="#아이템-25-톱레벨-클래스는-한-파일에-하나만-담으라" class="headerlink" title="아이템 25. 톱레벨 클래스는 한 파일에 하나만 담으라"></a>아이템 25. 톱레벨 클래스는 한 파일에 하나만 담으라</h2><ul>
+<li>하나의 파일에는 하나의 톱레벨 클래스만 하자</li>
+</ul>
+<h1 id="5장-제네릭"><a href="#5장-제네릭" class="headerlink" title="5장 제네릭"></a>5장 제네릭</h1><h2 id="아이템-26-로-타입은-사용하지-말라"><a href="#아이템-26-로-타입은-사용하지-말라" class="headerlink" title="아이템 26. 로 타입은 사용하지 말라"></a>아이템 26. 로 타입은 사용하지 말라</h2><ul>
+<li>클래스와 인터페이스 선언에 타입 매개변수가 쓰이면, 제네릭 클래스 혹은 제네릭 인터페이스라한다.</li>
+<li>제네릭 클래스와 제네릭 인터페이스를 통틀어 제네릭 타입이라고한다</li>
+<li>각각의 제네릭 타입은 일련의 매개변수화 타입을 정의한다.!<br>List<String>  (여기서 타입 매개변수 E에 해당하는 실제 타입 매개변수는 String이다)</li>
+<li>제네릭 타입을 하나 정의하면 그에 따라른 로타입(raw type)도 함께정의된다. (로 타입== 하위호환성을 위해, 타입 매개변수 사용하지않았을때의 상황 을뜻함)</li>
+<li>로 타입으로 쓰지말자. 제네릭이 안겨주는 안전성과 표현력을 이용하자</li>
+<li>로 타입을 매개변수로 하는 메서드에 List <Object>는 로타입의 하위 클래스가 아니므로 못넘기고, List<String>은 넘길수있다. &gt;&gt; List같은 로타입사용하면 타입 안정성 잃게됨</li>
+<li></li>
+</ul>
+<h2 id="아이템-27-비검사-경고를-제거하라"><a href="#아이템-27-비검사-경고를-제거하라" class="headerlink" title="아이템 27. 비검사 경고를 제거하라"></a>아이템 27. 비검사 경고를 제거하라</h2><ul>
+<li>비검사 경고 모두 제거, 혹시 타입 안전확신할수있다면 애너테이션 달아 경고를 숨기자</li>
+<li>@supperessWarnings 애너테이션은 개별 지역변수 선언부터 클래스 전체까지 모든 선언에도 달수있다.&gt;&gt; 최대한 좁은 범위에 적용하자</li>
+</ul>
+<h2 id="아이템-28-배열보다는-리스트를-사용하라"><a href="#아이템-28-배열보다는-리스트를-사용하라" class="headerlink" title="아이템 28. 배열보다는 리스트를 사용하라"></a>아이템 28. 배열보다는 리스트를 사용하라</h2><ul>
+<li>배열은 공변+실체화가능<br>상위 클래스의 배열, 하위 클래스 배열이 같이 변한다. 상위 클래스 정의바뀌면..</li>
+<li>제네릭은 불공변, 타입정보 소거</li>
+</ul>
+<h2 id="아이템-29-이왕이면-제네릭-타입으로-만들라"><a href="#아이템-29-이왕이면-제네릭-타입으로-만들라" class="headerlink" title="아이템 29. 이왕이면 제네릭 타입으로 만들라"></a>아이템 29. 이왕이면 제네릭 타입으로 만들라</h2><ul>
+<li><p>변환잘보기</p>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212241538649.png" alt="스크린샷 2022-06-01 오후 12.17.15.png"></p>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212241538672.png" alt="스크린샷 2022-06-01 오후 12.17.25.png"></p>
+</li>
+</ul>
+<h2 id="아이템-30-이왕이면-제네릭-메서드로-만들라"><a href="#아이템-30-이왕이면-제네릭-메서드로-만들라" class="headerlink" title="아이템 30. 이왕이면 제네릭 메서드로 만들라"></a>아이템 30. 이왕이면 제네릭 메서드로 만들라</h2><ul>
+<li><h2 id="아이템-31-한정적-와일드카드를-사용해-API-유연성을-높이라"><a href="#아이템-31-한정적-와일드카드를-사용해-API-유연성을-높이라" class="headerlink" title="아이템 31. 한정적 와일드카드를 사용해 API 유연성을 높이라"></a>아이템 31. 한정적 와일드카드를 사용해 API 유연성을 높이라</h2></li>
+<li></li>
+</ul>
+<h2 id="아이템-32-제네릭과-가변인수를-함께-쓸-때는-신중하라"><a href="#아이템-32-제네릭과-가변인수를-함께-쓸-때는-신중하라" class="headerlink" title="아이템 32. 제네릭과 가변인수를 함께 쓸 때는 신중하라"></a>아이템 32. 제네릭과 가변인수를 함께 쓸 때는 신중하라</h2><ul>
+<li>가변싱ㄴ수는 메서드에 넘기는 인수의 개수를 클라이언트가 조절</li>
+<li></li>
+</ul>
+<h2 id="아이템-33-타입-안전-이종-컨테이너를-고려하라"><a href="#아이템-33-타입-안전-이종-컨테이너를-고려하라" class="headerlink" title="아이템 33. 타입 안전 이종 컨테이너를 고려하라"></a>아이템 33. 타입 안전 이종 컨테이너를 고려하라</h2><h1 id="6장-열거-타입과-애너테이션"><a href="#6장-열거-타입과-애너테이션" class="headerlink" title="6장 열거 타입과 애너테이션"></a>6장 열거 타입과 애너테이션</h1><ul>
+<li>자바에는 특수한 목적의 참조 타입 두가지존재&gt;&gt; enum , annotation이다</li>
+</ul>
+<h2 id="아이템-34-int-상수-대신-열거-타입을-사용하라"><a href="#아이템-34-int-상수-대신-열거-타입을-사용하라" class="headerlink" title="아이템 34. int 상수 대신 열거 타입을 사용하라"></a>아이템 34. int 상수 대신 열거 타입을 사용하라</h2><ul>
+<li><p>열거 타입은 일정 개수의 상수 값 정의후, 그외의 값은 허용하지않는타입이다</p>
+</li>
+<li><p>public enum Apple {PIPPIN, GRANNY_SMITH} 상수당 다신의 인스턴스를 하나씩 만들어 public static final필드로 공개한다.</p>
+</li>
+<li><p>열거 타입은 생성자가 없으므로 밖에서 접근못함</p>
+</li>
+<li><p>열거 타입에는 임의의 메서드나 필드를 추가가능</p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212241538682.png" alt="스크린샷 2022-06-01 오후 2.47.02.png"></p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212241538675.png" alt="스크린샷 2022-06-01 오후 2.47.14.png"></p>
+<h2 id="아이템-35-ordinal-메서드-대신-인스턴스-필드를-사용하라"><a href="#아이템-35-ordinal-메서드-대신-인스턴스-필드를-사용하라" class="headerlink" title="아이템 35. ordinal 메서드 대신 인스턴스 필드를 사용하라"></a>아이템 35. ordinal 메서드 대신 인스턴스 필드를 사용하라</h2><h2 id="아이템-36-비트-필드-대신-EnumSet을-사용하라"><a href="#아이템-36-비트-필드-대신-EnumSet을-사용하라" class="headerlink" title="아이템 36. 비트 필드 대신 EnumSet을 사용하라"></a>아이템 36. 비트 필드 대신 EnumSet을 사용하라</h2><h2 id="아이템-37-ordinal-인덱싱-대신-EnumMap을-사용하라"><a href="#아이템-37-ordinal-인덱싱-대신-EnumMap을-사용하라" class="headerlink" title="아이템 37. ordinal 인덱싱 대신 EnumMap을 사용하라"></a>아이템 37. ordinal 인덱싱 대신 EnumMap을 사용하라</h2><h2 id="아이템-38-확장할-수-있는-열거-타입이-필요하면-인터페이스를-사용하라"><a href="#아이템-38-확장할-수-있는-열거-타입이-필요하면-인터페이스를-사용하라" class="headerlink" title="아이템 38. 확장할 수 있는 열거 타입이 필요하면 인터페이스를 사용하라"></a>아이템 38. 확장할 수 있는 열거 타입이 필요하면 인터페이스를 사용하라</h2><h2 id="아이템-39-명명-패턴보다-애너테이션을-사용하라"><a href="#아이템-39-명명-패턴보다-애너테이션을-사용하라" class="headerlink" title="아이템 39. 명명 패턴보다 애너테이션을 사용하라"></a>아이템 39. 명명 패턴보다 애너테이션을 사용하라</h2><ul>
+<li>애너테이션</li>
+</ul>
+<h2 id="아이템-40-Override-애너테이션을-일관되게-사용하라"><a href="#아이템-40-Override-애너테이션을-일관되게-사용하라" class="headerlink" title="아이템 40. @Override 애너테이션을 일관되게 사용하라"></a>아이템 40. @Override 애너테이션을 일관되게 사용하라</h2><ul>
+<li>@Override반드시 쓰기.. 그래야 컴파일러 단에서 오류 일으켜줌</li>
+</ul>
+<h2 id="아이템-41-정의하려는-것이-타입이라면-마커-인터페이스를-사용하라"><a href="#아이템-41-정의하려는-것이-타입이라면-마커-인터페이스를-사용하라" class="headerlink" title="아이템 41. 정의하려는 것이 타입이라면 마커 인터페이스를 사용하라"></a>아이템 41. 정의하려는 것이 타입이라면 마커 인터페이스를 사용하라</h2><ul>
+<li><h1 id="7장-람다와-스트림"><a href="#7장-람다와-스트림" class="headerlink" title="7장 람다와 스트림"></a>7장 람다와 스트림</h1></li>
+<li><p>함수형 인터페이스, 람다, 메서드 참조라는 개념</p>
+</li>
+</ul>
+<h2 id="아이템-42-익명-클래스보다는-람다를-사용하라"><a href="#아이템-42-익명-클래스보다는-람다를-사용하라" class="headerlink" title="아이템 42. 익명 클래스보다는 람다를 사용하라"></a>아이템 42. 익명 클래스보다는 람다를 사용하라</h2><ul>
+<li>추상 메서드 하나짜리 인터페이스&gt;&gt;&gt; 람다식을 사용할수있음</li>
+<li>익명 클래스는 타입의인스턴스를 만들때 활용하기</li>
+<li></li>
+</ul>
+<h2 id="아이템-43-람다보다는-메서드-참조를-사용하라"><a href="#아이템-43-람다보다는-메서드-참조를-사용하라" class="headerlink" title="아이템 43. 람다보다는 메서드 참조를 사용하라"></a>아이템 43. 람다보다는 메서드 참조를 사용하라</h2><ul>
+<li>람다는 (매개변수) → (함수)</li>
+<li>메서드 참조는 (인스턴스)::(함수)</li>
+</ul>
+<h2 id="아이템-44-표준-함수형-인터페이스를-사용하라"><a href="#아이템-44-표준-함수형-인터페이스를-사용하라" class="headerlink" title="아이템 44. 표준 함수형 인터페이스를 사용하라"></a>아이템 44. 표준 함수형 인터페이스를 사용하라</h2><ul>
+<li>(!!!) java.util.function 패키지에 43개 인터페이스중 6개만 기억하자.<ul>
+<li>UnaryOperator</li>
+<li>BinaryOperator</li>
+<li>Predicate</li>
+<li>Function</li>
+<li>Supplier</li>
+<li>Consumer</li>
+</ul>
+</li>
+</ul>
+<h2 id="아이템-45-스트림은-주의해서-사용하라-45-48라이브러리중요"><a href="#아이템-45-스트림은-주의해서-사용하라-45-48라이브러리중요" class="headerlink" title="아이템 45. 스트림은 주의해서 사용하라(45~48라이브러리중요)"></a>아이템 45. 스트림은 주의해서 사용하라(45~48라이브러리중요)</h2><ul>
+<li>API가 제공하는 추상 개념 핵심은 두가지다<ul>
+<li>스트림은 데이터 원소의 유한 혹은 무산 시퀀스를 뜻한다</li>
+<li>스트림 파이프라인은 이 원소들로 수행하는 연산 단계를 표현하는 개념</li>
+</ul>
+</li>
+<li>소스 스트림 &gt; 중간연산&gt; 종단연산<ul>
+<li>각 중간연산은 변환을 하는것이며, 각 원소에 함수를 적용하거나 특정 조건 만족 못하는 원소를 걸러낼수있다</li>
+<li>종단연산은 마지막 중간 연산이 내놓은 스트림에 최후의 연산을 증가한다.<br>(원소를 정렬후 컬렉션담거나, 특정 원소 하나를 선택, 모든 원소를 출력)</li>
+</ul>
+</li>
+<li></li>
+</ul>
+<h2 id="아이템-46-스트림에서는-부작용-없는-함수를-사용하라"><a href="#아이템-46-스트림에서는-부작용-없는-함수를-사용하라" class="headerlink" title="아이템 46. 스트림에서는 부작용 없는 함수를 사용하라"></a>아이템 46. 스트림에서는 부작용 없는 함수를 사용하라</h2><ul>
+<li>스트림 패러다임의 핵심은 계산을 일련의 변환으로 재구성하느 부분이다.</li>
+<li>각 변환 단계는 가능한 한 이전 단계의 결과를 받아 처리하는 순수 함수여야한다.</li>
+<li>forEach연산은 스트림 계산 결과를 보고할때만사용하자(계산 하지마)</li>
+<li>collect는 &gt;&gt; 스트림의 원소들을 객체 하나에 취합하는것이다.</li>
+</ul>
+<h2 id="아이템-47-반환-타입으로는-스트림보다-컬렉션이-낫다"><a href="#아이템-47-반환-타입으로는-스트림보다-컬렉션이-낫다" class="headerlink" title="아이템 47. 반환 타입으로는 스트림보다 컬렉션이 낫다"></a>아이템 47. 반환 타입으로는 스트림보다 컬렉션이 낫다</h2><ul>
+<li>컬렉션 인터페이스는 iterable의 하위 타입이며, stream메서드를 제공하므로 반복과 스트림 동시 지원</li>
+<li>컬렉션이나 하위 타입을 쓰는게 최선이다</li>
+<li></li>
+</ul>
+<h2 id="아이템-48-스트림-병렬화는-주의해서-적용하라"><a href="#아이템-48-스트림-병렬화는-주의해서-적용하라" class="headerlink" title="아이템 48. 스트림 병렬화는 주의해서 적용하라"></a>아이템 48. 스트림 병렬화는 주의해서 적용하라</h2><ul>
+<li>병렬화 &gt;&gt; 스레드, 동기화, wait/notify</li>
+<li>데이터 소스가 중요하다(메모리가 연속적임이중요)(지역성)<ul>
+<li>ArrayList, HashMap, HashSet, ConcurrentHashMap의 인스턴스</li>
+<li>배열, int 범위, long 범위</li>
+</ul>
+</li>
+<li>어떤환경에서든</li>
+</ul>
+<p>결과 도출이 일정한지 반드시 확인필요</p>
+<h1 id="8장-메서드"><a href="#8장-메서드" class="headerlink" title="8장 메서드"></a>8장 메서드</h1><ul>
+<li>메서드를 설계할때 주의할점, 매개변수, 반환값처리, 메서드 시그니처 설계, 문서화</li>
+<li>생성자도 포함</li>
+</ul>
+<h2 id="아이템-49-매개변수가-유효한지-검사하라"><a href="#아이템-49-매개변수가-유효한지-검사하라" class="headerlink" title="아이템 49. 매개변수가 유효한지 검사하라"></a>아이템 49. 매개변수가 유효한지 검사하라</h2><ul>
+<li>메서드와 생성자 대부분은 입력 매개변수의 값이 특정 조건을 만족하기 바란다.</li>
+<li>이런 제약은 반드시 문서화해야한다. 메서드 몸체가 시작되기전에 검사해야한다</li>
+<li>나중에 쓰려고 저장하는 매개변수의 유효성을 검사하라!</li>
+<li>몸체 실행전 유효성검사필수 예외는 유효성 검사 비용이 높거나 실용적이지않을떄..</li>
+<li></li>
+</ul>
+<h2 id="아이템-50-적시에-방어적-복사본을-만들라"><a href="#아이템-50-적시에-방어적-복사본을-만들라" class="headerlink" title="아이템 50. 적시에 방어적 복사본을 만들라(!!!)"></a>아이템 50. 적시에 방어적 복사본을 만들라(!!!)</h2><ul>
+<li>Date는 가변 객체이므로 생성자에서 받은 가변 매개변수는 언제든 밖에서 Date.year(68)로 수정가능&gt;&gt; 그럼 그전에 만들었던 객체안의 값이 수정되어버림…</li>
+<li><strong>생성자에서 받은 가변 매개변수 각각을 방어적으로 복사하고 값유효성 검사, 상수에 저장하는게최고</strong></li>
+<li>특히 생성자에서 값유효성 검사이유는 매개변수 값을 복사하던 찰나에 값을 바꿔버릴수있으므로!(검사시점/사용시점공격 방어)</li>
+<li>또 값을 반환할때 값의객체로 할것이 아닌, 방어적 복사본으로 반환해야한다.(복사본아니면 값 수정가능)</li>
+<li>참조형일떄 정말 주의해야함. 아예 기본 타입으로 해도 좋다.</li>
+<li>항상 방어적일 필요없다.이는  통제권을 명백히 이전함을 뜻하기도한다. 의도에 맞게 사용</li>
+</ul>
+<h2 id="아이템-51-메서드-시그니처를-신중히-설계하라"><a href="#아이템-51-메서드-시그니처를-신중히-설계하라" class="headerlink" title="아이템 51. 메서드 시그니처를 신중히 설계하라(!!!)"></a>아이템 51. 메서드 시그니처를 신중히 설계하라(!!!)</h2><ul>
+<li>메서 이름&gt;&gt; 표준 명명 규칙 따르자</li>
+<li>편의 메서드를 너무 많이 만들지 말자</li>
+<li>매개변수 목록은 짧게 유지하자&gt;&gt; 4개 이하가 좋다.<ul>
+<li>과하게 긴 매개변수 목록을 짧게하는 기술<ul>
+<li>여러 메서드로 쪼갠다&gt;&gt; 각각은 원래 매개변수 목록의 부분집합을 받는다&gt;&gt;조합하면원래 원햇던 기능 동작가능</li>
+<li>매개변수 여러개를 묶어주는 도우미 클래스를 만드는것&gt;&gt; 정적 멤버 클래스로 둔다&gt;&gt; 이 클래스를 만들어 하나의 매개변수로 주고받으면됨</li>
+<li>객체 생성에 사용한 빌터 패턴을 메서드 호출에 응용&gt;&gt; 모든 매개변수를 하나로 추상화한 객체를 정의하고, 클라이언트에서 이 객체의 세터 메서드를 호출해 필요한 값을 설정&gt;&gt; 설정완료한 객체에 execute메서드로 유효성검사후 완료된객체를 넘겨 계산수행</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>메서드에 매개변수는 클래스보다 인터페이스가 좋다</li>
+<li>boolean보다는 원소 2개짜리 열거 타입이 낫다!! 훨씬 명확함</li>
+</ul>
+<h2 id="아이템-52-다중정의는-신중히-사용하라"><a href="#아이템-52-다중정의는-신중히-사용하라" class="headerlink" title="아이템 52. 다중정의는 신중히 사용하라"></a>아이템 52. 다중정의는 신중히 사용하라</h2><ul>
+<li>재정의한 메서드(오버라이딩)은 동적으로 선택되고, 다중정의== 오버로딩은 한 메서드는 정적으로 선택되기 때문이다</li>
+<li>즉, 오버라이딩은 컴파일 타임에 인스턴스타입은 상관없이 런타임에 동적으로 가장 하위에서 정의한 재정의 메서드가 실행!!</li>
+<li>오버로딩의 선택은 컴파일 타임에 오직 매개변수의 컴파일타임 타입에 의해 이뤄진다.<br>어떤 다중정의의 메서드가 호출될지 모른다면 오동작하기 쉽다.<ul>
+<li>쉽게 매개변수 수가 같은 다중정의는 만들지 말자</li>
+<li>또는 이름을 다르게 지어주는 방법도 좋다 writeInt(int), writeLong(long) 등</li>
+</ul>
+</li>
+</ul>
+<h2 id="아이템-53-가변인수는-신중히-사용하라"><a href="#아이템-53-가변인수는-신중히-사용하라" class="headerlink" title="아이템 53. 가변인수는 신중히 사용하라"></a>아이템 53. 가변인수는 신중히 사용하라</h2><ul>
+<li>명시한 타입인수를 0개이상 받을수있다.</li>
+<li>가변인수 메서드를 호출하면, 가장 먼저 인수의 개수와 길이가 같은 배열을 만들고 인수들을 이 배열에 저장하여, 가변인수 메서드에 건네준다</li>
+<li>1개이상 필요시 args.length ==0일때 throw new 예외처리 &gt;&gt;&gt; 런타임에 실패한다ㅠㅠ 단점</li>
+<li>위에 문제는 첫 번째로 평범한 매개변수를 받고, 두번째부터 가변인수로 받으면된다</li>
+</ul>
+<h2 id="아이템-54-null이-아닌-빈-컬렉션이나-배열을-반환하라"><a href="#아이템-54-null이-아닌-빈-컬렉션이나-배열을-반환하라" class="headerlink" title="아이템 54. null이 아닌, 빈 컬렉션이나 배열을 반환하라"></a>아이템 54. null이 아닌, 빈 컬렉션이나 배열을 반환하라</h2><ul>
+<li>null을 사용하면 반환받는쪽에서 처리도 필요하므로,,, 그냥 빈 배열이나 컬렉션 반환하자</li>
+</ul>
+<h2 id="아이템-55-옵셔널-반환은-신중히-하라"><a href="#아이템-55-옵셔널-반환은-신중히-하라" class="headerlink" title="아이템 55. 옵셔널 반환은 신중히 하라"></a>아이템 55. 옵셔널 반환은 신중히 하라</h2><ul>
+<li>자바 8 이전에는 값 반환못할떄 두가지 처리방식<ul>
+<li>예외적인 상황에 예외발생 &gt;&gt;비용 높음</li>
+<li>null을 반환 할거같으면, 별도의 null처리 코드를 추가해야한다. 처리안하면 언젠가 nullpointerexception이 발생함 &gt;&gt; 그냥넘긴 원인을 모르게됨</li>
+</ul>
+</li>
+<li>자바 8이후 하나더 선택지가 생겼다. Optional<T>는 null이 아닌 T 타입 참조를 하나 담거나, 혹은 아무것도 담지 않을수잇다. 아무것도 안담으면 비었다라고 말한다. 반대로 어떤 값을 담은 옵셔널은 비지 않았다라고한다. 최대 1개 가질수있는 불변 컬렉션이다.</li>
+<li>보통 T를 반환해야하지만 아무것도 반환하지 않아할떄 Optional<T>를 반환하도록 선언하면된다.</li>
+<li>이는 결국 옵셔널을 반환하도록 구현하는것인데, 값이없다면 Optional.empty(); 반환하고, 값 존재시 Optional.of(result)를 반환한다.</li>
+<li>Optional로 반환시 클라이언트는 값을 반지 못했을떄 취할 행동선택가능<br>.orElse(”단어없읍”) 또는 .orElseThrow(에러::new)로 에러생성가능</li>
+<li></li>
+</ul>
+<h2 id="아이템-56-공개된-API-요소에는-항상-문서화-주석을-작성하라"><a href="#아이템-56-공개된-API-요소에는-항상-문서화-주석을-작성하라" class="headerlink" title="아이템 56. 공개된 API 요소에는 항상 문서화 주석을 작성하라"></a>아이템 56. 공개된 API 요소에는 항상 문서화 주석을 작성하라</h2><ul>
+<li>API를 쓸모 있게 하려면 잘 작성된 문서도 곁들여야 한다.</li>
+<li>API를 올바로 문서화하려면 공개된 모든 클래스, 인터페이스, 메서드, 필드 선언에 문서화 주석을 달아야한다.</li>
+<li>메서드용 문서화 주석에는 해당 메서드와 클라이언트 사이의 규약을 명료하게 기술</li>
+</ul>
+<h1 id="9장-일반적인-프로그래밍-원칙"><a href="#9장-일반적인-프로그래밍-원칙" class="headerlink" title="9장 일반적인 프로그래밍 원칙"></a>9장 일반적인 프로그래밍 원칙</h1><ul>
+<li>자바 언어의 핵심요소</li>
+<li>지역변수, 제어구조, 라이브러리, 데이터 타입, 리플렉션과 네이티브 메서드(언어 경계X)</li>
+<li>최적화와 명명 규칙</li>
+</ul>
+<h2 id="아이템-57-지역변수의-범위를-최소화하라"><a href="#아이템-57-지역변수의-범위를-최소화하라" class="headerlink" title="아이템 57. 지역변수의 범위를 최소화하라"></a>아이템 57. 지역변수의 범위를 최소화하라</h2><ul>
+<li>지역변수의 범위를 줄이는 가장 강력한 기법은 “ 가장 처음 쓰일떄 선언하기”</li>
+<li>거의 모든 지역변수는 선언과 동시에 초기화해야한다.</li>
+<li>변수를 초기화하는 표현식에서 검사 예외를 던질 가능성이있다면 try블록안에서 초기화해야한다</li>
+<li>while문보다 for문을 쓰는게 지역변수가 좁아진다. for문에서 지역변수 스코프가 끝나기때문이다. &gt;&gt; 똑같은 변수 여러번써도 for문은상관없다</li>
+<li>메서드를 작게 유지하고 한가지 기능에 집중하는것이좋다</li>
+</ul>
+<h2 id="아이템-58-전통적인-for-문보다는-for-each-문을-사용하라"><a href="#아이템-58-전통적인-for-문보다는-for-each-문을-사용하라" class="headerlink" title="아이템 58. 전통적인 for 문보다는 for-each 문을 사용하라"></a>아이템 58. 전통적인 for 문보다는 for-each 문을 사용하라</h2><ul>
+<li>For문은 전통적인 for문</li>
+<li>for-each==향상된 for 문 &gt;&gt;&gt; for (Element e : elements) {…}<ul>
+<li>: 의 의미는 안의(in)으로 해석하면된다. (파이썬과 유사)</li>
+<li>사용할수없는 세가지 상황<ul>
+<li>파괴적인 필터링 상황(순회하면서 선택된 원소를 제거해야한다면 remove호출)</li>
+<li>변경(순회하면서 그 원소의 값 변경)</li>
+<li>병렬반복(여러 컬렉션을 병렬로 순회한다면..)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="아이템-59-라이브러리를-익히고-사용하라"><a href="#아이템-59-라이브러리를-익히고-사용하라" class="headerlink" title="아이템 59. 라이브러리를 익히고 사용하라"></a>아이템 59. 라이브러리를 익히고 사용하라</h2><ul>
+<li>표준 라이브러리를 사용하면 다른 프로그래머들의 경험을 활용할수있다.</li>
+<li><strong>java.lang, java.util, java.io와 그 하위 패키지들에 익숙해여야한다</strong></li>
+<li>바퀴를 다시 발면하지 말자</li>
+</ul>
+<h2 id="아이템-60-정확한-답이-필요하다면-float와-double은-피하라"><a href="#아이템-60-정확한-답이-필요하다면-float와-double은-피하라" class="headerlink" title="아이템 60. 정확한 답이 필요하다면 float와 double은 피하라"></a>아이템 60. 정확한 답이 필요하다면 float와 double은 피하라</h2><ul>
+<li>float, double은 근사치로 계산되도록 설계되어있다. 금융관련 계산과는 맞지 않는다</li>
+<li>정확한 금융계산은 BigDecimal, int,long사용</li>
+<li>int, long사용시 소수점 직접 관리해야한다.</li>
+</ul>
+<h2 id="아이템-61-박싱된-기본-타입보다는-기본-타입을-사용하라"><a href="#아이템-61-박싱된-기본-타입보다는-기본-타입을-사용하라" class="headerlink" title="아이템 61. 박싱된 기본 타입보다는 기본 타입을 사용하라"></a>아이템 61. 박싱된 기본 타입보다는 기본 타입을 사용하라</h2><ul>
+<li>데이터 타입에는 기본타입과 참조타입이있다</li>
+<li>각각의 기본 타입에는 대응하는 참조타입이 하나씩 있고이를 박싱된 기본 타입이라고한다.</li>
+<li>오토박싱과 오토언박싱덕분에 크게 구별안해도되지만 차이점이 큰차이점 3가지있다<ul>
+<li>기본 타입은 값만 가지고있으나, 박싱된 기본 타입은 값에 더해 식별성이란 속성을 갖는다(같이 같아도 서로 다르다고 식별될수있다)</li>
+<li>기본 타입의 값은 언제나 유효하나, 박싱된 기본타입은 유효하지 않은 값, null을 가질수있다</li>
+<li>기본타입이 박싱된 기본 타입보다 시간과 메모리 사용면이 더 효율적이다</li>
+</ul>
+</li>
+<li>Integer로 박싱된 것을 == 비교자로 할경우, 값은 같아도 인스턴스가 다르니 false값이되고 예상치 못한 결과가 도출될것이다(객체비교…)</li>
+<li>이를 피하기 위해 일단 기본 타입으로 가르키게 한후 연산하는것이 좋다.</li>
+<li>기본 타입과 박싱된 기본 타입을 혼요한 연산에서는 박싱된 기본 타입의 박싱이 언박싱된다.그리고 null참조를 언박싱하면… NullPointerException이 발생한다.</li>
+<li>기본타입과 박싱된 기본타입의 연산을 번갈아하면 박싱과정때문에 아주 느려진다. 비용 높음</li>
+<li>박싱된 기본 타입은 언제 써야하는가?<ul>
+<li>컬렉션의 원소, 키 값으로 쓴다 (컬렉션은 기본 타입을 담을수없기에)</li>
+<li>리플렉션을 통해 메서드를 호출할 떄도 박싱된 기본 타입사용해야함</li>
+</ul>
+</li>
+</ul>
+<h2 id="아이템-62-다른-타입이-적절하다면-문자열-사용을-피하라"><a href="#아이템-62-다른-타입이-적절하다면-문자열-사용을-피하라" class="headerlink" title="아이템 62. 다른 타입이 적절하다면 문자열 사용을 피하라"></a>아이템 62. 다른 타입이 적절하다면 문자열 사용을 피하라</h2><ul>
+<li>문자열은 다른 값 타입을 대신하기에 적합하지않다</li>
+<li>문자열보다 기본타입을 먼저 사용하자</li>
+<li>문자열은 열거 타입을 대신하기 적합하지않다.</li>
+<li>문자열은 혼합 타입을 대신하기에 적합하지않다.</li>
+<li>모두 차라리 전용 private static 멤버 클래스를 선언하자.</li>
+<li>문자열은 권한을 표현하기에 적합하지않다.</li>
+</ul>
+<h2 id="아이템-63-문자열-연결은-느리니-주의하라"><a href="#아이템-63-문자열-연결은-느리니-주의하라" class="headerlink" title="아이템 63. 문자열 연결은 느리니 주의하라"></a>아이템 63. 문자열 연결은 느리니 주의하라</h2><ul>
+<li>문자열 연결 연산자로 문자열 n개를 잇는 시간은 n^2에 비례한다(양쪽내욜을 모두 복사.함)</li>
+<li>이때는 StringBuilder를 사용하자, 문자배열을 사용하여 마지막에 toString하는 방법도존재</li>
+</ul>
+<h2 id="아이템-64-객체는-인터페이스를-사용해-참조하라"><a href="#아이템-64-객체는-인터페이스를-사용해-참조하라" class="headerlink" title="아이템 64. 객체는 인터페이스를 사용해 참조하라"></a>아이템 64. 객체는 인터페이스를 사용해 참조하라</h2><ul>
+<li>객체는 클래스가 아닌 인터페이스를 참조하는게좋고</li>
+<li>적합한 인터페이스만 있다면 매개변수뿐 아니라, 반환값, 변수, 필드를 전부 인터페이스 타입으로 선언하라</li>
+<li>적합한 인터페이스가 없다면, 클래스의 계층 구조 중 필요한 기능을 만족하는 가장 덜 구체적인 상위의 클래스를 타입으로 사용하자</li>
+</ul>
+<h2 id="아이템-65-리플렉션보다는-인터페이스를-사용하라"><a href="#아이템-65-리플렉션보다는-인터페이스를-사용하라" class="headerlink" title="아이템 65. 리플렉션보다는 인터페이스를 사용하라"></a>아이템 65. 리플렉션보다는 인터페이스를 사용하라</h2><ul>
+<li>java.lang.reflect를 이용하면 프로그램에서 임의의 클래스에 접근할수있다. Class객체가 주어지면 그 클래스의 생성자, 메서드, 필드의 인스턴스를 가져올수있고, 이 인스턴스들로는 그 클래스의 멤버 이름, 필드 타입, 메서드 시그니처를 가져올수있다.</li>
+<li>단점<ul>
+<li>컴파일타임 타입 검사가 주는 이점을 하나도 누릴수없다</li>
+<li>리플렉션을 이용하면 코드가 지저분하고 장황해진다</li>
+<li>성능을 떨어트린다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="아이템-66-네이티브-메서드는-신중히-사용하라"><a href="#아이템-66-네이티브-메서드는-신중히-사용하라" class="headerlink" title="아이템 66. 네이티브 메서드는 신중히 사용하라"></a>아이템 66. 네이티브 메서드는 신중히 사용하라</h2><ul>
+<li>자바 프로그램이 네이티브 메서드를 호출하는 기술이다.</li>
+</ul>
+<h2 id="아이템-67-최적화는-신중히-하라"><a href="#아이템-67-최적화는-신중히-하라" class="headerlink" title="아이템 67. 최적화는 신중히 하라"></a>아이템 67. 최적화는 신중히 하라</h2><ul>
+<li>성능을 제한하는 설계를 피하라</li>
+<li>API를 설계할 떄 성능에 주는 영향을 고려하라</li>
+</ul>
+<h2 id="아이템-68-일반적으로-통용되는-명명-규칙을-따르라"><a href="#아이템-68-일반적으로-통용되는-명명-규칙을-따르라" class="headerlink" title="아이템 68. 일반적으로 통용되는 명명 규칙을 따르라(!!!)"></a>아이템 68. 일반적으로 통용되는 명명 규칙을 따르라(!!!)</h2><ul>
+<li>자바 언어 명세 JLS, 6.1참조하자</li>
+<li>열거 타입과 애너테이션을 포함한 클래스와 인터페이스의 이름은 하나 이상의 단어로 이뤄지며, 각 단어는 대문자로 시작한다.!!!(통용되는 약자의 경우 예외)</li>
+<li>메서드와 필드 이름은 첫 글자를 소문자를 쓴다는 점빼고 클래스 명명 규칙과 같다(remove,ensureCapacity)</li>
+<li>상수 필드는 예외다. 상수 필드를 구성하는 단어는 모두 대문자로 쓰며, 단어 사이는 밑줄로 구분한다(VALUES, NEGATIVE_INFINITY) == 상수필드는 값이 불변인 static final을 말한다<br>이름에 밑줄을 사용하는 요소로는 상수 필드가 유일하다, 가르키는 객체가 불변이라면 비록 그 타입은 가변이더라도 상수필드다</li>
+<li>지역변수는 다른것들과 비슷한 규칙이다. 단, 약어를 써도좋다. (houseNum, i, denom)</li>
+<li>타입 매개변수 이름은 보통 한문자로 한다. 임의의 타입T, 컬렉션 원소의 타입은 E, 맵의 키와 값에는 K, V 예외에는 X, 메서드의 반환 타입 R을 사용한다. 임의의 타입 시웤스는 T,U,V를 쓰기도한다.</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212241539656.png" alt="스크린샷 2022-06-05 오전 12.19.53.png"></p>
+<ul>
+<li>객체를 생성할수 있는 클래스(열거 타입 포함)의 이름은 보통 단수 명사나 명사구다</li>
+<li>메서드의 이름은 동사나 동사구로 짓는다 (반환하는 메서드라면 is, has,get로 시작하기도한다)<ul>
+<li>특별한 메서드 이름 몇가지가있다</li>
+<li>객체의 타입을 바꿔서, 다른 타입의 또 다른 객체를 반환하는 메서드는 toType형태로 짓는다<br>(toString, toArray)</li>
+<li>객체의 내용을 다른 뷰로 보여주는 메서드는 asType<br>(asList)</li>
+<li>객체의 값을 기본 타입 값으로 반환하는 메서드이름은 typeValue<br>(intValue)</li>
+<li>마지막으로 정적 팩터리의 이름은 from, of valueof, instance, getType, newType을 흔시사용한다</li>
+</ul>
+</li>
+<li>필드 이름에 관한 규칙은…</li>
+</ul>
+<h1 id="10장-예외"><a href="#10장-예외" class="headerlink" title="10장 예외"></a>10장 예외</h1><ul>
+<li>예외를 제대로 활용해야, 가독성, 신뢰성, 유지보수성이높아진다</li>
+</ul>
+<h2 id="아이템-69-예외는-진짜-예외-상황에만-사용하라"><a href="#아이템-69-예외는-진짜-예외-상황에만-사용하라" class="headerlink" title="아이템 69. 예외는 진짜 예외 상황에만 사용하라"></a>아이템 69. 예외는 진짜 예외 상황에만 사용하라</h2><ul>
+<li>예외가 일어날때 써야한다.</li>
+<li>절대로 일상적인 제어 흐름용으로 쓰여선 안된다!!!!</li>
+</ul>
+<h2 id="아이템-70-복구할-수-있는-상황에는-검사-예외를-프로그래밍-오류에는-런타임-예외를-사용하라"><a href="#아이템-70-복구할-수-있는-상황에는-검사-예외를-프로그래밍-오류에는-런타임-예외를-사용하라" class="headerlink" title="아이템 70. 복구할 수 있는 상황에는 검사 예외를, 프로그래밍 오류에는 런타임 예외를 사용하라"></a>아이템 70. 복구할 수 있는 상황에는 검사 예외를, 프로그래밍 오류에는 런타임 예외를 사용하라</h2><ul>
+<li>자바는 문제 상황을 알리는 타입으로 검사 예외, 런타임 예외, 에러 3가지 제공</li>
+<li>호출하는 쪽에서 복구하리라 여겨지는 상황이라면 검사 예외를 사용하라</li>
+<li>비검사예외로는 런타임 예외와 에러다</li>
+<li>프로그래밍 오류를 나타낼 때는 런타임 예외를 사용하자</li>
+<li>에러는 보통 JVM자원 부족, 불변식 깨짐등 더이상 수행할수없는 상황에서 사용한다</li>
+<li>따라서 우리가 구현하는 비검사 throwable은 모두 RuntimeException의 하위클래스이여야만한다!</li>
+<li></li>
+</ul>
+<h2 id="아이템-71-필요-없는-검사-예외-사용은-피하라"><a href="#아이템-71-필요-없는-검사-예외-사용은-피하라" class="headerlink" title="아이템 71. 필요 없는 검사 예외 사용은 피하라"></a>아이템 71. 필요 없는 검사 예외 사용은 피하라</h2><ul>
+<li>어떤 메서드가 검사 예외를 던질 수있다고 선언됐다면, 이를 호출하는 코드는 catch블록을 두어 그 예외를 붙잡아 처리하거나 더 바깥으로 던저야만한다!!!</li>
+<li>둘다 아니라면 비검사 예외를 사용하자</li>
+<li>검사 예외를 피하는 방법은 옵셔널을 반환하는 것이다. 검사 예외를 던지는 대신 단순히 빈 옵셔널 반환!!.. 단점은 발생한 이유를 알려주는 부가 정보담을수없다</li>
+<li>예외를 사용하면, 구체적인 예외 타입과 제공 메서드로 알수있다.</li>
+<li></li>
+</ul>
+<h2 id="아이템-72-표준-예외를-사용하라"><a href="#아이템-72-표준-예외를-사용하라" class="headerlink" title="아이템 72. 표준 예외를 사용하라"></a>아이템 72. 표준 예외를 사용하라</h2><ul>
+<li>IllegalArgumentException가장 많이쓰고, 호출자가 인수로 부적절한 값을 넘길때 던지는 예외</li>
+<li>이런 표준 예외를 자주 사용하자</li>
+<li>Exception, RuntimeException, Throwable, Error는 직접사용하지말자. 하위 클래스사용하자</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212241538108.png" alt="스크린샷 2022-06-05 오전 12.45.53.png"></p>
+<h2 id="아이템-73-추상화-수준에-맞는-예외를-던지라"><a href="#아이템-73-추상화-수준에-맞는-예외를-던지라" class="headerlink" title="아이템 73. 추상화 수준에 맞는 예외를 던지라"></a>아이템 73. 추상화 수준에 맞는 예외를 던지라</h2><ul>
+<li>상위 계층에서는 저수준 예외를 잡아 자신의 추상화 수준에 맞는 예외로 바꿔 던저야한다. exception translation</li>
+</ul>
+<h2 id="아이템-74-메서드가-던지는-모든-예외를-문서화하라"><a href="#아이템-74-메서드가-던지는-모든-예외를-문서화하라" class="headerlink" title="아이템 74. 메서드가 던지는 모든 예외를 문서화하라"></a>아이템 74. 메서드가 던지는 모든 예외를 문서화하라</h2><h2 id="아이템-75-예외의-상세-메시지에-실패-관련-정보를-담으라"><a href="#아이템-75-예외의-상세-메시지에-실패-관련-정보를-담으라" class="headerlink" title="아이템 75. 예외의 상세 메시지에 실패 관련 정보를 담으라"></a>아이템 75. 예외의 상세 메시지에 실패 관련 정보를 담으라</h2><ul>
+<li>예외를 잡지 못해 프로그램이 실패하면 자바 시스템은 그 예외의 스택 추적정보를 자동으로 출력한다.</li>
+<li>실패 순산을 포착하려면 발생한 예외에 관여된 모든 매개변수와 필드의 값을 실패 메세지에 담아야한다!!(상세 메세지에 비밀번호나 암호키를 담으면안됨)</li>
+<li></li>
+</ul>
+<h2 id="아이템-76-가능한-한-실패-원자적으로-만들라"><a href="#아이템-76-가능한-한-실패-원자적으로-만들라" class="headerlink" title="아이템 76. 가능한 한 실패 원자적으로 만들라"></a>아이템 76. 가능한 한 실패 원자적으로 만들라</h2><ul>
+<li>호출된 메서드가 실패하더라도 해당 객체는 메서드 호출 전 상태를 유지해야한다.(failure-atomic)</li>
+<li>가장 간단한 방법은 불변 객체로 설계.</li>
+<li>가변 객체의 메서드를 실패 원자적으로 만드는 방법은 작업 수행에 앞서 매개변수의 유효성을 검사하는것이다. 객체의 내부 상태를 변경하기전에 잠재적 예외의 가능성을 걸러냄</li>
+<li>실패할 가능성있는 코드 검사가 객체의 상태 바꾸는 코드보다 앞에있어야한다(인수의 유효성검사 등)</li>
+<li>임시 복사본에서 작업을 수행한다음, 작업성공하면 원래 객체와 교체하는 것이다</li>
+<li>작업 도중 발생하는 실패를 가로채는 복구 코드를 작성하여 작업 전 상태로 되돌리는 방법이다</li>
+<li></li>
+</ul>
+<h2 id="아이템-77-예외를-무시하지-말라"><a href="#아이템-77-예외를-무시하지-말라" class="headerlink" title="아이템 77. 예외를 무시하지 말라"></a>아이템 77. 예외를 무시하지 말라</h2><ul>
+<li>굉장히 중요하다. API설계자의 목소리를 흘리지 말자</li>
+<li>차라리 필요없는 예외를 ignored지정하자</li>
+<li></li>
+</ul>
+<h1 id="11장-동시성"><a href="#11장-동시성" class="headerlink" title="11장 동시성"></a>11장 동시성</h1><ul>
+<li>스레드 사용!, 멀티코어 프로세서의 힘 사용!!!할수잇다</li>
+</ul>
+<h2 id="아이템-78-공유-중인-가변-데이터는-동기화해-사용하라"><a href="#아이템-78-공유-중인-가변-데이터는-동기화해-사용하라" class="headerlink" title="아이템 78. 공유 중인 가변 데이터는 동기화해 사용하라"></a>아이템 78. 공유 중인 가변 데이터는 동기화해 사용하라</h2><ul>
+<li>synchronized 키워드는 해당 메서드나 블록을 임계영역으로지정..보장한다&gt;&gt;배타적 실행</li>
+<li>가변 데이터를 공유한다면 그 데이터를 일고 쓰는 동작은 반드시 동기화해야한다.</li>
+<li></li>
+</ul>
+<h2 id="아이템-79-과도한-동기화는-피하라"><a href="#아이템-79-과도한-동기화는-피하라" class="headerlink" title="아이템 79. 과도한 동기화는 피하라"></a>아이템 79. 과도한 동기화는 피하라</h2><ul>
+<li>과도한 동기화는 성능을 떨어뜨리고, 교착상태에 빠트리며, 예측할수없는 동작을 낳는다</li>
+<li>응답 불가와 안전 실패를 피하려면 동기화 메서드나 동기화 블록안에서는 제어를 절대로 클라이언트에 양도하면안된다.</li>
+<li></li>
+</ul>
+<h2 id="아이템-80-스레드보다는-실행자-태스크-스트림을-애용하라"><a href="#아이템-80-스레드보다는-실행자-태스크-스트림을-애용하라" class="headerlink" title="아이템 80. 스레드보다는 실행자, 태스크, 스트림을 애용하라"></a>아이템 80. 스레드보다는 실행자, 태스크, 스트림을 애용하라</h2><h2 id="아이템-81-wait와-notify보다는-동시성-유틸리티를-애용하"><a href="#아이템-81-wait와-notify보다는-동시성-유틸리티를-애용하" class="headerlink" title="아이템 81. wait와 notify보다는 동시성 유틸리티를 애용하"></a>아이템 81. wait와 notify보다는 동시성 유틸리티를 애용하</h2><h2 id="아이템-82-스레드-안전성-수준을-문서화하라"><a href="#아이템-82-스레드-안전성-수준을-문서화하라" class="headerlink" title="아이템 82. 스레드 안전성 수준을 문서화하라"></a>아이템 82. 스레드 안전성 수준을 문서화하라</h2><h2 id="아이템-83-지연-초기화는-신중히-사용하라"><a href="#아이템-83-지연-초기화는-신중히-사용하라" class="headerlink" title="아이템 83. 지연 초기화는 신중히 사용하라"></a>아이템 83. 지연 초기화는 신중히 사용하라</h2><ul>
+<li>지연 초기화는 필드의 초기화 시점을 그 값이 처음 필요할 때까지 늦추는 기법이다.</li>
+<li>그래서 값이 쓰이지 않으면 초기화도 일어나지않는다</li>
+<li><strong>대부분은 일반적 초기화가 더 좋다</strong></li>
+<li></li>
+</ul>
+<h2 id="아이템-84-프로그램의-동작을-스레드-스케줄러에-기대지-말라"><a href="#아이템-84-프로그램의-동작을-스레드-스케줄러에-기대지-말라" class="headerlink" title="아이템 84. 프로그램의 동작을 스레드 스케줄러에 기대지 말라"></a>아이템 84. 프로그램의 동작을 스레드 스케줄러에 기대지 말라</h2><ul>
+<li>운영체제의 스레드 스케줄러가 어떤 스레드를 얼마나 오래 실행할지 정한다.</li>
+</ul>
+<h1 id="12장-직렬화"><a href="#12장-직렬화" class="headerlink" title="12장 직렬화"></a>12장 직렬화</h1><ul>
+<li>객체 직렬화란 자바가 객체를 바이트 스트림으로 인코딩하고(직렬화) 그 바이트 스트림으로부터 다시 객체를 재구성하는 (역직렬화) 메커니즘이다. 직렬화된 객체는 다른 VM에 전송하거나 디스크에 저장한 후 나중에 역직렬화 할수있다. 직렬화가 품고있는 위험과 위험 최소화 방법!!집중</li>
+</ul>
+<h2 id="아이템-85-자바-직렬화의-대안을-찾으라"><a href="#아이템-85-자바-직렬화의-대안을-찾으라" class="headerlink" title="아이템 85. 자바 직렬화의 대안을 찾으라"></a>아이템 85. 자바 직렬화의 대안을 찾으라</h2><ul>
+<li>직렬화 하지않기(JSON, 프로토콜 버퍼 사용)</li>
+<li>신뢰할 수 없는 데이터는 절대 역직렬화하지않는것</li>
+<li>화이트 리스트 방식 추천</li>
+</ul>
+<h2 id="아이템-86-Serializable을-구현할지는-신중히-결정하라"><a href="#아이템-86-Serializable을-구현할지는-신중히-결정하라" class="headerlink" title="아이템 86. Serializable을 구현할지는 신중히 결정하라"></a>아이템 86. Serializable을 구현할지는 신중히 결정하라</h2><ul>
+<li>Serialzable을 구현하면 릴리스한 뒤에는 수정하기 어렵다.!!!</li>
+</ul>
+<h2 id="아이템-87-커스텀-직렬화-형태를-고려해보라"><a href="#아이템-87-커스텀-직렬화-형태를-고려해보라" class="headerlink" title="아이템 87. 커스텀 직렬화 형태를 고려해보라"></a>아이템 87. 커스텀 직렬화 형태를 고려해보라</h2><h2 id="아이템-88-readObject-메서드는-방어적으로-작성하라"><a href="#아이템-88-readObject-메서드는-방어적으로-작성하라" class="headerlink" title="아이템 88. readObject 메서드는 방어적으로 작성하라"></a>아이템 88. readObject 메서드는 방어적으로 작성하라</h2><h2 id="아이템-89-인스턴스-수를-통제해야-한다면-readResolve보다는-열거타입을-사용하라"><a href="#아이템-89-인스턴스-수를-통제해야-한다면-readResolve보다는-열거타입을-사용하라" class="headerlink" title="아이템 89. 인스턴스 수를 통제해야 한다면 readResolve보다는 열거타입을 사용하라"></a>아이템 89. 인스턴스 수를 통제해야 한다면 readResolve보다는 열거타입을 사용하라</h2><h2 id="아이템-90-직렬화된-인스턴스-대신-직렬화-프록시-사용을-검토하라"><a href="#아이템-90-직렬화된-인스턴스-대신-직렬화-프록시-사용을-검토하라" class="headerlink" title="아이템 90. 직렬화된 인스턴스 대신 직렬화 프록시 사용을 검토하라"></a>아이템 90. 직렬화된 인스턴스 대신 직렬화 프록시 사용을 검토하라</h2>
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2022/12/24/SpringCore-CH00/" title= "SpringCore CH00">
+                    <div class="nextTitle">SpringCore CH00</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2022/12/23/JavaCH14/" title= "Java 배우기 CH14">
+                    <div class="prevTitle">Java 배우기 CH14</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#책리뷰-이펙티브-자바-3-E"><span class="toc-number">1.</span> <span class="toc-text">(책리뷰)이펙티브 자바 3&#x2F;E</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">2.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1장-들어가기"><span class="toc-number">3.</span> <span class="toc-text">1장 들어가기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2장-객체-생성과-파괴"><span class="toc-number">4.</span> <span class="toc-text">2장 객체 생성과 파괴</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-1-생성자-대신-정적-팩터리-메서드를-고려하라"><span class="toc-number">4.1.</span> <span class="toc-text">아이템 1. 생성자 대신 정적 팩터리 메서드를 고려하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-2-생성자에-매개변수가-많다면-빌더를-고려하라"><span class="toc-number">4.2.</span> <span class="toc-text">아이템 2. 생성자에 매개변수가 많다면 빌더를 고려하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-3-private-생성자나-열거-타입으로-싱글턴임을-보증하라"><span class="toc-number">4.3.</span> <span class="toc-text">아이템 3. private 생성자나 열거 타입으로 싱글턴임을 보증하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-4-인스턴스화를-막으려거든-private-생성자를-사용하라"><span class="toc-number">4.4.</span> <span class="toc-text">아이템 4. 인스턴스화를 막으려거든 private 생성자를 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-5-자원을-직접-명시하지-말고-의존-객체-주입을-사용하라"><span class="toc-number">4.5.</span> <span class="toc-text">아이템 5. 자원을 직접 명시하지 말고 의존 객체 주입을 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-6-불필요한-객체-생성을-피하라"><span class="toc-number">4.6.</span> <span class="toc-text">아이템 6. 불필요한 객체 생성을 피하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-7-다-쓴-객체-참조를-해제하라"><span class="toc-number">4.7.</span> <span class="toc-text">아이템 7. 다 쓴 객체 참조를 해제하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-8-finalizer와-cleaner-사용을-피하라"><span class="toc-number">4.8.</span> <span class="toc-text">아이템 8. finalizer와 cleaner 사용을 피하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-9-try-finally보다는-try-with-resoure"><span class="toc-number">4.9.</span> <span class="toc-text">아이템 9. try-finally보다는 try-with-resoure</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3장-모든-객체의-공통-메서드"><span class="toc-number">5.</span> <span class="toc-text">3장 모든 객체의 공통 메서드</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-10-equals는-일반-규약을-지켜-재정의하라"><span class="toc-number">5.1.</span> <span class="toc-text">아이템 10. equals는 일반 규약을 지켜 재정의하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-11-equals를-재정의하려거든-hashCode도-재정의"><span class="toc-number">5.2.</span> <span class="toc-text">아이템 11. equals를 재정의하려거든 hashCode도 재정의</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-12-toString을-항상-재정의하라"><span class="toc-number">5.3.</span> <span class="toc-text">아이템 12. toString을 항상 재정의하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-13-clone-재정의는-주의해서-진행하라"><span class="toc-number">5.4.</span> <span class="toc-text">아이템 13. clone 재정의는 주의해서 진행하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-14-Comparable을-구현할지-고려하라"><span class="toc-number">5.5.</span> <span class="toc-text">아이템 14. Comparable을 구현할지 고려하라</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4장-클래스와-인터페이스"><span class="toc-number">6.</span> <span class="toc-text">4장 클래스와 인터페이스</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-15-클래스와-멤버의-접근-권한을-최소화하라"><span class="toc-number">6.1.</span> <span class="toc-text">아이템 15. 클래스와 멤버의 접근 권한을 최소화하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-16-public-클래스에서는-public-필드가-아닌-접근자-메서드를-사용하라"><span class="toc-number">6.2.</span> <span class="toc-text">아이템 16. public 클래스에서는 public 필드가 아닌 접근자 메서드를 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-17-변경-가능성을-최소화하라"><span class="toc-number">6.3.</span> <span class="toc-text">아이템 17. 변경 가능성을 최소화하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-18-상속보다는-컴포지션을-사용하라"><span class="toc-number">6.4.</span> <span class="toc-text">아이템 18. 상속보다는 컴포지션을 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-19-상속을-고려해-설계하고-문서화하라-그러지-않았다면-상속을-금지하라"><span class="toc-number">6.5.</span> <span class="toc-text">아이템 19. 상속을 고려해 설계하고 문서화하라. 그러지 않았다면 상속을 금지하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-20-추상-클래스보다는-인터페이스를-우선하라"><span class="toc-number">6.6.</span> <span class="toc-text">아이템 20. 추상 클래스보다는 인터페이스를 우선하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-21-인터페이스는-구현하는-쪽을-생각해-설계하라"><span class="toc-number">6.7.</span> <span class="toc-text">아이템 21. 인터페이스는 구현하는 쪽을 생각해 설계하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-22-인터페이스는-타입을-정의하는-용도로만-사용하라"><span class="toc-number">6.8.</span> <span class="toc-text">아이템 22. 인터페이스는 타입을 정의하는 용도로만 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-23-태그-달린-클래스보다는-클래스-계층구조를-활용하라"><span class="toc-number">6.9.</span> <span class="toc-text">아이템 23. 태그 달린 클래스보다는 클래스 계층구조를 활용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-24-멤버-클래스는-되도록-static으로-만들라"><span class="toc-number">6.10.</span> <span class="toc-text">아이템 24. 멤버 클래스는 되도록 static으로 만들라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-25-톱레벨-클래스는-한-파일에-하나만-담으라"><span class="toc-number">6.11.</span> <span class="toc-text">아이템 25. 톱레벨 클래스는 한 파일에 하나만 담으라</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5장-제네릭"><span class="toc-number">7.</span> <span class="toc-text">5장 제네릭</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-26-로-타입은-사용하지-말라"><span class="toc-number">7.1.</span> <span class="toc-text">아이템 26. 로 타입은 사용하지 말라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-27-비검사-경고를-제거하라"><span class="toc-number">7.2.</span> <span class="toc-text">아이템 27. 비검사 경고를 제거하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-28-배열보다는-리스트를-사용하라"><span class="toc-number">7.3.</span> <span class="toc-text">아이템 28. 배열보다는 리스트를 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-29-이왕이면-제네릭-타입으로-만들라"><span class="toc-number">7.4.</span> <span class="toc-text">아이템 29. 이왕이면 제네릭 타입으로 만들라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-30-이왕이면-제네릭-메서드로-만들라"><span class="toc-number">7.5.</span> <span class="toc-text">아이템 30. 이왕이면 제네릭 메서드로 만들라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-31-한정적-와일드카드를-사용해-API-유연성을-높이라"><span class="toc-number">7.6.</span> <span class="toc-text">아이템 31. 한정적 와일드카드를 사용해 API 유연성을 높이라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-32-제네릭과-가변인수를-함께-쓸-때는-신중하라"><span class="toc-number">7.7.</span> <span class="toc-text">아이템 32. 제네릭과 가변인수를 함께 쓸 때는 신중하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-33-타입-안전-이종-컨테이너를-고려하라"><span class="toc-number">7.8.</span> <span class="toc-text">아이템 33. 타입 안전 이종 컨테이너를 고려하라</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6장-열거-타입과-애너테이션"><span class="toc-number">8.</span> <span class="toc-text">6장 열거 타입과 애너테이션</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-34-int-상수-대신-열거-타입을-사용하라"><span class="toc-number">8.1.</span> <span class="toc-text">아이템 34. int 상수 대신 열거 타입을 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-35-ordinal-메서드-대신-인스턴스-필드를-사용하라"><span class="toc-number">8.2.</span> <span class="toc-text">아이템 35. ordinal 메서드 대신 인스턴스 필드를 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-36-비트-필드-대신-EnumSet을-사용하라"><span class="toc-number">8.3.</span> <span class="toc-text">아이템 36. 비트 필드 대신 EnumSet을 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-37-ordinal-인덱싱-대신-EnumMap을-사용하라"><span class="toc-number">8.4.</span> <span class="toc-text">아이템 37. ordinal 인덱싱 대신 EnumMap을 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-38-확장할-수-있는-열거-타입이-필요하면-인터페이스를-사용하라"><span class="toc-number">8.5.</span> <span class="toc-text">아이템 38. 확장할 수 있는 열거 타입이 필요하면 인터페이스를 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-39-명명-패턴보다-애너테이션을-사용하라"><span class="toc-number">8.6.</span> <span class="toc-text">아이템 39. 명명 패턴보다 애너테이션을 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-40-Override-애너테이션을-일관되게-사용하라"><span class="toc-number">8.7.</span> <span class="toc-text">아이템 40. @Override 애너테이션을 일관되게 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-41-정의하려는-것이-타입이라면-마커-인터페이스를-사용하라"><span class="toc-number">8.8.</span> <span class="toc-text">아이템 41. 정의하려는 것이 타입이라면 마커 인터페이스를 사용하라</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7장-람다와-스트림"><span class="toc-number">9.</span> <span class="toc-text">7장 람다와 스트림</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-42-익명-클래스보다는-람다를-사용하라"><span class="toc-number">9.1.</span> <span class="toc-text">아이템 42. 익명 클래스보다는 람다를 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-43-람다보다는-메서드-참조를-사용하라"><span class="toc-number">9.2.</span> <span class="toc-text">아이템 43. 람다보다는 메서드 참조를 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-44-표준-함수형-인터페이스를-사용하라"><span class="toc-number">9.3.</span> <span class="toc-text">아이템 44. 표준 함수형 인터페이스를 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-45-스트림은-주의해서-사용하라-45-48라이브러리중요"><span class="toc-number">9.4.</span> <span class="toc-text">아이템 45. 스트림은 주의해서 사용하라(45~48라이브러리중요)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-46-스트림에서는-부작용-없는-함수를-사용하라"><span class="toc-number">9.5.</span> <span class="toc-text">아이템 46. 스트림에서는 부작용 없는 함수를 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-47-반환-타입으로는-스트림보다-컬렉션이-낫다"><span class="toc-number">9.6.</span> <span class="toc-text">아이템 47. 반환 타입으로는 스트림보다 컬렉션이 낫다</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-48-스트림-병렬화는-주의해서-적용하라"><span class="toc-number">9.7.</span> <span class="toc-text">아이템 48. 스트림 병렬화는 주의해서 적용하라</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8장-메서드"><span class="toc-number">10.</span> <span class="toc-text">8장 메서드</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-49-매개변수가-유효한지-검사하라"><span class="toc-number">10.1.</span> <span class="toc-text">아이템 49. 매개변수가 유효한지 검사하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-50-적시에-방어적-복사본을-만들라"><span class="toc-number">10.2.</span> <span class="toc-text">아이템 50. 적시에 방어적 복사본을 만들라(!!!)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-51-메서드-시그니처를-신중히-설계하라"><span class="toc-number">10.3.</span> <span class="toc-text">아이템 51. 메서드 시그니처를 신중히 설계하라(!!!)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-52-다중정의는-신중히-사용하라"><span class="toc-number">10.4.</span> <span class="toc-text">아이템 52. 다중정의는 신중히 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-53-가변인수는-신중히-사용하라"><span class="toc-number">10.5.</span> <span class="toc-text">아이템 53. 가변인수는 신중히 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-54-null이-아닌-빈-컬렉션이나-배열을-반환하라"><span class="toc-number">10.6.</span> <span class="toc-text">아이템 54. null이 아닌, 빈 컬렉션이나 배열을 반환하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-55-옵셔널-반환은-신중히-하라"><span class="toc-number">10.7.</span> <span class="toc-text">아이템 55. 옵셔널 반환은 신중히 하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-56-공개된-API-요소에는-항상-문서화-주석을-작성하라"><span class="toc-number">10.8.</span> <span class="toc-text">아이템 56. 공개된 API 요소에는 항상 문서화 주석을 작성하라</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9장-일반적인-프로그래밍-원칙"><span class="toc-number">11.</span> <span class="toc-text">9장 일반적인 프로그래밍 원칙</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-57-지역변수의-범위를-최소화하라"><span class="toc-number">11.1.</span> <span class="toc-text">아이템 57. 지역변수의 범위를 최소화하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-58-전통적인-for-문보다는-for-each-문을-사용하라"><span class="toc-number">11.2.</span> <span class="toc-text">아이템 58. 전통적인 for 문보다는 for-each 문을 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-59-라이브러리를-익히고-사용하라"><span class="toc-number">11.3.</span> <span class="toc-text">아이템 59. 라이브러리를 익히고 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-60-정확한-답이-필요하다면-float와-double은-피하라"><span class="toc-number">11.4.</span> <span class="toc-text">아이템 60. 정확한 답이 필요하다면 float와 double은 피하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-61-박싱된-기본-타입보다는-기본-타입을-사용하라"><span class="toc-number">11.5.</span> <span class="toc-text">아이템 61. 박싱된 기본 타입보다는 기본 타입을 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-62-다른-타입이-적절하다면-문자열-사용을-피하라"><span class="toc-number">11.6.</span> <span class="toc-text">아이템 62. 다른 타입이 적절하다면 문자열 사용을 피하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-63-문자열-연결은-느리니-주의하라"><span class="toc-number">11.7.</span> <span class="toc-text">아이템 63. 문자열 연결은 느리니 주의하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-64-객체는-인터페이스를-사용해-참조하라"><span class="toc-number">11.8.</span> <span class="toc-text">아이템 64. 객체는 인터페이스를 사용해 참조하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-65-리플렉션보다는-인터페이스를-사용하라"><span class="toc-number">11.9.</span> <span class="toc-text">아이템 65. 리플렉션보다는 인터페이스를 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-66-네이티브-메서드는-신중히-사용하라"><span class="toc-number">11.10.</span> <span class="toc-text">아이템 66. 네이티브 메서드는 신중히 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-67-최적화는-신중히-하라"><span class="toc-number">11.11.</span> <span class="toc-text">아이템 67. 최적화는 신중히 하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-68-일반적으로-통용되는-명명-규칙을-따르라"><span class="toc-number">11.12.</span> <span class="toc-text">아이템 68. 일반적으로 통용되는 명명 규칙을 따르라(!!!)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10장-예외"><span class="toc-number">12.</span> <span class="toc-text">10장 예외</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-69-예외는-진짜-예외-상황에만-사용하라"><span class="toc-number">12.1.</span> <span class="toc-text">아이템 69. 예외는 진짜 예외 상황에만 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-70-복구할-수-있는-상황에는-검사-예외를-프로그래밍-오류에는-런타임-예외를-사용하라"><span class="toc-number">12.2.</span> <span class="toc-text">아이템 70. 복구할 수 있는 상황에는 검사 예외를, 프로그래밍 오류에는 런타임 예외를 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-71-필요-없는-검사-예외-사용은-피하라"><span class="toc-number">12.3.</span> <span class="toc-text">아이템 71. 필요 없는 검사 예외 사용은 피하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-72-표준-예외를-사용하라"><span class="toc-number">12.4.</span> <span class="toc-text">아이템 72. 표준 예외를 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-73-추상화-수준에-맞는-예외를-던지라"><span class="toc-number">12.5.</span> <span class="toc-text">아이템 73. 추상화 수준에 맞는 예외를 던지라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-74-메서드가-던지는-모든-예외를-문서화하라"><span class="toc-number">12.6.</span> <span class="toc-text">아이템 74. 메서드가 던지는 모든 예외를 문서화하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-75-예외의-상세-메시지에-실패-관련-정보를-담으라"><span class="toc-number">12.7.</span> <span class="toc-text">아이템 75. 예외의 상세 메시지에 실패 관련 정보를 담으라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-76-가능한-한-실패-원자적으로-만들라"><span class="toc-number">12.8.</span> <span class="toc-text">아이템 76. 가능한 한 실패 원자적으로 만들라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-77-예외를-무시하지-말라"><span class="toc-number">12.9.</span> <span class="toc-text">아이템 77. 예외를 무시하지 말라</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11장-동시성"><span class="toc-number">13.</span> <span class="toc-text">11장 동시성</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-78-공유-중인-가변-데이터는-동기화해-사용하라"><span class="toc-number">13.1.</span> <span class="toc-text">아이템 78. 공유 중인 가변 데이터는 동기화해 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-79-과도한-동기화는-피하라"><span class="toc-number">13.2.</span> <span class="toc-text">아이템 79. 과도한 동기화는 피하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-80-스레드보다는-실행자-태스크-스트림을-애용하라"><span class="toc-number">13.3.</span> <span class="toc-text">아이템 80. 스레드보다는 실행자, 태스크, 스트림을 애용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-81-wait와-notify보다는-동시성-유틸리티를-애용하"><span class="toc-number">13.4.</span> <span class="toc-text">아이템 81. wait와 notify보다는 동시성 유틸리티를 애용하</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-82-스레드-안전성-수준을-문서화하라"><span class="toc-number">13.5.</span> <span class="toc-text">아이템 82. 스레드 안전성 수준을 문서화하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-83-지연-초기화는-신중히-사용하라"><span class="toc-number">13.6.</span> <span class="toc-text">아이템 83. 지연 초기화는 신중히 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-84-프로그램의-동작을-스레드-스케줄러에-기대지-말라"><span class="toc-number">13.7.</span> <span class="toc-text">아이템 84. 프로그램의 동작을 스레드 스케줄러에 기대지 말라</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12장-직렬화"><span class="toc-number">14.</span> <span class="toc-text">12장 직렬화</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-85-자바-직렬화의-대안을-찾으라"><span class="toc-number">14.1.</span> <span class="toc-text">아이템 85. 자바 직렬화의 대안을 찾으라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-86-Serializable을-구현할지는-신중히-결정하라"><span class="toc-number">14.2.</span> <span class="toc-text">아이템 86. Serializable을 구현할지는 신중히 결정하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-87-커스텀-직렬화-형태를-고려해보라"><span class="toc-number">14.3.</span> <span class="toc-text">아이템 87. 커스텀 직렬화 형태를 고려해보라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-88-readObject-메서드는-방어적으로-작성하라"><span class="toc-number">14.4.</span> <span class="toc-text">아이템 88. readObject 메서드는 방어적으로 작성하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-89-인스턴스-수를-통제해야-한다면-readResolve보다는-열거타입을-사용하라"><span class="toc-number">14.5.</span> <span class="toc-text">아이템 89. 인스턴스 수를 통제해야 한다면 readResolve보다는 열거타입을 사용하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#아이템-90-직렬화된-인스턴스-대신-직렬화-프록시-사용을-검토하라"><span class="toc-number">14.6.</span> <span class="toc-text">아이템 90. 직렬화된 인스턴스 대신 직렬화 프록시 사용을 검토하라</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 139
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH00/" >SpringCore CH00</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH01/" >SpringCore CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH04/" >SpringCore CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH08/" >SpringCore CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH02-03/" >SpringCore CH02~03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH07/" >SpringCore CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH05/" >SpringCore CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH06/" >SpringCore CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/effective-java-review/" >effective-java-review </a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH09/" >SpringCore CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH01/" >Java 배우기 CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH02/" >Java 배우기 CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH03/" >Java 배우기 CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH04/" >Java 배우기 CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH06/" >Java 배우기 CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH08/" >Java 배우기 CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH09/" >Java 배우기 CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH07/" >Java 배우기 CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH11/" >Java 배우기 CH11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH10/" >Java 배우기 CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH12/" >Java 배우기 CH12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH13/" >Java 배우기 CH13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH14/" >Java 배우기 CH14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH05/" >Java 배우기 CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/ConnectDomainToNotion/" >Notion과 개인 Domain 연결하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/OSI7layer/" >OSI7계층과 TCP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/02</span><a class="archive-post-title" href= "/2020/10/02/mysql/" >Mysql 기본 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-command/" >우분투 자주 쓰는 명령어</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="Notion"><span class="iconfont-archer">&#xe606;</span>Notion</span>
+    
+        <span class="sidebar-tag-name" data-tags="Domain"><span class="iconfont-archer">&#xe606;</span>Domain</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="Tips"><span class="iconfont-archer">&#xe60a;</span>Tips</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="Java"><span class="iconfont-archer">&#xe60a;</span>Java</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+        <span class="sidebar-category-name" data-categories="Spring"><span class="iconfont-archer">&#xe60a;</span>Spring</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
