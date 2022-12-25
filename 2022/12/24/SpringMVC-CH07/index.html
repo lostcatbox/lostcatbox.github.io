@@ -264,9 +264,17 @@ height:50vh;
             <div class="post-intros">
                 <!-- 文章页标签  -->
                 
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Spring">Spring</a>
+    
+</div>
+                
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">0</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">3.7k</span>Reading time: <span class="post-count reading-time">23 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -395,13 +403,307 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        
+        <h1 id="스프링-MVC-1편-CH07"><a href="#스프링-MVC-1편-CH07" class="headerlink" title="스프링 MVC 1편 CH07"></a>스프링 MVC 1편 CH07</h1><p>Created Time: July 1, 2022 9:25 PM<br>Last Edited Time: July 3, 2022 2:32 PM</p>
+<h1 id="프로젝트-생성"><a href="#프로젝트-생성" class="headerlink" title="프로젝트 생성"></a>프로젝트 생성</h1><ul>
+<li>start.spring.io</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212242130314.png" alt="스크린샷 2022-07-01 오후 9.30.55.png"></p>
+<ul>
+<li>환경 설정에서 gradle검색후 test방식 실행방식 인텔리J로 바꾸기</li>
+<li>환경 설정에서 annotation을 검색후 enable하기(SF4J, Lombok위해서)</li>
+</ul>
+<h2 id="Welcome-페이지-추가"><a href="#Welcome-페이지-추가" class="headerlink" title="Welcome 페이지 추가"></a>Welcome 페이지 추가</h2><ul>
+<li><code>/resources/static/index.html</code></li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">"UTF-8"</span>&gt;</span><br><span class="line">    &lt;title&gt;Title&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt; &lt;ul&gt;</span><br><span class="line">    &lt;li&gt;상품 관리 &lt;ul&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href="/basic/items"&gt;상품 관리 - 기본&lt;/a&gt;&lt;/li&gt; &lt;/ul&gt;</span><br><span class="line">    &lt;/li&gt; &lt;/ul&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="요구사항-분석"><a href="#요구사항-분석" class="headerlink" title="요구사항 분석"></a>요구사항 분석</h2><h3 id="상품-도메인-모델"><a href="#상품-도메인-모델" class="headerlink" title="상품 도메인 모델"></a>상품 도메인 모델</h3><ul>
+<li>상품 ID</li>
+<li>상품명</li>
+<li>가격</li>
+<li>수량</li>
+</ul>
+<h3 id="상품-관리-기능"><a href="#상품-관리-기능" class="headerlink" title="상품 관리 기능"></a>상품 관리 기능</h3><ul>
+<li>상품 목록</li>
+<li>상품 상세</li>
+<li>상품 등록</li>
+<li>상품 수정</li>
+</ul>
+<h3 id="서비스-제공-흐름"><a href="#서비스-제공-흐름" class="headerlink" title="서비스 제공 흐름"></a>서비스 제공 흐름</h3><ul>
+<li>컨트롤러 검은색, 흰색은 뷰</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212242130318.png" alt="스크린샷 2022-07-02 오전 3.03.58.png"></p>
+<h2 id="상품-도메인-개발"><a href="#상품-도메인-개발" class="headerlink" title="상품 도메인 개발"></a>상품 도메인 개발</h2><ul>
+<li>Item -상품객체</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> hello.itemservice.domain.item;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.Getter;</span><br><span class="line"><span class="keyword">import</span> lombok.Setter;</span><br><span class="line"></span><br><span class="line"><span class="comment">//@Data //위험함 내용알고쓰기</span></span><br><span class="line"><span class="meta">@Getter</span> <span class="meta">@Setter</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Item</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Long id;  <span class="comment">//id 는 save시 repo에서 마지막 넣어주면됨.!</span></span><br><span class="line">    <span class="keyword">private</span> String itemName;</span><br><span class="line">    <span class="keyword">private</span> Integer price; <span class="comment">//가격이 null로 들어갈수있음. int는 null가질수없음</span></span><br><span class="line">    <span class="keyword">private</span> Integer quantity; <span class="comment">//양이 null로 들어갈수있음. int는 null가질수없음</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Item</span><span class="params">()</span></span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Item</span><span class="params">(String itemName, Integer price, Integer quantity)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.itemName =itemName;</span><br><span class="line">        <span class="keyword">this</span>.price = price;</span><br><span class="line">        <span class="keyword">this</span>.quantity = quantity;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Lombok의 @Data는 다양한모든 기능을 넣어준다. 오히려 @Getter @Setter로 정확히 해주는것이 필요이상으로 기능을 넣지않아 안전하다.</p>
+</blockquote>
+<ul>
+<li><strong>ItemRepository - 상품 저장소</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemRepository</span> </span>&#123;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;Long, Item&gt; store = <span class="keyword">new</span> HashMap&lt;&gt;();<span class="comment">//static사용해, 어차피 싱글톤이여서 상관없지만, 혹시나 다른곳에서는 쓸수있으므로</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">long</span> sequence = <span class="number">0L</span>; <span class="comment">//static사용해</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Item <span class="title">save</span><span class="params">(Item item)</span></span>&#123;</span><br><span class="line">    item.setId(++sequence);</span><br><span class="line">    store.put(item.getId(),item);</span><br><span class="line">    <span class="keyword">return</span> item;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> Item <span class="title">findById</span><span class="params">(Long id)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> store.get(id);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Item&gt; <span class="title">findAll</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;(store.values());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Long itemId, Item updateParam)</span></span>&#123;</span><br><span class="line">    Item findItem = findById(itemId);</span><br><span class="line">    findItem.setItemName(updateParam.getItemName());</span><br><span class="line">    findItem.setPrice(updateParam.getPrice());</span><br><span class="line">    findItem.setQuantity(updateParam.getQuantity());</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clearStore</span><span class="params">()</span></span>&#123;</span><br><span class="line">    store.clear();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>ItemRepositoryTest - 상품 저장소 테스트</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ItemRepositoryTest</span> </span>&#123;</span><br><span class="line">    ItemRepository itemRepository = <span class="keyword">new</span> ItemRepository();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AfterEach</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">afterEach</span><span class="params">()</span></span>&#123;</span><br><span class="line">        itemRepository.clearStore();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">saveTest</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//given</span></span><br><span class="line">        Item itemA = <span class="keyword">new</span> Item(<span class="string">"A"</span>,<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//when</span></span><br><span class="line">        Item savedItem = itemRepository.save(itemA);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//then</span></span><br><span class="line">        Item findItem = itemRepository.findById(itemA.getId());</span><br><span class="line">        Assertions.assertThat(savedItem).isEqualTo(findItem);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">findAllTest</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//given</span></span><br><span class="line">        Item itemA = <span class="keyword">new</span> Item(<span class="string">"A"</span>,<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">        Item itemB = <span class="keyword">new</span> Item(<span class="string">"B"</span>,<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        itemRepository.save(itemA);</span><br><span class="line">        itemRepository.save(itemB);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//when</span></span><br><span class="line">        List&lt;Item&gt; result = itemRepository.findAll();</span><br><span class="line">        <span class="comment">//then</span></span><br><span class="line">        Assertions.assertThat(result.size()).isEqualTo(<span class="number">2</span>);</span><br><span class="line">        Assertions.assertThat(result).contains(itemA, itemB);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">updateItemTest</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//given</span></span><br><span class="line">        Item itemA = <span class="keyword">new</span> Item(<span class="string">"A"</span>,<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">        Item updateParam = <span class="keyword">new</span> Item(<span class="string">"B"</span>, <span class="number">2</span>, <span class="number">2</span>);</span><br><span class="line">        Item savedItem=itemRepository.save(itemA);</span><br><span class="line">        Long itemId = savedItem.getId();</span><br><span class="line">        <span class="comment">//when</span></span><br><span class="line">        itemRepository.update(itemId,updateParam);</span><br><span class="line">        <span class="comment">//then</span></span><br><span class="line">        Item findItem = itemRepository.findById(itemId);</span><br><span class="line">        Assertions.assertThat(findItem.getItemName()).isEqualTo(updateParam.getItemName());</span><br><span class="line">        Assertions.assertThat(findItem.getPrice()).isEqualTo(updateParam.getPrice());</span><br><span class="line">        Assertions.assertThat(findItem.getQuantity()).isEqualTo(updateParam.getQuantity());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="상품-서비스-HTML"><a href="#상품-서비스-HTML" class="headerlink" title="상품 서비스 HTML"></a>상품 서비스 HTML</h1><ul>
+<li>핵심 비즈니스 로직을 개발하는 동안, 웹 퍼블리셔는 HTML 마크업을 완료했다.</li>
+<li>부트스트랩<ul>
+<li>참고로 HTML을 편리하게 개발하기 위해 부트스트랩 사용했다.</li>
+<li>이동: <a href="https://getbootstrap.com/docs/5.0/getting-started/download/" target="_blank" rel="noopener">https://getbootstrap.com/docs/5.0/getting-started/download/</a><br>Compiled CSS and JS 항목을 다운로드하자.<br>압축을 출고 bootstrap.min.css 를 복사해서 다음 폴더에 추가하자<br><code>resources/static/css/bootstrap.min.css</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="HTML-css파일"><a href="#HTML-css파일" class="headerlink" title="HTML,css파일"></a>HTML,css파일</h2><ul>
+<li>/resources/static/css/bootstrap.min.css 부트스트랩 다운로드</li>
+<li>/resources/static/html/items.html 아래 참조</li>
+<li>/resources/static/html/item.html</li>
+<li>/resources/static/html/addForm.html</li>
+<li>/resources/static/html/editForm.html</li>
+</ul>
+<blockquote>
+<p>이렇게 정적 리소스가 공개되는 /resources/static 폴더에 HTML을 넣어두면, 실제 서비스에서도 공개된다. 서비스를 운영한다면 지금처럼 공개할 필요없는 HTML을 두는 것은 주의하자.</p>
+</blockquote>
+<h1 id="상품-목록-타입-리프"><a href="#상품-목록-타입-리프" class="headerlink" title="상품 목록 - 타입 리프"></a>상품 목록 - 타입 리프</h1><ul>
+<li>th가 있다면 기본적으로 값을 기존것을 날리고 새로운것을 덮어쓰이는 동작함</li>
+<li>@는 url링크 같은 것들의 문법, $는 참조변수의 정보로 동적치환하는법</li>
+</ul>
+<h2 id="BasicItemController"><a href="#BasicItemController" class="headerlink" title="BasicItemController"></a><strong>BasicItemController</strong></h2><ul>
+<li><code>hello.itemservice.web.basic</code> 위치</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/basic/items"</span>)</span><br><span class="line"><span class="meta">@RequiredArgsConstructor</span> <span class="comment">//final 붙은 애에 대해 생성자 로만들어즘</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BasicItemController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ItemRepository itemRepository;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">items</span><span class="params">(Model model)</span></span>&#123;</span><br><span class="line">        List&lt;Item&gt; items = itemRepository.findAll();</span><br><span class="line">        model.addAttribute(<span class="string">"items"</span>,items);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"basic/items"</span>; <span class="comment">//뷰 위치</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  테스트용 케이스 추가(초기화 콜백사용)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">        itemRepository.save(<span class="keyword">new</span> Item(<span class="string">"itemA"</span>, <span class="number">1000</span>, <span class="number">1</span>));</span><br><span class="line">        itemRepository.save(<span class="keyword">new</span> Item(<span class="string">"itemB"</span>, <span class="number">2000</span>, <span class="number">2</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>@RequiredArgsConstructor<ul>
+<li><code>final</code> 이 붙은 멤버변수만 사용해서 생성자를 자동으로 만들어준다.</li>
+<li>또한 현재상황은 1개의 생성자 밖에없으므로 스프링이 자동으로 @Autowired주입해줌</li>
+<li>따라서 <strong>final 키워드를 빼면 안된다!</strong>, 그러면 ItemRepository 의존관계 주입이 안된다.</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">BasicItemController</span><span class="params">(ItemRepository itemRepository)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.itemRepository = itemRepository;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="타입-리프-써보기"><a href="#타입-리프-써보기" class="headerlink" title="타입 리프 써보기"></a>타입 리프 써보기</h2><ul>
+<li>뷰 템플릿 영역으로 items.html</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE HTML&gt;</span><br><span class="line">&lt;html xmlns:th=<span class="string">"http://www.thymeleaf.org"</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">"utf-8"</span>&gt;</span><br><span class="line">    &lt;link th:href=<span class="string">"@&#123;/css/bootstrap.min.css&#125;"</span></span><br><span class="line">            href=<span class="string">"../css/bootstrap.min.css"</span> rel=<span class="string">"stylesheet"</span>&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        .container &#123;</span><br><span class="line">            max-width: <span class="number">560</span>px;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"container"</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"py-5 text-center"</span>&gt;</span><br><span class="line">        &lt;h2&gt;상품 상세&lt;/h2&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 추가 --&gt;</span><br><span class="line">    &lt;h2 th:if="$&#123;param.status&#125;" th:text="'저장 완료'"&gt;&lt;/h2&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;label for="itemId"&gt;상품 ID&lt;/label&gt;</span><br><span class="line">        &lt;input type=<span class="string">"text"</span> id=<span class="string">"itemId"</span> name=<span class="string">"itemId"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"form-control"</span> value=<span class="string">"1"</span> th:value=<span class="string">"$&#123;item.id&#125;"</span> readonly&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;label for="itemName"&gt;상품명&lt;/label&gt;</span><br><span class="line">        &lt;input type=<span class="string">"text"</span> id=<span class="string">"itemName"</span> name=<span class="string">"itemName"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"form-control"</span> value=<span class="string">"상품A"</span> th:value=<span class="string">"$&#123;item.itemName&#125;"</span> readonly&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;label for="price"&gt;가격&lt;/label&gt;</span><br><span class="line">        &lt;input type=<span class="string">"text"</span> id=<span class="string">"price"</span> name=<span class="string">"price"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"form-control"</span> value=<span class="string">"10000"</span> th:value=<span class="string">"$&#123;item.price&#125;"</span> readonly&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;label for="quantity"&gt;수량&lt;/label&gt;</span><br><span class="line">        &lt;input type=<span class="string">"text"</span> id=<span class="string">"quantity"</span> name=<span class="string">"quantity"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"form-control"</span> value=<span class="string">"10"</span> th:value=<span class="string">"$&#123;item.quantity&#125;"</span> readonly&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">    &lt;hr <span class="class"><span class="keyword">class</span></span>=<span class="string">"my-4"</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"row"</span>&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"col"</span>&gt;</span><br><span class="line">            &lt;button <span class="class"><span class="keyword">class</span></span>=<span class="string">"w-100 btn btn-primary btn-lg"</span></span><br><span class="line">                    onclick=<span class="string">"location.href='editForm.html'"</span></span><br><span class="line">                    th:onclick=<span class="string">"|location.href='@&#123;/basic/items/&#123;itemId&#125;/edit(itemId=$&#123;item.id&#125;)&#125;'|"</span></span><br><span class="line">                    type="button"&gt;상품 수정&lt;/button&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"col"</span>&gt;</span><br><span class="line">            &lt;button <span class="class"><span class="keyword">class</span></span>=<span class="string">"w-100 btn btn-secondary btn-lg"</span></span><br><span class="line">                    onclick=<span class="string">"location.href='items.html'"</span></span><br><span class="line">                    th:onclick=<span class="string">"|location.href='@&#123;/basic/items&#125;'|"</span></span><br><span class="line">                    type="button"&gt;목록으로&lt;/button&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;/div&gt; &lt;!-- /container --&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="타입리프-사용-선언"><a href="#타입리프-사용-선언" class="headerlink" title="타입리프 사용 선언"></a>타입리프 사용 선언</h3><p><code>&lt;html xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;</code></p>
+<h3 id="타입리프-핵심"><a href="#타입리프-핵심" class="headerlink" title="타입리프 핵심"></a>타입리프 핵심</h3><ul>
+<li>핵심은 th:xxx 가 붙은 부분은 서버사이드에서 렌더링 되고, 기존 것을 대체한다. th:xxx 이 없으면 기존 html의 xxx 속성이 그대로 사용된다.<br>HTML을 파일로 직접 열었을 때, th:xxx 가 있어도 웹 브라우저는 th: 속성을 알지 못하므로 무시한다. <strong>따라서 HTML을 파일 보기를 유지하면서 템플릿 기능도 할 수 있다.</strong></li>
+<li>예시로 <code>href=”value1”</code> <code>th:href=”value2”</code> 존재 한다면, th:href값으로 href 속성값이 변경된다. 속성이 없다면 새로 생성한다.</li>
+</ul>
+<h3 id="URL-링크-표현식-…"><a href="#URL-링크-표현식-…" class="headerlink" title="URL 링크 표현식 - @{…}"></a>URL 링크 표현식 - @{…}</h3><ul>
+<li><code>th:href=&quot;@{/css/bootstrap.min.css}&quot;</code></li>
+<li>@{…} : 타임리프는 URL 링크를 사용하는 경우 @{…} 를 사용한다. 이것을 URL 링크 표현식이라 한다.</li>
+<li>URL 링크 표현식을 사용하면 서블릿 컨텍스트를 자동으로 포함한다.</li>
+</ul>
+<h3 id="리터럴-대체-…"><a href="#리터럴-대체-…" class="headerlink" title="리터럴 대체 - |…|"></a>리터럴 대체 - |…|</h3><ul>
+<li>타임리프에서 문자와 표현식 등은 분리되어 있기 때문에 더해서 사용해야 한다.<br><code>&lt;span th:text=&quot;&#39;Welcome to our application, &#39; + ${user.name} + &#39;!&#39;&quot;&gt;</code></li>
+<li>다음과 같이 리터럴 대체 문법을 사용하면, 더하기 없이 편리하게 사용할 수 있다.<br><code>&lt;span th:text=&quot;|Welcome to our application, ${user.name}!|&quot;&gt;</code></li>
+<li>예시로  <code>location.href=&#39;/basic/items/add&#39;</code><ul>
+<li><code>th:onclick=&quot;&#39;location.href=&#39; + &#39;\&#39;&#39; + @{/basic/items/add} + &#39;\&#39;&#39;”</code></li>
+<li><code>th:onclick=&quot;|location.href=&#39;@{/basic/items/add}&#39;|”</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="반복-출력-th-each"><a href="#반복-출력-th-each" class="headerlink" title="반복 출력 - th:each"></a><strong>반복 출력 - th:each</strong></h3><ul>
+<li><code>&lt;tr th:each=&quot;item : ${items}&quot;&gt;</code></li>
+<li>반복은 th:each 를 사용한다. 이렇게 하면 모델에 포함된 items 컬렉션 데이터가 item 변수에 하나씩 포함되고, 반복문 안에서 item 변수를 사용할 수 있다.</li>
+</ul>
+<h3 id="변수-표현식-…"><a href="#변수-표현식-…" class="headerlink" title="변수 표현식 - ${…}"></a><strong>변수 표현식 - ${…}</strong></h3><ul>
+<li><code>&lt;td th:text=&quot;${item.price}&quot;&gt;10000&lt;/td&gt;</code></li>
+<li>모델에 포함된 값이나, 타임리프 변수로 선언한 값을 조회할 수 있다. <strong>프로퍼티 접근법을 사용한다. ( item.getPrice() )</strong></li>
+</ul>
+<h3 id="내용-변경-th-text"><a href="#내용-변경-th-text" class="headerlink" title="내용 변경 - th:text"></a>내용 변경 - th:text</h3><ul>
+<li><code>&lt;td th:text=&quot;${item.price}&quot;&gt;10000&lt;/td&gt;</code></li>
+<li>내용의 값을 th:text 의 값으로 변경한다.</li>
+<li>여기서는 10000을 ${item.price} 의 값으로 변경한다.</li>
+</ul>
+<h3 id="URL-링크-표현식1-2"><a href="#URL-링크-표현식1-2" class="headerlink" title="URL 링크 표현식1,2"></a>URL 링크 표현식1,2</h3><ul>
+<li><code>th:href=&quot;@{/basic/items/{itemId}(itemId=${item.id})}&quot;</code></li>
+<li>상품 ID를 선택하는 링크를 확인해보자.</li>
+<li>URL 링크 표현식을 사용하면 경로를 템플릿처럼 편리하게 사용할 수 있다.<br>경로 변수( {itemId} ) 뿐만 아니라 쿼리 파라미터도 생성한다.<ul>
+<li>예) th:href=”@{/basic/items/{itemId}(itemId=${item.id}, query=’test’)}”</li>
+<li>생성 링크: <a href="http://localhost:8080/basic/items/1?query=test" target="_blank" rel="noopener">http://localhost:8080/basic/items/1?query=test</a></li>
+</ul>
+</li>
+<li>리터럴 대체문법도 활용하여 URL 링크 표현식 가능하다<ul>
+<li><code>th:href=&quot;@{|/basic/items/${[item.id](http://item.id/)}|}&quot;</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>타임리프는 순수 HTML 파일을 웹 브라우저에서 열어도 내용을 확인할 수 있고, 서버를 통해 뷰 템플릿을 거치면 동적으로 변경된 결과를 확인할 수 있다. JSP를 생각해보면, JSP 파일은 웹 브라우저에서 그냥 열면 JSP 소스코드와 HTML이 뒤죽박죽 되어서 정상적인 확인이 불가능하다. 오직 서버를 통해서 JSP를 열어야<br>한다. 이렇게 <strong>순수 HTML을 그대로 유지하면서 뷰 템플릿도 사용할 수 있는 타임리프의 특징을 네츄럴 템플릿</strong>(natural templates)이라 한다.</p>
+</blockquote>
+<h1 id="상품-상세"><a href="#상품-상세" class="headerlink" title="상품 상세"></a>상품 상세</h1><ul>
+<li><strong>BasicItemController에 추가</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/&#123;itemId&#125;"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">item</span><span class="params">(@PathVariable Long itemId, Model model)</span> </span>&#123;</span><br><span class="line">      Item item = itemRepository.findById(itemId);</span><br><span class="line">      model.addAttribute(<span class="string">"item"</span>, item);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"basic/item"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>PathVariable 로 넘어온 상품ID로 상품을 조회하고, 모델에 담아둔다. 그리고 뷰 템플릿을 호출한다.</li>
+<li>해당 html</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE HTML&gt;</span><br><span class="line">&lt;html xmlns:th&#x3D;&quot;http:&#x2F;&#x2F;www.thymeleaf.org&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;</span><br><span class="line">    &lt;link th:href&#x3D;&quot;@&#123;&#x2F;css&#x2F;bootstrap.min.css&#125;&quot;</span><br><span class="line">            href&#x3D;&quot;..&#x2F;css&#x2F;bootstrap.min.css&quot; rel&#x3D;&quot;stylesheet&quot;&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        .container &#123;</span><br><span class="line">            max-width: 560px;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;&#x2F;style&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class&#x3D;&quot;container&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div class&#x3D;&quot;py-5 text-center&quot;&gt;</span><br><span class="line">        &lt;h2&gt;상품 상세&lt;&#x2F;h2&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 추가 --&gt;</span><br><span class="line">    &lt;h2 th:if&#x3D;&quot;$&#123;param.status&#125;&quot; th:text&#x3D;&quot;&#39;저장 완료&#39;&quot;&gt;&lt;&#x2F;h2&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;label for&#x3D;&quot;itemId&quot;&gt;상품 ID&lt;&#x2F;label&gt;</span><br><span class="line">        &lt;input type&#x3D;&quot;text&quot; id&#x3D;&quot;itemId&quot; name&#x3D;&quot;itemId&quot; class&#x3D;&quot;form-control&quot; value&#x3D;&quot;1&quot; th:value&#x3D;&quot;$&#123;item.id&#125;&quot; readonly&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;label for&#x3D;&quot;itemName&quot;&gt;상품명&lt;&#x2F;label&gt;</span><br><span class="line">        &lt;input type&#x3D;&quot;text&quot; id&#x3D;&quot;itemName&quot; name&#x3D;&quot;itemName&quot; class&#x3D;&quot;form-control&quot; value&#x3D;&quot;상품A&quot; th:value&#x3D;&quot;$&#123;item.itemName&#125;&quot; readonly&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;label for&#x3D;&quot;price&quot;&gt;가격&lt;&#x2F;label&gt;</span><br><span class="line">        &lt;input type&#x3D;&quot;text&quot; id&#x3D;&quot;price&quot; name&#x3D;&quot;price&quot; class&#x3D;&quot;form-control&quot; value&#x3D;&quot;10000&quot; th:value&#x3D;&quot;$&#123;item.price&#125;&quot; readonly&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;label for&#x3D;&quot;quantity&quot;&gt;수량&lt;&#x2F;label&gt;</span><br><span class="line">        &lt;input type&#x3D;&quot;text&quot; id&#x3D;&quot;quantity&quot; name&#x3D;&quot;quantity&quot; class&#x3D;&quot;form-control&quot; value&#x3D;&quot;10&quot; th:value&#x3D;&quot;$&#123;item.quantity&#125;&quot; readonly&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">    &lt;hr class&#x3D;&quot;my-4&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div class&#x3D;&quot;row&quot;&gt;</span><br><span class="line">        &lt;div class&#x3D;&quot;col&quot;&gt;</span><br><span class="line">            &lt;button class&#x3D;&quot;w-100 btn btn-primary btn-lg&quot;</span><br><span class="line">                    onclick&#x3D;&quot;location.href&#x3D;&#39;editForm.html&#39;&quot;</span><br><span class="line">                    th:onclick&#x3D;&quot;|location.href&#x3D;&#39;@&#123;&#x2F;basic&#x2F;items&#x2F;&#123;itemId&#125;&#x2F;edit(itemId&#x3D;$&#123;item.id&#125;)&#125;&#39;|&quot;</span><br><span class="line">                    type&#x3D;&quot;button&quot;&gt;상품 수정&lt;&#x2F;button&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">        &lt;div class&#x3D;&quot;col&quot;&gt;</span><br><span class="line">            &lt;button class&#x3D;&quot;w-100 btn btn-secondary btn-lg&quot;</span><br><span class="line">                    onclick&#x3D;&quot;location.href&#x3D;&#39;items.html&#39;&quot;</span><br><span class="line">                    th:onclick&#x3D;&quot;|location.href&#x3D;&#39;@&#123;&#x2F;basic&#x2F;items&#125;&#39;|&quot;</span><br><span class="line">                    type&#x3D;&quot;button&quot;&gt;목록으로&lt;&#x2F;button&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;div&gt; &lt;!-- &#x2F;container --&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>속성 변경 - th:value<ul>
+<li>th:value=”${<a href="http://item.id/" target="_blank" rel="noopener">item.id</a>}”<br>모델에 있는 item 정보를 획득하고 프로퍼티 접근법으로 출력한다. ( item.getId() ) value 속성을 th:value 속성으로 변경한다.</li>
+</ul>
+</li>
+<li>상품수정 링크</li>
+<li>목록으로 링크</li>
+</ul>
+<h1 id="상품-등록폼"><a href="#상품-등록폼" class="headerlink" title="상품 등록폼"></a>상품 등록폼</h1><ul>
+<li>controller에 추가</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/add"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">addForm</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"basic/addForm"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>html<ul>
+<li>추후에 같은 링크에 Post맵핑하여 save처리할예정</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE HTML&gt;</span><br><span class="line">&lt;html xmlns:th=<span class="string">"http://www.thymeleaf.org"</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">"utf-8"</span>&gt;</span><br><span class="line">    &lt;link th:href=<span class="string">"@&#123;/css/bootstrap.min.css&#125;"</span></span><br><span class="line">          href=<span class="string">"../css/bootstrap.min.css"</span> rel=<span class="string">"stylesheet"</span>&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        .container &#123;</span><br><span class="line">            max-width: <span class="number">560</span>px;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"container"</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"py-5 text-center"</span>&gt;</span><br><span class="line">        &lt;h2&gt;상품 등록 폼&lt;/h2&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">    &lt;h4 class="mb-3"&gt;상품 입력&lt;/h4&gt;</span><br><span class="line"></span><br><span class="line">    &lt;form action=<span class="string">"item.html"</span> th:action method=<span class="string">"post"</span>&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;label for="itemName"&gt;상품명&lt;/label&gt;</span><br><span class="line">            &lt;input type=<span class="string">"text"</span> id=<span class="string">"itemName"</span> name=<span class="string">"itemName"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"form-control"</span> placeholder=<span class="string">"이름을 입력하세요"</span>&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;label for="price"&gt;가격&lt;/label&gt;</span><br><span class="line">            &lt;input type=<span class="string">"text"</span> id=<span class="string">"price"</span> name=<span class="string">"price"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"form-control"</span> placeholder=<span class="string">"가격을 입력하세요"</span>&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;label for="quantity"&gt;수량&lt;/label&gt;</span><br><span class="line">            &lt;input type=<span class="string">"text"</span> id=<span class="string">"quantity"</span> name=<span class="string">"quantity"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"form-control"</span> placeholder=<span class="string">"수량을 입력하세요"</span>&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">        &lt;hr <span class="class"><span class="keyword">class</span></span>=<span class="string">"my-4"</span>&gt;</span><br><span class="line"></span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"row"</span>&gt;</span><br><span class="line">            &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"col"</span>&gt;</span><br><span class="line">                &lt;button class="w-100 btn btn-primary btn-lg" type="submit"&gt;상품 등록&lt;/button&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">            &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"col"</span>&gt;</span><br><span class="line">                &lt;button <span class="class"><span class="keyword">class</span></span>=<span class="string">"w-100 btn btn-secondary btn-lg"</span></span><br><span class="line">                        onclick=<span class="string">"location.href='items.html'"</span></span><br><span class="line">                        th:onclick=<span class="string">"|location.href='@&#123;/basic/items&#125;'|"</span></span><br><span class="line">                        type="button"&gt;취소&lt;/button&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/form&gt;</span><br><span class="line"></span><br><span class="line">&lt;/div&gt; &lt;!-- /container --&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>속성 변경 - th:action</strong><ul>
+<li>th:action</li>
+<li>HTML form에서 action 에 값이 없으면 현재 URL에 데이터를 전송한다.<br>상품 등록 폼의 URL과 실제 상품 등록을 처리하는 URL을 똑같이 맞추고 HTTP 메서드로 두 기능을 구분한다.<ul>
+<li>상품 등록 폼: GET /basic/items/add</li>
+<li>상품 등록 처리: POST /basic/items/add</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="상품-등록-처리-ModelAttribute"><a href="#상품-등록-처리-ModelAttribute" class="headerlink" title="상품 등록 처리 - @ModelAttribute"></a>상품 등록 처리 - @ModelAttribute</h1><ul>
+<li>상품 등록 처리시 전달된 데이터는 <strong>POST - HTML Form</strong><ul>
+<li>content-type: application/x-www-form-urlencoded</li>
+<li>메시지 바디에 쿼리 파리미터 형식으로 전달 itemName=itemA&amp;price=10000&amp;quantity=10</li>
+<li>예) 회원 가입, 상품 주문, HTML Form 사용</li>
+</ul>
+</li>
+<li>controller<ul>
+<li>아래 방법 모두 사용가능</li>
+<li>@RequestParam가능</li>
+<li>@ModelAttribute도 가능</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//    @PostMapping("/add")</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">save</span><span class="params">(@RequestParam String itemName,</span></span></span><br><span class="line"><span class="function"><span class="params">                       @RequestParam Integer price,</span></span></span><br><span class="line"><span class="function"><span class="params">                       @RequestParam Integer quantity,</span></span></span><br><span class="line"><span class="function"><span class="params">                       Model model)</span></span>&#123;</span><br><span class="line">        Item item = <span class="keyword">new</span> Item(itemName, price, quantity);</span><br><span class="line">        itemRepository.save(item);</span><br><span class="line">        model.addAttribute(<span class="string">"item"</span>,item);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"basic/item"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//    @PostMapping("/add")</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">addItemV2</span><span class="params">(@ModelAttribute(<span class="string">"item"</span>)</span> Item item)</span>&#123;</span><br><span class="line">        itemRepository.save(item);</span><br><span class="line"><span class="comment">//        model.addAttribute("item",item); // 자동추가되므로, 생략 가능</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"basic/item"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@PostMapping</span>(<span class="string">"/add"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">addItemV3</span><span class="params">(Item item)</span></span>&#123; <span class="comment">//이렇게 작성시 @ModelAttribute가 되고, Model에 등록은 "item"으로 자동으로됨(규칙은 타입 맨앞 대문자 소문자로변경)</span></span><br><span class="line">        itemRepository.save(item);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"basic/item"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>@ModelAttribute에 대해 알아야할점<ul>
+<li>@ModelAttribute 는 Item 객체를 생성하고, 요청 파라미터의 값을 프로퍼티 접근법(setXxx)으로 입력해준다.</li>
+<li>@ModelAttribute 는 중요한 한가지 기능이 더 있는데, 바로 모델(Model)에 @ModelAttribute 로 지정한 객체를 자동으로 넣어준다. 지금 코드를 보면 model.addAttribute(“item”, item) 가 주석처리 되어 있어도 잘 동작하는 것을 확인할 수 있다.<ul>
+<li>@ModelAttribute(“hello”) Item item 이름을 hello 로 지정</li>
+<li>model.addAttribute(“hello”, item); 모델에 hello 이름으로 저장</li>
+</ul>
+</li>
+<li>@ModelAttribute 는 모델에 등록될 이름을 생략하면 클래스의 첫글자만 소문자로 변경해서 등록한다 (Item→item)</li>
+<li>@ModelAttribute 자체도 생략가능하다</li>
+</ul>
+</li>
+<li>controller에 추가<ul>
+<li>Get, Post 나눠서 개발 redirect부분 잘보기</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/&#123;itemId&#125;/edit"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">editForm</span><span class="params">(@PathVariable Long itemId, Model model)</span></span>&#123;</span><br><span class="line">        Item item = itemRepository.findById(itemId);</span><br><span class="line">        model.addAttribute(<span class="string">"item"</span>, item);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"basic/editForm"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@PostMapping</span> (<span class="string">"/&#123;itemId&#125;/edit"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">edit</span><span class="params">(@PathVariable Long itemId, @ModelAttribute Item item)</span></span>&#123;</span><br><span class="line">        itemRepository.update(itemId,item);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"redirect:/basic/items/&#123;itemId&#125;"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>editForm</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE HTML&gt;</span><br><span class="line">&lt;html xmlns:th=<span class="string">"http://www.thymeleaf.org"</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">"utf-8"</span>&gt;</span><br><span class="line">    &lt;link th:href=<span class="string">"@&#123;/css/bootstrap.min.css&#125;"</span></span><br><span class="line">          href=<span class="string">"../css/bootstrap.min.css"</span> rel=<span class="string">"stylesheet"</span>&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        .container &#123;</span><br><span class="line">            max-width: <span class="number">560</span>px;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"container"</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"py-5 text-center"</span>&gt;</span><br><span class="line">        &lt;h2&gt;상품 수정 폼&lt;/h2&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">    &lt;form action=<span class="string">"item.html"</span> th:action method=<span class="string">"post"</span>&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;label for="id"&gt;상품 ID&lt;/label&gt;</span><br><span class="line">            &lt;input type=<span class="string">"text"</span> id=<span class="string">"id"</span> name=<span class="string">"id"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"form-control"</span> value=<span class="string">"1"</span> th:value=<span class="string">"$&#123;item.id&#125;"</span> readonly&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;label for="itemName"&gt;상품명&lt;/label&gt;</span><br><span class="line">            &lt;input type=<span class="string">"text"</span> id=<span class="string">"itemName"</span> name=<span class="string">"itemName"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"form-control"</span> value=<span class="string">"상품A"</span> th:value=<span class="string">"$&#123;item.itemName&#125;"</span>&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;label for="price"&gt;가격&lt;/label&gt;</span><br><span class="line">            &lt;input type=<span class="string">"text"</span> id=<span class="string">"price"</span> name=<span class="string">"price"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"form-control"</span> value=<span class="string">"10000"</span> th:value=<span class="string">"$&#123;item.price&#125;"</span>&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;label for="quantity"&gt;수량&lt;/label&gt;</span><br><span class="line">            &lt;input type=<span class="string">"text"</span> id=<span class="string">"quantity"</span> name=<span class="string">"quantity"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"form-control"</span> value=<span class="string">"10"</span> th:value=<span class="string">"$&#123;item.quantity&#125;"</span>&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">        &lt;hr <span class="class"><span class="keyword">class</span></span>=<span class="string">"my-4"</span>&gt;</span><br><span class="line"></span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"row"</span>&gt;</span><br><span class="line">            &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"col"</span>&gt;</span><br><span class="line">                &lt;button class="w-100 btn btn-primary btn-lg" type="submit"&gt;저장&lt;/button&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">            &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"col"</span>&gt;</span><br><span class="line">                &lt;button <span class="class"><span class="keyword">class</span></span>=<span class="string">"w-100 btn btn-secondary btn-lg"</span></span><br><span class="line">                        onclick=<span class="string">"location.href='item.html'"</span></span><br><span class="line">                        th:onclick=<span class="string">"|location.href='@&#123;/basic/items/&#123;itemId&#125;(itemId=$&#123;item.id&#125;)&#125;'|"</span></span><br><span class="line">                        type="button"&gt;취소&lt;/button&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/form&gt;</span><br><span class="line"></span><br><span class="line">&lt;/div&gt; &lt;!-- /container --&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="상품-수정-개발"><a href="#상품-수정-개발" class="headerlink" title="상품 수정 개발"></a>상품 수정 개발</h2><ul>
+<li>controller</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping</span> (<span class="string">"/&#123;itemId&#125;/edit"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">edit</span><span class="params">(@PathVariable Long itemId, @ModelAttribute Item item)</span></span>&#123;</span><br><span class="line">        itemRepository.update(itemId,item);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"redirect:/basic/items/&#123;itemId&#125;"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>상품 수정은 상품 등록과 전체 프로세스가 유사하다.<ul>
+<li>GET /items/{itemId}/edit:상품수정폼</li>
+<li>POST /items/{itemId}/edit : 상품 수정 처리</li>
+</ul>
+</li>
+<li>리다이렉트<ul>
+<li>상품 수정은 마지막에 뷰 템플릿을 호출하는 대신에 상품 상세 화면으로 이동하도록 리다이렉트를 호출한다.</li>
+<li>스프링은 redirect:/… 으로 편리하게 리다이렉트를 지원한다.</li>
+<li>redirect:/basic/items/{itemId}<ul>
+<li>컨트롤러에 매핑된 @PathVariable 의 값은 redirect 에도 사용 할 수 있다.</li>
+<li>redirect:/basic/items/{itemId} {itemId} 는 @PathVariable Long itemId 의 값을 그대로 사용한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>HTML Form 전송은 PUT, PATCH를 지원하지 않는다. GET, POST만 사용할 수 있다. PUT, PATCH는 HTTP API 전송시에 사용<br>스프링에서 HTTP POST로 Form 요청할 때 히든 필드를 통해서 PUT, PATCH 매핑을 사용하는 방법이 있지만, HTTP 요청상 POST 요청이다.</p>
+</blockquote>
+<h1 id="PRG-Post-Redirect-Get"><a href="#PRG-Post-Redirect-Get" class="headerlink" title="PRG Post/Redirect/Get"></a>PRG Post/Redirect/Get</h1><ul>
+<li><p>post로 add하고 새로고침…하면 계속 제품 추가됨..문제점</p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212242130319.png" alt="스크린샷 2022-07-02 오후 6.43.04.png"></p>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212242130326.png" alt="스크린샷 2022-07-02 오후 6.43.16.png"></p>
+<ul>
+<li>웹 브라우저의 새로 고침은 마지막에 서버에 전송한 데이터를 다시 전송한다.<br>상품 등록 폼에서 데이터를 입력하고 저장을 선택하면 POST /add + 상품 데이터를 서버로 전송한다.</li>
+<li>이 상태에서 새로 고침을 또 선택하면 마지막에 전송한 POST /add + 상품 데이터를 서버로 다시 전송하게 된다.그래서 내용은 같고, ID만 다른 상품 데이터가 계속 쌓이게 된다.</li>
+</ul>
+</li>
+<li><p><strong>POST, Redirect GET</strong></p>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212242130329.png" alt="스크린샷 2022-07-02 오후 6.44.30.png"></p>
+<ul>
+<li>웹 브라우저의 새로 고침은 마지막에 서버에 전송한 데이터를 다시 전송한다.<br>새로 고침 문제를 해결하려면 상품 저장 후에 뷰 템플릿으로 이동하는 것이 아니라, 상품 상세 화면으로 리다이렉트를 호출해주면 된다.<br>웹 브라우저는 리다이렉트의 영향으로 상품 저장 후에 실제 상품 상세 화면으로 다시 이동한다. 따라서마지막에 호출한 내용이 상품 상세 화면인 GET /items/{id} 가 되는 것이다.<br>이후 새로고침을 해도 상품 상세 화면으로 이동하게 되므로 새로 고침 문제를 해결할 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="해결-구현"><a href="#해결-구현" class="headerlink" title="해결 구현"></a>해결 구현</h2><ul>
+<li><p>controller에서 변경</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping</span>(<span class="string">"/add"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">addItemV3</span><span class="params">(Item item)</span></span>&#123; <span class="comment">//이렇게 작성시 @ModelAttribute가 되고, Model에 등록은 "item"으로 자동으로됨(규칙은 타입 맨앞 대문자 소문자로변경)</span></span><br><span class="line">        itemRepository.save(item);</span><br><span class="line"><span class="comment">//        model.addAttribute("item",item); // 자동추가되므로, 생략 가능</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"redirect:/basic/items/"</span>+item.getId();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>상품 등록 처리 이후에 뷰 템플릿이 아니라 상품 상세 화면으로 리다이렉트 하도록 코드를 작성해보자. 이런 문제 해결 방식을 PRG Post/Redirect/Get 라 한다.</p>
+</li>
+</ul>
+<blockquote>
+<p><code>&quot;redirect:/basic/items/&quot; + item.getId() redirect에서 +item.getId()</code> 처럼 URL에 변수를 더해서 사용하는 것은 URL 인코딩이 안되기 때문에 위험하다. 다음에 설명하는 <code>RedirectAttributes</code> 를 사용하자.</p>
+</blockquote>
+<h2 id="RedirectAttributes"><a href="#RedirectAttributes" class="headerlink" title="RedirectAttributes"></a><strong>RedirectAttributes</strong></h2><ul>
+<li>상품을 저장하고 상품 상세 화면으로 리다이렉트 한 것 까지는 좋았다. 그런데 고객 입장에서 저장이 잘 된 것인지 안 된 것인지 확신이 들지 않는다. 그래서 저장이 잘 되었으면 상품 상세 화면에 “저장되었습니다”라는 메시지를 보여달라는 요구사항이 왔다. 간단하게 해결해보자.</li>
+<li><strong>RedirectAttributes 를 사용하면 URL 인코딩도 해주고, pathVarible , 쿼리 파라미터까지 처리해준다.</strong></li>
+<li>redirect:/basic/items/{itemId}<ul>
+<li>pathVariable 바인딩: {itemId}</li>
+<li>나머지는 쿼리 파라미터로 처리: ?status=true</li>
+</ul>
+</li>
+<li>controller에 추가</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping</span>(<span class="string">"/add"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">addItemV5</span><span class="params">(Item item, RedirectAttributes redirectAttributes)</span> </span>&#123;</span><br><span class="line">        Item savedItem = itemRepository.save(item);</span><br><span class="line">        redirectAttributes.addAttribute(<span class="string">"itemId"</span>, savedItem.getId());</span><br><span class="line">        redirectAttributes.addAttribute(<span class="string">"status"</span>, <span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"redirect:/basic/items/&#123;itemId&#125;"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>리다이렉트 할 때 간단히 status=true 를 추가해보자. 그리고 뷰 템플릿에서 이 값이 있으면, 저장되었습니다. 라는 메시지를 출력해보자.</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;h2 th:if="$&#123;param.status&#125;" th:text="'저장 완료'"&gt;&lt;/h2&gt;</span><br></pre></td></tr></table></figure>
+
     </article>
     <!-- license  -->
     
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2022/12/24/BasicDB/" title= "BasicDB">
+                    <div class="nextTitle">BasicDB</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -527,7 +829,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#스프링-MVC-1편-CH07"><span class="toc-number">1.</span> <span class="toc-text">스프링 MVC 1편 CH07</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#프로젝트-생성"><span class="toc-number">2.</span> <span class="toc-text">프로젝트 생성</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Welcome-페이지-추가"><span class="toc-number">2.1.</span> <span class="toc-text">Welcome 페이지 추가</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#요구사항-분석"><span class="toc-number">2.2.</span> <span class="toc-text">요구사항 분석</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#상품-도메인-모델"><span class="toc-number">2.2.1.</span> <span class="toc-text">상품 도메인 모델</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#상품-관리-기능"><span class="toc-number">2.2.2.</span> <span class="toc-text">상품 관리 기능</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#서비스-제공-흐름"><span class="toc-number">2.2.3.</span> <span class="toc-text">서비스 제공 흐름</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#상품-도메인-개발"><span class="toc-number">2.3.</span> <span class="toc-text">상품 도메인 개발</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#상품-서비스-HTML"><span class="toc-number">3.</span> <span class="toc-text">상품 서비스 HTML</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML-css파일"><span class="toc-number">3.1.</span> <span class="toc-text">HTML,css파일</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#상품-목록-타입-리프"><span class="toc-number">4.</span> <span class="toc-text">상품 목록 - 타입 리프</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#BasicItemController"><span class="toc-number">4.1.</span> <span class="toc-text">BasicItemController</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#타입-리프-써보기"><span class="toc-number">4.2.</span> <span class="toc-text">타입 리프 써보기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#타입리프-사용-선언"><span class="toc-number">4.2.1.</span> <span class="toc-text">타입리프 사용 선언</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#타입리프-핵심"><span class="toc-number">4.2.2.</span> <span class="toc-text">타입리프 핵심</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#URL-링크-표현식-…"><span class="toc-number">4.2.3.</span> <span class="toc-text">URL 링크 표현식 - @{…}</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#리터럴-대체-…"><span class="toc-number">4.2.4.</span> <span class="toc-text">리터럴 대체 - |…|</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#반복-출력-th-each"><span class="toc-number">4.2.5.</span> <span class="toc-text">반복 출력 - th:each</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#변수-표현식-…"><span class="toc-number">4.2.6.</span> <span class="toc-text">변수 표현식 - ${…}</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#내용-변경-th-text"><span class="toc-number">4.2.7.</span> <span class="toc-text">내용 변경 - th:text</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#URL-링크-표현식1-2"><span class="toc-number">4.2.8.</span> <span class="toc-text">URL 링크 표현식1,2</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#상품-상세"><span class="toc-number">5.</span> <span class="toc-text">상품 상세</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#상품-등록폼"><span class="toc-number">6.</span> <span class="toc-text">상품 등록폼</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#상품-등록-처리-ModelAttribute"><span class="toc-number">7.</span> <span class="toc-text">상품 등록 처리 - @ModelAttribute</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#상품-수정-개발"><span class="toc-number">7.1.</span> <span class="toc-text">상품 수정 개발</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#PRG-Post-Redirect-Get"><span class="toc-number">8.</span> <span class="toc-text">PRG Post&#x2F;Redirect&#x2F;Get</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#해결-구현"><span class="toc-number">8.1.</span> <span class="toc-text">해결 구현</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RedirectAttributes"><span class="toc-number">8.2.</span> <span class="toc-text">RedirectAttributes</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -2902,9 +3204,333 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 146
+        Total : 172
         </div>
         <!-- search  -->
         
@@ -2917,6 +3543,136 @@ top:50vh;
     
     <div class="archive-year"> 2022 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutMessageQ/" >AboutMessageQ</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutSpringSecurity/" >AboutSpringSecurity</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutKafka/" >AboutKafka</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Sequence-Diagram/" >Sequence-Diagram</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH01/" >SpringProject-TrackingPost-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH02/" >SpringProject-TrackingPost-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH03/" >SpringProject-TrackingPost-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH04/" >SpringProject-TrackingPost-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH05/" >SpringProject-TrackingPost-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH06/" >SpringProject-TrackingPost-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutLombokAtSpring/" >AboutLombokAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Basic-Vue-js/" >Basic Vue.js</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/BasicDB/" >BasicDB</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Http-Status/" >Http-Status</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Spring-Logger/" >Spring-Logger</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH01/" >SpringProject-Board-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH02/" >SpringProject-Board-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH03/" >SpringProject-Board-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH04/" >SpringProject-Board-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH06/" >SpringProject-Board-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH05/" >SpringProject-Board-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH07/" >SpringProject-Board-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH08/" >SpringProject-Board-CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH10/" >SpringProject-Board-CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH09/" >SpringProject-Board-CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/UsingAOPAtSpring/" >UsingAOPAtSpring</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -3852,6 +4608,20 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
     
+        <span class="sidebar-tag-name" data-tags="Lombok"><span class="iconfont-archer">&#xe606;</span>Lombok</span>
+    
+        <span class="sidebar-tag-name" data-tags="MessageQ"><span class="iconfont-archer">&#xe606;</span>MessageQ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kafka"><span class="iconfont-archer">&#xe606;</span>Kafka</span>
+    
+        <span class="sidebar-tag-name" data-tags="Vue"><span class="iconfont-archer">&#xe606;</span>Vue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Logger"><span class="iconfont-archer">&#xe606;</span>Logger</span>
+    
+        <span class="sidebar-tag-name" data-tags="CS"><span class="iconfont-archer">&#xe606;</span>CS</span>
+    
+        <span class="sidebar-tag-name" data-tags="AOP"><span class="iconfont-archer">&#xe606;</span>AOP</span>
+    
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -3978,6 +4748,12 @@ jsonContent:
         <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
     
         <span class="sidebar-category-name" data-categories="Spring"><span class="iconfont-archer">&#xe60a;</span>Spring</span>
+    
+        <span class="sidebar-category-name" data-categories="MessageQ"><span class="iconfont-archer">&#xe60a;</span>MessageQ</span>
+    
+        <span class="sidebar-category-name" data-categories="Vue"><span class="iconfont-archer">&#xe60a;</span>Vue</span>
+    
+        <span class="sidebar-category-name" data-categories="CS"><span class="iconfont-archer">&#xe60a;</span>CS</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
