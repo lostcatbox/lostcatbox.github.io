@@ -264,9 +264,17 @@ height:50vh;
             <div class="post-intros">
                 <!-- 文章页标签  -->
                 
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "DB">DB</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Mybatis">Mybatis</a>
+    
+</div>
+                
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">0</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">720</span>Reading time: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -395,7 +403,44 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        
+        <h1 id="참조"><a href="#참조" class="headerlink" title="참조"></a>참조</h1><p><a href="https://velog.io/@qotndus43/MyBatis-%EB%8F%99%EC%9E%91-%EC%9B%90%EB%A6%AC%EB%A5%BC-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B3%A0-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EC%9E%90" target="_blank" rel="noopener">동작원리참조1</a></p>
+<h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>mybatis는 지금 다니고 있는 회사에서 사용하고있는 스펙이다.</p>
+<p>jpa 와 mybatis의 차이를 알아보고, mybatis의 동작원리를 이해해보자</p>
+<h1 id="MyBatis"><a href="#MyBatis" class="headerlink" title="MyBatis"></a>MyBatis</h1><p>자바에서 데이터베이스 프로그래밍을 할 때 JDBC API를 사용한다.</p>
+<p>JDBC를 사용하게 쉽게 만든 Mybatis는 SQL Mapper를 통해 자바의 메서드와 SQL 맵핑을 해준다.</p>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202301312235759.png" alt="스크린샷 2023-01-31 오후 10.35.27"></p>
+<p>MyBatis3가 데이터베이스에 액세스하는 흐름은 위와 같다.</p>
+<p>애플리케이션 시작시 1 ~ 3 프로세스를 수행하고,</p>
+<p>클라이언트의 각 요청에 대해 4 ~ 10 프로세스가 수행됩니다.</p>
+<p>애플리케이션 시작 시 <code>SqlSessionFactoryBuilder</code>가 MyBatis 설정 파일을 참고하여 <code>SqlSessionFactory</code>를 생성합니다.<br>이후 Application단에서 데이터 접근 작업시 <code>SqlSessionFactory</code>는 매 요청마다 <code>SqlSession</code> 객체를 생성합니다.<br><code>SqlSession</code> 객체를 통해 DB 작업을 진행하는데, 작업시 수행하는 쿼리는 mapper 파일에 담겨있습니다.</p>
+<h1 id="DataSource"><a href="#DataSource" class="headerlink" title="DataSource"></a>DataSource</h1><p>JDBC API를 이용하여 데이터베이스 연동을 처리하려면 반드시 데이터베이스로부터 커넥션을 얻어와야 한다.<br>이를 위해 데이터베이스와의 물리적인 연결을 지원하는 DataSource가 필요합니다.</p>
+<p>하위 예시</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spring.datasource.driver-<span class="class"><span class="keyword">class</span>-<span class="title">name</span></span>=com.mysql.cj.jdbc.Driver</span><br><span class="line">spring.datasource.url=jdbc:mysql:<span class="comment">//localhost:3306/flab?serverTimezone=UTC&amp;characterEncoding=UTF-8</span></span><br><span class="line">spring.datasource.username=baesuyeon</span><br><span class="line">spring.datasource.password=baesuyeon</span><br></pre></td></tr></table></figure>
+
+<p>Spring Boot에서는 Java Config 를 통해 DataSource를 설정할수도 있지만 application.properties 파일 내 spring.datasource.* 패턴으로도 설정이 가능합니다.</p>
+<p>위와 같이 실제 접속을 위한 데이터베이스 ip, id, pw만 설정해주면 됩니다.</p>
+<h1 id="MySQL-MyBatis-의존성-추가"><a href="#MySQL-MyBatis-의존성-추가" class="headerlink" title="MySQL, MyBatis 의존성 추가"></a>MySQL, MyBatis 의존성 추가</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">compile &quot;org.springframework.boot:spring-boot-starter-jdbc&quot;</span><br><span class="line">compile group: &#39;mysql&#39;, name: &#39;mysql-connector-java&#39;</span><br><span class="line">compile group: &#39;org.mybatis.spring.boot&#39;, name: &#39;mybatis-spring-boot-autoconfigure&#39;, version: &#39;2.1.4&#39;</span><br><span class="line">compile group: &#39;org.mybatis.spring.boot&#39;, name: &#39;mybatis-spring-boot-starter&#39;, version: &#39;2.1.4&#39;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Mapper-Interface"><a href="#Mapper-Interface" class="headerlink" title="Mapper Interface"></a>Mapper Interface</h1><p>복잡한 쿼리는 XML을 사용하는것이 좋은 방법이 될 수 있습니다.</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">"com.flab.demo.mapper.ProductMapper"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>SQL Mapper.xml 파일은 <code>&lt;mapper&gt;</code>를 루트 엘리먼트로 사용합니다.<br>namespace는 <code>Mapper Interface 경로</code>와 맵핑합니다.</p>
+<p>그리고 <code>&lt;insert&gt; &lt;update&gt; &lt;delete&gt; &lt;select&gt;</code> 엘리먼트를 이용하여 필요한 SQL 구문들을 등록합니다.<br>이때 id 속성은 필수 속성으로 네임스페이스 내부에서 유일한 아이디를 등록해야 합니다.</p>
+<p>XML의 id 값과 Interface 내의 메서드명이 일치하면 자동으로 xml과 메서드를 맵핑되어 id로 등록된 SQL을 실행할 수 있습니다.</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">"com.flab.demo.mapper.ProductMapper"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">type</span>=<span class="string">"com.flab.demo.domain.Product"</span> <span class="attr">id</span>=<span class="string">"product"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"id"</span> <span class="attr">column</span>=<span class="string">"id"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"productName"</span> <span class="attr">column</span>=<span class="string">"product_name"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"fixedPrice"</span> <span class="attr">column</span>=<span class="string">"fixed_price"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"sellerId"</span> <span class="attr">column</span>=<span class="string">"seller_id"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"salesYn"</span> <span class="attr">column</span>=<span class="string">"sales_yn"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"createDate"</span> <span class="attr">column</span>=<span class="string">"create_date"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getById"</span> <span class="attr">parameterType</span>=<span class="string">"Long"</span> <span class="attr">resultMap</span>=<span class="string">"product"</span>&gt;</span></span><br><span class="line">        SELECT *</span><br><span class="line">            FROM PRODUCT</span><br><span class="line">            WHERE id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">"com.flab.demo.mapper.ProductMapper"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getById"</span> <span class="attr">parameterType</span>=<span class="string">"Long"</span> <span class="attr">resultType</span>=<span class="string">"com.flab.demo.domain.Product"</span>&gt;</span></span><br><span class="line">        SELECT *</span><br><span class="line">            FROM PRODUCT</span><br><span class="line">            WHERE id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>SELECT SQL 구문이 실행되면 ResultSet이 리턴되며, ResultSet에 저장된 검색 결과를 어떤 자바 객체에 맵핑해야 할지 지정해야 하는데,<br>이때 <code>resultType</code>, <code>resultMap</code> 속성을 사용할 수 있습니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;insert id=<span class="string">"create"</span> parameterType=<span class="string">"com.flab.demo.domain.Product"</span>&gt;</span><br><span class="line">        <span class="function">INSERT INTO <span class="title">PRODUCT</span><span class="params">(product_name, fixed_price, seller_id)</span></span></span><br><span class="line"><span class="function">        <span class="title">VALUES</span><span class="params">(#&#123;productName&#125;, #&#123;fixedPrice&#125;, #&#123;sellerId&#125;)</span></span></span><br><span class="line"><span class="function">&lt;/insert&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Mapper 파일에 등록된 SQL 실행 시 SQL 실행에 필요한 데이터를 외부로부터 받아야 할 상황이 있을 수 있습니다. 이때 <code>parameterType</code> 속성을 사용할 수 있습니다. 내부적으로 parameter 값을 가져올 수 있는 getter 메서드를 호출합니다.</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mybatis.mapper-locations=mapper/*.xml</span><br><span class="line">mybatis.type-aliases-package=패키지 경로</span><br></pre></td></tr></table></figure>
+
+<p>마이바티스 세팅을 위해 application.properties 파일을 수정합니다.</p>
+<p><strong>mybatis.mapper-locations</strong> : xml 파일이 위치한 경로/*.xml<br>mybatis mapper.xml 파일이 있는 폴더 경로를 설정해줍니다.<br>보통 classpath 를 통해 경로 설정을 해주는데, spring boot로 프로젝트 생성시 classpath는 resources 폴더 입니다.</p>
+<p><strong>mybatis.mapper-locations</strong> : 매퍼용 클래스가 위치한 경로<br>Mapper에서 resultType을 단순히 클래스 명으로만 적기 위해 필요합니다.<br>미설정시 전체 패키지 경로와 클래스명을 작성해야 합니다.</p>
+
     </article>
     <!-- license  -->
     
@@ -532,7 +577,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#참조"><span class="toc-number">1.</span> <span class="toc-text">참조</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">2.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MyBatis"><span class="toc-number">3.</span> <span class="toc-text">MyBatis</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DataSource"><span class="toc-number">4.</span> <span class="toc-text">DataSource</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MySQL-MyBatis-의존성-추가"><span class="toc-number">5.</span> <span class="toc-text">MySQL, MyBatis 의존성 추가</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mapper-Interface"><span class="toc-number">6.</span> <span class="toc-text">Mapper Interface</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -4824,6 +4869,8 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
     
+        <span class="sidebar-tag-name" data-tags="Mybatis"><span class="iconfont-archer">&#xe606;</span>Mybatis</span>
+    
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -4962,6 +5009,8 @@ jsonContent:
         <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="Mybatis"><span class="iconfont-archer">&#xe60a;</span>Mybatis</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
