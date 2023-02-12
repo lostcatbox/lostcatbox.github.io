@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">720</span>Reading time: <span class="post-count reading-time">4 min</span></span>
+                        <span>Word count: <span class="post-count word-count">822</span>Reading time: <span class="post-count reading-time">5 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -404,9 +404,25 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <h1 id="참조"><a href="#참조" class="headerlink" title="참조"></a>참조</h1><p><a href="https://velog.io/@qotndus43/MyBatis-%EB%8F%99%EC%9E%91-%EC%9B%90%EB%A6%AC%EB%A5%BC-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B3%A0-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EC%9E%90" target="_blank" rel="noopener">동작원리참조1</a></p>
+<p><a href="https://dreaming-soohyun.tistory.com/entry/JPA%EC%99%80-MyBatis%EC%9D%98-%EC%B0%A8%EC%9D%B4-ORM%EA%B3%BC-SQL-Mapper" target="_blank" rel="noopener">jpavsmybatis</a></p>
 <h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>mybatis는 지금 다니고 있는 회사에서 사용하고있는 스펙이다.</p>
 <p>jpa 와 mybatis의 차이를 알아보고, mybatis의 동작원리를 이해해보자</p>
-<h1 id="MyBatis"><a href="#MyBatis" class="headerlink" title="MyBatis"></a>MyBatis</h1><p>자바에서 데이터베이스 프로그래밍을 할 때 JDBC API를 사용한다.</p>
+<h1 id="MyBatis-vs-JPA"><a href="#MyBatis-vs-JPA" class="headerlink" title="MyBatis vs JPA"></a>MyBatis vs JPA</h1><h2 id="MyBatis"><a href="#MyBatis" class="headerlink" title="MyBatis"></a>MyBatis</h2><p>장점</p>
+<ul>
+<li>접근이 쉽고 코드가 간결하다(sql문과 많이 흡사함)</li>
+<li>성능-&gt; 직접 sql문 작성하여 최적화된 쿼리 구현가능</li>
+<li>다양한 프로그래밍 언어로 구현이 가능하다.(java, ruby 등등)</li>
+<li>mybatis는 sql을 별도의 xml파일로 분리해서 관리한다. (유지보수 분리)</li>
+</ul>
+<p>단점</p>
+<ul>
+<li>테이블이 변경되고 dto가 변경될때마다 매핑에 대한 부분을 다시 수정해야한다.</li>
+<li>application 과 DB간의 설계부분이 수정이 많은경우 많은 설정을 바꿔야한다.</li>
+<li>런타임을 해야 오류확인가능</li>
+<li>DB에 종속적이다. DB 변경시 mapper 전부 수정해야한다.</li>
+<li>많은 것에 대한 정의가 필요하다<br>Mapper에서 select id로 사용할 인터페이스 설계, 쿼리에 파라미터로 # 혹은 $로 파라미터 바인딩을 위한 model 정의, resultType/ParameterType으로 전달할 model 정의가 필요하다.</li>
+</ul>
+<h1 id="MyBatis-1"><a href="#MyBatis-1" class="headerlink" title="MyBatis"></a>MyBatis</h1><p>자바에서 데이터베이스 프로그래밍을 할 때 JDBC API를 사용한다.</p>
 <p>JDBC를 사용하게 쉽게 만든 Mybatis는 SQL Mapper를 통해 자바의 메서드와 SQL 맵핑을 해준다.</p>
 <p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202301312235759.png" alt="스크린샷 2023-01-31 오후 10.35.27"></p>
 <p>MyBatis3가 데이터베이스에 액세스하는 흐름은 위와 같다.</p>
@@ -574,7 +590,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#참조"><span class="toc-number">1.</span> <span class="toc-text">참조</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">2.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MyBatis"><span class="toc-number">3.</span> <span class="toc-text">MyBatis</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DataSource"><span class="toc-number">4.</span> <span class="toc-text">DataSource</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MySQL-MyBatis-의존성-추가"><span class="toc-number">5.</span> <span class="toc-text">MySQL, MyBatis 의존성 추가</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mapper-Interface"><span class="toc-number">6.</span> <span class="toc-text">Mapper Interface</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#참조"><span class="toc-number">1.</span> <span class="toc-text">참조</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">2.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MyBatis-vs-JPA"><span class="toc-number">3.</span> <span class="toc-text">MyBatis vs JPA</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#MyBatis"><span class="toc-number">3.1.</span> <span class="toc-text">MyBatis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MyBatis-1"><span class="toc-number">4.</span> <span class="toc-text">MyBatis</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DataSource"><span class="toc-number">5.</span> <span class="toc-text">DataSource</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MySQL-MyBatis-의존성-추가"><span class="toc-number">6.</span> <span class="toc-text">MySQL, MyBatis 의존성 추가</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mapper-Interface"><span class="toc-number">7.</span> <span class="toc-text">Mapper Interface</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
