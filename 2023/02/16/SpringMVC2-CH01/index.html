@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>SpringMVC2-CH01 · lostcatbox</title>
+    <title>SpringMVC2-CH01(스프링 thymeleaf) · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">SpringMVC2-CH01</a>
+                <a href="#" class="post-name">SpringMVC2-CH01(스프링 thymeleaf)</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            SpringMVC2-CH01
+            SpringMVC2-CH01(스프링 thymeleaf)
             <!-- 404 -->
             
         </h1>
@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">7</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">2.4k</span>Reading time: <span class="post-count reading-time">15 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -404,9 +404,263 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <h1 id="참조"><a href="#참조" class="headerlink" title="참조"></a>참조</h1><p><a href="https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-mvc-2#reviews" target="_blank" rel="noopener">인프런 김영한 springmvc2편</a></p>
-<h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>기술의 사용</p>
+<h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>김영한의 spring mvc 강의를 들으면 정리하고싶었다.</p>
+<p>이번편에는 타임리프가 나왔는데 회사에서는 jsp를 활용중이다.</p>
+<p>사실 오래된 기술을 사용하고 그렇다보니, war파일을 tomcat에 직접넣어줄수밖에없었다.</p>
+<p><del>나도 jar파일쓰고, thymeleaf 쓰면서 비즈니스 로직과 분리를 이루고싶다.</del></p>
 <p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202302162244231.png" alt="스크린샷 2023-02-16 오후 10.44.26"></p>
+<h1 id="간단한-jsp-VS-thymeleaf-차이"><a href="#간단한-jsp-VS-thymeleaf-차이" class="headerlink" title="간단한 jsp VS thymeleaf 차이"></a>간단한 jsp VS thymeleaf 차이</h1><h2 id="jsp"><a href="#jsp" class="headerlink" title="jsp"></a>jsp</h2><ul>
+<li>서블릿으로 형태가 변환되어 실행된다.<br>서블릿은 자바소스라서 jsp에서 자바코드를 사용하는 것이 가능하다.<br>따라서 view에 비즈니스 로직이 포함되어 복잡하고 무거워진다.</li>
+<li>서버 사이드 렌더링</li>
+<li><strong>반드시 war 패키징만 가능하다.</strong></li>
+<li>반드시, 웹서버나 war가 필요하고, web-inf 디렉토리에서 사전 정의된 구조만 사용가능하다.</li>
+</ul>
+<h2 id="thymeleaf"><a href="#thymeleaf" class="headerlink" title="thymeleaf"></a>thymeleaf</h2><ul>
+<li>서블릿형태가 아닌 html 형태</li>
+<li>웹서버나 was없이 단독으로 브라우저에서 직접 띄울수있다.</li>
+<li>jar, war 패키징 상관없이 둘다 가능하다.</li>
+<li>타임리프는 순수 HTML을 최대한 유지하는 특징(서버없어도됨.)</li>
+</ul>
+<h1 id="타임리프-기본기능"><a href="#타임리프-기본기능" class="headerlink" title="타임리프 - 기본기능"></a>타임리프 - 기본기능</h1><h2 id="타임리프-depend-설정"><a href="#타임리프-depend-설정" class="headerlink" title="타임리프 depend 설정"></a>타임리프 depend 설정</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'</span><br><span class="line">compileOnly 'org.projectlombok:lombok'</span><br><span class="line">    annotationProcessor 'org.projectlombok:lombok'</span><br></pre></td></tr></table></figure>
 
+<h2 id="타임리프-사용-선언"><a href="#타임리프-사용-선언" class="headerlink" title="타임리프 사용 선언"></a>타임리프 사용 선언</h2><p>html 태그 에 넣기</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;html xmlns:th&#x3D;&quot;http:&#x2F;&#x2F;www.thymeleaf.org&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="기본-표현식"><a href="#기본-표현식" class="headerlink" title="기본 표현식"></a>기본 표현식</h2><ul>
+<li>간단한 표현:<ul>
+<li>변수 표현식: ${…}</li>
+<li>선택 변수 표현식: *{…}</li>
+<li>메시지 표현식: #{…}</li>
+<li>링크 URL 표현식: @{…}</li>
+<li>조각 표현식: ~{…}</li>
+</ul>
+</li>
+<li>리터럴<ul>
+<li>텍스트: ‘one text’, ‘Another one!’,…</li>
+<li>숫자: 0, 34, 3.0, 12.3,…</li>
+<li>불린: true, false</li>
+<li>널: null</li>
+<li>리터럴 토큰: one, sometext, main,…</li>
+</ul>
+</li>
+<li>문자 연산:<br> ◦ 문자합치기:+</li>
+</ul>
+<p>◦ 리터럴 대체: |The name is ${name}|</p>
+<ul>
+<li>산술 연산:<ul>
+<li>Binary operators: +, -, *, /, %</li>
+<li>Minus sign (unary operator): -</li>
+</ul>
+</li>
+<li>불린 연산:<ul>
+<li>Binary operators: and, or</li>
+<li>Boolean negation (unary operator): !, not</li>
+</ul>
+</li>
+<li>비교와 동등:<br> ◦ 비교:&gt;,&lt;,&gt;=,&lt;=(gt,lt,ge,le)</li>
+</ul>
+<p>◦ 동등 연산: ==, != (eq, ne)</p>
+<ul>
+<li>조건 연산:<ul>
+<li>If-then: (if) ? (then)</li>
+<li>If-then-else: (if) ? (then) : (else)</li>
+<li>Default: (value) ?: (defaultvalue)</li>
+</ul>
+</li>
+<li>특별한 토큰:<ul>
+<li>No-Operation: _</li>
+</ul>
+</li>
+</ul>
+<h2 id="텍스트-text-utext"><a href="#텍스트-text-utext" class="headerlink" title="텍스트 - text, utext"></a>텍스트 - text, utext</h2><h3 id="escape"><a href="#escape" class="headerlink" title="escape"></a>escape</h3><ul>
+<li>th:text</li>
+<li>[[…]]</li>
+</ul>
+<blockquote>
+<p><strong>HTML</strong> <strong>엔티티</strong><br>웹브라우저는 &lt;를HTML테그의 시작으로 인식한다.</p>
+<p>&lt;를테그의시작이아니라문자로표현할수 있는 방법이 필요한데, 이것을 HTML 엔티티라 한다. </p>
+<p>그리고 이렇게 HTML에서 사용하는 특수 문자를 HTML 엔티티로 변경하는 것을 이스케이프(escape)라 한다.</p>
+<p>타임리프가 제공하는 th:text , [[…]] 는 <strong>기본적으로 이스케이스(escape)를 제공</strong>한다.</p>
+</blockquote>
+<h3 id="unescape"><a href="#unescape" class="headerlink" title="unescape"></a>unescape</h3><p>이스케이프 기능을 사용하지 않으려면 어떻게 해야할까?</p>
+<p>타임리프는 다음 두 기능을 제공한다. </p>
+<ul>
+<li>th:utext </li>
+<li>[(…)]</li>
+</ul>
+<h3 id="예시"><a href="#예시" class="headerlink" title="예시"></a>예시</h3><ul>
+<li>BasicController</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  <span class="meta">@Controller</span></span><br><span class="line">  <span class="meta">@RequestMapping</span>(<span class="string">"/basic"</span>)</span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BasicController</span> </span>&#123;</span><br><span class="line">      <span class="meta">@GetMapping</span>(<span class="string">"/text-basic"</span>)</span><br><span class="line">      <span class="function"><span class="keyword">public</span> String <span class="title">textBasic</span><span class="params">(Model model)</span> </span>&#123;</span><br><span class="line">          model.addAttribute(<span class="string">"data"</span>, <span class="string">"Hello Spring!"</span>);</span><br><span class="line">          <span class="keyword">return</span> <span class="string">"basic/text-basic"</span>;</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Basic/text-basic.html</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">html</span> <span class="attr">xmlns:th</span>=<span class="string">"http://www.thymeleaf.org"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>컨텐츠에 데이터 출력하기<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span>th:text 사용 <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;data&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span> <span class="tag">&lt;<span class="name">li</span>&gt;</span>컨텐츠 안에서 직접 출력하기 = [[$&#123;data&#125;]]<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="변수-SpringEL"><a href="#변수-SpringEL" class="headerlink" title="변수 - SpringEL"></a>변수 - SpringEL</h2><p>스프링이 내부에서 객체를 접근할때 활용하는 표현식</p>
+<p>타임리프에서도 그대로 사용함</p>
+<ul>
+<li><h3 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h3></li>
+<li><p>${user.username} = userA</p>
+</li>
+<li><p>${user[‘username’]} = userA<br>이방식은 문자로 해서 property꺼내기쉬운방법</p>
+</li>
+<li><p>${user.getUsername()} = userA</p>
+</li>
+<li><h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3></li>
+<li><p>${users[0].username} = userA</p>
+</li>
+<li><p>${users[0][‘username’]} = userA<br>이방식은 문자로 해서 property꺼내기쉬운방법</p>
+</li>
+<li><p>${users[0].getUsername()} = userA</p>
+</li>
+<li><h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3></li>
+<li><p>${userMap[‘userA’].username} = userA</p>
+</li>
+<li><p>${userMap[‘userA’][‘username’]} = userA<br>이방식은 문자로 해서 property꺼내기쉬운방법</p>
+</li>
+<li><p>${userMap[‘userA’].getUsername()} = userA</p>
+</li>
+</ul>
+<h3 id="지역-변수-선언"><a href="#지역-변수-선언" class="headerlink" title="지역 변수 선언"></a>지역 변수 선언</h3><p><code>th:with</code> 를 사용하면 지역 변수를 선언해서 사용할 수 있다. 지역 변수는 선언한 테그 안에서만 사용할 수 있다.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">th:with</span>=<span class="string">"first=$&#123;users[0]&#125;"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>처음 사람의 이름은 <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;first.username&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="기본-객체들"><a href="#기본-객체들" class="headerlink" title="기본 객체들"></a>기본 객체들</h2><p>타임리프는 기본 객체들을 제공한다. 하지만 <strong>스프링 부트 3.0부터 제공하지 않는다</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$&#123;#request&#125; </span><br><span class="line">$&#123;#response&#125; </span><br><span class="line">$&#123;#session&#125; </span><br><span class="line">$&#123;#servletContext&#125; </span><br><span class="line">$&#123;#locale&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.0부터는 하위와 같이 spring에서 직접 model에 넣어줘서 사용해야한다.</p>
+<p>참고로 bean으로 등록된 객체를 사용할수있는 문법도있다<br><code>${@helloBean.hello(&#39;Spring!&#39;)}</code> 접근방식</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/basic-objects"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">basicObjects</span><span class="params">(Model model, HttpServletRequest request,</span></span></span><br><span class="line"><span class="function"><span class="params">  HttpServletResponse response, HttpSession session)</span> </span>&#123;</span><br><span class="line">      session.setAttribute(<span class="string">"sessionData"</span>, <span class="string">"Hello Session"</span>);</span><br><span class="line">      model.addAttribute(<span class="string">"request"</span>, request);</span><br><span class="line">      model.addAttribute(<span class="string">"response"</span>, response);</span><br><span class="line">      model.addAttribute(<span class="string">"servletContext"</span>, request.getServletContext());</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"basic/basic-objects"</span>;</span><br><span class="line">&#125;</span><br><span class="line">  <span class="meta">@Component</span>(<span class="string">"helloBean"</span>)</span><br><span class="line">  <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloBean</span> </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="string">"Hello "</span> + data;</span><br><span class="line">&#125; &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>html</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">li</span>&gt;</span>request = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;request&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">li</span>&gt;</span>response = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;response&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">li</span>&gt;</span>session = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;session&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">li</span>&gt;</span>servletContext = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;servletContext&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">li</span>&gt;</span>locale = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;#locale&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>편의 객체<span class="tag">&lt;/<span class="name">h1</span>&gt;</span> <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">li</span>&gt;</span>Request Parameter = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;param.paramData&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">li</span>&gt;</span>session = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;session.sessionData&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">li</span>&gt;</span>spring bean = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;@helloBean.hello('Spring!')&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/</span></span><br><span class="line"><span class="tag"><span class="attr">li</span>&gt;</span> <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="유틸리티-객체와-날짜"><a href="#유틸리티-객체와-날짜" class="headerlink" title="유틸리티 객체와 날짜"></a>유틸리티 객체와 날짜</h2><h3 id="타임리프-유틸리티-객체들"><a href="#타임리프-유틸리티-객체들" class="headerlink" title="타임리프 유틸리티 객체들"></a>타임리프 유틸리티 객체들</h3><ul>
+<li>#message : 메시지, 국제화 처리</li>
+<li>#uris : URI 이스케이프 지원</li>
+<li>#dates : java.util.Date 서식 지원</li>
+<li>#calendars : java.util.Calendar 서식 지원</li>
+<li>#temporals : 자바8 날짜 서식 지원</li>
+<li>#numbers : 숫자 서식 지원</li>
+<li>#strings : 문자 관련 편의 기능</li>
+<li>#objects : 객체 관련 기능 제공</li>
+<li>#bools : boolean 관련 기능 제공</li>
+<li>#arrays : 배열 관련 기능 제공</li>
+<li>#lists , #sets , #maps : 컬렉션 관련 기능 제공 </li>
+<li>#ids : 아이디 처리 관련 기능 제공, 뒤에서 설명</li>
+</ul>
+<h3 id="날짜"><a href="#날짜" class="headerlink" title="날짜"></a>날짜</h3><p>타임리프에서 자바8 날짜인 LocalDate , LocalDateTime , Instant 를 사용하려면 추가 라이브러리가 필요하다. 스프링 부트 타임리프를 사용하면 해당 라이브러리가 자동으로 추가되고 통합된다.</p>
+<p><strong>타임리프 자바**</strong>8** <strong>날짜 지원 라이브러리</strong> </p>
+<p><code>thymeleaf-extras-java8time</code></p>
+<h2 id="Url-Link"><a href="#Url-Link" class="headerlink" title="Url Link"></a>Url Link</h2><ul>
+<li>Controller</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;&#x2F;link&quot;)</span><br><span class="line">public String link(Model model) &#123;</span><br><span class="line">    model.addAttribute(&quot;param1&quot;, &quot;data1&quot;);</span><br><span class="line">    model.addAttribute(&quot;param2&quot;, &quot;data2&quot;);</span><br><span class="line">    return &quot;basic&#x2F;link&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>html<ul>
+<li>하위에는 get parameter 붙이는법, url 경로 동적 변경도 포함되어있다.</li>
+<li>parameter 는 <code>@{/hello(param1=${param1}, param2=${param2})}</code> 으로 활용한다.</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">"@&#123;/hello&#125;"</span>&gt;</span>basic url<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">"@&#123;/hello(param1=$&#123;param1&#125;, param2=$&#123;param2&#125;)&#125;"</span>&gt;</span>hello query param<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">"@&#123;/hello/&#123;param1&#125;/&#123;param2&#125;(param1=$&#123;param1&#125;, param2=$&#123;param2&#125;)&#125;"</span>&gt;</span>path variable<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">"@&#123;/hello/&#123;param1&#125;(param1=$&#123;param1&#125;, param2=$&#123;param2&#125;)&#125;"</span>&gt;</span>path variable + query parameter<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="리터럴"><a href="#리터럴" class="headerlink" title="리터럴"></a>리터럴</h2><p>리터럴은 소스 코드상에 고정된 값을 말하는 용어이다.</p>
+<p>예를 들어서 다음 코드에서 “Hello” 는 문자 리터럴, 10 , 20 는 숫자 리터럴이다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">"Hello"</span></span><br><span class="line"><span class="keyword">int</span> a = <span class="number">10</span> * <span class="number">20</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>타임리프는 반드시 작은 따옴표로 감싸야한다</strong></p>
+<ul>
+<li>문자: ‘hello’ </li>
+<li>숫자: 10</li>
+<li>불린: true , false </li>
+<li>null: null</li>
+</ul>
+<p><strong>그런데문자를항상 ‘로감싸는것은너무귀찮은일이다.</strong></p>
+<p><strong>공백없이쭉이어진다면하나의의미있는 토큰으로 인지해서 다음과 같이 작은 따옴표를 생략할 수 있다.</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;span th:text&#x3D;&quot;hello&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="자주하는-오류"><a href="#자주하는-오류" class="headerlink" title="자주하는 오류"></a>자주하는 오류</h3><p><strong>오류</strong></p>
+<p><code>&lt;span th:text=&quot;hello world!&quot;&gt;&lt;/span&gt;</code><br>문자 리터럴은 원칙상 ‘ 로 감싸야 한다. </p>
+<p>중간에 공백이 있어서 하나의 의미있는 토큰으로도 인식되지 않는다. </p>
+<p><strong>수정</strong></p>
+<p><code>&lt;span th:text=&quot;&#39;hello world!&#39;&quot;&gt;&lt;/span&gt;</code></p>
+<p> 이렇게 ‘ 로 감싸면 정상 동작한다.</p>
+<h3 id="리터럴-대체-Literal-substitutions"><a href="#리터럴-대체-Literal-substitutions" class="headerlink" title="리터럴 대체**(Literal substitutions)**"></a><strong>리터럴 대체**</strong>(Literal substitutions)**</h3><p> <code>&lt;span th:text=&quot;|hello ${data}|&quot;&gt;</code></p>
+<p>마지막의 리터럴 대체 문법을 사용하면 마치 템플릿을 사용하는 것 처럼 편리하다.</p>
+<h2 id="연산"><a href="#연산" class="headerlink" title="연산"></a>연산</h2><p>타임리프 연산은 자바와 크게 다르지 않다. </p>
+<p>HTML안에서 사용하기 때문에 HTML 엔티티를 사용하는 부분만 주의하자.</p>
+<ul>
+<li><strong>비교연산</strong>: HTML 엔티티를 사용해야 하는 부분을 주의하자,<br> &gt; (gt), &lt; (lt), &gt;= (ge), &lt;= (le), ! (not), == (eq), != (neq, ne)</li>
+<li><strong>조건식</strong>: 자바의 조건식과 유사하다.</li>
+<li><strong>Elvis</strong> <strong>연산자</strong>: 조건식의 편의 버전</li>
+<li><strong>No-Operation</strong>: _ 인 경우 <strong>마치 타임리프가 실행되지 않는 것</strong> 처럼 동작한다. 이것을 잘 사용하면 <strong>HTML 의 내용 그대로 활용</strong>할 수 있다. 마지막 예를 보면 데이터가 없습니다. 부분이 그대로 출력된다.</li>
+</ul>
+<h3 id="예시-1"><a href="#예시-1" class="headerlink" title="예시"></a>예시</h3><ul>
+<li>Controller</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">@GetMapping</span>(<span class="string">"/operation"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">operation</span><span class="params">(Model model)</span> </span>&#123;</span><br><span class="line">      model.addAttribute(<span class="string">"nullData"</span>, <span class="keyword">null</span>);</span><br><span class="line">      model.addAttribute(<span class="string">"data"</span>, <span class="string">"Spring!"</span>);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"basic/operation"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>html</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">xmlns:th</span>=<span class="string">"http://www.thymeleaf.org"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>산술 연산</span><br><span class="line">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>10 + 2 = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"10 + 2"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>10 % 2 == 0 = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"10 % 2 == 0"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>비교 연산</span><br><span class="line">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>1 &gt; 10 = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"1 &amp;gt; 10"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>1 gt 10 = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"1 gt 10"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>1 &gt;= 10 = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"1 &gt;= 10"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>1 ge 10 = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"1 ge 10"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>1 == 1 = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"1 == 10"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>1 != 1 = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"1 != 10"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>조건식</span><br><span class="line">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>(10 % 2 == 0)? '짝수':'홀수' = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"(10 % 2 == 0)? '짝수':'홀수'"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Elvis 연산자</span><br><span class="line">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>$&#123;data&#125;?: '데이터가 없습니다.' = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;data&#125;?: '데이터가 없습니다.'"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>$&#123;nullData&#125;?: '데이터가 없습니다.' = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;nullData&#125;?: '데이터가 없습니다.'"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>No-Operation</span><br><span class="line">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>$&#123;data&#125;?: _ = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;data&#125;?: _"</span>&gt;</span>데이터가 없습니다.<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>$&#123;nullData&#125;?: _ = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;nullData&#125;?: _"</span>&gt;</span>데이터가 없습니다.<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="속성값-설정"><a href="#속성값-설정" class="headerlink" title="속성값 설정"></a>속성값 설정</h2><p><strong>타임리프 태그 속성(Attribute)</strong><br>타임리프는 주로 HTML 태그에 th:* 속성을 지정하는 방식으로 동작한다. th:* 로 속성을 적용하면 기존</p>
+<p><strong>기존 속성을 대체한다. 기존 속성이 없으면 새로 만든다.</strong></p>
+<p><strong>속성 설정</strong></p>
+<p>th:* 속성을 지정하면 타임리프는 기존 속성을 th:* 로 지정한 속성으로 대체한다. 기존 속성이 없다면 새로 만든다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;mock&quot; th:name&#x3D;&quot;userA&quot; &#x2F;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>타임리프 렌더링 후 <code>&lt;input type=&quot;text&quot; name=&quot;userA&quot; /&gt;</code></p>
+<p><strong>속성 추가</strong></p>
+<p>th:attrappend : 속성 값의 뒤에 값을 추가한다. th:attrprepend : 속성 값의 앞에 값을 추가한다. th:classappend : class 속성에 자연스럽게 추가한다.</p>
+<p><strong>checked</strong> <strong>처리</strong></p>
+<p>HTML에서는 <code>&lt;input type=&quot;checkbox&quot; name=&quot;active&quot; checked=&quot;false&quot; /&gt;</code> 이 경우에도 checked 속성이 있기 때문에 checked 처리가 되어버린다.</p>
+<p>HTML에서 checked 속성은 checked 속성의 값과 상관없이 checked 라는 속성만 있어도 체크가 된다. 이런 부분이 true , false 값을 주로 사용하는 개발자 입장에서는 불편하다.</p>
+<p>타임리프의 th:checked 는 값이 false 인 경우 checked 속성 자체를 제거한다. <code>&lt;input type=&quot;checkbox&quot; name=&quot;active&quot; th:checked=&quot;false&quot; /&gt;</code></p>
+<p>타임리프 렌더링 후: <code>&lt;input type=&quot;checkbox&quot; name=&quot;active&quot; /&gt;</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>속성 설정<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"mock"</span> <span class="attr">th:name</span>=<span class="string">"userA"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>속성 추가<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">- th:attrappend = <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"text"</span> <span class="attr">th:attrappend</span>=<span class="string">"class=' large'"</span> /&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">- th:attrprepend = <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"text"</span> <span class="attr">th:attrprepend</span>=<span class="string">"class='large '"</span> /&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">- th:classappend = <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"text"</span> <span class="attr">th:classappend</span>=<span class="string">"large"</span> / &gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>checked 처리<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">- checked o <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"checkbox"</span> <span class="attr">name</span>=<span class="string">"active"</span> <span class="attr">th:checked</span>=<span class="string">"true"</span> /&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">- checked x <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"checkbox"</span> <span class="attr">name</span>=<span class="string">"active"</span> <span class="attr">th:checked</span>=<span class="string">"false"</span> /&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span> - checked=false <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"checkbox"</span> <span class="attr">name</span>=<span class="string">"active"</span> <span class="attr">checked</span>=<span class="string">"false"</span> /&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="반복"><a href="#반복" class="headerlink" title="반복"></a>반복</h2><p>타임리프에서 반복은 <code>th:each</code> 를 사용한다. 추가로 반복에서 사용할 수 있는 여러 상태 값을 지원한다.</p>
+<p><strong>반복 기능</strong></p>
+<p><code>&lt;tr th:each=&quot;user : ${users}&quot;&gt;</code><br> 반복시 오른쪽 컬렉션( ${users} )의 값을 하나씩 꺼내서 왼쪽 변수( user )에 담아서 태그를 반복 실행합니다.</p>
+<p> <code>th:each</code> 는 List 뿐만 아니라 배열, java.util.Iterable , java.util.Enumeration 을 구현한 모든 객체를 반복에 사용할 수 있습니다. Map 도 사용할 수 있는데 이 경우 변수에 담기는 값은 Map.Entry 입니다.</p>
+<p><strong>반복 상태 유지</strong>(재밋는 기능)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;tr th:each&#x3D;&quot;user, userStat : $&#123;users&#125;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>반복의 두번째 파라미터를 설정해서 반복의 상태를 확인 할 수 있습니다.</strong><br>두번째 파라미터는 생략 가능한데, 생략하면 지정한 변수명( user ) + Stat 가 됩니다. 여기서는 user + Stat = userStat 이므로 생략 가능합니다.</p>
+<p><strong>반복 상태 유지 기능</strong></p>
+<p>index : 0부터 시작하는 값<br> count : 1부터 시작하는 값<br> size : 전체 사이즈<br> even , odd : 홀수, 짝수 여부( boolean ) first , last :처음, 마지막 여부( boolean ) current : 현재 객체</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">tr</span> <span class="attr">th:each</span>=<span class="string">"user : $&#123;users&#125;"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">td</span> <span class="attr">th:text</span>=<span class="string">"$&#123;user.username&#125;"</span>&gt;</span>username<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">td</span> <span class="attr">th:text</span>=<span class="string">"$&#123;user.age&#125;"</span>&gt;</span>0<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">tr</span> <span class="attr">th:each</span>=<span class="string">"user, userStat : $&#123;users&#125;"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">td</span> <span class="attr">th:text</span>=<span class="string">"$&#123;userStat.count&#125;"</span>&gt;</span>username<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">td</span> <span class="attr">th:text</span>=<span class="string">"$&#123;user.username&#125;"</span>&gt;</span>username<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">td</span> <span class="attr">th:text</span>=<span class="string">"$&#123;user.age&#125;"</span>&gt;</span>0<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">td</span>&gt;</span></span><br><span class="line">    index = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;userStat.index&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    count = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;userStat.count&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    size = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;userStat.size&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    even? = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;userStat.even&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    odd? = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;userStat.odd&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    first? = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;userStat.first&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    last? = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;userStat.last&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    current = <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">"$&#123;userStat.current&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="작성중"><a href="#작성중" class="headerlink" title="작성중"></a>작성중</h1>
     </article>
     <!-- license  -->
     
@@ -550,7 +804,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#참조"><span class="toc-number">1.</span> <span class="toc-text">참조</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">2.</span> <span class="toc-text">왜?</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#참조"><span class="toc-number">1.</span> <span class="toc-text">참조</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">2.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#간단한-jsp-VS-thymeleaf-차이"><span class="toc-number">3.</span> <span class="toc-text">간단한 jsp VS thymeleaf 차이</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#jsp"><span class="toc-number">3.1.</span> <span class="toc-text">jsp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#thymeleaf"><span class="toc-number">3.2.</span> <span class="toc-text">thymeleaf</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#타임리프-기본기능"><span class="toc-number">4.</span> <span class="toc-text">타임리프 - 기본기능</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#타임리프-depend-설정"><span class="toc-number">4.1.</span> <span class="toc-text">타임리프 depend 설정</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#타임리프-사용-선언"><span class="toc-number">4.2.</span> <span class="toc-text">타임리프 사용 선언</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#기본-표현식"><span class="toc-number">4.3.</span> <span class="toc-text">기본 표현식</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#텍스트-text-utext"><span class="toc-number">4.4.</span> <span class="toc-text">텍스트 - text, utext</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#escape"><span class="toc-number">4.4.1.</span> <span class="toc-text">escape</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#unescape"><span class="toc-number">4.4.2.</span> <span class="toc-text">unescape</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#예시"><span class="toc-number">4.4.3.</span> <span class="toc-text">예시</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#변수-SpringEL"><span class="toc-number">4.5.</span> <span class="toc-text">변수 - SpringEL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Object"><span class="toc-number">4.5.1.</span> <span class="toc-text">Object</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#List"><span class="toc-number">4.5.2.</span> <span class="toc-text">List</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Map"><span class="toc-number">4.5.3.</span> <span class="toc-text">Map</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#지역-변수-선언"><span class="toc-number">4.5.4.</span> <span class="toc-text">지역 변수 선언</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#기본-객체들"><span class="toc-number">4.6.</span> <span class="toc-text">기본 객체들</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#유틸리티-객체와-날짜"><span class="toc-number">4.7.</span> <span class="toc-text">유틸리티 객체와 날짜</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#타임리프-유틸리티-객체들"><span class="toc-number">4.7.1.</span> <span class="toc-text">타임리프 유틸리티 객체들</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#날짜"><span class="toc-number">4.7.2.</span> <span class="toc-text">날짜</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Url-Link"><span class="toc-number">4.8.</span> <span class="toc-text">Url Link</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#리터럴"><span class="toc-number">4.9.</span> <span class="toc-text">리터럴</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#자주하는-오류"><span class="toc-number">4.9.1.</span> <span class="toc-text">자주하는 오류</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#리터럴-대체-Literal-substitutions"><span class="toc-number">4.9.2.</span> <span class="toc-text">리터럴 대체**(Literal substitutions)**</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#연산"><span class="toc-number">4.10.</span> <span class="toc-text">연산</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#예시-1"><span class="toc-number">4.10.1.</span> <span class="toc-text">예시</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#속성값-설정"><span class="toc-number">4.11.</span> <span class="toc-text">속성값 설정</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#반복"><span class="toc-number">4.12.</span> <span class="toc-text">반복</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#작성중"><span class="toc-number">5.</span> <span class="toc-text">작성중</span></a></li></ol>
         <br/>
         <br/>
         <br/>
@@ -3771,7 +4025,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">02/16</span><a class="archive-post-title" href= "/2023/02/16/SpringMVC2-CH01/" >SpringMVC2-CH01</a>
+            <span class="archive-post-date">02/16</span><a class="archive-post-title" href= "/2023/02/16/SpringMVC2-CH01/" >SpringMVC2-CH01(스프링 thymeleaf)</a>
         </li>
     
     
