@@ -1,0 +1,5332 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>gitlab-CI/CD-springproject · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">gitlab-CI/CD-springproject</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            gitlab-CI/CD-springproject
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Gitlab">Gitlab</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CI-CD">CI-CD</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">1.3k</span>Reading time: <span class="post-count reading-time">8 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2023/02/23</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="gitlab-CICD-구축"><a href="#gitlab-CICD-구축" class="headerlink" title="gitlab CICD 구축"></a>gitlab CICD 구축</h1><p>Created Time: February 21, 2023 3:12 PM<br>Last Edited Time: February 23, 2023 8:37 PM<br>Status: In progress</p>
+<h1 id="참고"><a href="#참고" class="headerlink" title="참고"></a>참고</h1><ul>
+<li><a href="https://docs.gitlab.com/ee/ci/introduction/index.html" target="_blank" rel="noopener">gitlab홈페이지</a></li>
+<li><a href="https://europani.github.io/git/2021/07/20/010-gitlab-runner.html" target="_blank" rel="noopener">참조 블로그1</a></li>
+<li><a href="https://workshop.infograb.io/gitlab-ci/11_introduction-to-gitlab-cicd/3_gitlab_ci_cd_terms_concepts/" target="_blank" rel="noopener">참조 블로그2</a></li>
+<li><a href="https://velog.io/@leesomyoung/CICD%EB%A5%BC-%EC%9C%84%ED%95%9C-gitlab-pipeline-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0" target="_blank" rel="noopener">참조 블로그3</a></li>
+<li><a href="https://www.augmentedmind.de/2022/06/26/speed-up-gitlab-ci-pipelines/" target="_blank" rel="noopener">참조 블로그4(gitlab runner position)</a></li>
+<li><a href="https://dev.to/techworld_with_nana/gitlab-cicd-for-beginners-free-course-2mee" target="_blank" rel="noopener">참조 블로그5(gitlab runner position)</a></li>
+<li><a href="https://bravenamme.github.io/2020/11/09/gitlab-runner/" target="_blank" rel="noopener">gitlab-ci/cd pipeline 구성과 .gitlab-ci.yml</a></li>
+</ul>
+<h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>회사에서 svn → gitlab으로 옮기는 과정을 거친후</p>
+<p>jenkins를 모두 각자 쓰는 것보다 gitlab으로 한번에 CI/CD를 구축하는것이 어떻냐는 제안에 수긍하였고, 환경을 구축하게되었다.</p>
+<p>다른 서버 개발자와 클라이언트 개발자 등 다양한 환경에서 협업하면, 지속적인 코드 수정이 이뤄지며, 지속적인 통합, 지속적인 배포가 반드시 필요하니까!</p>
+<h1 id="예시기준"><a href="#예시기준" class="headerlink" title="예시기준"></a>예시기준</h1><ul>
+<li><strong><strong>GitLab Community Edition 14.2.1</strong></strong></li>
+<li>프로젝트: spring 4.3</li>
+<li>사내 프레임워크</li>
+</ul>
+<h1 id="사전지식"><a href="#사전지식" class="headerlink" title="사전지식"></a>사전지식</h1><h2 id="전체-워크-플로우"><a href="#전체-워크-플로우" class="headerlink" title="전체 워크 플로우"></a>전체 워크 플로우</h2><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202302232039299.png" alt="Untitled"></p>
+<h2 id="GitLab-runner-컨셉"><a href="#GitLab-runner-컨셉" class="headerlink" title="GitLab runner 컨셉"></a>GitLab runner 컨셉</h2><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202302232039915.png" alt="Untitled 1"></p>
+<h2 id="초기-구성도"><a href="#초기-구성도" class="headerlink" title="초기 구성도"></a>초기 구성도</h2><ul>
+<li>gitlab 및 gitlab-runner는 다음과같이 각 jobs가 필요한 서버당 runner한대 등록한다.</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202302232039088.png" alt="Untitled"></p>
+<h2 id="실-서버-구성도"><a href="#실-서버-구성도" class="headerlink" title="실 서버 구성도"></a>실 서버 구성도</h2><ul>
+<li>추후 수정된 구성도</li>
+<li>사유: gitlab-runner 의 인증서 관리 편의 및 보안 이슈</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202302232039096.png" alt="Untitled"></p>
+<h2 id="간단-용어-정리"><a href="#간단-용어-정리" class="headerlink" title="간단 용어 정리"></a>간단 용어 정리</h2><h3 id="Pipelines"><a href="#Pipelines" class="headerlink" title="Pipelines"></a>Pipelines</h3><p>파이프라인은 지속적 통합, 전달 및 배포의 최상위 구성 요소입니다.</p>
+<p>Job은 runner에 의해 실행됩니다. 동시(concurrent) 러너가 충분한 경우, 동일한 단계의 여러 Job이 병렬로 실행됩니다.</p>
+<p>한 단계의 모든 Job이 성공하면, 파이프라인은 다음 단계로 넘어갑니다.</p>
+<h2 id="Jobs"><a href="#Jobs" class="headerlink" title="Jobs"></a><strong>Jobs</strong></h2><p>파이프라인 구성은 Job으로 시작됩니다. </p>
+<p>Job은 <code>.gitlab-ci.yml</code>파일의 가장 기본적인 요소</p>
+<p>Job은 Runner가 실행해야 하는 명령 모음</p>
+<p>Job은 :</p>
+<ul>
+<li>어떤 조건에서 실행되어야 하는지를 명시하는 제약 조건으로 정의됩니다.</li>
+<li>임의의 이름을 가진 최상위 요소이며 최소한 script 절을 포함해야 합니다.</li>
+<li>정의할 수 있는 수에는 제한이 없습니다.</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">job1:</span><br><span class="line">  script: <span class="string">"execute-script-for-job1"</span></span><br><span class="line"></span><br><span class="line">job2:</span><br><span class="line">  script: <span class="string">"execute-script-for-job2"</span></span><br></pre></td></tr></table></figure>
+
+<p>각 Job이 서로 다른 명령을 실행하는 두 개의 개별 Job이 있는 가장 간단한 CI/CD 구성입니다</p>
+<h3 id="Variables"><a href="#Variables" class="headerlink" title="Variables"></a><strong>Variables</strong></h3><p>CI/CD 변수는 환경 변수의 한 유형</p>
+<ul>
+<li>Jobs 및 파이프라인의 동작을 제어</li>
+<li>재사용하려는 값을 저장</li>
+<li><code>.gitlab-ci.yml</code> 파일에 값을 하드 코딩하는 것을 방지</li>
+</ul>
+<h3 id="Environments"><a href="#Environments" class="headerlink" title="Environments"></a><strong>Environments</strong></h3><p>환경은 코드가 배포되는 위치를 설명합니다.</p>
+<h3 id="Runners"><a href="#Runners" class="headerlink" title="Runners"></a><strong>Runners</strong></h3><p>GitLab CI/CD에서 러너는 <code>.gitlab-ci.yml</code>에 정의된 코드를 실행합니다. 러너는 GitLab CI/CD의 코디네이터 API를 통해 CI Job을 선택하고, Job을 실행한 다음, 결과를 GitLab 인스턴스로 다시 보내는 경량의 확장성이 뛰어난 에이전트입니다.</p>
+<p>GitLab UI에는 액세스 할 사용자에 따라 세 가지 유형의 러너가 있습니다.</p>
+<ul>
+<li>공유 러너(Shared runners)는 GitLab 인스턴스의 모든 그룹 및 프로젝트에서 사용할 수 있습니다.</li>
+<li>그룹 러너(Group runners)는 그룹의 모든 프로젝트와 하위 그룹에서 사용할 수 있습니다.</li>
+<li>특정 러너(Specific runners)는 특정 프로젝트와 연결됩니다. 일반적으로 특정 러너는 한 번에 하나의 프로젝트에 사용됩니다.</li>
+</ul>
+<h1 id="설치-및-설정"><a href="#설치-및-설정" class="headerlink" title="설치 및 설정"></a>설치 및 설정</h1><p>여기서부터는 구조도와 환경에 따라 차이가 발생할수있다.</p>
+<h2 id="runner-설치"><a href="#runner-설치" class="headerlink" title="runner 설치"></a>runner 설치</h2><ul>
+<li>gitlab에 있는 서버에 직접 설치</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ curl -L https:<span class="comment">//packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | sudo bash</span></span><br><span class="line">$ yum install gitlab-runner</span><br><span class="line">$ chmod +x /usr/local/bin/gitlab-runner</span><br><span class="line">$ systemctl status gitlab-runner</span><br><span class="line"></span><br><span class="line"># root 유저로 설치</span><br><span class="line">$ gitlab-runner install --user=root --working-directory=<span class="regexp">/home/gi</span>tlab-runner</span><br><span class="line"></span><br><span class="line"># 만약 install 명령시 이미 실행중이라고 뜬다면 service 파일에서 사용자를 직접 수정</span><br><span class="line">$ cd /etc/systemd/system</span><br><span class="line">$ vi gitlab-runner.service</span><br><span class="line"></span><br><span class="line">ExecStart=<span class="regexp">/usr/</span>bin/gitlab-runner .... <span class="string">"--user"</span> <span class="string">"root"</span></span><br><span class="line"></span><br><span class="line"># gitlab-runner 서비스 재시작</span><br><span class="line">$ systemctl daemon-reload</span><br><span class="line">$ systemctl restart gitlab-runner</span><br></pre></td></tr></table></figure>
+
+<h2 id="runner-등록"><a href="#runner-등록" class="headerlink" title="runner 등록"></a><strong><strong>runner 등록</strong></strong></h2><ul>
+<li>gitlab의 push를 감지하고 event가 일어나면 입력해놓은 커맨드를 실행하는 것을 runner라고 한다</li>
+<li>한 서버에 여러개의 runner를 등록 할 수도 있다</li>
+<li>서버주소와 토큰은 <code>Gitlab &gt; project &gt; Settings &gt; CI/CD &gt; Runners</code>에서 확인 가능하다</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ gitlab-runner register</span><br><span class="line"></span><br><span class="line"># 1. gitlab 서버주소 (gitlab project runner에서 확인)</span><br><span class="line">https:<span class="comment">//gitlab.com/</span></span><br><span class="line"></span><br><span class="line"># 2. token (gitlab project runner에서 확인)</span><br><span class="line">yboVk-t_P.......So</span><br><span class="line"></span><br><span class="line"># 3. descrption - name 설정</span><br><span class="line">dev-runner</span><br><span class="line"></span><br><span class="line"># 4. tag (매우중요!!) - gitlab-ci.yml에서 해당 tag를 참조하여 실행함</span><br><span class="line">dev-runner</span><br><span class="line"></span><br><span class="line"># 5. executor</span><br><span class="line">shell</span><br></pre></td></tr></table></figure>
+
+<p>4번의 태그는 gitlab-ci.yml에서의 tag와 일치해야한다.</p>
+<h1 id="gitlab-ci-yml-CI-CD-파일설정"><a href="#gitlab-ci-yml-CI-CD-파일설정" class="headerlink" title="gitlab-ci.yml(CI/CD 파일설정)"></a>gitlab-ci.yml(CI/CD 파일설정)</h1><ul>
+<li>하위로 먼저 테스트해보기</li>
+<li>이스케이프(<code>#</code>,<code>:</code> 등등 필요 시) ⇒전체를 <code>&#39;&#39;</code> 로 묶음<br>이때 변수 사용 시  <code>&quot;&quot;</code> 로 반드시 변수를 묶어줘야한다.<br>(예시: <code>&quot;${DEV_PROJECT_DIR}&quot;</code>)</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">stages:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">test</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">build</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">deploy</span></span><br><span class="line"><span class="attr">unit-test:</span></span><br><span class="line"><span class="attr">  stage:</span> <span class="string">test</span></span><br><span class="line"><span class="attr">  tags:</span>                <span class="comment"># runner tags와 매칭</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev-runner</span></span><br><span class="line"><span class="attr">  only:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev</span>              <span class="comment"># dev branch만! </span></span><br><span class="line"><span class="attr">  script:</span> <span class="string">echo</span> <span class="string">'Testing...'</span></span><br><span class="line"><span class="attr">unity-build:</span></span><br><span class="line"><span class="attr">  stage:</span> <span class="string">build</span></span><br><span class="line"><span class="attr">  tags:</span>                <span class="comment"># runner tags와 매칭</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev-runner</span></span><br><span class="line"><span class="attr">  only:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev</span>              <span class="comment"># dev branch만! </span></span><br><span class="line"><span class="attr">  script:</span> <span class="string">echo</span> <span class="string">'Building...'</span></span><br><span class="line"><span class="attr">playstore:</span></span><br><span class="line"><span class="attr">  stage:</span> <span class="string">deploy</span></span><br><span class="line"><span class="attr">  tags:</span>                <span class="comment"># runner tags와 매칭</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev-runner</span></span><br><span class="line"><span class="attr">  only:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev</span>               <span class="comment"># dev branch만! </span></span><br><span class="line"><span class="attr">  script:</span> <span class="string">echo</span> <span class="string">'Deploying...'</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>gitlab-runner 프로젝트 서버 내부에있을경우</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">stages:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">build</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">test</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">deploy</span></span><br><span class="line"></span><br><span class="line"><span class="attr">build-project:</span></span><br><span class="line"><span class="attr">  stage:</span> <span class="string">build</span></span><br><span class="line"><span class="attr">  tags:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev-runner</span></span><br><span class="line"><span class="attr">  except:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev</span></span><br><span class="line">	<span class="attr">variables:</span></span><br><span class="line"><span class="attr">    PROJECT_PATH:</span> <span class="string">'/app/projectname'</span></span><br><span class="line"><span class="attr">  script:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">cd</span> <span class="string">$&#123;PROJECT_PATH&#125;</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">mvn</span> <span class="string">package</span></span><br><span class="line"></span><br><span class="line"><span class="attr">deploy-to-dev:</span></span><br><span class="line"><span class="attr">  stage:</span> <span class="string">deploy</span></span><br><span class="line"><span class="attr">  tags:</span>                <span class="comment"># runner tags와 매칭</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev-runner</span></span><br><span class="line"><span class="attr">  only:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev</span></span><br><span class="line">	<span class="attr">variables:</span></span><br><span class="line"><span class="attr">    PROJECT_PATH:</span> <span class="string">'/app/projectname'</span></span><br><span class="line"><span class="attr">  script:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">sh</span> <span class="string">$&#123;PROJECT_PATH&#125;/tomcat8.0.52/bin/shutdown.sh</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">echo</span> <span class="string">"tomcat shutdown..."</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">sleep</span> <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">    -</span> <span class="string">'rm -rf /app/projectname/tomcat8.0.52/webapps/ROOT'</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">echo</span> <span class="string">"removing past ROOT.war success"</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">sleep</span> <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">    -</span> <span class="string">cp</span> <span class="string">$&#123;PROJECT_PATH&#125;/target/ROOT.war</span> <span class="string">$&#123;PROJECT_PATH&#125;/tomcat8.0.52/webapps/</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">sh</span> <span class="string">$&#123;PROJECT_PATH&#125;/tomcat8.0.52/bin/startup.sh</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">echo</span> <span class="string">"Finish..!"</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>gitlab-runner 프로젝트 외부에 존재하여 ip접속시 scp, ssh 원격 접속</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">stages:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">build</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">deploy</span></span><br><span class="line"></span><br><span class="line"><span class="attr">build-project:</span></span><br><span class="line"><span class="attr">  stage:</span> <span class="string">build</span></span><br><span class="line"><span class="attr">  tags:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev-runner</span></span><br><span class="line"><span class="attr">  variables:</span></span><br><span class="line"><span class="attr">    GIT_STRATEGY:</span> <span class="string">clone</span></span><br><span class="line"><span class="attr">    GIT_CHECKOUT:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">  only:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">  script:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">pwd</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">mvn</span> <span class="string">build</span></span><br><span class="line"></span><br><span class="line"><span class="attr">deploy-to-dev:</span></span><br><span class="line"><span class="attr">  stage:</span> <span class="string">deploy</span></span><br><span class="line"><span class="attr">  tags:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev-runner</span></span><br><span class="line"><span class="attr">  only:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">  variables:</span></span><br><span class="line"><span class="attr">    GIT_STRATEGY:</span> <span class="string">none</span></span><br><span class="line"><span class="attr">    PROJECT_PATH:</span> <span class="string">'/app/projectname'</span></span><br><span class="line"><span class="attr">  script:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">echo</span> <span class="string">$CI_PROJECT_DIR</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">echo</span> <span class="string">"Start Deploy.."</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">ssh</span> <span class="string">[id]@[ip]</span> <span class="string">$&#123;DEV_PROJECT_DIR&#125;/tomcat8.0.52/bin/shutdown.sh</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">echo</span> <span class="string">"tomcat shutdown..."</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">ssh</span> <span class="string">[id]@[ip]</span> <span class="string">"rm -rf $&#123;DEV_PROJECT_DIR&#125;/tomcat8.0.52/webapps/ROOT.war"</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">scp</span> <span class="string">$&#123;CI_PROJECT_DIR&#125;/target/ROOT.war</span> <span class="string">[id]@[ip]:$&#123;DEV_PROJECT_DIR&#125;/tomcat8.0.52/webapps</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">ssh</span> <span class="string">[id]@[ip]</span> <span class="string">$&#123;DEV_PROJECT_DIR&#125;/tomcat8.0.52/bin/startup.sh</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">echo</span> <span class="string">"Finish Deploy"</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="gitlab-runner-관련-정보"><a href="#gitlab-runner-관련-정보" class="headerlink" title="gitlab-runner 관련 정보"></a>gitlab-runner 관련 정보</h1><h2 id="GIT-STRATEGY"><a href="#GIT-STRATEGY" class="headerlink" title="GIT_STRATEGY"></a>GIT_STRATEGY</h2><ul>
+<li>clone<ul>
+<li>해당 job때, clone을 실행하여, worktree이전에 작업내용 다 날리고,<br>항상 깨끗한 local working 유지</li>
+</ul>
+</li>
+<li>fetch(default)<ul>
+<li>해당 job때, git clean 실행하여 undo any changes하고, 그리고 git fetch 한다.</li>
+</ul>
+</li>
+<li>nono<ul>
+<li>아무것도 하지않는다. 따라서 이전에 했던 job파일들이 로컬에 그대로 남아있다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="GIT-CLEAN-FLAGS"><a href="#GIT-CLEAN-FLAGS" class="headerlink" title="GIT_CLEAN_FLAGS"></a>GIT_CLEAN_FLAGS</h2><ul>
+<li>각각의 CI job에 대해 git clean 에 대한 동의 여부</li>
+<li><code>none</code>: git clean 비활성화</li>
+</ul>
+<h1 id="에러"><a href="#에러" class="headerlink" title="에러"></a>에러</h1><h2 id="unable-to-access-problem-with-the-SSL"><a href="#unable-to-access-problem-with-the-SSL" class="headerlink" title="unable to access : problem with the SSL"></a>unable to access : problem with the SSL</h2><h3 id="참조"><a href="#참조" class="headerlink" title="참조"></a>참조</h3><p><a href="https://docs.gitlab.com/runner/configuration/tls-self-signed.html" target="_blank" rel="noopener">https://docs.gitlab.com/runner/configuration/tls-self-signed.html</a></p>
+<h3 id="문제"><a href="#문제" class="headerlink" title="문제"></a>문제</h3><p>Gitlab Runner &gt; Runner 등록하기(<a href="https://docs.gitlab.com/runner/register/index.html" target="_blank" rel="noopener">Ofiicial Documentation</a>)</p>
+<p>gitlab-runner 등록시 해당 https:// 로 접근시, ssl인증서가 필요할텐데, </p>
+<p>기존 로컬 10.0.1.X로 접속할 때는 ssl인증서가 필요 없었지만,  </p>
+<p>gitlab runner 는 등록 시 https:// 활용 따라서 ssl problem이 발생하였다.</p>
+<h3 id="해결"><a href="#해결" class="headerlink" title="해결"></a>해결</h3><p><strong>Self-signed certificate</strong></p>
+<p>이 방법은 인증 기관을 거치지 않고 SSL 인증을 하여 <strong>GitLab Runner</strong> 를 등록하는 방법이다.</p>
+<p><strong>필요 사항</strong></p>
+<ul>
+<li><a href="https://www.openssl.org/" target="_blank" rel="noopener">openssl</a></li>
+</ul>
+<p><strong>GitLab 서버에서</strong></p>
+<p>OpenSSL을 이용해 인증서를 만든다. 주의할 점은 Common Name(CN)에 gitlab.com 도메인 혹은 192.168.12.23 IP 주소를 입력해야 한다.</p>
+<p>자세한 사항은 <a href="https://www.ibm.com/support/knowledgecenter/en/SSWHYP_4.0.0/com.ibm.apimgmt.cmc.doc/task_apionprem_gernerate_self_signed_openSSL.html" target="_blank" rel="noopener">IBM OpenSSL 문서 참조</a></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">$</span> <span class="string">cd</span> <span class="string">/etc/gitlab/ssl/</span></span><br><span class="line"><span class="string">$</span> <span class="string">openssl</span> <span class="string">genrsa</span> <span class="bullet">-out</span> <span class="string">./gitlab.key</span> <span class="number">2048</span></span><br><span class="line"><span class="string">$</span> <span class="string">openssl</span> <span class="string">req</span> <span class="bullet">-new</span> <span class="bullet">-key</span> <span class="string">gitlab.key</span> <span class="bullet">-out</span> <span class="string">gitlab.csr</span></span><br><span class="line"><span class="string">$</span> <span class="string">openssl</span> <span class="string">x509</span> <span class="bullet">-req</span> <span class="bullet">-days</span> <span class="number">1000</span> <span class="bullet">-in</span> <span class="string">gitlab.csr</span> <span class="bullet">-signkey</span> <span class="string">gitlab.key</span> <span class="bullet">-out</span> <span class="string">gitlab.crt</span></span><br><span class="line"><span class="string">$</span> <span class="string">cp</span> <span class="string">gitlab.crt</span> <span class="string">gitlab.pem</span></span><br><span class="line"></span><br><span class="line"><span class="string">$</span> <span class="string">sudo</span> <span class="string">gitlab-ctl</span> <span class="string">restart</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>GitLab Runner 서버에서</strong></p>
+<p>GitLab Runner 에서는 앞서 생성한 <code>gitlab.pem</code> 인증서를 사용한다. 앞서 생성된 <code>gitlab.pem</code> 파일을 <code>/etc/ssl/certs</code> 에 복사한다. 그리고 <code>gitlab.pem</code> 의 데이터를 <code>ca-certificates.crt</code> 마지막 줄에 삽입하면 인증 기관을 거치지 않아도 GitLab Runner를 등록할 수 있다.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">$</span> <span class="string">cd</span> <span class="string">/etc/ssl/certs</span></span><br><span class="line"><span class="string">$</span> <span class="string">cat</span> <span class="string">gitlab.pem</span> <span class="string">&gt;&gt;</span> <span class="string">ca-certificates.crt</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Register</strong></p>
+<p>프로젝트의 Settings &gt; CI/CD &gt; Runners settings 에서 URL과 registration token을 확인한다.</p>
+<p><code>gitlab-runner register</code> 명령어를 이용해 URL과 registration token을 차례로 입력한 후 runner 이름과 실행 방법을 선택하면 등록 완료.</p>
+<h3 id="인증서란"><a href="#인증서란" class="headerlink" title="인증서란?"></a>인증서란?</h3><blockquote>
+<p>pem, crt, csr 형식파일<br>pem: 주로 인증서나 개인키를 담고있다.<br>****crt: 인증서를 의미, 보통 pem형식의 인증서를 의미<br>csr: 인증기관(CA)에 인증서 발급 요청을 하는 형식의 파일이며, 그안에는 내 공개키 정보와 사용하는 알고리즘 정보들이있다.</p>
+</blockquote>
+<p><strong>인증서 특징</strong></p>
+<ul>
+<li>public key에 대한 sign 파일</li>
+<li>private key로 서명요청파일(CSR)을 생성하여 인증서 생성시 public키가 포함된 인증서 파일이 생성됨</li>
+<li>해당 public키를 이용하여 통신을 하며 해당 키가 정상적인 public key인지 인증할수있다.</li>
+<li>이 public key에 대한 보증하는 단체 CA임</li>
+<li>인증기관없이 자기 자신을 인증된 것을 self sign 인증서</li>
+</ul>
+<p><strong>인증서 생성 순서</strong></p>
+<ol>
+<li>개인키(Private Key) 생성</li>
+<li>서명 요청 파일(CSR) 파일생성</li>
+<li>인증서 생성</li>
+</ol>
+<h2 id="fatal-git-fetch-pack-expected-shallow-list"><a href="#fatal-git-fetch-pack-expected-shallow-list" class="headerlink" title="fatal: git fetch-pack: expected shallow list"></a>fatal: git fetch-pack: expected shallow list</h2><p>해당 서버에서 gitlab-runner에서 git version 낮아서 발생</p>
+<p>git —version 확인후 update 진행</p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2023/02/16/SpringMVC2-CH01/" title= "SpringMVC2-CH01(스프링 thymeleaf)">
+                    <div class="prevTitle">SpringMVC2-CH01(스프링 thymeleaf)</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 사각형 반응형 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="2080063347"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#gitlab-CICD-구축"><span class="toc-number">1.</span> <span class="toc-text">gitlab CICD 구축</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#참고"><span class="toc-number">2.</span> <span class="toc-text">참고</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">3.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#예시기준"><span class="toc-number">4.</span> <span class="toc-text">예시기준</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#사전지식"><span class="toc-number">5.</span> <span class="toc-text">사전지식</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#전체-워크-플로우"><span class="toc-number">5.1.</span> <span class="toc-text">전체 워크 플로우</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GitLab-runner-컨셉"><span class="toc-number">5.2.</span> <span class="toc-text">GitLab runner 컨셉</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#초기-구성도"><span class="toc-number">5.3.</span> <span class="toc-text">초기 구성도</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#실-서버-구성도"><span class="toc-number">5.4.</span> <span class="toc-text">실 서버 구성도</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#간단-용어-정리"><span class="toc-number">5.5.</span> <span class="toc-text">간단 용어 정리</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pipelines"><span class="toc-number">5.5.1.</span> <span class="toc-text">Pipelines</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jobs"><span class="toc-number">5.6.</span> <span class="toc-text">Jobs</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Variables"><span class="toc-number">5.6.1.</span> <span class="toc-text">Variables</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Environments"><span class="toc-number">5.6.2.</span> <span class="toc-text">Environments</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Runners"><span class="toc-number">5.6.3.</span> <span class="toc-text">Runners</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#설치-및-설정"><span class="toc-number">6.</span> <span class="toc-text">설치 및 설정</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#runner-설치"><span class="toc-number">6.1.</span> <span class="toc-text">runner 설치</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#runner-등록"><span class="toc-number">6.2.</span> <span class="toc-text">runner 등록</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#gitlab-ci-yml-CI-CD-파일설정"><span class="toc-number">7.</span> <span class="toc-text">gitlab-ci.yml(CI&#x2F;CD 파일설정)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#gitlab-runner-관련-정보"><span class="toc-number">8.</span> <span class="toc-text">gitlab-runner 관련 정보</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#GIT-STRATEGY"><span class="toc-number">8.1.</span> <span class="toc-text">GIT_STRATEGY</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GIT-CLEAN-FLAGS"><span class="toc-number">8.2.</span> <span class="toc-text">GIT_CLEAN_FLAGS</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#에러"><span class="toc-number">9.</span> <span class="toc-text">에러</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#unable-to-access-problem-with-the-SSL"><span class="toc-number">9.1.</span> <span class="toc-text">unable to access : problem with the SSL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#참조"><span class="toc-number">9.1.1.</span> <span class="toc-text">참조</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#문제"><span class="toc-number">9.1.2.</span> <span class="toc-text">문제</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#해결"><span class="toc-number">9.1.3.</span> <span class="toc-text">해결</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#인증서란"><span class="toc-number">9.1.4.</span> <span class="toc-text">인증서란?</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fatal-git-fetch-pack-expected-shallow-list"><span class="toc-number">9.2.</span> <span class="toc-text">fatal: git fetch-pack: expected shallow list</span></a></li></ol></li></ol>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 수직형 반응형 디스플레이광고 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="1645513725"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 192
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2023 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2023/02/23/gitlab-CI-CD-springproject/" >gitlab-CI/CD-springproject</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span><a class="archive-post-title" href= "/2023/02/16/SpringMVC2-CH01/" >SpringMVC2-CH01(스프링 thymeleaf)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span><a class="archive-post-title" href= "/2023/02/07/JavaScript-Basic/" >JavaScript-Basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/05</span><a class="archive-post-title" href= "/2023/02/05/Html-JQuery/" >Html-JQuery</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2023/01/22/mysql/" >Mysql 기본 공부 (수정본)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-mybatis/" >About-mybatis</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-maven/" >About-maven</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-xml/" >XML 파일에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/ubuntu-command/" >우분투 자주 쓰는 명령어(2023버전)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2023/01/02/n-plus-1-problem-i/" >JPA N+1 문제와 해결법(수정중)</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/31</span><a class="archive-post-title" href= "/2022/12/31/end-of-2023/" >2023년을 마무리 하며...(2023년 목표 포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/AboutSpring/" >AboutSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/CS-Lock-MutexAndSemaphore/" >CS Lock MutexAndSemaphore</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Isolation-Level-4-And-Lock/" >Isolation Level 4 And Lock</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/READ-ME-Writing/" >READ-ME Writing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/SpringAndJenkins/" >SpringAndJenkins</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Entity-DAO-DTO/" >Spring-Entity-DAO-DTO</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Lambda-Capturing/" >Java Lambda-Capturing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Basic-JVM/" >Java Basic JVM</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-SOLID/" >Java SOLID</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Null-Optional-Empty/" >Null-Optional-Empty</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Singleton-Stateless/" >Spring Singleton Stateless</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutMessageQ/" >AboutMessageQ</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutKafka/" >AboutKafka</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutSpringSecurity/" >AboutSpringSecurity</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Sequence-Diagram/" >Sequence-Diagram</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH02/" >SpringProject-TrackingPost-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH04/" >SpringProject-TrackingPost-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH01/" >SpringProject-TrackingPost-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH06/" >SpringProject-TrackingPost-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH05/" >SpringProject-TrackingPost-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH03/" >SpringProject-TrackingPost-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutLombokAtSpring/" >AboutLombokAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Basic-Vue-js/" >Basic Vue.js</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/BasicDB/" >BasicDB</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Http-Status/" >Http-Status</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Spring-Logger/" >Spring-Logger</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH02/" >SpringProject-Board-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH04/" >SpringProject-Board-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH06/" >SpringProject-Board-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH01/" >SpringProject-Board-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH03/" >SpringProject-Board-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH07/" >SpringProject-Board-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH05/" >SpringProject-Board-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH08/" >SpringProject-Board-CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH09/" >SpringProject-Board-CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH10/" >SpringProject-Board-CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/UsingAOPAtSpring/" >UsingAOPAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH00/" >SpringCore CH00</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH01/" >SpringCore CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH04/" >SpringCore CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH05/" >SpringCore CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH08/" >SpringCore CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH06/" >SpringCore CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH07/" >SpringCore CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH09/" >SpringCore CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH01/" >SpringMVC-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH02/" >SpringMVC-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH03/" >SpringMVC-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH07/" >SpringMVC-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH05/" >SpringMVC-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH02-03/" >SpringCore CH02~03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH06/" >SpringMVC-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH04/" >SpringMVC-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/effective-java-review/" >(책리뷰)이펙티브 자바</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH01/" >Java 배우기 CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH02/" >Java 배우기 CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH03/" >Java 배우기 CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH04/" >Java 배우기 CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH05/" >Java 배우기 CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH06/" >Java 배우기 CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH07/" >Java 배우기 CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH08/" >Java 배우기 CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH10/" >Java 배우기 CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH11/" >Java 배우기 CH11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH09/" >Java 배우기 CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH13/" >Java 배우기 CH13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH12/" >Java 배우기 CH12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH14/" >Java 배우기 CH14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/ConnectDomainToNotion/" >Notion과 개인 Domain 연결하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/OSI7layer/" >OSI7계층과 TCP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mybatis"><span class="iconfont-archer">&#xe606;</span>Mybatis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Lombok"><span class="iconfont-archer">&#xe606;</span>Lombok</span>
+    
+        <span class="sidebar-tag-name" data-tags="MessageQ"><span class="iconfont-archer">&#xe606;</span>MessageQ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kafka"><span class="iconfont-archer">&#xe606;</span>Kafka</span>
+    
+        <span class="sidebar-tag-name" data-tags="CS"><span class="iconfont-archer">&#xe606;</span>CS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Vue"><span class="iconfont-archer">&#xe606;</span>Vue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="Notion"><span class="iconfont-archer">&#xe606;</span>Notion</span>
+    
+        <span class="sidebar-tag-name" data-tags="Domain"><span class="iconfont-archer">&#xe606;</span>Domain</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jquery"><span class="iconfont-archer">&#xe606;</span>Jquery</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="FrontEnd"><span class="iconfont-archer">&#xe606;</span>FrontEnd</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="Logger"><span class="iconfont-archer">&#xe606;</span>Logger</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jenkins"><span class="iconfont-archer">&#xe606;</span>Jenkins</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="AOP"><span class="iconfont-archer">&#xe606;</span>AOP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="JPA"><span class="iconfont-archer">&#xe606;</span>JPA</span>
+    
+        <span class="sidebar-tag-name" data-tags="Problem"><span class="iconfont-archer">&#xe606;</span>Problem</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+        <span class="sidebar-tag-name" data-tags="Gitlab"><span class="iconfont-archer">&#xe606;</span>Gitlab</span>
+    
+        <span class="sidebar-tag-name" data-tags="CI-CD"><span class="iconfont-archer">&#xe606;</span>CI-CD</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Mybatis"><span class="iconfont-archer">&#xe60a;</span>Mybatis</span>
+    
+        <span class="sidebar-category-name" data-categories="Maven"><span class="iconfont-archer">&#xe60a;</span>Maven</span>
+    
+        <span class="sidebar-category-name" data-categories="Spring"><span class="iconfont-archer">&#xe60a;</span>Spring</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+        <span class="sidebar-category-name" data-categories="MessageQ"><span class="iconfont-archer">&#xe60a;</span>MessageQ</span>
+    
+        <span class="sidebar-category-name" data-categories="CS"><span class="iconfont-archer">&#xe60a;</span>CS</span>
+    
+        <span class="sidebar-category-name" data-categories="Vue"><span class="iconfont-archer">&#xe60a;</span>Vue</span>
+    
+        <span class="sidebar-category-name" data-categories="Tips"><span class="iconfont-archer">&#xe60a;</span>Tips</span>
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="Jquery"><span class="iconfont-archer">&#xe60a;</span>Jquery</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="Java"><span class="iconfont-archer">&#xe60a;</span>Java</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="Javascript"><span class="iconfont-archer">&#xe60a;</span>Javascript</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Jenkins"><span class="iconfont-archer">&#xe60a;</span>Jenkins</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="JPA"><span class="iconfont-archer">&#xe60a;</span>JPA</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="Gitlab"><span class="iconfont-archer">&#xe60a;</span>Gitlab</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
