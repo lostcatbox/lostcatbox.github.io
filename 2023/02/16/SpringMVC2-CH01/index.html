@@ -430,11 +430,11 @@ height:50vh;
 
 <h2 id="기본-표현식"><a href="#기본-표현식" class="headerlink" title="기본 표현식"></a>기본 표현식</h2><ul>
 <li>간단한 표현:<ul>
-<li>변수 표현식: ${…}</li>
+<li><strong>변수 표현식: ${…}</strong></li>
 <li>선택 변수 표현식: *{…}</li>
 <li>메시지 표현식: #{…}</li>
 <li>링크 URL 표현식: @{…}</li>
-<li>조각 표현식: ~{…}</li>
+<li><strong>조각 표현식: ~{…}</strong></li>
 </ul>
 </li>
 <li>리터럴<ul>
@@ -534,7 +534,21 @@ height:50vh;
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$&#123;#request&#125; </span><br><span class="line">$&#123;#response&#125; </span><br><span class="line">$&#123;#session&#125; </span><br><span class="line">$&#123;#servletContext&#125; </span><br><span class="line">$&#123;#locale&#125;</span><br></pre></td></tr></table></figure>
 
 <p>3.0부터는 하위와 같이 spring에서 직접 model에 넣어줘서 사용해야한다.</p>
-<p>참고로 bean으로 등록된 객체를 사용할수있는 문법도있다<br><code>${@helloBean.hello(&#39;Spring!&#39;)}</code> 접근방식</p>
+<ul>
+<li>HTTP 요청 파라미터 접근: param<ul>
+<li>예) ${param.paramData} </li>
+</ul>
+</li>
+<li>HTTP 세션 접근: session<ul>
+<li>예) ${session.sessionData}</li>
+</ul>
+</li>
+<li>스프링 빈 접근: @<ul>
+<li>예) ${@helloBean.hello(‘Spring!’)}</li>
+<li>참고로 bean으로 등록된 객체를 사용할수있는 문법도있다<br><code>${@helloBean.hello(&#39;Spring!&#39;)}</code> 접근방식</li>
+</ul>
+</li>
+</ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/basic-objects"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">basicObjects</span><span class="params">(Model model, HttpServletRequest request,</span></span></span><br><span class="line"><span class="function"><span class="params">  HttpServletResponse response, HttpSession session)</span> </span>&#123;</span><br><span class="line">      session.setAttribute(<span class="string">"sessionData"</span>, <span class="string">"Hello Session"</span>);</span><br><span class="line">      model.addAttribute(<span class="string">"request"</span>, request);</span><br><span class="line">      model.addAttribute(<span class="string">"response"</span>, response);</span><br><span class="line">      model.addAttribute(<span class="string">"servletContext"</span>, request.getServletContext());</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"basic/basic-objects"</span>;</span><br><span class="line">&#125;</span><br><span class="line">  <span class="meta">@Component</span>(<span class="string">"helloBean"</span>)</span><br><span class="line">  <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloBean</span> </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="string">"Hello "</span> + data;</span><br><span class="line">&#125; &#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -599,11 +613,9 @@ height:50vh;
 <p><strong>공백없이쭉이어진다면하나의의미있는 토큰으로 인지해서 다음과 같이 작은 따옴표를 생략할 수 있다.</strong> </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;span th:text&#x3D;&quot;hello&quot;&gt;</span><br></pre></td></tr></table></figure>
 
-
-
 <h3 id="자주하는-오류"><a href="#자주하는-오류" class="headerlink" title="자주하는 오류"></a>자주하는 오류</h3><p><strong>오류</strong></p>
-<p><code>&lt;span th:text=&quot;hello world!&quot;&gt;&lt;/span&gt;</code><br>문자 리터럴은 원칙상 ‘ 로 감싸야 한다. </p>
-<p>중간에 공백이 있어서 하나의 의미있는 토큰으로도 인식되지 않는다. </p>
+<p><strong><code>&lt;span th:text=&quot;hello world!&quot;&gt;&lt;/span&gt;</code></strong><br><strong>문자 리터럴은 원칙상 ‘ 로 감싸야 한다.</strong> </p>
+<p><strong>중간에 공백이 있어서 하나의 의미있는 토큰으로도 인식되지 않는다.</strong> </p>
 <p><strong>수정</strong></p>
 <p><code>&lt;span th:text=&quot;&#39;hello world!&#39;&quot;&gt;&lt;/span&gt;</code></p>
 <p> 이렇게 ‘ 로 감싸면 정상 동작한다.</p>
@@ -4293,9 +4305,10 @@ top:50vh;
     
     
     
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 196
+        Total : 197
         </div>
         <!-- search  -->
         
@@ -4308,6 +4321,11 @@ top:50vh;
     
     <div class="archive-year"> 2023 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/29</span><a class="archive-post-title" href= "/2023/03/29/SpringMVC2-CH02/" >SpringMVC2-CH02</a>
+        </li>
     
     
         <li class="archive-post-item">
