@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>JPA 기본편 CH01 (JPA 시작) · lostcatbox</title>
+    <title>JPA 기본편 CH02 (JPA 영속성 컨텍스트) · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">JPA 기본편 CH01 (JPA 시작)</a>
+                <a href="#" class="post-name">JPA 기본편 CH02 (JPA 영속성 컨텍스트)</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            JPA 기본편 CH01 (JPA 시작)
+            JPA 기본편 CH02 (JPA 영속성 컨텍스트)
             <!-- 404 -->
             
         </h1>
@@ -276,12 +276,12 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">788</span>Reading time: <span class="post-count reading-time">4 min</span></span>
+                        <span>Word count: <span class="post-count word-count">502</span>Reading time: <span class="post-count reading-time">3 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2023/04/05</span>
+                    <span class="post-intro-time">2023/04/06</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -405,102 +405,122 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>sql, jpql, mybatis 등등을 활용할때는 개발자가 결국 직접 sql을 쓰는것과같다.</p>
-<p>하지만 JPA는 객체지향으로 쿼리를 만들고 개발할수있다.</p>
-<h1 id="출처"><a href="#출처" class="headerlink" title="출처"></a>출처</h1><p><a href="https://www.inflearn.com/course/ORM-JPA-Basic" target="_blank" rel="noopener">김영한 JPA 기본편</a></p>
-<h1 id="목표"><a href="#목표" class="headerlink" title="목표"></a>목표</h1><h2 id="객체와-테이블-설계-매핑"><a href="#객체와-테이블-설계-매핑" class="headerlink" title="객체와 테이블 설계 매핑"></a>객체와 테이블 설계 매핑</h2><ul>
-<li>기본 키와 외래키</li>
-<li>1:N, N:1, 1:1, N:M 매핑</li>
-<li>실무 노하우 + 성능까지 고려</li>
-<li>복잡한 시스템도 JPA로 설계 가능</li>
+        <h1 id="JPA에서-가장-중요한-것"><a href="#JPA에서-가장-중요한-것" class="headerlink" title="JPA에서 가장 중요한 것"></a>JPA에서 가장 중요한 것</h1><ul>
+<li>객체와 관계형 데이터베이스 매핑하기 </li>
+<li><strong>영속성 컨텍스트</strong></li>
 </ul>
-<h2 id="JPA-내부-동작-방식-이해"><a href="#JPA-내부-동작-방식-이해" class="headerlink" title="JPA 내부 동작 방식 이해"></a>JPA 내부 동작 방식 이해</h2><ul>
-<li>JPA의 내부 동작 방식을 이해하지 못함</li>
-<li>JPA가 어떤 SQL을 만들어 내는지 이해</li>
-<li>JPA가 언제 SQL을 실행하는지 이해</li>
+<h1 id="개념"><a href="#개념" class="headerlink" title="개념"></a>개념</h1><h2 id="엔티티-매니저-팩토리와-엔티티-매니저"><a href="#엔티티-매니저-팩토리와-엔티티-매니저" class="headerlink" title="엔티티 매니저 팩토리와 엔티티 매니저"></a>엔티티 매니저 팩토리와 엔티티 매니저</h2><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304062102003.png" alt="스크린샷 2023-04-06 오후 9.02.05"></p>
+<h2 id="영속성-컨텍스트"><a href="#영속성-컨텍스트" class="headerlink" title="영속성 컨텍스트"></a>영속성 컨텍스트</h2><ul>
+<li><p>엔티티를 영구 저장하는 환경</p>
+</li>
+<li><p><code>EntityManager.persist(entity)</code></p>
+<blockquote>
+<p>persist는 DB에 저장하는것이 아니라 영속성 컨텍스트에 저장한다는 의미이다</p>
+</blockquote>
+</li>
+<li><p>영속성 컨텍스트는 논리적인 개념</p>
+</li>
+<li><p>엔티티 매니저를 통해서 영속성 컨텍스트에 접근함</p>
+</li>
 </ul>
-<h1 id="JPA-기본"><a href="#JPA-기본" class="headerlink" title="JPA 기본"></a>JPA 기본</h1><h2 id="SQL-단점"><a href="#SQL-단점" class="headerlink" title="SQL 단점"></a>SQL 단점</h2><ul>
-<li>객체에 필드 추가시 insert update delete 문에 모두 다 추가해야한다.</li>
-<li>객체 지향 프로그래밍의 추상화, 캡슐과, 다형성, 상속등과 지향점이 틀리다</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304052256808.png" alt="스크린샷 2023-04-05 오후 10.55.34"></p>
-<h2 id="객체-JAVA-와-관계형-데이터-데이터베이스의-차이-지향점차이"><a href="#객체-JAVA-와-관계형-데이터-데이터베이스의-차이-지향점차이" class="headerlink" title="객체(JAVA)와 관계형 데이터 데이터베이스의 차이(지향점차이)"></a>객체(JAVA)와 관계형 데이터 데이터베이스의 차이(지향점차이)</h2><ol>
-<li><p>상속<br>관계형 DB에서는 상속에서 추가, 조회할려면 각각 모든 해당 DB 모두 join해야한다.</p>
-</li>
-<li><p>연관관계<br><code>member.getTeam()</code>  VS <code>JOIN ON M.TEAM_ID = T.TEAM_ID</code><br>객체는 team_id가 아닌 team객체의 주소를 가짐</p>
-<p>또한 RDB에서는 SQL문에서 이미 가져올수있는 값이 정해진다.<br><code>member.getTeam()</code> 는 되지만, <code>member.getOrder().getDelivery()</code>는 안될수있음(신뢰성문제)</p>
-</li>
-<li><p>데이터 타입</p>
-</li>
-<li><p>데이터 식별 방법<br><code>==</code>를 할경우? SQL은 결국 마지막에 new 객체이므로 참조값 다를수밖에없다</p>
-</li>
-</ol>
-<h2 id="객체를-자바-컬렉션에-저장-하듯-DB에-저장가능할까-gt-JPA"><a href="#객체를-자바-컬렉션에-저장-하듯-DB에-저장가능할까-gt-JPA" class="headerlink" title="객체를 자바 컬렉션에 저장 하듯, DB에 저장가능할까? -&gt; JPA"></a>객체를 자바 컬렉션에 저장 하듯, DB에 저장가능할까? -&gt; JPA</h2><p>신뢰할수있는 엔티티, 계층을 가진다!<br>(객체가있다면 어떤 필드를 get()해도 null은 일어나지않음)</p>
-<h1 id="JPA-란"><a href="#JPA-란" class="headerlink" title="JPA 란?"></a>JPA 란?</h1><h2 id="ORM이란"><a href="#ORM이란" class="headerlink" title="ORM이란?"></a>ORM이란?</h2><ul>
-<li>객체 관계 매핑(Object-relational mapping)</li>
-<li>객체는 객체대로 설계, 관계형 데이터베이스는 관계형 데이터베이스로 설계</li>
-<li>ORM 프레임워크가 중간에서 매핑</li>
-<li>기본구조</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304052315470.png" alt="스크린샷 2023-04-05 오후 11.15.37"></p>
+<h2 id="엔티티의-생명주기"><a href="#엔티티의-생명주기" class="headerlink" title="엔티티의 생명주기"></a>엔티티의 생명주기</h2><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304062105743.png" alt="스크린샷 2023-04-06 오후 9.05.44"></p>
 <ul>
-<li>Save()</li>
+<li><p><strong>비영속 (new/transient)</strong> <br> 영속성 컨텍스트와 전혀 관계가 없는 <strong>새로운</strong> 상태</p>
+</li>
+<li><p><strong>영속 (managed)</strong> <br> 영속성 컨텍스트에 <strong>관리</strong>되는 상태</p>
+</li>
+<li><p><strong>준영속 (detached)</strong> <br> 영속성 컨텍스트에 저장되었다가 <strong>분리</strong>된 상태</p>
+</li>
+<li><p><strong>삭제 (removed)</strong> <br> <strong>삭제</strong>된 상태</p>
+</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304052316700.png" alt="스크린샷 2023-04-05 오후 11.16.25"></p>
-<ul>
-<li>Find()</li>
+<h3 id="비영속"><a href="#비영속" class="headerlink" title="비영속"></a>비영속</h3><ul>
+<li>현재 JPA랑 관계없음</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304052316266.png" alt="스크린샷 2023-04-05 오후 11.16.38"></p>
-<h2 id="JPA를-사용해야하는이유"><a href="#JPA를-사용해야하는이유" class="headerlink" title="JPA를 사용해야하는이유"></a>JPA를 사용해야하는이유</h2><ul>
-<li>SQL 중심적인 개발에서 객체 중심으로 개발</li>
-<li>생산성</li>
-<li>유지보수</li>
-<li>패러다임의 불일치 해결</li>
-<li>성능</li>
-<li>데이터 접근 추상화와 벤더 독립성</li>
-<li>표준</li>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304062106669.png" alt="스크린샷 2023-04-06 오후 9.06.33"></p>
+<h3 id="영속"><a href="#영속" class="headerlink" title="영속"></a>영속</h3><ul>
+<li>객체를 저장한 상태</li>
+<li>영속성 컨텍스트에 저장하지만 DB쿼리는 없음</li>
+<li>Transaction commit 해야만 DB에 쿼리 날림</li>
+<li>persist(),find() 를 할때도 영속 컨텍스트에 없엇다면, 생김</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">jpa.persist(member) <span class="comment">//저장</span></span><br><span class="line">Member member = jpa.find(memberId) <span class="comment">//조회</span></span><br><span class="line">member.setName(“변경할 이름”) <span class="comment">//수정</span></span><br><span class="line">jpa.remove(member) <span class="comment">//삭제</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304062107258.png" alt="스크린샷 2023-04-06 오후 9.07.30"></p>
+<h3 id="준영속"><a href="#준영속" class="headerlink" title="준영속"></a>준영속</h3><ul>
+<li>회원 엔티티를 영속성 컨텍스트에서 분리, 준영속 상태</li>
+<li><code>em.detach(member);</code></li>
+</ul>
+<h3 id="삭제"><a href="#삭제" class="headerlink" title="삭제"></a>삭제</h3><ul>
+<li>객체를 삭제한 상태(삭제)</li>
+<li>DB에서 해당 객체의 데이터 삭제 요청</li>
+<li><code>em.remove(member)</code></li>
+</ul>
+<h2 id="영속성-컨텍스트의-이점"><a href="#영속성-컨텍스트의-이점" class="headerlink" title="영속성 컨텍스트의 이점"></a>영속성 컨텍스트의 이점</h2><ul>
+<li>1차 캐시 </li>
+<li>동일성(identity) 보장</li>
+<li>트랜잭션을 지원하는 쓰기 지연  (transactional write-behind)</li>
+<li>변경 감지(Dirty Checking)</li>
+<li>지연 로딩(Lazy Loading)</li>
+</ul>
+<h3 id="1차-캐시"><a href="#1차-캐시" class="headerlink" title="1차 캐시"></a>1차 캐시</h3><ul>
+<li>DB 트랜잭션 단위로 영속 컨텍스트가 존재함(트랜잭션 끝나면 삭제됨)</li>
+<li>따라서 큰 효과는없음</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304062113476.png" alt="스크린샷 2023-04-06 오후 9.13.49"></p>
+<h3 id="동일성"><a href="#동일성" class="headerlink" title="동일성"></a>동일성</h3><ul>
+<li>한 트랜잭션에서 같은 객체 find시 객체 참조값 같음. Equal</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304062120293.png" alt="스크린샷 2023-04-06 오후 9.20.52"></p>
+<h3 id="쓰기-지연"><a href="#쓰기-지연" class="headerlink" title="쓰기 지연"></a>쓰기 지연</h3><ul>
+<li>commit 이전까지 계속 영속 컨텍스트에만 쌓아둠</li>
+<li>SQL문은 쓰기 지연 SQL 저장소에 쌓아둠 (trancsaction.commit시 DB에 쿼리 날림)</li>
+<li>Hibernate의 <code>batch_size</code> 기능을 활용하여, SQL문을 한번에 보낼수있다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">EntityManager em = emf.createEntityManager();</span><br><span class="line">EntityTransaction transaction = em.getTransaction();</span><br><span class="line"><span class="comment">//엔티티 매니저는 데이터 변경시 트랜잭션을 시작해야 한다.</span></span><br><span class="line">transaction.begin(); <span class="comment">// [트랜잭션] 시작</span></span><br><span class="line">em.persist(memberA);</span><br><span class="line">em.persist(memberB);</span><br><span class="line"><span class="comment">//여기까지 INSERT SQL을 데이터베이스에 보내지 않는다.</span></span><br><span class="line"><span class="comment">//커밋하는 순간 데이터베이스에 INSERT SQL을 보낸다.</span></span><br><span class="line">transaction.commit(); <span class="comment">// [트랜잭션] 커밋</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="JPA의-성능-최적화-기능"><a href="#JPA의-성능-최적화-기능" class="headerlink" title="JPA의 성능 최적화 기능"></a>JPA의 성능 최적화 기능</h2><ol>
-<li>1차 캐시와 동일성(identity) 보장 =&gt; 캐시</li>
-<li>트랜잭션을 지원하는 쓰기 지연(transactional write-behind) =&gt; 모아서보냄</li>
-<li>지연 로딩(Lazy Loading) =&gt; 미루다가, 객체의 데이터가 필요한 시점에 쿼리, 즉시로딩을 선택한다면 join으로가져옴</li>
-</ol>
-<h2 id="JPA-구동방식"><a href="#JPA-구동방식" class="headerlink" title="JPA 구동방식"></a>JPA 구동방식</h2><p> <img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304060910955.png" alt="스크린샷 2023-04-06 오전 9.10.57"></p>
-<h2 id="JPA-쓸때-주의해야-할점"><a href="#JPA-쓸때-주의해야-할점" class="headerlink" title="JPA 쓸때 주의해야 할점"></a>JPA 쓸때 주의해야 할점</h2><ul>
-<li><strong>엔티티 매니저 팩토리</strong>는 하나만 생성해서 애플리케이션 전체에서 공유 (싱글톤)</li>
-<li><strong>엔티티 매니저</strong>는 쓰레드간에 공유X (사용하고 버려야 한다). (트랜잭션 단위로 엔티티 매니저 쓴다!)</li>
-<li><strong>JPA의 모든 데이터 변경은 트랜잭션 안에서 실행</strong> (모든 RDB내부에서도 트랜잭션 단위로 일어남, JPA도 동일하게 설계됨)(ex. 더티체킹)</li>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304062123586.png" alt="스크린샷 2023-04-06 오후 9.23.55"></p>
+<h3 id="변경-감지-더티-체킹"><a href="#변경-감지-더티-체킹" class="headerlink" title="변경 감지 (더티 체킹)"></a>변경 감지 (더티 체킹)</h3><ul>
+<li>한 트랜잭션 안에서 변경사항 발생시 자동으로 DB에 마지막 쿼리로 update함</li>
+<li>Transaction.commit() 시에 영속 컨텍스트의 스냅샷(읽은 최소 객체 상태 기억)과 비교하여 다른점을 update함</li>
 </ul>
-<h1 id="JPQL-소개"><a href="#JPQL-소개" class="headerlink" title="JPQL 소개"></a>JPQL 소개</h1><ul>
-<li>JPA를 사용하면 <strong>엔티티 객체를 중심으로 개발</strong></li>
-<li>검색을 할 때도 테이블이 아닌 엔티티 객체를 대상으로 검색 모든 DB 데이터를 객체로 변환해서 검색하는 것은 불가능</li>
-<li>애플리케이션이 필요한 데이터만 DB에서 불러오려면 결국 검 색 조건이 포함된 SQL이 필요</li>
-<li><strong>JPA는 SQL을 추상화한 JPQL이라는 객체 지향 쿼리 언어 제공</strong> (dialect만 바꾸면 모든 DB에 맞춰 SQL번역됨)</li>
-<li>SQL과 문법 유사, SELECT, FROM, WHERE, GROUP BY, HAVING, JOIN 지원</li>
-<li>JPQL은 엔티티 객체를 대상으로 쿼리</li>
-<li>SQL은 데이터베이스 테이블을 대상으로 쿼리</li>
-</ul>
-<h1 id="JPA-설정-예시"><a href="#JPA-설정-예시" class="headerlink" title="JPA 설정 예시"></a>JPA 설정 예시</h1><ul>
-<li><p>dependency</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.hibernate&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;hibernate-entitymanager&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;5.3.10.Final&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;!-- H2 데이터베이스 --&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.h2database&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;h2&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.4.199&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>src/main/resources/META-INF/persistence.xml</p>
-<ul>
-<li>jdbc driver, 및 DB 설정</li>
-<li><code>persistence-unit name=&quot;hello&quot;</code> 이름은 추후 <code>EntityManagerFactory</code> 를 생성시 name으로 사용</li>
-</ul>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;persistence version=<span class="string">"2.2"</span></span><br><span class="line">             xmlns=<span class="string">"http://xmlns.jcp.org/xml/ns/persistence"</span> xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">             xsi:schemaLocation=<span class="string">"http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"</span>&gt;</span><br><span class="line">    &lt;persistence-unit name=<span class="string">"hello"</span>&gt;</span><br><span class="line">        &lt;properties&gt;</span><br><span class="line">            &lt;!-- 필수 속성 --&gt;</span><br><span class="line">            &lt;property name=<span class="string">"javax.persistence.jdbc.driver"</span> value=<span class="string">"org.h2.Driver"</span>/&gt;</span><br><span class="line">            &lt;property name=<span class="string">"javax.persistence.jdbc.user"</span> value=<span class="string">"sa"</span>/&gt;</span><br><span class="line">            &lt;property name=<span class="string">"javax.persistence.jdbc.password"</span> value=<span class="string">""</span>/&gt;</span><br><span class="line">            &lt;property name=<span class="string">"javax.persistence.jdbc.url"</span> value=<span class="string">"jdbc:h2:tcp://localhost/~/test"</span>/&gt;</span><br><span class="line">            &lt;property name=<span class="string">"hibernate.dialect"</span> value=<span class="string">"org.hibernate.dialect.H2Dialect"</span>/&gt;</span><br><span class="line">            &lt;!-- 옵션 --&gt;</span><br><span class="line">            &lt;property name=<span class="string">"hibernate.show_sql"</span> value=<span class="string">"true"</span>/&gt;</span><br><span class="line">            &lt;property name=<span class="string">"hibernate.format_sql"</span> value=<span class="string">"true"</span>/&gt;</span><br><span class="line">            &lt;property name=<span class="string">"hibernate.use_sql_comments"</span> value=<span class="string">"true"</span>/&gt;</span><br><span class="line">            &lt;!--&lt;property name=<span class="string">"hibernate.hbm2ddl.auto"</span> value=<span class="string">"create"</span> /&gt;--&gt;</span><br><span class="line">        &lt;/properties&gt;</span><br><span class="line">    &lt;/persistence-unit&gt;</span><br><span class="line">&lt;/persistence&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>EntityManagerFactory</code> 생성 -&gt; Spring에서 단 한개만 존재 싱글톤</p>
-</li>
-<li><p><code>EntityManager</code> 생성 -&gt; 트랜잭선 단위로 생선한다고 생각</p>
-</li>
-<li><p>예시</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">EntityManagerFactory emf = Persistence.createEntityManagerFactory(<span class="string">"hello"</span>); <span class="comment">// 한번만 소환</span></span><br><span class="line"></span><br><span class="line">EntityManager em = emf.createEntityManager(); <span class="comment">// 한트랜잭션 당 하나만 만들기</span></span><br><span class="line"></span><br><span class="line">EntityTransaction tx = em.getTransaction();</span><br><span class="line">tx.begin();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">//            Member member = em.find(Member.class, 1L);</span></span><br><span class="line">    List&lt;Member&gt; result = em.createQuery(<span class="string">"select m from Member as m"</span>, Member.class)</span><br><span class="line">            .setFirstResult(<span class="number">2</span>)</span><br><span class="line">            .setMaxResults(<span class="number">5</span>)</span><br><span class="line">            .getResultList();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (Member member:result)&#123;</span><br><span class="line">        System.out.println(<span class="string">"member = "</span> + member);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    tx.commit();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">    tx.rollback();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    em.close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">emf.close();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">EntityManager em = emf.createEntityManager();</span><br><span class="line">EntityTransaction transaction = em.getTransaction();</span><br><span class="line">transaction.begin(); <span class="comment">// [트랜잭션] 시작</span></span><br><span class="line"><span class="comment">// 영속 엔티티 조회</span></span><br><span class="line">Member memberA = em.find(Member.class, <span class="string">"memberA"</span>);</span><br><span class="line"><span class="comment">// 영속 엔티티 데이터 수정</span></span><br><span class="line">memberA.setUsername(<span class="string">"hi"</span>);</span><br><span class="line">memberA.setAge(<span class="number">10</span>);</span><br><span class="line"><span class="comment">//em.update(member) 이런 코드가 있어야 하지 않을까?</span></span><br><span class="line">transaction.commit(); <span class="comment">// [트랜잭션] 커밋</span></span><br></pre></td></tr></table></figure>
 
-</li>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304062131097.png" alt="스크린샷 2023-04-06 오후 9.31.13"></p>
+<h3 id="제거-엔티티-삭제"><a href="#제거-엔티티-삭제" class="headerlink" title="제거(엔티티 삭제)"></a>제거(엔티티 삭제)</h3><ul>
+<li>commit 시점에 delete쿼리 나감</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//삭제 대상 엔티티 조회</span></span><br><span class="line">Member memberA = em.find(Member.class, <span class="string">"memberA"</span>);</span><br><span class="line">em.remove(memberA); <span class="comment">//엔티티 삭제</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="플러시-flush"><a href="#플러시-flush" class="headerlink" title="플러시(flush)"></a>플러시(flush)</h1><p><strong>영속성 컨텍스트의 변경내용을  데이터베이스에 반영</strong></p>
+<p>(1차 캐시는 지워지지않는다. 트랜잭션이 끝나지 않았기 때문이다.)</p>
+<h2 id="동작"><a href="#동작" class="headerlink" title="동작"></a>동작</h2><ul>
+<li>변경 감지</li>
+<li>수정된 엔티티 쓰기 지연 SQL 저장소에 등록</li>
+<li>쓰기 지연 SQL 저장소의 쿼리를 데이터베이스에 전송   (등록, 수정, 삭제 쿼리)</li>
+<li><strong>앞에 1,2번 진행후 DB에 쿼리 박히는 3번 진행함</strong></li>
+</ul>
+<h2 id="영속성-컨텍스트를-플러쉬하는-방법"><a href="#영속성-컨텍스트를-플러쉬하는-방법" class="headerlink" title="영속성 컨텍스트를 플러쉬하는 방법"></a>영속성 컨텍스트를 플러쉬하는 방법</h2><ul>
+<li><strong>em.flush()</strong> - 직접 호출</li>
+<li><strong>트랜잭션 커밋 -</strong> 플러시 자동 호출 </li>
+<li><strong>JPQL 쿼리 실행 -</strong> 플러시 자동 호출<br>(em.createQuery(“[JPQL문]”)=&gt;발생시 이때 DB에 이전 쿼리 반영하고난후 JPQL 동작 호출됨)</li>
+</ul>
+<h2 id="플러쉬-요약"><a href="#플러쉬-요약" class="headerlink" title="플러쉬 요약"></a>플러쉬 요약</h2><ul>
+<li>영속성 컨텍스트를 비우지 않음</li>
+<li>영속성 컨텍스트의 변경내용을 데이터베이스에 동기화</li>
+<li>트랜잭션이라는 작업 단위가 중요 -&gt; 커밋 직전에만 동기화 하면 됨</li>
+</ul>
+<h1 id="준영속-상태"><a href="#준영속-상태" class="headerlink" title="준영속 상태"></a>준영속 상태</h1><ul>
+<li>영속 -&gt; 준영속</li>
+<li>영속 상태의 엔티티가 영속성 컨텍스트에서 분리(deteched)</li>
+<li>영속성 컨텍스트가 제공하는 기능을 사용 못함(더티 체킹 등등)</li>
+</ul>
+<h2 id="준영속-상태-만드는-법"><a href="#준영속-상태-만드는-법" class="headerlink" title="준영속 상태 만드는 법"></a>준영속 상태 만드는 법</h2><ul>
+<li><strong>em.detach(entity)</strong> <br>특정 엔티티만 준영속 상태로 전환</li>
+<li><strong>em.clear()</strong> <br>영속성 컨텍스트를 완전히 초기화</li>
+<li><strong>em.close()</strong> <br>영속성 컨텍스트를 종료</li>
 </ul>
 
     </article>
@@ -514,8 +534,8 @@ height:50vh;
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href= "/2023/04/05/querydsl/" title= "DataSource, QueryDSL이란?">
-                    <div class="prevTitle">DataSource, QueryDSL이란?</div>
+                <a href= "/2023/04/05/JPA-Basic-CH01/" title= "JPA 기본편 CH01 (JPA 시작)">
+                    <div class="prevTitle">JPA 기본편 CH01 (JPA 시작)</div>
                 </a>
             
         </li>
@@ -646,7 +666,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#출처"><span class="toc-number">2.</span> <span class="toc-text">출처</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#목표"><span class="toc-number">3.</span> <span class="toc-text">목표</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#객체와-테이블-설계-매핑"><span class="toc-number">3.1.</span> <span class="toc-text">객체와 테이블 설계 매핑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPA-내부-동작-방식-이해"><span class="toc-number">3.2.</span> <span class="toc-text">JPA 내부 동작 방식 이해</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JPA-기본"><span class="toc-number">4.</span> <span class="toc-text">JPA 기본</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL-단점"><span class="toc-number">4.1.</span> <span class="toc-text">SQL 단점</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#객체-JAVA-와-관계형-데이터-데이터베이스의-차이-지향점차이"><span class="toc-number">4.2.</span> <span class="toc-text">객체(JAVA)와 관계형 데이터 데이터베이스의 차이(지향점차이)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#객체를-자바-컬렉션에-저장-하듯-DB에-저장가능할까-gt-JPA"><span class="toc-number">4.3.</span> <span class="toc-text">객체를 자바 컬렉션에 저장 하듯, DB에 저장가능할까? -&gt; JPA</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JPA-란"><span class="toc-number">5.</span> <span class="toc-text">JPA 란?</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ORM이란"><span class="toc-number">5.1.</span> <span class="toc-text">ORM이란?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPA를-사용해야하는이유"><span class="toc-number">5.2.</span> <span class="toc-text">JPA를 사용해야하는이유</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPA의-성능-최적화-기능"><span class="toc-number">5.3.</span> <span class="toc-text">JPA의 성능 최적화 기능</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPA-구동방식"><span class="toc-number">5.4.</span> <span class="toc-text">JPA 구동방식</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPA-쓸때-주의해야-할점"><span class="toc-number">5.5.</span> <span class="toc-text">JPA 쓸때 주의해야 할점</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JPQL-소개"><span class="toc-number">6.</span> <span class="toc-text">JPQL 소개</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JPA-설정-예시"><span class="toc-number">7.</span> <span class="toc-text">JPA 설정 예시</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JPA에서-가장-중요한-것"><span class="toc-number">1.</span> <span class="toc-text">JPA에서 가장 중요한 것</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#개념"><span class="toc-number">2.</span> <span class="toc-text">개념</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#엔티티-매니저-팩토리와-엔티티-매니저"><span class="toc-number">2.1.</span> <span class="toc-text">엔티티 매니저 팩토리와 엔티티 매니저</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#영속성-컨텍스트"><span class="toc-number">2.2.</span> <span class="toc-text">영속성 컨텍스트</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#엔티티의-생명주기"><span class="toc-number">2.3.</span> <span class="toc-text">엔티티의 생명주기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#비영속"><span class="toc-number">2.3.1.</span> <span class="toc-text">비영속</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#영속"><span class="toc-number">2.3.2.</span> <span class="toc-text">영속</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#준영속"><span class="toc-number">2.3.3.</span> <span class="toc-text">준영속</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#삭제"><span class="toc-number">2.3.4.</span> <span class="toc-text">삭제</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#영속성-컨텍스트의-이점"><span class="toc-number">2.4.</span> <span class="toc-text">영속성 컨텍스트의 이점</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1차-캐시"><span class="toc-number">2.4.1.</span> <span class="toc-text">1차 캐시</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#동일성"><span class="toc-number">2.4.2.</span> <span class="toc-text">동일성</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#쓰기-지연"><span class="toc-number">2.4.3.</span> <span class="toc-text">쓰기 지연</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#변경-감지-더티-체킹"><span class="toc-number">2.4.4.</span> <span class="toc-text">변경 감지 (더티 체킹)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#제거-엔티티-삭제"><span class="toc-number">2.4.5.</span> <span class="toc-text">제거(엔티티 삭제)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#플러시-flush"><span class="toc-number">3.</span> <span class="toc-text">플러시(flush)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#동작"><span class="toc-number">3.1.</span> <span class="toc-text">동작</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#영속성-컨텍스트를-플러쉬하는-방법"><span class="toc-number">3.2.</span> <span class="toc-text">영속성 컨텍스트를 플러쉬하는 방법</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#플러쉬-요약"><span class="toc-number">3.3.</span> <span class="toc-text">플러쉬 요약</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#준영속-상태"><span class="toc-number">4.</span> <span class="toc-text">준영속 상태</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#준영속-상태-만드는-법"><span class="toc-number">4.1.</span> <span class="toc-text">준영속 상태 만드는 법</span></a></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
@@ -4059,9 +4079,26 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 199
+        Total : 200
         </div>
         <!-- search  -->
         
@@ -4077,7 +4114,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/JPA-Basic/" >JPA 기본편 CH01 (JPA 시작)</a>
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2023/04/06/JPA-Basic-CH02/" >JPA 기본편 CH02 (JPA 영속성 컨텍스트)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/JPA-Basic-CH01/" >JPA 기본편 CH01 (JPA 시작)</a>
         </li>
     
     
