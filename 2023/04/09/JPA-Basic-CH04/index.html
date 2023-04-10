@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">247</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">691</span>Reading time: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -440,6 +440,82 @@ height:50vh;
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Team team &#x3D; new Team();</span><br><span class="line">team.setName(&quot;TEAMA&quot;);</span><br><span class="line">em.persist(team);</span><br><span class="line"></span><br><span class="line">Member member &#x3D; new Member();</span><br><span class="line">member.setUsername(&quot;sss&quot;);</span><br><span class="line">member.setTeam(team);</span><br><span class="line">em.persist(member);</span><br><span class="line"></span><br><span class="line">em.flush();</span><br><span class="line">em.clear();</span><br><span class="line"></span><br><span class="line">Member findMember &#x3D; em.find(Member.class, member.getId());</span><br><span class="line">Team findTeam &#x3D; findMember.getTeam();</span><br></pre></td></tr></table></figure>
 
 
+
+<h1 id="양방향-연관관계와-연관관계의-주인"><a href="#양방향-연관관계와-연관관계의-주인" class="headerlink" title="양방향 연관관계와 연관관계의 주인"></a>양방향 연관관계와 연관관계의 주인</h1><ul>
+<li><strong>테이블 연관관계는 FK(외래키) 하나로 양방향이 가능하다.</strong></li>
+<li>객체에서는 양쪽으로 갈려면, 서로 모두 세팅해야한다.</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304102322061.png" alt="스크린샷 2023-04-10 오후 11.22.27"></p>
+<ul>
+<li>team</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Team</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span></span><br><span class="line">    <span class="meta">@Column</span>(name=<span class="string">"TEAM_ID"</span>)</span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@OneToMany</span>(mappedBy = <span class="string">"team"</span>)</span><br><span class="line">    <span class="keyword">private</span> List&lt;Member&gt; members = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>member<ul>
+<li><strong>여기에서 mappedBy 는 처음에는 이해하기 어렵다</strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Member</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span></span><br><span class="line">    <span class="meta">@Column</span>(name = <span class="string">"MEMBER_ID"</span>)</span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line">    <span class="meta">@Column</span>(name = <span class="string">"USERNAME"</span>)</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ManyToOne</span></span><br><span class="line">    <span class="meta">@JoinColumn</span>(name=<span class="string">"TEAM_ID"</span>)</span><br><span class="line">    <span class="keyword">private</span> Team team;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="객체와-테이블이-관계를-맺는-차이"><a href="#객체와-테이블이-관계를-맺는-차이" class="headerlink" title="객체와 테이블이 관계를 맺는 차이"></a>객체와 테이블이 관계를 맺는 차이</h2><ul>
+<li><p><strong>객체 연관관계</strong>= 2개</p>
+<ul>
+<li><p>회원 -&gt; 팀 연관관계 1개(단방향)</p>
+</li>
+<li><p>팀 -&gt; 회원 연관관계 1개(단방향)</p>
+</li>
+<li><p>객체의 <strong>양방향 관계는 사실 양방향 관계가 아니라 서로 다른 단 뱡향 관계</strong> <strong>2개다</strong></p>
+<p>• 객체를 양방향으로 참조하려면 <strong>단방향 연관관계를</strong> <strong>2</strong>개 만들어 야 한다.</p>
+</li>
+</ul>
+</li>
+<li><p><strong>테이블 연관관계</strong> = 1개</p>
+<ul>
+<li>회원 &lt;-&gt; 팀의 연관관계 1개(양방향)</li>
+<li>테이블은 <strong>외래 키 하나</strong>로 두 테이블의 연관관계를 관리</li>
+<li>MEMBER.TEAM_ID 외래 키 하나로 양방향 연관관계 가짐 (양쪽으로 조인할 수 있다.)</li>
+</ul>
+</li>
+</ul>
+<h2 id="연관관계의-주인-Owner"><a href="#연관관계의-주인-Owner" class="headerlink" title="연관관계의 주인(Owner)"></a>연관관계의 주인(Owner)</h2><h3 id="양방향-매핑-규칙"><a href="#양방향-매핑-규칙" class="headerlink" title="양방향 매핑 규칙"></a>양방향 매핑 규칙</h3><ul>
+<li><strong>객체의 두 관계중 하나를 연관관계의 주인으로 지정</strong></li>
+<li><strong>연관관계의 주인만이 외래 키를 관리(등록, 수정)</strong></li>
+<li><strong>주인이 아닌쪽은 읽기만 가능</strong></li>
+<li>주인은 mappedBy 속성 사용X</li>
+<li>주인이 아니면 mappedBy 속성으로 주인 지정</li>
+</ul>
+<h3 id="주인은-누구냐-gt-외래키가있는-곳이-주인-무조건"><a href="#주인은-누구냐-gt-외래키가있는-곳이-주인-무조건" class="headerlink" title="주인은 누구냐? -&gt; 외래키가있는 곳이 주인, 무조건!!!"></a>주인은 누구냐? -&gt; 외래키가있는 곳이 주인, 무조건!!!</h3><ul>
+<li>DB입장에서는 1:N = 하인:주인 임!</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304102339918.png" alt="스크린샷 2023-04-10 오후 11.39.10"></p>
+<h2 id="양방향-매핑시-가장-많이-하는-실수"><a href="#양방향-매핑시-가장-많이-하는-실수" class="headerlink" title="양방향 매핑시 가장 많이 하는 실수"></a>양방향 매핑시 가장 많이 하는 실수</h2><ul>
+<li>Team의 memberlist 주인이 아니므로 fk값 관리를 하지않고, 조회만가능하다.<br><strong>(MappedBy는 가짜 매핑, 어차피 조회말고는 쿼리에서 안씀)</strong><br>따라서 add를 해도 반영되지않는다.</li>
+<li>따라서 반드시 하인을 먼저 생성한후 그 객체를  fk값을 가지는 주인을 만들떄 반영 해주는것이다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Member member = <span class="keyword">new</span> Member();</span><br><span class="line">member.setUsername(<span class="string">"sss"</span>);</span><br><span class="line">em.persist(member);</span><br><span class="line"></span><br><span class="line">Team team = <span class="keyword">new</span> Team();</span><br><span class="line">team.setName(<span class="string">"TEAMA"</span>);</span><br><span class="line">team.getMembers().add(member);</span><br><span class="line">em.persist(team);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="양방향-매핑시-연관관계의-주인에-값을-입력해야한다"><a href="#양방향-매핑시-연관관계의-주인에-값을-입력해야한다" class="headerlink" title="양방향 매핑시 연관관계의 주인에 값을 입력해야한다."></a>양방향 매핑시 연관관계의 주인에 값을 입력해야한다.</h2><p>(순수한 객체 관계를 고려하면 항상 양쪽 다 값을 입력해야한다.)</p>
+<ul>
+<li><p>아래 예시를 잘보자. 1차 캐시를 비워주지않는다면, 1차 캐시의 team은 find 할떄도, <code>List&lt;member&gt;</code>에 아무것도없다.</p>
+</li>
+<li><p>따라서 항상 <code>team.getMembers().add(member)</code> 로 1차 캐시에도 반영해주는것이 좋다.</p>
+</li>
+<li><p>만약 em.flush(), em.clear()를 하고 team을 find한다면, 이미 DB에 반영되어있고, 쿼리를 해서 조회해오기때문에,  <code>List&lt;member&gt;</code>에 member가 존재한다.</p>
+</li>
+<li><p>따라서 반드시  실수하지 않으려면 주인 쪽에서 set해줄때, 반드시 하인 것도 세팅해주자<br>아래와 같이 <code>setTeam()</code> 함수에  <code>team.getMembers().add(this);</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTeam</span><span class="params">(Team team)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.team = team;</span><br><span class="line">    team.getMembers().add(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">            Team team = <span class="keyword">new</span> Team();</span><br><span class="line">            team.setName(<span class="string">"TEAMA"</span>);</span><br><span class="line">            em.persist(team);</span><br><span class="line">            </span><br><span class="line">            Member member = <span class="keyword">new</span> Member();</span><br><span class="line">            member.setUsername(<span class="string">"sss"</span>);</span><br><span class="line">            em.persist(member);</span><br><span class="line"></span><br><span class="line"><span class="comment">//            team.getMembers().add(member);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//            em.flush();</span></span><br><span class="line"><span class="comment">//            em.clear();</span></span><br><span class="line"></span><br><span class="line">            Team findTeam = em.find(Team.class, team.getId());</span><br><span class="line">            List&lt;Member&gt; members = findTeam.getMembers();</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span> (Member m : members)&#123;</span><br><span class="line">                System.out.println(<span class="string">"m.getUsername() = "</span> + m.getUsername());</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+
+
     </article>
     <!-- license  -->
     
@@ -583,7 +659,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#목표"><span class="toc-number">1.</span> <span class="toc-text">목표</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RDB-기준-설계의-문제점"><span class="toc-number">2.</span> <span class="toc-text">RDB 기준 설계의 문제점</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#단방향-연관관계"><span class="toc-number">3.</span> <span class="toc-text">단방향 연관관계</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#목표"><span class="toc-number">1.</span> <span class="toc-text">목표</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RDB-기준-설계의-문제점"><span class="toc-number">2.</span> <span class="toc-text">RDB 기준 설계의 문제점</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#단방향-연관관계"><span class="toc-number">3.</span> <span class="toc-text">단방향 연관관계</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#양방향-연관관계와-연관관계의-주인"><span class="toc-number">4.</span> <span class="toc-text">양방향 연관관계와 연관관계의 주인</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#객체와-테이블이-관계를-맺는-차이"><span class="toc-number">4.1.</span> <span class="toc-text">객체와 테이블이 관계를 맺는 차이</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#연관관계의-주인-Owner"><span class="toc-number">4.2.</span> <span class="toc-text">연관관계의 주인(Owner)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#양방향-매핑-규칙"><span class="toc-number">4.2.1.</span> <span class="toc-text">양방향 매핑 규칙</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#주인은-누구냐-gt-외래키가있는-곳이-주인-무조건"><span class="toc-number">4.2.2.</span> <span class="toc-text">주인은 누구냐? -&gt; 외래키가있는 곳이 주인, 무조건!!!</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#양방향-매핑시-가장-많이-하는-실수"><span class="toc-number">4.3.</span> <span class="toc-text">양방향 매핑시 가장 많이 하는 실수</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#양방향-매핑시-연관관계의-주인에-값을-입력해야한다"><span class="toc-number">4.4.</span> <span class="toc-text">양방향 매핑시 연관관계의 주인에 값을 입력해야한다.</span></a></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
