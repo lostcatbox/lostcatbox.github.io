@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">691</span>Reading time: <span class="post-count reading-time">4 min</span></span>
+                        <span>Word count: <span class="post-count word-count">830</span>Reading time: <span class="post-count reading-time">5 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -500,7 +500,7 @@ height:50vh;
 
 
 
-<h2 id="양방향-매핑시-연관관계의-주인에-값을-입력해야한다"><a href="#양방향-매핑시-연관관계의-주인에-값을-입력해야한다" class="headerlink" title="양방향 매핑시 연관관계의 주인에 값을 입력해야한다."></a>양방향 매핑시 연관관계의 주인에 값을 입력해야한다.</h2><p>(순수한 객체 관계를 고려하면 항상 양쪽 다 값을 입력해야한다.)</p>
+<h2 id="양방향-매핑시-연관관계의-주인에-값을-입력해야한다"><a href="#양방향-매핑시-연관관계의-주인에-값을-입력해야한다" class="headerlink" title="양방향 매핑시 연관관계의 주인에 값을 입력해야한다.(!!!)"></a>양방향 매핑시 연관관계의 주인에 값을 입력해야한다.(!!!)</h2><p>(순수한 객체 관계를 고려하면 항상 양쪽 다 값을 입력해야한다.)</p>
 <ul>
 <li><p>아래 예시를 잘보자. 1차 캐시를 비워주지않는다면, 1차 캐시의 team은 find 할떄도, <code>List&lt;member&gt;</code>에 아무것도없다.</p>
 </li>
@@ -508,13 +508,40 @@ height:50vh;
 </li>
 <li><p>만약 em.flush(), em.clear()를 하고 team을 find한다면, 이미 DB에 반영되어있고, 쿼리를 해서 조회해오기때문에,  <code>List&lt;member&gt;</code>에 member가 존재한다.</p>
 </li>
-<li><p>따라서 반드시  실수하지 않으려면 주인 쪽에서 set해줄때, 반드시 하인 것도 세팅해주자<br>아래와 같이 <code>setTeam()</code> 함수에  <code>team.getMembers().add(this);</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTeam</span><span class="params">(Team team)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.team = team;</span><br><span class="line">    team.getMembers().add(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><p><strong>따라서 반드시  실수하지 않으려면 주인 쪽에서 set해줄때, 반드시 하인 것도 세팅해주자</strong><br><strong>아래와 같이 <code>changeTeam()</code> 함수에  <code>team.getMembers().add(this);</code></strong></p>
+</li>
+<li><p><strong>또는 직접<code>team.getMembers().add(member)</code> 추가해주자</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">changeTeam</span><span class="params">(Team team)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.team = team;</span><br><span class="line">    team.getMembers().add(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">            Team team = <span class="keyword">new</span> Team();</span><br><span class="line">            team.setName(<span class="string">"TEAMA"</span>);</span><br><span class="line">            em.persist(team);</span><br><span class="line">            </span><br><span class="line">            Member member = <span class="keyword">new</span> Member();</span><br><span class="line">            member.setUsername(<span class="string">"sss"</span>);</span><br><span class="line">            em.persist(member);</span><br><span class="line"></span><br><span class="line"><span class="comment">//            team.getMembers().add(member);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//            em.flush();</span></span><br><span class="line"><span class="comment">//            em.clear();</span></span><br><span class="line"></span><br><span class="line">            Team findTeam = em.find(Team.class, team.getId());</span><br><span class="line">            List&lt;Member&gt; members = findTeam.getMembers();</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span> (Member m : members)&#123;</span><br><span class="line">                System.out.println(<span class="string">"m.getUsername() = "</span> + m.getUsername());</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
 
+
+
+<h2 id="양방향-연관관계-주의"><a href="#양방향-연관관계-주의" class="headerlink" title="양방향 연관관계 주의(!!!)"></a>양방향 연관관계 주의(!!!)</h2><p><strong>순수 객체 상태를 고려해서 항상 양쪽에 값을 설정하자</strong> </p>
+<p>잘못하면 무한 루프됨</p>
+<ul>
+<li>연관관계 편의 메소드를 생성하자</li>
+<li>양방향 매핑시에 무한 루프를 조심하자</li>
+<li>예: <strong>toString(), lombok, JSON 생성 라이브러리</strong></li>
+<li><strong>예를 들면, Entity를 바로 Controller에서 반환할경우, 연관관계가 양쪽으로 설정되어있다면, Jackson직렬화시 무한루프</strong></li>
+</ul>
+<h1 id="양방향-매핑-정리"><a href="#양방향-매핑-정리" class="headerlink" title="양방향 매핑 정리"></a>양방향 매핑 정리</h1><ul>
+<li><p><strong>Member - Order = 1 : N 이라면, Member에 OneToMany를 하는것보다, Member조회후, 해당하는 Order 엔티티들을 다시 검색하는게 훨씬더 비즈니스 구조적으로 낫다. 단방향만 써도 거의 충분하고, 설계도 깔끔해진다.</strong></p>
+</li>
+<li><p><strong>단방향만 설계 잘해놓으면 table설계 변경 필요없이 끝임!!!</strong></p>
+</li>
+<li><p><strong>단방향 매핑만으로도 이미 연관관계 매핑은 완료 해야함.</strong></p>
+</li>
+<li><p><strong>양방향 매핑은 반대 방향으로 조회(객체 그래프 탐색) 기능이 추 가된 것 뿐 그 이상이 아니다</strong></p>
+</li>
+<li><p>JPQL에서 역방향으로 탐색할 일이 많음</p>
+</li>
+<li><p>단방향 매핑을 잘 하고 양방향은 필요할 때 추가해도 됨  (테이블에 영향을 주지 않음)</p>
+</li>
+</ul>
+<h1 id="연관관계의-주인"><a href="#연관관계의-주인" class="headerlink" title="연관관계의 주인!"></a>연관관계의 주인!</h1><p><strong>연관관계의 주인은 외래 키의 위치를 기준으로 정해야함</strong></p>
 
     </article>
     <!-- license  -->
@@ -659,7 +686,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#목표"><span class="toc-number">1.</span> <span class="toc-text">목표</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RDB-기준-설계의-문제점"><span class="toc-number">2.</span> <span class="toc-text">RDB 기준 설계의 문제점</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#단방향-연관관계"><span class="toc-number">3.</span> <span class="toc-text">단방향 연관관계</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#양방향-연관관계와-연관관계의-주인"><span class="toc-number">4.</span> <span class="toc-text">양방향 연관관계와 연관관계의 주인</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#객체와-테이블이-관계를-맺는-차이"><span class="toc-number">4.1.</span> <span class="toc-text">객체와 테이블이 관계를 맺는 차이</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#연관관계의-주인-Owner"><span class="toc-number">4.2.</span> <span class="toc-text">연관관계의 주인(Owner)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#양방향-매핑-규칙"><span class="toc-number">4.2.1.</span> <span class="toc-text">양방향 매핑 규칙</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#주인은-누구냐-gt-외래키가있는-곳이-주인-무조건"><span class="toc-number">4.2.2.</span> <span class="toc-text">주인은 누구냐? -&gt; 외래키가있는 곳이 주인, 무조건!!!</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#양방향-매핑시-가장-많이-하는-실수"><span class="toc-number">4.3.</span> <span class="toc-text">양방향 매핑시 가장 많이 하는 실수</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#양방향-매핑시-연관관계의-주인에-값을-입력해야한다"><span class="toc-number">4.4.</span> <span class="toc-text">양방향 매핑시 연관관계의 주인에 값을 입력해야한다.</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#목표"><span class="toc-number">1.</span> <span class="toc-text">목표</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RDB-기준-설계의-문제점"><span class="toc-number">2.</span> <span class="toc-text">RDB 기준 설계의 문제점</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#단방향-연관관계"><span class="toc-number">3.</span> <span class="toc-text">단방향 연관관계</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#양방향-연관관계와-연관관계의-주인"><span class="toc-number">4.</span> <span class="toc-text">양방향 연관관계와 연관관계의 주인</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#객체와-테이블이-관계를-맺는-차이"><span class="toc-number">4.1.</span> <span class="toc-text">객체와 테이블이 관계를 맺는 차이</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#연관관계의-주인-Owner"><span class="toc-number">4.2.</span> <span class="toc-text">연관관계의 주인(Owner)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#양방향-매핑-규칙"><span class="toc-number">4.2.1.</span> <span class="toc-text">양방향 매핑 규칙</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#주인은-누구냐-gt-외래키가있는-곳이-주인-무조건"><span class="toc-number">4.2.2.</span> <span class="toc-text">주인은 누구냐? -&gt; 외래키가있는 곳이 주인, 무조건!!!</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#양방향-매핑시-가장-많이-하는-실수"><span class="toc-number">4.3.</span> <span class="toc-text">양방향 매핑시 가장 많이 하는 실수</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#양방향-매핑시-연관관계의-주인에-값을-입력해야한다"><span class="toc-number">4.4.</span> <span class="toc-text">양방향 매핑시 연관관계의 주인에 값을 입력해야한다.(!!!)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#양방향-연관관계-주의"><span class="toc-number">4.5.</span> <span class="toc-text">양방향 연관관계 주의(!!!)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#양방향-매핑-정리"><span class="toc-number">5.</span> <span class="toc-text">양방향 매핑 정리</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#연관관계의-주인"><span class="toc-number">6.</span> <span class="toc-text">연관관계의 주인!</span></a></li></ol>
         <br/>
         <br/>
         <br/>
