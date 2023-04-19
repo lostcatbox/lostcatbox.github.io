@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">256</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">360</span>Reading time: <span class="post-count reading-time">2 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -453,7 +453,27 @@ System.out •println(<span class="string">"refMember == findMember: "</span> + 
 </li>
 </ul>
 <h2 id="지연-로딩"><a href="#지연-로딩" class="headerlink" title="지연 로딩"></a>지연 로딩</h2><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304192343758.png" alt="스크린샷 2023-04-19 오후 11.43.26"></p>
-<h1 id="지연-로딩-활용"><a href="#지연-로딩-활용" class="headerlink" title="지연 로딩 활용"></a>지연 로딩 활용</h1><h1 id="영속성-전이-CASCADE"><a href="#영속성-전이-CASCADE" class="headerlink" title="영속성 전이: CASCADE"></a>영속성 전이: CASCADE</h1><h1 id="고아-객체"><a href="#고아-객체" class="headerlink" title="고아 객체"></a>고아 객체</h1><h1 id="영속성-전이-고아-객체-생명주기"><a href="#영속성-전이-고아-객체-생명주기" class="headerlink" title="영속성 전이 + 고아 객체, 생명주기"></a>영속성 전이 + 고아 객체, 생명주기</h1>
+<h2 id="즉시-로딩-EAGER를-사용해서-함께-조회"><a href="#즉시-로딩-EAGER를-사용해서-함께-조회" class="headerlink" title="즉시 로딩 EAGER를 사용해서 함께 조회"></a>즉시 로딩 EAGER를 사용해서 함께 조회</h2><ul>
+<li>Join으로 한번에 다 가져옴</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ManyToOne</span>(fetch = FetchType.EAGER)</span><br><span class="line"><span class="meta">@JoinColumn</span>(name = <span class="string">"team"</span>)</span><br><span class="line"><span class="keyword">private</span> Team team;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="프록시와-즉시로딩-주의"><a href="#프록시와-즉시로딩-주의" class="headerlink" title="프록시와 즉시로딩 주의(!!!)"></a>프록시와 즉시로딩 주의(!!!)</h2><ul>
+<li><strong>가급적 지연 로딩만 사용</strong>(특히 실무에서)</li>
+<li>즉시 로딩을 적용하면 예상하지 못한 SQL이 발생 </li>
+<li><strong>즉시 로딩은 JPQL에서 N+1 문제를 일으킨다</strong><br>(JPQL로 Member조회시 Member의 row수(N)만큼 Team select 쿼리갯수 더나감)</li>
+<li><strong>@ManyToOne, @OneToOne은 기본이 즉시 로딩 -&gt; LAZY로 설정</strong></li>
+<li><strong>@OneToMany, @ManyToMany는 기본이 지연 로딩</strong></li>
+</ul>
+<h1 id="지연-로딩-활용"><a href="#지연-로딩-활용" class="headerlink" title="지연 로딩 활용"></a>지연 로딩 활용</h1><ul>
+<li>모든 연관관계에 지연 로딩을 사용해라!</li>
+<li>실무에서 즉시 로딩을 사용하지 마라!</li>
+<li><strong>JPQL fetch 조인이나, 엔티티 그래프 기능을 사용해라!  (뒤에서 설명)</strong></li>
+<li>즉시 로딩은 상상하지 못한 쿼리가 나간다.</li>
+</ul>
+<h1 id="영속성-전이-CASCADE"><a href="#영속성-전이-CASCADE" class="headerlink" title="영속성 전이: CASCADE"></a>영속성 전이: CASCADE</h1><h1 id="고아-객체"><a href="#고아-객체" class="headerlink" title="고아 객체"></a>고아 객체</h1><h1 id="영속성-전이-고아-객체-생명주기"><a href="#영속성-전이-고아-객체-생명주기" class="headerlink" title="영속성 전이 + 고아 객체, 생명주기"></a>영속성 전이 + 고아 객체, 생명주기</h1>
     </article>
     <!-- license  -->
     
@@ -597,7 +617,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#프록시"><span class="toc-number">1.</span> <span class="toc-text">프록시</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#왜"><span class="toc-number">1.1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#프록시-기초"><span class="toc-number">1.2.</span> <span class="toc-text">프록시 기초</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#프록시-특징"><span class="toc-number">1.3.</span> <span class="toc-text">프록시 특징</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#프록시-객체의-초기화"><span class="toc-number">1.4.</span> <span class="toc-text">프록시 객체의 초기화</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#프록시의-특징"><span class="toc-number">1.5.</span> <span class="toc-text">프록시의 특징(!!!)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#지연-로딩"><span class="toc-number">1.6.</span> <span class="toc-text">지연 로딩</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#지연-로딩-활용"><span class="toc-number">2.</span> <span class="toc-text">지연 로딩 활용</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#영속성-전이-CASCADE"><span class="toc-number">3.</span> <span class="toc-text">영속성 전이: CASCADE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#고아-객체"><span class="toc-number">4.</span> <span class="toc-text">고아 객체</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#영속성-전이-고아-객체-생명주기"><span class="toc-number">5.</span> <span class="toc-text">영속성 전이 + 고아 객체, 생명주기</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#프록시"><span class="toc-number">1.</span> <span class="toc-text">프록시</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#왜"><span class="toc-number">1.1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#프록시-기초"><span class="toc-number">1.2.</span> <span class="toc-text">프록시 기초</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#프록시-특징"><span class="toc-number">1.3.</span> <span class="toc-text">프록시 특징</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#프록시-객체의-초기화"><span class="toc-number">1.4.</span> <span class="toc-text">프록시 객체의 초기화</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#프록시의-특징"><span class="toc-number">1.5.</span> <span class="toc-text">프록시의 특징(!!!)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#지연-로딩"><span class="toc-number">1.6.</span> <span class="toc-text">지연 로딩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#즉시-로딩-EAGER를-사용해서-함께-조회"><span class="toc-number">1.7.</span> <span class="toc-text">즉시 로딩 EAGER를 사용해서 함께 조회</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#프록시와-즉시로딩-주의"><span class="toc-number">1.8.</span> <span class="toc-text">프록시와 즉시로딩 주의(!!!)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#지연-로딩-활용"><span class="toc-number">2.</span> <span class="toc-text">지연 로딩 활용</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#영속성-전이-CASCADE"><span class="toc-number">3.</span> <span class="toc-text">영속성 전이: CASCADE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#고아-객체"><span class="toc-number">4.</span> <span class="toc-text">고아 객체</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#영속성-전이-고아-객체-생명주기"><span class="toc-number">5.</span> <span class="toc-text">영속성 전이 + 고아 객체, 생명주기</span></a></li></ol>
         <br/>
         <br/>
         <br/>
