@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">417</span>Reading time: <span class="post-count reading-time">2 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.4k</span>Reading time: <span class="post-count reading-time">8 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -441,14 +441,14 @@ height:50vh;
 <li><strong>실무 사용 권장</strong></li>
 <li><strong>JPQL만 잘하면 QueryDSL따라옴</strong></li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//JPOL</span></span><br><span class="line"><span class="comment">//select m from Member m where m.age &gt; 18</span></span><br><span class="line">JPAFactoryQuery query = <span class="keyword">new</span> JPAQueryFactory(em) ;</span><br><span class="line">QMember m = QMember. member;</span><br><span class="line">List&lt;Member&gt; list =</span><br><span class="line">query.selectFrom (m)</span><br><span class="line">.where (m.age.gt (<span class="number">18</span>))</span><br><span class="line">orderBy (m. name. desc () )</span><br><span class="line">.fetch();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//JPOL</span></span><br><span class="line"><span class="comment">//select m from Member m where m.age &gt; 18</span></span><br><span class="line">JPAFactoryQuery query = <span class="keyword">new</span> JPAQueryFactory(em);</span><br><span class="line">QMember m = QMember.member;</span><br><span class="line">List&lt;Member&gt; list = query.selectFrom(m)</span><br><span class="line">  .where(m.age.gt(<span class="number">18</span>))</span><br><span class="line">  .orderBy(m. name.desc())</span><br><span class="line">  .fetch();</span><br></pre></td></tr></table></figure>
 
 <h1 id="네이티브-SQL"><a href="#네이티브-SQL" class="headerlink" title="네이티브 SQL"></a>네이티브 SQL</h1><ul>
 <li>JPA가 제공하는 SQL을 직접 사용하는 기능</li>
 <li>JPQL로 해결할 수 없는 특정 데이터베이스에 의존적인 기능 </li>
 <li>예) 오라클 CONNECT BY, 특정 DB만 사용하는 SQL 힌트</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String sql =</span><br><span class="line"><span class="string">"SELECT ID, AGE, TEAM ID, NAME FROM MEMBER WHERE NAME = 'kim'"</span>;</span><br><span class="line">List&lt;Member&gt; resultList</span><br><span class="line">em.createNativeQuery (sql, Member.class) .getResultList ();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String sql = <span class="string">"SELECT ID, AGE, TEAM ID, NAME FROM MEMBER WHERE NAME = 'kim'"</span>;</span><br><span class="line">List&lt;Member&gt; resultList = em.createNativeQuery(sql,Member.class).getResultList();</span><br></pre></td></tr></table></figure>
 
 <h1 id="JDBC-직접-사용-SpringJdbcTemplate"><a href="#JDBC-직접-사용-SpringJdbcTemplate" class="headerlink" title="JDBC 직접 사용, SpringJdbcTemplate"></a>JDBC 직접 사용, SpringJdbcTemplate</h1><ul>
 <li>JPA를 사용하면서 JDBC 커넥션을 직접 사용하거나, 스프링 JdbcTemplate, 마이바티스등을 함께 사용 가능</li>
@@ -464,6 +464,214 @@ height:50vh;
 <li>﻿﻿JPQL은 객체지향 쿼리 언어다. 따라서 테이블을 대상으로 쿼리 하는 것이 아니라 엔티티 객체를 대상으로 쿼리한다.</li>
 <li>﻿﻿JPOL은 SQL을 추상화해서 특정데이터베이스 SQL에 의존하<br> 지 않는다.</li>
 <li>﻿﻿JPQL은 결국 SQL로 변환된다.</li>
+</ul>
+<h2 id="JPQL-문법"><a href="#JPQL-문법" class="headerlink" title="JPQL 문법"></a>JPQL 문법</h2><ul>
+<li><code>select m from **Member** as m where **m.age** &gt; 18</code></li>
+<li>엔티티와 속성은 대소문자 구분O </li>
+<li>JPQL 키워드는 대소문자 구분 X(select, from, where)</li>
+<li>엔티티 이름 사용, 테이블 이름은 아님!</li>
+<li>별칭은 필수(m)</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304231635245.png" alt="스크린샷 2023-04-23 오후 4.34.50"></p>
+<ul>
+<li>COUNT(m)</li>
+<li>SUM(m.age)</li>
+<li>AVG(m.age)</li>
+<li>MAX(m.age)</li>
+<li>MIN(m.age)</li>
+<li>GROUP BY, HAVING</li>
+<li>ORDER BY</li>
+</ul>
+<h2 id="TypeQuery-Query"><a href="#TypeQuery-Query" class="headerlink" title="TypeQuery, Query"></a>TypeQuery, Query</h2><ul>
+<li>TypeQuery: 반환 타입이 명확할 떄 사용</li>
+<li>Query: 반환 타입이 명확하지 않을때</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TypedQuery&lt;Member&gt; select_m_from_member_m = em.createQuery(<span class="string">"select m from Member m"</span>, Member.class);</span><br><span class="line">TypedQuery&lt;String&gt; query1 = em.createQuery(<span class="string">"select m.username, m.age from Member m"</span>, String.class);</span><br><span class="line">Query query = em.createQuery(<span class="string">"select m.username, m.age from Member m"</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="결과-조회-API"><a href="#결과-조회-API" class="headerlink" title="결과 조회 API"></a>결과 조회 API</h2><ul>
+<li>query.getResultList(): <strong>결과가 하나 이상일 때</strong>, 리스트 반환 <ul>
+<li><strong>결과가 없으면 빈 리스트 반환</strong></li>
+</ul>
+</li>
+<li>query.getSingleResult(): <strong>결과가 정확히 하나</strong>, 단일 객체 반환 <ul>
+<li><strong>결과가 한개가 아니면 Exception처리 필요해짐</strong></li>
+<li><strong>결과가 없으면: javax.persistence.NoResultException</strong></li>
+<li><strong>둘 이상이면: javax.persistence.NonUniqueResultException</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="파라미터-바인딩-이름-기준-위치-기준"><a href="#파라미터-바인딩-이름-기준-위치-기준" class="headerlink" title="파라미터 바인딩 - 이름 기준, 위치 기준"></a>파라미터 바인딩 - 이름 기준, 위치 기준</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//이름 기준, 강추</span></span><br><span class="line">SELECT m FROM Member m where m.username=:username </span><br><span class="line"></span><br><span class="line">query.setParameter(<span class="string">"username"</span>, usernameParam);</span><br><span class="line"></span><br><span class="line"><span class="comment">//위치 기반... 추천 X</span></span><br><span class="line">SELECT m FROM Member m where m.username=?<span class="number">1</span> </span><br><span class="line">  </span><br><span class="line">query.setParameter(<span class="number">1</span>, usernameParam);</span><br></pre></td></tr></table></figure>
+
+<h2 id="프로젝션"><a href="#프로젝션" class="headerlink" title="프로젝션(!!!)"></a>프로젝션(!!!)</h2><ul>
+<li><p><strong>!!!!!!!!!!엔티티 프로젝션을 한다면 모두 영속성 컨텍스트에서 관리됨!!!!!!!!!!!</strong></p>
+</li>
+<li><p>참고로, 내부적으로 묵시적으로 join이 쓰인다면, 명시적으로 join으로 JPQL로 명시적으로 하자</p>
+</li>
+<li><p><strong>SELECT 절에 조회할 대상을 지정하는 것</strong></p>
+</li>
+<li><p>프로젝션 대상: (JPQL관점에서) <strong>엔티티, 임베디드 타입, 스칼라 타입</strong>(숫자, 문자등 기본 데이터 타입)</p>
+</li>
+<li><p>Member 엔티티의 alias 가 m</p>
+</li>
+<li><p>SELECT <strong>m</strong> FROM Member m -&gt; 엔티티 프로젝션</p>
+</li>
+<li><p>SELECT <strong>m.team</strong> FROM Member m -&gt; 엔티티 프로젝션</p>
+</li>
+<li><p>SELECT <strong>m.address</strong> FROM Member m -&gt; 임베디드 타입 프로젝션 </p>
+</li>
+<li><p>SELECT <strong>m.username, m.age</strong> FROM Member m -&gt; 스칼라 타입 프로젝션 </p>
+</li>
+<li><p>DISTINCT로 중복 제거 가능</p>
+</li>
+</ul>
+<h2 id="프로젝션-여러-값-조회"><a href="#프로젝션-여러-값-조회" class="headerlink" title="프로젝션 - 여러 값 조회"></a>프로젝션 - 여러 값 조회</h2><p><code>SELECT m.username, m.age FROM Member m</code></p>
+<p>-&gt; 타입을 명시못하니,, Object로 나오니까.</p>
+<ol>
+<li><p>Query 타입으로 조회</p>
+</li>
+<li><p>Object[] 타입으로 조회</p>
+</li>
+<li><p>new 명령어로 조회(추천)</p>
+<ul>
+<li><p>단순값을 MemberDTO 로 바로조회</p>
+</li>
+<li><p><code>SELECT new jpabook.jpql.MemberDTO(m.username, m.age) FROM Member m</code></p>
+</li>
+<li><p>생성자를 호출하는것 new 가 반드시 필요!!!</p>
+</li>
+<li><p>패키지명을 포함한 전체클래스명 입력</p>
+</li>
+<li><p>순서와 타입이 일치하는 생성자 필요</p>
+</li>
+<li><p>추후 queryDSL사용시 이것과 똑같이가능</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="페이징-API"><a href="#페이징-API" class="headerlink" title="페이징 API"></a>페이징 API</h2><ul>
+<li>JPA는 페이징을 다음 두 API로 추상화 </li>
+<li><strong>setFirstResult</strong>(int startPosition) : 조회 시작 위치 (0부터 시작)</li>
+<li><strong>setMaxResults</strong>(int maxResult) : 조회할 데이터 수</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//페이징 쿼리</span></span><br><span class="line">String jpql = <span class="string">"select m from Member m order by m.name desc"</span>; List&lt;Member&gt; resultList = em.createQuery(jpql, Member.class)</span><br><span class="line">      .setFirstResult(<span class="number">10</span>)</span><br><span class="line">      .setMaxResults(<span class="number">20</span>)</span><br><span class="line">      .getResultList();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">    M.ID <span class="keyword">AS</span> <span class="keyword">ID</span>,</span><br><span class="line">    M.AGE <span class="keyword">AS</span> AGE,</span><br><span class="line">    M.TEAM_ID <span class="keyword">AS</span> TEAM_ID,</span><br><span class="line">    M.NAME <span class="keyword">AS</span> <span class="keyword">NAME</span></span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">		<span class="keyword">MEMBER</span> M</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span></span><br><span class="line">    M.NAME <span class="keyword">DESC</span> <span class="keyword">LIMIT</span> ?, ?</span><br></pre></td></tr></table></figure>
+
+<h2 id="조인"><a href="#조인" class="headerlink" title="조인"></a>조인</h2><ul>
+<li>내부 조인:<br> <code>SELECT m FROM Member m [INNER] JOIN m.team t</code></li>
+<li>외부 조인:<br> <code>SELECT m FROM Member m LEFT [OUTER] JOIN m.team t</code></li>
+<li>세타 조인: -&gt; m*t 곱하기로 나옴…모든 테이블 생성됨<br> <code>select count(m) from Member m, Team t where m.username = t.name</code></li>
+</ul>
+<h2 id="조인-ON절"><a href="#조인-ON절" class="headerlink" title="조인 - ON절"></a>조인 - ON절</h2><ul>
+<li>ON절을 활용한 조인(JPA 2.1부터 지원) <ol>
+<li>조인 대상 필터링</li>
+<li><strong>연관관계 없는 엔티티 외부 조인(하이버네이트 5.1부터)</strong></li>
+</ol>
+</li>
+</ul>
+<h3 id="조인-대상-필터링-연관관계-있음-로-필터링가능"><a href="#조인-대상-필터링-연관관계-있음-로-필터링가능" class="headerlink" title="조인 대상 필터링(연관관계 있음 + 로 필터링가능)"></a>조인 대상 필터링(연관관계 있음 + 로 필터링가능)</h3><ul>
+<li><p>예) 회원과 팀을 조인하면서, 팀 이름이 A인 팀만 조인</p>
+</li>
+<li><p><strong>JPQL:</strong></p>
+<p><code>SELECT m, t FROM Member m LEFT JOIN m.team t on t.name = &#39;A&#39;</code></p>
+</li>
+<li><p><strong>SQL:</strong></p>
+<p><code>SELECT m.*, t.* FROM Member m LEFT JOIN Team t ON m.TEAM_ID=t.id and t.name=&#39;A&#39;</code></p>
+</li>
+</ul>
+<h3 id="연관관계-없는-엔티티-외부-조인"><a href="#연관관계-없는-엔티티-외부-조인" class="headerlink" title="연관관계 없는 엔티티 외부 조인(!!!)"></a>연관관계 없는 엔티티 외부 조인(!!!)</h3><ul>
+<li><p>예) 회원의 이름과 팀의 이름이 같은 대상 외부 조인</p>
+</li>
+<li><p><strong>JPQL:</strong></p>
+<p><code>SELECT m, t FROM Member m LEFT JOIN Team t on m.username = t.name</code></p>
+</li>
+<li><p><strong>SQL:</strong></p>
+<p><code>SELECT m.*, t.* FROM Member m LEFT JOIN Team t ON m.username = t.name</code></p>
+</li>
+</ul>
+<h2 id="서브-쿼리"><a href="#서브-쿼리" class="headerlink" title="서브 쿼리"></a>서브 쿼리</h2><p>보통은 연관되지 않는 값을 서브쿼리에 쓰는것이 성능이좋다</p>
+<ul>
+<li><p>나이가 평균보다 많은 회원(성능!)</p>
+<p><code>select m from Member m where m.age &gt; (select avg(m2.age) from Member m2)</code></p>
+</li>
+<li><p>한 건이라도 주문한 고객(성능X)</p>
+<p><code>select m from Member m where (select count(o) from Order o where m = o.member) &gt; 0</code></p>
+</li>
+</ul>
+<h2 id="서브-쿼리-지원-함수"><a href="#서브-쿼리-지원-함수" class="headerlink" title="서브 쿼리 지원 함수"></a>서브 쿼리 지원 함수</h2><ul>
+<li><p>[NOT] EXISTS (subquery): 서브쿼리에 결과가 존재하면 참 </p>
+<ul>
+<li>{ALL | ANY | SOME} (subquery)</li>
+<li>ALL 모두 만족하면 참</li>
+<li>ANY, SOME: 같은 의미, 조건을 하나라도 만족하면 참</li>
+</ul>
+</li>
+<li><p>[NOT] IN (subquery): 서브쿼리의 결과 중 하나라도 같은 것이 있으면 참</p>
+</li>
+<li><p>예시</p>
+</li>
+<li><p>팀A 소속인 회원<br> select m from Member m<br> where <strong>exists</strong> (select t from m.team t where t.name = ‘팀A’)</p>
+</li>
+<li><p>전체 상품 각각의 재고보다 주문량이 많은 주문들</p>
+<p>select o from Order o<br> where o.orderAmount &gt; <strong>ALL</strong> (select p.stockAmount from Product p)</p>
+</li>
+<li><p>어떤 팀이든 팀에 소속된 회원</p>
+<p>select m from Member m<br> where m.team = <strong>ANY</strong> (select t from Team t)</p>
+</li>
+</ul>
+<h2 id="JPA-서브-쿼리-한계"><a href="#JPA-서브-쿼리-한계" class="headerlink" title="JPA 서브 쿼리 한계"></a>JPA 서브 쿼리 한계</h2><ul>
+<li>JPA는 WHERE, HAVING 절에서만 서브 쿼리 사용 가능 </li>
+<li>SELECT 절도 가능(하이버네이트에서 지원)</li>
+<li><strong>FROM 절의 서브 쿼리는 현재 JPQL에서 불가능</strong><ul>
+<li><strong>조인으로 풀 수 있으면 풀어서 해결</strong></li>
+<li>또는 쿼리 2번 날려서 해결. 나머지는 애플리케이션 단에서 해결</li>
+</ul>
+</li>
+<li>하이버네이트6 부터는 <strong>FROM</strong> <strong>절의 서브쿼리를 지원</strong>합니다.</li>
+</ul>
+<h2 id="JPQL-타입-표현"><a href="#JPQL-타입-표현" class="headerlink" title="JPQL 타입 표현"></a>JPQL 타입 표현</h2><ul>
+<li>문자: ‘HELLO’, ‘She’’s’</li>
+<li>숫자: 10L(Long), 10D(Double), 10F(Float)</li>
+<li>Boolean: TRUE, FALSE</li>
+<li>ENUM: jpabook.MemberType.Admin (패키지명 포함)</li>
+<li>엔티티 타입: TYPE(m) = Member (상속 관계에서 사용)(상속관계 DType쓸때지만..보통안씀)</li>
+</ul>
+<h2 id="JPQL-기타"><a href="#JPQL-기타" class="headerlink" title="JPQL 기타"></a>JPQL 기타</h2><ul>
+<li>SQL과 문법이 같은 식</li>
+<li>EXISTS, IN</li>
+<li>AND, OR, NOT</li>
+<li>=, &gt;, &gt;=, &lt;, &lt;=, &lt;&gt;</li>
+<li>BETWEEN, LIKE, <strong>IS NULL</strong></li>
+</ul>
+<h2 id="조건식-CASE-식"><a href="#조건식-CASE-식" class="headerlink" title="조건식 - CASE 식"></a>조건식 - CASE 식</h2><ul>
+<li><p>기본 CASE 식</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">		<span class="keyword">case</span> <span class="keyword">when</span> m.age &lt;= <span class="number">10</span> <span class="keyword">then</span> <span class="string">' 학생요금'</span> </span><br><span class="line">				 <span class="keyword">when</span> m.age &gt;= <span class="number">60</span> <span class="keyword">then</span> <span class="string">' 경로요금'</span> </span><br><span class="line">				 <span class="keyword">else</span> <span class="string">' 일반요금'</span></span><br><span class="line">		 <span class="keyword">end</span></span><br><span class="line"><span class="keyword">from</span> <span class="keyword">Member</span> m</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>단순 CASE 식</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">		<span class="keyword">case</span> t.name</span><br><span class="line">				<span class="keyword">when</span> <span class="string">'팀&amp;'</span> <span class="keyword">then</span> <span class="string">'인센티브110%'</span></span><br><span class="line">				<span class="keyword">when</span> <span class="string">'팀B'</span> <span class="keyword">then</span> <span class="string">'인센티브120%'</span></span><br><span class="line">				<span class="keyword">else</span> <span class="string">' 인센티브105%'</span></span><br><span class="line">		 <span class="keyword">end</span></span><br><span class="line"><span class="keyword">from</span> <span class="keyword">Member</span> m</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>COALESCE: 하나씩 조회해서 null이 아니면 반환</p>
+<ul>
+<li>사용자 이름이 없으면 이름 없는 회원을 반환</li>
+<li><code>select coalesce(m.username,&#39;이름 없는 회원&#39;) from Member m</code></li>
+</ul>
+</li>
+<li><p>NULLIF: 두 값이 같으면 null 반환, 다르면 첫번째 값 반환</p>
+<ul>
+<li>사용자 이름이 ‘관리자’면 null을 반환하고 나머지는 본인의 이름을 반환</li>
+<li><code>select NULLIF(m.username, &#39;관리자&#39;) from Member m</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="JPQL-기본-함수"><a href="#JPQL-기본-함수" class="headerlink" title="JPQL 기본 함수"></a>JPQL 기본 함수</h2><ul>
+<li>CONCAT</li>
+<li>SUBSTRING</li>
+<li>TRIM</li>
+<li>LOWER, UPPER </li>
+<li>LENGTH</li>
+<li>LOCATE</li>
+<li>ABS, SQRT, MOD</li>
+<li>SIZE, INDEX(JPA 용도)</li>
 </ul>
 
     </article>
@@ -614,7 +822,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JPA는-다양한-퀴리-방법-지원"><span class="toc-number">1.</span> <span class="toc-text">JPA는 다양한 퀴리 방법 지원</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JPQL"><span class="toc-number">2.</span> <span class="toc-text">JPQL</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Criteria-안씀"><span class="toc-number">3.</span> <span class="toc-text">Criteria(안씀)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#QueryDSL-권장-강추"><span class="toc-number">4.</span> <span class="toc-text">QueryDSL(권장, 강추, !!!)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#네이티브-SQL"><span class="toc-number">5.</span> <span class="toc-text">네이티브 SQL</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JDBC-직접-사용-SpringJdbcTemplate"><span class="toc-number">6.</span> <span class="toc-text">JDBC 직접 사용, SpringJdbcTemplate</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#모든-기술들은-1차-캐시-영속성-컨텍스트-고려하기"><span class="toc-number">7.</span> <span class="toc-text">모든 기술들은 1차 캐시(영속성 컨텍스트) 고려하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JPQL-1"><span class="toc-number">8.</span> <span class="toc-text">JPQL</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JPA는-다양한-퀴리-방법-지원"><span class="toc-number">1.</span> <span class="toc-text">JPA는 다양한 퀴리 방법 지원</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JPQL"><span class="toc-number">2.</span> <span class="toc-text">JPQL</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Criteria-안씀"><span class="toc-number">3.</span> <span class="toc-text">Criteria(안씀)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#QueryDSL-권장-강추"><span class="toc-number">4.</span> <span class="toc-text">QueryDSL(권장, 강추, !!!)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#네이티브-SQL"><span class="toc-number">5.</span> <span class="toc-text">네이티브 SQL</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JDBC-직접-사용-SpringJdbcTemplate"><span class="toc-number">6.</span> <span class="toc-text">JDBC 직접 사용, SpringJdbcTemplate</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#모든-기술들은-1차-캐시-영속성-컨텍스트-고려하기"><span class="toc-number">7.</span> <span class="toc-text">모든 기술들은 1차 캐시(영속성 컨텍스트) 고려하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JPQL-1"><span class="toc-number">8.</span> <span class="toc-text">JPQL</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JPQL-문법"><span class="toc-number">8.1.</span> <span class="toc-text">JPQL 문법</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TypeQuery-Query"><span class="toc-number">8.2.</span> <span class="toc-text">TypeQuery, Query</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#결과-조회-API"><span class="toc-number">8.3.</span> <span class="toc-text">결과 조회 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#파라미터-바인딩-이름-기준-위치-기준"><span class="toc-number">8.4.</span> <span class="toc-text">파라미터 바인딩 - 이름 기준, 위치 기준</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#프로젝션"><span class="toc-number">8.5.</span> <span class="toc-text">프로젝션(!!!)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#프로젝션-여러-값-조회"><span class="toc-number">8.6.</span> <span class="toc-text">프로젝션 - 여러 값 조회</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#페이징-API"><span class="toc-number">8.7.</span> <span class="toc-text">페이징 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#조인"><span class="toc-number">8.8.</span> <span class="toc-text">조인</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#조인-ON절"><span class="toc-number">8.9.</span> <span class="toc-text">조인 - ON절</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#조인-대상-필터링-연관관계-있음-로-필터링가능"><span class="toc-number">8.9.1.</span> <span class="toc-text">조인 대상 필터링(연관관계 있음 + 로 필터링가능)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#연관관계-없는-엔티티-외부-조인"><span class="toc-number">8.9.2.</span> <span class="toc-text">연관관계 없는 엔티티 외부 조인(!!!)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#서브-쿼리"><span class="toc-number">8.10.</span> <span class="toc-text">서브 쿼리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#서브-쿼리-지원-함수"><span class="toc-number">8.11.</span> <span class="toc-text">서브 쿼리 지원 함수</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPA-서브-쿼리-한계"><span class="toc-number">8.12.</span> <span class="toc-text">JPA 서브 쿼리 한계</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPQL-타입-표현"><span class="toc-number">8.13.</span> <span class="toc-text">JPQL 타입 표현</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPQL-기타"><span class="toc-number">8.14.</span> <span class="toc-text">JPQL 기타</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#조건식-CASE-식"><span class="toc-number">8.15.</span> <span class="toc-text">조건식 - CASE 식</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPQL-기본-함수"><span class="toc-number">8.16.</span> <span class="toc-text">JPQL 기본 함수</span></a></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
