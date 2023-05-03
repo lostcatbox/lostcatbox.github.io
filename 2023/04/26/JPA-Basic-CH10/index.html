@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">938</span>Reading time: <span class="post-count reading-time">5 min</span></span>
+                        <span>Word count: <span class="post-count word-count">936</span>Reading time: <span class="post-count reading-time">5 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -452,10 +452,10 @@ height:50vh;
 </ul>
 <p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202304262239930.png" alt="스크린샷 2023-04-26 오후 10.39.39"></p>
 <h3 id="DISTINCT가-추가로-애플리케이션에서-중복-제거시도"><a href="#DISTINCT가-추가로-애플리케이션에서-중복-제거시도" class="headerlink" title="DISTINCT가 추가로 애플리케이션에서 중복 제거시도"></a>DISTINCT가 추가로 애플리케이션에서 중복 제거시도</h3><p> <strong>-&gt;</strong> <strong>하이버네이트6 부터는 DISTINCT</strong> **명령어를 사용하지 않아도 애플리케이션에서 중복 제거가 자동으로 적용됩니다</p>
-<h3 id="참고로-당연히-다대일-관계는-데이터가-예측적이다-당연히"><a href="#참고로-당연히-다대일-관계는-데이터가-예측적이다-당연히" class="headerlink" title="참고로 당연히 다대일 관계는 데이터가 예측적이다. 당연히"></a>참고로 당연히 다대일 관계는 데이터가 예측적이다. 당연히</h3><h2 id="페치-조인과-일반-조인의-차이"><a href="#페치-조인과-일반-조인의-차이" class="headerlink" title="페치 조인과 일반 조인의 차이"></a>페치 조인과 일반 조인의 차이</h2><h3 id="일반-조인"><a href="#일반-조인" class="headerlink" title="일반 조인"></a>일반 조인</h3><ul>
-<li>JPQL은 결과를 반환할 때 연관관계 고려X</li>
-<li>일반 조인 실행시 연관된 엔티티를 함께 조회하지 않음</li>
-<li>단지 SELECT 절에 지정한 엔티티만 조회할 뿐 (join 대상의 영속화 X)</li>
+<h3 id="당연히-다대일-관계는-데이터가-예측적이다"><a href="#당연히-다대일-관계는-데이터가-예측적이다" class="headerlink" title="당연히 다대일 관계는 데이터가 예측적이다."></a>당연히 다대일 관계는 데이터가 예측적이다.</h3><h2 id="페치-조인과-일반-조인의-차이"><a href="#페치-조인과-일반-조인의-차이" class="headerlink" title="페치 조인과 일반 조인의 차이"></a>페치 조인과 일반 조인의 차이</h2><h3 id="일반-조인"><a href="#일반-조인" class="headerlink" title="일반 조인"></a>일반 조인</h3><ul>
+<li><strong>JPQL은 결과를 반환할 때 연관관계 고려X</strong></li>
+<li><strong>일반 조인 실행시 연관된 엔티티를 함께 조회하지 않음</strong></li>
+<li><strong>단지 SELECT 절에 지정한 엔티티만 조회할 뿐 (join 대상의 영속화 X)</strong></li>
 <li>여기서는 팀 엔티티만 조회하고, 회원 엔티티는 조회X</li>
 <li>예시<ul>
 <li><strong>[JPQL]</strong><ul>
@@ -485,7 +485,7 @@ height:50vh;
 </li>
 </ul>
 <h2 id="페치-조인의-특징과-한계"><a href="#페치-조인의-특징과-한계" class="headerlink" title="페치 조인의 특징과 한계(!!!)"></a>페치 조인의 특징과 한계(!!!)</h2><ul>
-<li><p><strong>즉 fetch join 의 목적은 연관된 모든 정보를 모두 가져오는것, where문을 통해 특정 인자만 가져오는것이 목적안됨. 따라서 별칭을 주고 where조건도 불가</strong>  -&gt; 즉, 따로 조회해야함</p>
+<li><p><strong>즉 fetch join 의 목적은 연관된 모든 정보를 모두 가져오는것, where문을 통해 특정 인자만 가져오는것이 목적안됨. 따라서 별칭을 주고 where조건도 불가</strong>  <strong>-&gt; 즉, 따로 조회해야함</strong></p>
 </li>
 <li><p><strong>페치 조인 대상에는 별칭을 줄 수 없다</strong>.</p>
 <ul>
@@ -506,7 +506,7 @@ height:50vh;
 </li>
 </ul>
 <h3 id="해당-이슈는-다음과-같은-방식으로-해결가능"><a href="#해당-이슈는-다음과-같은-방식으로-해결가능" class="headerlink" title="해당 이슈는 다음과 같은 방식으로 해결가능"></a>해당 이슈는 다음과 같은 방식으로 해결가능</h3><ul>
-<li>Join으로 만 사용하고 Lazy로딩한후 Batch설정 -&gt; sql문에서 IN으로 내부적으로 활용되므로 쿼리 한개만 일어남<ul>
+<li>Join으로만 사용하고 Lazy로딩한후 Batch설정 -&gt; sql문에서 IN으로 내부적으로 활용되므로 쿼리 한개만 일어남<ul>
 <li>글로벌 세팅 추천<br>hibernate.default_batch_fetch_size =100</li>
 </ul>
 </li>
@@ -514,8 +514,8 @@ height:50vh;
 <li>쿼리 직접 짜기</li>
 </ul>
 <h2 id="페치-조인-요약"><a href="#페치-조인-요약" class="headerlink" title="페치 조인 요약"></a>페치 조인 요약</h2><ul>
-<li>연관된 엔티티들을 SQL 한 번으로 조회 (성능 최적화)</li>
-<li>엔티티에 직접 적용하는 글로벌 로딩 전략보다 우선함<ul>
+<li><strong>연관된 엔티티들을 SQL 한 번으로 조회 (성능 최적화)</strong></li>
+<li><strong>엔티티에 직접 적용하는 글로벌 로딩 전략보다 우선함</strong><ul>
 <li>@OneToMany(fetch = FetchType.LAZY) //글로벌 로딩 전략 </li>
 </ul>
 </li>
@@ -725,7 +725,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#페치-조인"><span class="toc-number">1.</span> <span class="toc-text">페치 조인</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#엔티티-페치-조인"><span class="toc-number">1.1.</span> <span class="toc-text">엔티티 페치 조인</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#컬렉션-페치-조인"><span class="toc-number">1.2.</span> <span class="toc-text">컬렉션 페치 조인</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#일대다-조인은-데이터가-예상보다-많아진다"><span class="toc-number">1.2.1.</span> <span class="toc-text">일대다 조인은 데이터가 예상보다 많아진다(!!!)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#페치-조인과-DISTINCT"><span class="toc-number">1.2.2.</span> <span class="toc-text">페치 조인과 DISTINCT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DISTINCT가-추가로-애플리케이션에서-중복-제거시도"><span class="toc-number">1.2.3.</span> <span class="toc-text">DISTINCT가 추가로 애플리케이션에서 중복 제거시도</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#참고로-당연히-다대일-관계는-데이터가-예측적이다-당연히"><span class="toc-number">1.2.4.</span> <span class="toc-text">참고로 당연히 다대일 관계는 데이터가 예측적이다. 당연히</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#페치-조인과-일반-조인의-차이"><span class="toc-number">1.3.</span> <span class="toc-text">페치 조인과 일반 조인의 차이</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#일반-조인"><span class="toc-number">1.3.1.</span> <span class="toc-text">일반 조인</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#페치-조인-1"><span class="toc-number">1.3.2.</span> <span class="toc-text">페치 조인</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#페치-조인의-특징과-한계"><span class="toc-number">1.4.</span> <span class="toc-text">페치 조인의 특징과 한계(!!!)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#해당-이슈는-다음과-같은-방식으로-해결가능"><span class="toc-number">1.4.1.</span> <span class="toc-text">해당 이슈는 다음과 같은 방식으로 해결가능</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#페치-조인-요약"><span class="toc-number">1.5.</span> <span class="toc-text">페치 조인 요약</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#일반적인-방법-3가지"><span class="toc-number">1.5.1.</span> <span class="toc-text">일반적인 방법 3가지</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JPQL-엔티티-직접-사용"><span class="toc-number">2.</span> <span class="toc-text">JPQL - 엔티티 직접 사용</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#엔티티-직접-사용-기본-키-값"><span class="toc-number">2.1.</span> <span class="toc-text">엔티티 직접 사용 - 기본 키 값</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#엔티티-직접-사용-외래-키-값"><span class="toc-number">2.2.</span> <span class="toc-text">엔티티 직접 사용 - 외래 키 값</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Named-쿼리-에너테이션"><span class="toc-number">2.3.</span> <span class="toc-text">Named 쿼리 - 에너테이션</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPQL-벌크-연산"><span class="toc-number">2.4.</span> <span class="toc-text">JPQL - 벌크 연산(!!!)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#예제"><span class="toc-number">2.4.1.</span> <span class="toc-text">예제</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#벌크-연산-주의"><span class="toc-number">2.4.2.</span> <span class="toc-text">벌크 연산 주의</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#페치-조인"><span class="toc-number">1.</span> <span class="toc-text">페치 조인</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#엔티티-페치-조인"><span class="toc-number">1.1.</span> <span class="toc-text">엔티티 페치 조인</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#컬렉션-페치-조인"><span class="toc-number">1.2.</span> <span class="toc-text">컬렉션 페치 조인</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#일대다-조인은-데이터가-예상보다-많아진다"><span class="toc-number">1.2.1.</span> <span class="toc-text">일대다 조인은 데이터가 예상보다 많아진다(!!!)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#페치-조인과-DISTINCT"><span class="toc-number">1.2.2.</span> <span class="toc-text">페치 조인과 DISTINCT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DISTINCT가-추가로-애플리케이션에서-중복-제거시도"><span class="toc-number">1.2.3.</span> <span class="toc-text">DISTINCT가 추가로 애플리케이션에서 중복 제거시도</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#당연히-다대일-관계는-데이터가-예측적이다"><span class="toc-number">1.2.4.</span> <span class="toc-text">당연히 다대일 관계는 데이터가 예측적이다.</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#페치-조인과-일반-조인의-차이"><span class="toc-number">1.3.</span> <span class="toc-text">페치 조인과 일반 조인의 차이</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#일반-조인"><span class="toc-number">1.3.1.</span> <span class="toc-text">일반 조인</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#페치-조인-1"><span class="toc-number">1.3.2.</span> <span class="toc-text">페치 조인</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#페치-조인의-특징과-한계"><span class="toc-number">1.4.</span> <span class="toc-text">페치 조인의 특징과 한계(!!!)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#해당-이슈는-다음과-같은-방식으로-해결가능"><span class="toc-number">1.4.1.</span> <span class="toc-text">해당 이슈는 다음과 같은 방식으로 해결가능</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#페치-조인-요약"><span class="toc-number">1.5.</span> <span class="toc-text">페치 조인 요약</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#일반적인-방법-3가지"><span class="toc-number">1.5.1.</span> <span class="toc-text">일반적인 방법 3가지</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JPQL-엔티티-직접-사용"><span class="toc-number">2.</span> <span class="toc-text">JPQL - 엔티티 직접 사용</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#엔티티-직접-사용-기본-키-값"><span class="toc-number">2.1.</span> <span class="toc-text">엔티티 직접 사용 - 기본 키 값</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#엔티티-직접-사용-외래-키-값"><span class="toc-number">2.2.</span> <span class="toc-text">엔티티 직접 사용 - 외래 키 값</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Named-쿼리-에너테이션"><span class="toc-number">2.3.</span> <span class="toc-text">Named 쿼리 - 에너테이션</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPQL-벌크-연산"><span class="toc-number">2.4.</span> <span class="toc-text">JPQL - 벌크 연산(!!!)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#예제"><span class="toc-number">2.4.1.</span> <span class="toc-text">예제</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#벌크-연산-주의"><span class="toc-number">2.4.2.</span> <span class="toc-text">벌크 연산 주의</span></a></li></ol></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
