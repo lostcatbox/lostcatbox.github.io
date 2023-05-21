@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">214</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">825</span>Reading time: <span class="post-count reading-time">5 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -480,7 +480,109 @@ height:50vh;
 </ul>
 <pre><code>}
 
-```</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- ManyToMany는 다음과같이 구성 하지만 추천 X, 이어주는 테이블에 정보 추가못하므로</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;java</span><br><span class="line">    package jpabook.jpashop.domain.item;</span><br><span class="line">    </span><br><span class="line">    import jpabook.jpashop.domain.Category;</span><br><span class="line">    import lombok.Getter;</span><br><span class="line">    import lombok.Setter;</span><br><span class="line">    import org.springframework.context.annotation.Description;</span><br><span class="line">    </span><br><span class="line">    import javax.persistence.*;</span><br><span class="line">    import java.util.ArrayList;</span><br><span class="line">    import java.util.List;</span><br><span class="line">    </span><br><span class="line">    @Entity</span><br><span class="line">    @Inheritance(strategy &#x3D;  InheritanceType.SINGLE_TABLE)</span><br><span class="line">    @DiscriminatorColumn(name &#x3D; &quot;dtype&quot;)</span><br><span class="line">    @Getter</span><br><span class="line">    @Setter</span><br><span class="line">    public abstract class Item &#123;</span><br><span class="line">        @Id</span><br><span class="line">        @GeneratedValue</span><br><span class="line">        @Column(name &#x3D; &quot;order_item_id&quot;)</span><br><span class="line">        private Long id;</span><br><span class="line">    </span><br><span class="line">        private String name;</span><br><span class="line">    </span><br><span class="line">        private int price;</span><br><span class="line">        private int stockQuantity;</span><br><span class="line">    </span><br><span class="line">        @ManyToMany(mappedBy &#x3D; &quot;items&quot;)</span><br><span class="line">        private List&lt;Category&gt; categories &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></code></pre><ul>
+<li><pre><code class="java"><span class="keyword">package</span> jpabook.jpashop.domain;
+
+<span class="keyword">import</span> jpabook.jpashop.domain.item.Item;
+<span class="keyword">import</span> lombok.Getter;
+<span class="keyword">import</span> lombok.Setter;
+
+<span class="keyword">import</span> javax.persistence.*;
+<span class="keyword">import</span> java.util.ArrayList;
+<span class="keyword">import</span> java.util.List;
+
+<span class="meta">@Entity</span>
+<span class="meta">@Getter</span>
+<span class="meta">@Setter</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Category</span> </span>{
+    <span class="meta">@Id</span>
+    <span class="meta">@GeneratedValue</span>
+    <span class="keyword">private</span> <span class="keyword">long</span> id;
+
+    <span class="keyword">private</span> String name;
+
+    <span class="meta">@ManyToMany</span>
+    <span class="meta">@JoinTable</span>(name = <span class="string">"category_item"</span>, joinColumns = <span class="meta">@JoinColumn</span>(name = <span class="string">"category_id"</span>),
+    inverseJoinColumns = <span class="meta">@JoinColumn</span>(name = <span class="string">"item_id"</span>))
+    <span class="keyword">private</span> List&lt;Item&gt; items = <span class="keyword">new</span> ArrayList&lt;&gt;();
+
+
+</code></pre>
+</li>
+</ul>
+<pre><code>}
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 한 엔티티에서 부모 자식 만들수있음</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;java</span><br><span class="line">    package jpabook.jpashop.domain;</span><br><span class="line">    </span><br><span class="line">    import jpabook.jpashop.domain.item.Item;</span><br><span class="line">    import lombok.Getter;</span><br><span class="line">    import lombok.Setter;</span><br><span class="line">    </span><br><span class="line">    import javax.persistence.*;</span><br><span class="line">    import java.util.ArrayList;</span><br><span class="line">    import java.util.List;</span><br><span class="line">    </span><br><span class="line">    @Entity</span><br><span class="line">    @Getter</span><br><span class="line">    @Setter</span><br><span class="line">    public class Category &#123;</span><br><span class="line">        @Id</span><br><span class="line">        @GeneratedValue</span><br><span class="line">        private long id;</span><br><span class="line">    </span><br><span class="line">        private String name;</span><br><span class="line">    </span><br><span class="line">        @ManyToMany</span><br><span class="line">        @JoinTable(name &#x3D; &quot;category_item&quot;, joinColumns &#x3D; @JoinColumn(name &#x3D; &quot;category_id&quot;),</span><br><span class="line">        inverseJoinColumns &#x3D; @JoinColumn(name &#x3D; &quot;item_id&quot;))</span><br><span class="line">        private List&lt;Item&gt; items &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    </span><br><span class="line">        @ManyToOne</span><br><span class="line">        @JoinColumn(name &#x3D; &quot;parent_id&quot;)</span><br><span class="line">        private Category parent;</span><br><span class="line">    </span><br><span class="line">        @OneToMany(mappedBy &#x3D; &quot;parent&quot;)</span><br><span class="line">        private List&lt;Category&gt; child &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></code></pre><ul>
+<li><h1 id="엔티티-클래스-주의할점"><a href="#엔티티-클래스-주의할점" class="headerlink" title="엔티티 클래스 주의할점"></a>엔티티 클래스 주의할점</h1></li>
+</ul>
+<h2 id="id는-pk컬럼명-id-사용"><a href="#id는-pk컬럼명-id-사용" class="headerlink" title="id는 pk컬럼명_id 사용"></a>id는 pk컬럼명_id 사용</h2><ul>
+<li>엔티티의 식별자는 id 를 사용하고 PK 컬럼명은 member_id 를 사용했다. 엔티티는 타입(여기서는 Member )이 있으므로 id 필드만으로 쉽게 구분할 수 있다. 테이블은 타입이 없으므로 구분이 어렵다. 그리고 테이블은 관례상 테이블명 + id 를 많이 사용한다. 참고로 객체에서 id 대신에 memberId 를 사용해도 된다. 중요한 것은 일관성이다.</li>
+</ul>
+<h2 id="실무에서는-ManyToMany-를-사용하지-말자"><a href="#실무에서는-ManyToMany-를-사용하지-말자" class="headerlink" title="실무에서는 @ManyToMany 를 사용하지 말자"></a>실무에서는 @ManyToMany 를 사용하지 말자</h2><ul>
+<li>@ManyToMany 는 편리한 것 같지만, 중간 테이블( CATEGORY_ITEM )에 컬럼을 추가할 수 없고, 세밀하게 쿼리를 실행하기 어렵기 때문에 실무에서 사용하기에는 한계가 있다. 중간 엔티티( CategoryItem 를 만들고 @ManyToOne , @OneToMany 로 매핑해서 사용하자. 정리하면 대다대 매핑을 일대다, 다대일 매핑으로 풀어내서 사용하자.</li>
+</ul>
+<h2 id="값-타입은-변경-불가능하게-설계해야-한다"><a href="#값-타입은-변경-불가능하게-설계해야-한다" class="headerlink" title="값 타입은 변경 불가능하게 설계해야 한다."></a>값 타입은 변경 불가능하게 설계해야 한다.</h2><ul>
+<li><p>@Setter 를 제거하고, 생성자에서 값을 모두 초기화해서 변경 불가능한 클래스를 만들자. JPA 스펙상 엔티티나 임베디드 타입( @Embeddable )은 자바 기본 생성자(default constructor)를 public 또는 protected 로 설정해야 한다. public 으로 두는 것 보다는 protected 로 설정하는 것이 그나마 더 안전하다. JPA가 이런 제약을 두는 이유는 JPA 구현 라이브러리가 객체를 생성할 때 리플랙션 같은 기술을 사용할 수 있도록 지원해야 하기 때문이다</p>
+</li>
+<li><pre><code class="java"><span class="meta">@Embeddable</span>
+    <span class="meta">@Getter</span>
+    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Address</span> </span>{
+        <span class="keyword">private</span> String city;
+        <span class="keyword">private</span> String street;
+        <span class="keyword">private</span> String zipcode;
+        <span class="function"><span class="keyword">protected</span> <span class="title">Address</span><span class="params">()</span> </span>{
+        }
+        <span class="function"><span class="keyword">public</span> <span class="title">Address</span><span class="params">(String city, String street, String zipcode)</span> </span>{
+            <span class="keyword">this</span>.city = city;
+            <span class="keyword">this</span>.street = street;
+            <span class="keyword">this</span>.zipcode = zipcode;
+         } 
+}
+&lt;!--￼<span class="number">3</span>--&gt;
+</code></pre>
+</li>
+</ul>
+<h2 id="테이블-컬럼명-생성-전략"><a href="#테이블-컬럼명-생성-전략" class="headerlink" title="테이블, 컬럼명 생성 전략"></a>테이블, 컬럼명 생성 전략</h2><ul>
+<li><p><a href="https://docs.spring.io/spring-boot/docs/2.1.3.RELEASE/reference/htmlsingle/#howto-configure-hibernate-naming-strategy" target="_blank" rel="noopener">참조1</a>, <a href="http://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#naming" target="_blank" rel="noopener">참조2</a></p>
+</li>
+<li><p>스프링 부트에서 하이버네이트 기본 매핑 전략을 변경해서 실제 테이블 필드명은 다름</p>
+</li>
+<li><p>스프링 부트 신규 설정 (엔티티(필드) 테이블(컬럼))</p>
+<ol>
+<li>카멜 케이스 -&gt; 언더스코어(memberPoint member_point) </li>
+<li>.(점) -&gt; _(언더스코어)</li>
+<li>대문자 -&gt; 소문자</li>
+</ol>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202305211430831.png" alt="스크린샷 2023-05-21 오후 2.30.23"></p>
+</li>
+</ul>
+<h2 id="cascade"><a href="#cascade" class="headerlink" title="cascade"></a>cascade</h2><ul>
+<li><pre><code class="java"><span class="meta">@Entity</span>
+<span class="meta">@Table</span>(name = <span class="string">"orders"</span>)
+<span class="meta">@Getter</span>
+<span class="meta">@Setter</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Order</span> </span>{
+        <span class="meta">@OneToMany</span>(mappedBy = <span class="string">"order"</span>, cascade = CascadeType.ALL)
+    <span class="keyword">private</span> List&lt;OrderItem&gt; orderItems = <span class="keyword">new</span> ArrayList&lt;&gt;();
+}
+&lt;!--￼<span class="number">4</span>--&gt;
+</code></pre>
+</li>
+</ul>
+<h2 id="양방향은-항상-연관관계-편의-메서드-만들자"><a href="#양방향은-항상-연관관계-편의-메서드-만들자" class="headerlink" title="양방향은 항상 연관관계 편의 메서드 만들자!!!"></a>양방향은 항상 연관관계 편의 메서드 만들자!!!</h2><ul>
+<li><p>원래는 연관관계를 신경 써줘야하는 부분을 메서드에 포함시키므로써 편하게 관리할수있도록해준다.</p>
+</li>
+<li><pre><code class="java">Member member = <span class="keyword">new</span> Member();
+Order order = <span class="keyword">new</span> Order();
+member.getOrders().add(order); <span class="comment">// member 엔티티의 orders에 넣어줫더라도, order 객체에도 해당 member_id를 알려줘야한다.</span>
+order.setMember(member); 
+&lt;!--￼<span class="number">5</span>--&gt;</code></pre>
+</li>
+<li><p>결과적으로 <code>order.setMember(member)</code> 를 통해 손쉽게 추가되며 연관관계도 설정한다.</p>
+</li>
+</ul>
+
     </article>
     <!-- license  -->
     
@@ -624,7 +726,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#해당-강의-이후부터는-내용-전부가-아닌-핵심-부분들만-분석해서-팁으로-남길예정이다"><span class="toc-number">1.</span> <span class="toc-text">해당 강의 이후부터는 내용 전부가 아닌 핵심 부분들만 분석해서 팁으로 남길예정이다.</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#기능-요구사항"><span class="toc-number">2.</span> <span class="toc-text">기능 요구사항</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#도메인-모델과-테이블-설계"><span class="toc-number">2.1.</span> <span class="toc-text">도메인 모델과 테이블 설계</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#엔티티"><span class="toc-number">2.2.</span> <span class="toc-text">엔티티</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#회원-테이블"><span class="toc-number">2.3.</span> <span class="toc-text">회원 테이블</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#주요한-부분"><span class="toc-number">2.4.</span> <span class="toc-text">주요한 부분</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#해당-강의-이후부터는-내용-전부가-아닌-핵심-부분들만-분석해서-팁으로-남길예정이다"><span class="toc-number">1.</span> <span class="toc-text">해당 강의 이후부터는 내용 전부가 아닌 핵심 부분들만 분석해서 팁으로 남길예정이다.</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#기능-요구사항"><span class="toc-number">2.</span> <span class="toc-text">기능 요구사항</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#도메인-모델과-테이블-설계"><span class="toc-number">2.1.</span> <span class="toc-text">도메인 모델과 테이블 설계</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#엔티티"><span class="toc-number">2.2.</span> <span class="toc-text">엔티티</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#회원-테이블"><span class="toc-number">2.3.</span> <span class="toc-text">회원 테이블</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#주요한-부분"><span class="toc-number">2.4.</span> <span class="toc-text">주요한 부분</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#엔티티-클래스-주의할점"><span class="toc-number">3.</span> <span class="toc-text">엔티티 클래스 주의할점</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#id는-pk컬럼명-id-사용"><span class="toc-number">3.1.</span> <span class="toc-text">id는 pk컬럼명_id 사용</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#실무에서는-ManyToMany-를-사용하지-말자"><span class="toc-number">3.2.</span> <span class="toc-text">실무에서는 @ManyToMany 를 사용하지 말자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#값-타입은-변경-불가능하게-설계해야-한다"><span class="toc-number">3.3.</span> <span class="toc-text">값 타입은 변경 불가능하게 설계해야 한다.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#테이블-컬럼명-생성-전략"><span class="toc-number">3.4.</span> <span class="toc-text">테이블, 컬럼명 생성 전략</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cascade"><span class="toc-number">3.5.</span> <span class="toc-text">cascade</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#양방향은-항상-연관관계-편의-메서드-만들자"><span class="toc-number">3.6.</span> <span class="toc-text">양방향은 항상 연관관계 편의 메서드 만들자!!!</span></a></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
