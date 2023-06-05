@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">133</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">736</span>Reading time: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -424,6 +424,106 @@ height:50vh;
 <li>협력에 참여하는 객체들에게 얼마나 적절한 역할과 책임을 부여</li>
 <li>앞에서 설명한 개념들을 프로그래밍 언어라는 틀에 흐트러짐 없이 담아낼 수 있는 기술 활용</li>
 </ol>
+<h1 id="큰-목차"><a href="#큰-목차" class="headerlink" title="큰 목차"></a>큰 목차</h1><ol>
+<li>협력하는 객체들의 공동체</li>
+<li>이상한 나라의 객체</li>
+<li>타입과 추상화</li>
+<li>역할, 책임, 협력</li>
+<li><strong>책임과 메시지</strong></li>
+<li>객체 지도</li>
+<li>함께 모으기</li>
+</ol>
+<h1 id="협력하는-객체들의-공동체"><a href="#협력하는-객체들의-공동체" class="headerlink" title="협력하는 객체들의 공동체"></a>협력하는 객체들의 공동체</h1><h2 id="협력하는-객체들의-공동체-1"><a href="#협력하는-객체들의-공동체-1" class="headerlink" title="협력하는 객체들의 공동체"></a>협력하는 객체들의 공동체</h2><ul>
+<li>객체지향의 목표는 실무적으론 실세계를 모방하는 것이 아니다. 창조하는것이다.</li>
+<li>하지만, 객체지향 설계의 핵심 사상인 연결완전성을 설명하기엔 실세계가 적합하다. == 객체의 상호작용 중요성 강조</li>
+<li>커피를 주문하고 제조하는 과정은 역할, 책임, 협력 이라는 사람들이 일상 속에 항상 존재한다.</li>
+<li>손님, 캐시어, 바리스타의 협력, 역할, 책임 을 생각해보자</li>
+<li>객체지향에서의 가장 중요한 3가지 요소<ul>
+<li>역할: 협력하는 과정 속에 특정한 역할이 존재한다. 책임이나 의무를 의미한다.</li>
+<li>책임: 역할에 포함되고, 특정 역할이 정해지면, 특정 책임이 있다.</li>
+<li>협력: 요청과 응답을 통해 협력한다.</li>
+</ul>
+</li>
+<li>요청을 통해 도움을 요청하고 →받은 객체는 책임다하여 서비스를 응답한다. 제공한다.</li>
+</ul>
+<h3 id="특정-역할과-적합한-책임에-특징에-관하여"><a href="#특정-역할과-적합한-책임에-특징에-관하여" class="headerlink" title="특정 역할과 적합한 책임에 특징에 관하여"></a>특정 역할과 적합한 책임에 특징에 관하여</h3><ul>
+<li><p>여러 사람이 동일한 역할을 수행할수있다. 손님입장에서 아무 캐시어든 상관없는것처럼(대체가능)</p>
+</li>
+<li><p>동일한 요청을 받아서 서로 다른 방식으로 응답할 수 있는 능력을 </p>
+<p>다형성</p>
+<p>이라고한다</p>
+<ul>
+<li>마치, 캐시어 → 바리스타에서 요청하면, 바리스타는 일반 라떼 또는 그림그려진 라떼등을 응답할수있는것</li>
+</ul>
+</li>
+<li><p>한 사람이 동시에 여러 역할 수행가능(한 사람이 캐시어면서, 바리스타가능)</p>
+</li>
+<li><p>어떤 객체도 섬이 아니다 → 반드시 협력, 책임, 역할이있다.</p>
+<ul>
+<li>시스템은 역할과 책임을 수행하는 객체로 분할되어있다.</li>
+<li>시스템의 기능은 객체 간의 연쇄적인 요청과 응답의 흐름으로 구성된 협력으로 구현됨</li>
+</ul>
+</li>
+<li><p>객체 지향 설계 == 적절한 객체에게 적절한 책임을 할당하는것이다. 책임!!!!</p>
+</li>
+<li><p>역할 == 관련성 높은 책임의 집합이다.</p>
+<ul>
+<li>여러 객체가 동일한 역할 수행가능</li>
+<li>역할은 <strong>대체 가능성</strong>을 의미한다</li>
+<li>각 객체는 <strong>책임을 수행하는 방법을 자율적으로 선택(다형성)</strong>할수있다.</li>
+<li>하나의 객체가 <strong>동시에 여러 역할</strong>을 수행할 수 있다.</li>
+</ul>
+</li>
+<li><p>협력의 참여하는 주체는 객체의 특징</p>
+<ul>
+<li><strong>객체는 충분히 협력적이여야한다. 모든것을 스스로 처리하는 전지전능한 god object는 복잡도자멸!</strong></li>
+<li><strong>객체는 충분히 자율적이여야한다. 자기 스스로의 원칙에 따라 어떤 일을 하거나, 통제하여 절제하는것. 요청 받고 일에 스스로 책임진다. 누구에게 요청을 할지, 자신이 어떤 방식으로 처리할지 누가 정해주지않는다. 자율적으로 일을 판단, 책임진다.</strong></li>
+</ul>
+</li>
+<li><p><strong>객체는 흔히 상태와 행동을 함께 지닌 실체라고 정의한다. 객체는 조리법을 이미 알고있고, 필요한 상태와 행동을 알고있다.</strong></p>
+</li>
+<li><p>객체 지향은 데이터와 프로세스를 하나의 객체라는 틀안에 묶어 놓으므로서 객체의 자율성을 보장한다</p>
+</li>
+<li><p>객체는 메세지로 서로 통신하며, 송신사, 수신자로 구별된다.</p>
+</li>
+<li><p>수신자는 먼저 수신된 메세지를 이해할 수 있는지 판단후, 미리 정해진 자신의 방법으로 메시지를 처리한다. 이를 메서드라고 부른다. <strong>즉, 객체가 실행 시간에 적절한 메서드를 선택할 수 있다.</strong></p>
+</li>
+<li><p><strong>메세지와 메서드가 분리된것은 객체의 자율성을 높이며, 캡슐화 개념과 연관이 깊다</strong></p>
+</li>
+</ul>
+<h2 id="그래서-객체-지향의-본질은"><a href="#그래서-객체-지향의-본질은" class="headerlink" title="그래서 객체 지향의 본질은?"></a>그래서 객체 지향의 본질은?</h2><ul>
+<li>객체지향이란 시스템을 상호작용하는 자율적인 객체들의 공동체로 바라보고 객체를 이용해 시스템을 분할하는 방법이다.</li>
+<li>자율적인 객체란 상태와 행위를 함께 지니며 스스로 자기 자신을 책임지는 객체를 의미한다.</li>
+<li>객체는 시스템의 행위를 구현하기 위해 다른 객처와 협력한다. 각 객체는 협력 내에서 정해진 역할을 수행하며 역할은 관련된 책임의 집합이다.</li>
+<li>객체는 다른 객체와 협력하기 위해 메시지를 전송하고, 메시지를 수신한 객체는 메시지를 처리하는 데 적합한 메서드를 자율적으로 선택한다.</li>
+</ul>
+<h2 id="객체를-지향하라"><a href="#객체를-지향하라" class="headerlink" title="객체를 지향하라"></a>객체를 지향하라</h2><ul>
+<li>객체지향의 세계에서 클래스가 행식 중심 개념이라고 말하는것은 무리가있다.</li>
+<li><strong>그래서 클래스간의 상속 등에 관심을 두어서 객체 지향을 잊으면 안된다.</strong></li>
+<li>어떤 객체들이 어떤 메시지를 주고받으며 , 협력하는가. 가 중요하다. 클래스는 객체들의 협력 관계를 코드로 옮기는 도구에 불과하다.</li>
+<li>객체지향의 핵심은 적절한 책임을 수행하는 역할 간의 유연하고 견고한 협력 관계를 구축하는 것이다. 클래스는 협력에 참여하는 객체를 만드는 데 필요한 구현 메커니즘일 뿐니다.</li>
+<li><strong>클래스의 구조와 메서드가 아니라 객체의 역할, 책임, 협력에 집중하자</strong></li>
+</ul>
+<h1 id="이상한-나라의-객체"><a href="#이상한-나라의-객체" class="headerlink" title="이상한 나라의 객체"></a>이상한 나라의 객체</h1><ul>
+<li>객체는 결국 상태(state), 행동(behavior), 식별자(identity)를 갖고있다.<ul>
+<li>구별될수있고, 상태, 행동을 가진다.</li>
+<li>상태를 가진이유는, 행동의 여부가 상태에 의존하기때문이다.(20cm이하만 통과하는 메서드 생각해보자)</li>
+</ul>
+</li>
+<li>모든 객체는 단순한 값과 객체의 조합으로 표현할수있다.(단순한 값이란? 독립적의미는 없지만, 객체의 상태를 표현하기 위해 사용되는 값.(문자열, 시간, 속도, 숫자)</li>
+<li>앨리스와 객체<ul>
+<li>객체의 상태를 구성하는 모든 특징들을 통틀어 객체의 <strong>프로퍼티</strong>라고한다.(일반적으로 프로퍼티는 정적이다) 엘리스의 키, 위치, 음료</li>
+<li>반면 <strong>프로퍼티(property)의 값</strong>은 동적이다 엘리스의 키, 위치, 음료 값은 계속 바뀔수있다.</li>
+</ul>
+</li>
+<li>객체의 프로퍼티는 속성과 링크의 두가지 조합으로 표현된다<ul>
+<li>객체와 객체 사이의 의미 있는 연결을 링크⇒ 객체의 링크(<strong>link</strong>)를 통해서만 메세지를 주고받을수있다.</li>
+<li>객체가 참조값으로가진 객체 식별자인 링크 와 달리 객체를 구성하는 단순한 값은 <strong>속성(attribute)</strong> 이다</li>
+<li>상태는 특정 시점에 객체가 가지고있는 정보의 집합으로 객체의 구조적 특징을 표현한다.</li>
+<li>상태는 객체에 존재하는 정적인 프로퍼티와 동적인 프로퍼티 값으로 구성된다.</li>
+</ul>
+</li>
+</ul>
 
     </article>
     <!-- license  -->
@@ -568,7 +668,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#큰-목차"><span class="toc-number">2.</span> <span class="toc-text">큰 목차</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#협력하는-객체들의-공동체"><span class="toc-number">3.</span> <span class="toc-text">협력하는 객체들의 공동체</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#협력하는-객체들의-공동체-1"><span class="toc-number">3.1.</span> <span class="toc-text">협력하는 객체들의 공동체</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#특정-역할과-적합한-책임에-특징에-관하여"><span class="toc-number">3.1.1.</span> <span class="toc-text">특정 역할과 적합한 책임에 특징에 관하여</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#그래서-객체-지향의-본질은"><span class="toc-number">3.2.</span> <span class="toc-text">그래서 객체 지향의 본질은?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#객체를-지향하라"><span class="toc-number">3.3.</span> <span class="toc-text">객체를 지향하라</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이상한-나라의-객체"><span class="toc-number">4.</span> <span class="toc-text">이상한 나라의 객체</span></a></li></ol>
         <br/>
         <br/>
         <br/>
