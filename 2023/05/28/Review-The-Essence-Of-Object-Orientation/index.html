@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">736</span>Reading time: <span class="post-count reading-time">4 min</span></span>
+                        <span>Word count: <span class="post-count word-count">723</span>Reading time: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -403,22 +403,27 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>객체 지향적으로 짠다는 것은 무엇을까? 한번 생각해 보는 시점이 되었다.</p>
+        <h1 id="참조"><a href="#참조" class="headerlink" title="참조"></a>참조</h1><p><a href="https://ebook-product.kyobobook.co.kr/dig/epd/ebook/4808998139766#scrollSpyProdReview" target="_blank" rel="noopener">강추) 책을 삽시다!</a></p>
+<h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>객체 지향적으로 짠다는 것은 무엇을까? 한번 생각해 보는 시점이 되었다.</p>
 <p>어떻게 하면 더 좋은 코드를 짤수있을까?</p>
 <p>예를 들면, request.checkValidation() 를 하는것이 좋은것인가?, 아니면, checkValidation(request)의 형태를 만드는 것이 더 객체 지향 스러운것인가? 너무 궁금헀다. =&gt; 결과적으론 이 문제는 상황마다 다르다라는 것이 정답이였다.(꼭 객체 지향이 좋은것도아님)</p>
-<p>해당 질문에 고려해야할 부분</p>
 <ul>
-<li>디티오의 밸리데이션은 비즈니스인가 아닌가, 밸리데이션이 모델들에 대해 공통화가 가능한가?<ul>
+<li>객체의 자율성을 보장한다면, instance.checkValidation()</li>
+<li>하지만 여러 객체에서 쓰인다면, Validation 클래스에 뺴고, valid 역할 위임 이 적절할 것이다.</li>
+</ul>
+<p><strong>해당 질문에 고려해야할 부분</strong></p>
+<p>DTO의 밸리데이션은 비즈니스인가 아닌가, 밸리데이션이 모델들에 대해 공통화가 가능한가?</p>
+<ul>
 <li>밸리데이션이 널체크면 비즈니스 아님</li>
 <li>(비즈니스) 어떤 커맨드만 요청이 가능하다, 어떤 커맨드는 이런 부수정보가 필요하다 </li>
-<li>즉 처음부터 밸리데이션을 정의하는 단계가 논리가 부족했기 때문에</li>
-<li>뒤에서 이게 객체지향적인가? 같은 물음이 나오는것이다.</li>
 </ul>
-</li>
-</ul>
-<p>하여튼 이제부터 책 리뷰를 써보자</p>
-<p>객체 지향이란</p>
-<ol>
+<p><strong>하여튼 이제부터 책 리뷰를 써보자</strong></p>
+<h1 id="3줄-요약-핵심"><a href="#3줄-요약-핵심" class="headerlink" title="3줄 요약 핵심"></a>3줄 요약 핵심</h1><ol>
+<li><strong>책임, 역할, 협력</strong>을 항상 생각하자</li>
+<li><strong>메세지가 책임을 결정</strong>한다.(설계의 시작점 = 메세지)</li>
+<li>클래스가 아니라 <strong>행위, 속성</strong>에 대해 생각해보고, <strong>타입(=개념)으로 분류하여, 설계하자</strong></li>
+</ol>
+<h1 id="객체-지향이란"><a href="#객체-지향이란" class="headerlink" title="객체 지향이란?"></a>객체 지향이란?</h1><ol>
 <li>클래스가 아니라 객체를 바라보는 것</li>
 <li>객체를 독립적인 존재가 아니라 기능을 구현하기 위해 협력하는 공동체의 존재</li>
 <li>협력에 참여하는 객체들에게 얼마나 적절한 역할과 책임을 부여</li>
@@ -434,17 +439,14 @@ height:50vh;
 <li>함께 모으기</li>
 </ol>
 <h1 id="협력하는-객체들의-공동체"><a href="#협력하는-객체들의-공동체" class="headerlink" title="협력하는 객체들의 공동체"></a>협력하는 객체들의 공동체</h1><h2 id="협력하는-객체들의-공동체-1"><a href="#협력하는-객체들의-공동체-1" class="headerlink" title="협력하는 객체들의 공동체"></a>협력하는 객체들의 공동체</h2><ul>
-<li>객체지향의 목표는 실무적으론 실세계를 모방하는 것이 아니다. 창조하는것이다.</li>
-<li>하지만, 객체지향 설계의 핵심 사상인 연결완전성을 설명하기엔 실세계가 적합하다. == 객체의 상호작용 중요성 강조</li>
-<li>커피를 주문하고 제조하는 과정은 역할, 책임, 협력 이라는 사람들이 일상 속에 항상 존재한다.</li>
-<li>손님, 캐시어, 바리스타의 협력, 역할, 책임 을 생각해보자</li>
-<li>객체지향에서의 가장 중요한 3가지 요소<ul>
-<li>역할: 협력하는 과정 속에 특정한 역할이 존재한다. 책임이나 의무를 의미한다.</li>
-<li>책임: 역할에 포함되고, 특정 역할이 정해지면, 특정 책임이 있다.</li>
-<li>협력: 요청과 응답을 통해 협력한다.</li>
-</ul>
+<li><p>역할: 협력하는 과정 속에 특정한 역할이 존재한다. 책임이나 의무를 의미한다.</p>
 </li>
-<li>요청을 통해 도움을 요청하고 →받은 객체는 책임다하여 서비스를 응답한다. 제공한다.</li>
+<li><p>책임: 역할에 포함되고, 특정 역할이 정해지면, 특정 책임이 있다.</p>
+</li>
+<li><p>협력: 요청과 응답을 통해 협력한다.</p>
+</li>
+<li><p>다른 객체에 요청을 통해 도움을 요청하고 → 받은 객체는 책임을 다해 응답한다!</p>
+</li>
 </ul>
 <h3 id="특정-역할과-적합한-책임에-특징에-관하여"><a href="#특정-역할과-적합한-책임에-특징에-관하여" class="headerlink" title="특정 역할과 적합한 책임에 특징에 관하여"></a>특정 역할과 적합한 책임에 특징에 관하여</h3><ul>
 <li><p>여러 사람이 동일한 역할을 수행할수있다. 손님입장에서 아무 캐시어든 상관없는것처럼(대체가능)</p>
@@ -673,7 +675,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#큰-목차"><span class="toc-number">2.</span> <span class="toc-text">큰 목차</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#협력하는-객체들의-공동체"><span class="toc-number">3.</span> <span class="toc-text">협력하는 객체들의 공동체</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#협력하는-객체들의-공동체-1"><span class="toc-number">3.1.</span> <span class="toc-text">협력하는 객체들의 공동체</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#특정-역할과-적합한-책임에-특징에-관하여"><span class="toc-number">3.1.1.</span> <span class="toc-text">특정 역할과 적합한 책임에 특징에 관하여</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#그래서-객체-지향의-본질은"><span class="toc-number">3.2.</span> <span class="toc-text">그래서 객체 지향의 본질은?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#객체를-지향하라"><span class="toc-number">3.3.</span> <span class="toc-text">객체를 지향하라</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이상한-나라의-객체"><span class="toc-number">4.</span> <span class="toc-text">이상한 나라의 객체</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#참조"><span class="toc-number">1.</span> <span class="toc-text">참조</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">2.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3줄-요약-핵심"><span class="toc-number">3.</span> <span class="toc-text">3줄 요약 핵심</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#객체-지향이란"><span class="toc-number">4.</span> <span class="toc-text">객체 지향이란?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#큰-목차"><span class="toc-number">5.</span> <span class="toc-text">큰 목차</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#협력하는-객체들의-공동체"><span class="toc-number">6.</span> <span class="toc-text">협력하는 객체들의 공동체</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#협력하는-객체들의-공동체-1"><span class="toc-number">6.1.</span> <span class="toc-text">협력하는 객체들의 공동체</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#특정-역할과-적합한-책임에-특징에-관하여"><span class="toc-number">6.1.1.</span> <span class="toc-text">특정 역할과 적합한 책임에 특징에 관하여</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#그래서-객체-지향의-본질은"><span class="toc-number">6.2.</span> <span class="toc-text">그래서 객체 지향의 본질은?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#객체를-지향하라"><span class="toc-number">6.3.</span> <span class="toc-text">객체를 지향하라</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이상한-나라의-객체"><span class="toc-number">7.</span> <span class="toc-text">이상한 나라의 객체</span></a></li></ol>
         <br/>
         <br/>
         <br/>
