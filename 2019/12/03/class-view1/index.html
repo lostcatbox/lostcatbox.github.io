@@ -1,0 +1,6030 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>클래스뷰 정확히 쓰기 1 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">클래스뷰 정확히 쓰기 1</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            클래스뷰 정확히 쓰기 1
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Django">Django</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "ClassView">ClassView</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">3k</span>Reading time: <span class="post-count reading-time">18 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/12/03</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="overview"><a href="#overview" class="headerlink" title="overview"></a>overview</h1><h2 id="View"><a href="#View" class="headerlink" title="View?"></a>View?</h2><ul>
+<li><p>뷰의 정체는 호출가능한 객체 (Callable Object) </p>
+<p>첫번째 인자로 HttpRequest 인스턴스를 받고, </p>
+<p>리턴값으로 HttpResponse 인스턴스를 리턴해야하는 의무</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># myapp&#x2F;views.py</span><br><span class="line">def about(request):  #여기 request가 HttpRequest인스턴스</span><br><span class="line">     return HttpResponse(&#39;안녕하세요. AskDjango입니다.&#39;) #여기가 httpResponse인스턴스</span><br><span class="line"># myapp&#x2F;urls.py</span><br><span class="line">from . import views</span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line">     url(r&#39;^about&#x2F;$&#39;, views.about, name&#x3D;&#39;about&#39;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="함수기반뷰-or-클래스-기반뷰"><a href="#함수기반뷰-or-클래스-기반뷰" class="headerlink" title="함수기반뷰 or 클래스 기반뷰"></a>함수기반뷰 or 클래스 기반뷰</h3><ul>
+<li>함수 기빈뷰 - 함수로 구현한 뷰</li>
+<li>클래슥 기반 뷰-클래스로 함수를 구현한 뷰</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 함수 기반 뷰</span><br><span class="line">def about(request):</span><br><span class="line">     return HttpResponse(&#39;안녕하세요. AskDjango입니다.&#39;)</span><br><span class="line">     </span><br><span class="line"># 클래스 기반 뷰</span><br><span class="line">class AboutView(object):</span><br><span class="line">   @classmethod</span><br><span class="line">   def as_view(cls, message):</span><br><span class="line">       def view_fn(request):</span><br><span class="line">           return HttpResponse(message)</span><br><span class="line">       return view_fn</span><br><span class="line">       </span><br><span class="line"># 클래스 기반 뷰를 통해 만들어낸 함수</span><br><span class="line"># about객체는 현재 view_fn함수가 만들어짐.</span><br><span class="line">about &#x3D; AboutView.as_view(&#39;안녕하세요. AskDjango입니다.&#39;) </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">지금 쓴 클래스뷰는 위에 함수기반뷰와 동일한 실행</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="참고-클래스의-3가지-함수-형식"><a href="#참고-클래스의-3가지-함수-형식" class="headerlink" title="참고) 클래스의 3가지 함수 형식"></a>참고) 클래스의 3가지 함수 형식</h3><ul>
+<li><p>instance method : instance를 통한 호출. 첫번째 인자로 instance가 자동 지정 (self에 대입) </p>
+</li>
+<li><p>class method : class를 통한 호출. 첫번째 인자로 Class가 자동 지정 (cls에 대입)</p>
+</li>
+<li><p>static method : class를 통한 호출. 자동으로 지정되는 인자가 없음. 활용은 class method와 동일</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class Person(object):</span><br><span class="line"> 		def __init__(self, name, country):</span><br><span class="line">			  self.name &#x3D; name</span><br><span class="line">			  self.country &#x3D; country</span><br><span class="line"> </span><br><span class="line"> 		def say_hello(self):</span><br><span class="line"> 				return &#39;안녕. 나는 &#123;&#125;이야. &#123;&#125;에서 왔어&#39;.format(self.name, self.country)</span><br><span class="line"> </span><br><span class="line">    @staticmethod</span><br><span class="line">    def new_korean1(name):</span><br><span class="line">        return Person(name, &#39;Korea&#39;)</span><br><span class="line"> </span><br><span class="line">    @classmethod</span><br><span class="line">    def new_korean2(cls, name):</span><br><span class="line">        return cls(name, &#39;Korea&#39;)</span><br></pre></td></tr></table></figure>
+
+<p>출력</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; tom &#x3D; Person(&#39;Tom&#39;, &#39;SF&#39;)</span><br><span class="line">&gt;&gt;&gt; tom.say_hello()</span><br><span class="line">&#39;안녕. 나는 Tom이야. SF에서 왔어&#39;</span><br><span class="line">&gt;&gt;&gt; steve &#x3D; Person.new_korean1(&#39;Steve&#39;)</span><br><span class="line">&gt;&gt;&gt; steve.say_hello()</span><br><span class="line">&#39;안녕. 나는 Steve이야. Korea에서 왔어&#39;</span><br><span class="line">&gt;&gt;&gt; lee &#x3D; Person.new_korean2(&#39;Lee&#39;)</span><br><span class="line">&gt;&gt;&gt; lee.say_hello()</span><br><span class="line">&#39;안녕. 나는 Lee이야. Korea에서 왔어&#39;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="ClassBasedView-CBV"><a href="#ClassBasedView-CBV" class="headerlink" title="ClassBasedView(CBV)"></a>ClassBasedView(CBV)</h2><ul>
+<li>CBV의 정체는 FBV를 만들어주는 클래스<ul>
+<li>as_view 클래스함수를 통해 뷰 함수를 생성</li>
+</ul>
+</li>
+<li>장고 기본 CBV 팩키지 위치 : django.views.generic<ul>
+<li>CBV는 범용적 (generic) 으로 쓸 뷰</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-FBV코드"><a href="#1-FBV코드" class="headerlink" title="1) FBV코드"></a>1) FBV코드</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">포맷이 같은 유형</span><br><span class="line"></span><br><span class="line"># myapp&#x2F;views_fbv.py</span><br><span class="line">from django.shortcuts import get_object_or_404, render</span><br><span class="line"></span><br><span class="line"># 특정 id의 post detail 뷰 함수</span><br><span class="line">def post_detail(request, id):</span><br><span class="line">     post &#x3D; get_object_or_404(Post, id&#x3D;id)</span><br><span class="line">     return render(request, &#39;blog&#x2F;post_detail.html&#39;, &#123;</span><br><span class="line">         &#39;post&#39;: post,</span><br><span class="line">     &#125;)</span><br><span class="line">     </span><br><span class="line"># 특정 id의 article detail 뷰 함수</span><br><span class="line">def article_detail(request, id):</span><br><span class="line">     article &#x3D; get_object_or_404(Article, id&#x3D;id)</span><br><span class="line">     return render(request, &#39;blog&#x2F;article_detail.html&#39;, &#123;</span><br><span class="line">         &#39;article&#39;: article,</span><br><span class="line">     &#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-동일한-동작을-하는-CBV를-직접-컨셉만-구현"><a href="#2-동일한-동작을-하는-CBV를-직접-컨셉만-구현" class="headerlink" title="2) 동일한 동작을 하는 CBV를 직접 컨셉만 구현"></a>2) 동일한 동작을 하는 CBV를 직접 컨셉만 구현</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># myapp&#x2F;views_cbv.py</span><br><span class="line">class DetailView(object):</span><br><span class="line">     &#39;이전 FBV를 CBV버전으로 컨셉만 간단히 구현. 같은 동작을 수행&#39;</span><br><span class="line">     @classmethod</span><br><span class="line">     def as_view(cls, model):</span><br><span class="line">         def view_fn(request, id):</span><br><span class="line">             instance &#x3D; get_object_or_404(model, id&#x3D;id)</span><br><span class="line">             instance_name &#x3D; model._meta.model_name</span><br><span class="line">             template_name &#x3D; &#39;&#123;&#125;&#x2F;&#123;&#125;_detail.html&#39;.format(model._meta.app_label, instance_name)</span><br><span class="line">             return render(request, template_name, &#123;</span><br><span class="line">                 instance_name: instance,</span><br><span class="line">             &#125;)</span><br><span class="line">         return view_fn</span><br><span class="line">         </span><br><span class="line">post_detail &#x3D; DetailView.as_view(Post)</span><br><span class="line">article_detail &#x3D; DetailView.as_view(Article)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-장고-기본제공-CBV-쓰기"><a href="#3-장고-기본제공-CBV-쓰기" class="headerlink" title="3) 장고 기본제공 CBV 쓰기"></a>3) 장고 기본제공 CBV 쓰기</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># myapp&#x2F;views_cbv2.py</span><br><span class="line">from django.views.generic import DetailView</span><br><span class="line">post_detail &#x3D; DetailView.as_view(Post)</span><br><span class="line">article_detail &#x3D; DetailView.as_view(Article)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="샘플-urls-py"><a href="#샘플-urls-py" class="headerlink" title="샘플 urls.py"></a>샘플 urls.py</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"># myapp&#x2F;urls.py</span><br><span class="line">from django.views.generic import DetailView</span><br><span class="line">from .models import Post, Article</span><br><span class="line">from . import views_fbv</span><br><span class="line">from . import views_cbv</span><br><span class="line">from . import views_cbv2</span><br><span class="line"></span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line">     # views_fbv</span><br><span class="line">     url(r&#39;^posts&#x2F;fbv&#x2F;(?P&lt;id&gt;\d+)&#x2F;$&#39;, views_fbv.post_detail),</span><br><span class="line">     url(r&#39;^articles&#x2F;fbv&#x2F;(?P&lt;id&gt;\d+)&#x2F;$&#39;, views_fbv.article_detail),</span><br><span class="line"></span><br><span class="line">     # views_cbv</span><br><span class="line">     url(r&#39;^posts&#x2F;cbv&#x2F;(?P&lt;id&gt;\d+)&#x2F;$&#39;, views_cbv.post_detail),</span><br><span class="line">     url(r&#39;^posts&#x2F;cbv&#x2F;(?P&lt;id&gt;\d+)&#x2F;$&#39;, views_cbv.DetailView.as_view(Post)),</span><br><span class="line">     url(r&#39;^articles&#x2F;cbv&#x2F;(?P&lt;id&gt;\d+)&#x2F;$&#39;, views_cbv.article_detail),</span><br><span class="line">     url(r&#39;^articles&#x2F;cbv&#x2F;(?P&lt;id&gt;\d+)&#x2F;$&#39;, views_cbv.DetailView.as_view(Article)),</span><br><span class="line"></span><br><span class="line">     # views_cbv2</span><br><span class="line">     url(r&#39;^posts&#x2F;cbv2&#x2F;(?P&lt;id&gt;\d+)&#x2F;$&#39;, views_cbv2.post_detail),</span><br><span class="line">     url(r&#39;^posts&#x2F;cbv2&#x2F;(?P&lt;id&gt;\d+)&#x2F;$&#39;, DetailView.as_view(Post)), # views_cbv2 뷰 참조없음</span><br><span class="line">     url(r&#39;^articles&#x2F;cbv2&#x2F;(?P&lt;id&gt;\d+)&#x2F;$&#39;, views_cbv2.article_detail),</span><br><span class="line">     url(r&#39;^articles&#x2F;cbv2&#x2F;(?P&lt;id&gt;\d+)&#x2F;$&#39;, DetailView.as_view(Article)), # views_cbv2 뷰 참조없음</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="CBV는-구현은-복잡해도-가져다-쓸-때는-SO-SIMPLE"><a href="#CBV는-구현은-복잡해도-가져다-쓸-때는-SO-SIMPLE" class="headerlink" title="CBV는 구현은 복잡해도, 가져다 쓸 때는 SO SIMPLE !!!"></a>CBV는 구현은 복잡해도, 가져다 쓸 때는 SO SIMPLE !!!</h3><ul>
+<li><p>그렇다고해서 CBV를 통한 뷰코드가 모두 심플해지는 것은 아님. </p>
+</li>
+<li><p>이미 CBV에서 정해둔 시나리오를 따를 때에만 SIMPLE </p>
+<ul>
+<li><p>재사용성은 높아지지만, </p>
+</li>
+<li><p>정해진 시나리오를 벗어날 때에는 복잡해질 여지가 많습니다.</p>
+</li>
+</ul>
+</li>
+<li><p>CBV 만능주의 금물. FBV와 적절히 섞어쓰세요. CBV틀을 벗어나는 구현은 FBV가 훨씬 간단 </p>
+<ul>
+<li>함수로 구현하는 것이 재사용성은 낮지만, 로직 구현 복잡도가 낮아집니다.</li>
+</ul>
+</li>
+<li><p>FBV먼저하고 나중에 cbv로 바꾸자</p>
+</li>
+</ul>
+<h2 id="CBV는-코드-재사용성을-높이기-위한-목적"><a href="#CBV는-코드-재사용성을-높이기-위한-목적" class="headerlink" title="CBV는 코드 재사용성을 높이기 위한 목적"></a>CBV는 코드 재사용성을 높이기 위한 목적</h2><p>중복을 제거하고, 코드 재사용성을 높이기 위함</p>
+<ul>
+<li>하나의 뷰를 구현할 때,<ul>
+<li>함수 : 하나의 로직 만을 담을 수 있다. 특정 로직 만을 변경할 수 없 다. 상속 개념이 없으므로, 유사한 뷰가 있을 경우 함수 전체를 그대 로 복사하여 활용해야함. </li>
+<li>클래스 : 뷰를 다수의 함수로 구성할 경우, 특정 함수만 재정의하여 로직을 변경하기 용이하다.</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>관련 공식문서</p>
+<p>• Class-based views </p>
+<p>• Form handling with class-based views </p>
+<p>• Using mixins with class-based views </p>
+<p>• Built-in class-based views API </p>
+<p>• Class-based generic views - flattened index</p>
+</blockquote>
+<h1 id="상속을-통해-특정-루틴-재정의-Overriding"><a href="#상속을-통해-특정-루틴-재정의-Overriding" class="headerlink" title="상속을 통해 특정 루틴 재정의 (Overriding)"></a>상속을 통해 특정 루틴 재정의 (Overriding)</h1><h2 id="파이썬에서의-Overriding"><a href="#파이썬에서의-Overriding" class="headerlink" title="파이썬에서의 Overriding"></a>파이썬에서의 Overriding</h2><ul>
+<li>상위 클래스가 가지고 있는 함수를 하위 클래스가 재정의</li>
+<li>파이썬은 Overloading(함수명은 같으나, 인자의 자료형이나 수가 다른 함수의 선언을 허용하는 것)은 미지원</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class Circle(object):</span><br><span class="line">     def __init__(self, radius):</span><br><span class="line">         self.radius &#x3D; radius</span><br><span class="line">     def get_area(self):</span><br><span class="line">         return self.radius ** 2</span><br><span class="line">     def __str__(self):</span><br><span class="line">         return &#39;radius &#x3D; &#123;&#125;, area &#x3D; &#123;&#125;&#39;.format(self.radius, self.get_area())</span><br><span class="line">         </span><br><span class="line">class Sphere(Circle):</span><br><span class="line">		 def get_area(self): # get_area() 함수만 재정의</span><br><span class="line">				 return self.radius ** 3</span><br><span class="line">				 </span><br><span class="line">print(Circle(3)) # radius &#x3D; 3, area &#x3D; 9</span><br><span class="line">print(Sphere(3)) # radius &#x3D; 3, area &#x3D; 27</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="CBV에-Overriding-활용"><a href="#CBV에-Overriding-활용" class="headerlink" title="CBV에 Overriding 활용"></a>CBV에 Overriding 활용</h2><p>Overriding 대상 : 클래스 변수, 클래스 함수, 인스턴스 함수</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from django.http import HttpResponse</span><br><span class="line">from django.views import View</span><br><span class="line"></span><br><span class="line">class GreetingView(View):</span><br><span class="line">     message &#x3D; &#39;Good Day&#39; # Class Variable(클래스 변수)</span><br><span class="line">     </span><br><span class="line">     def get(self, *args, **kwargs):  #맴버함수</span><br><span class="line">         return HttpResponse(self.message)  #self.message를 하면 인스턴스에 message있나 찾고 없으면 클래스 변수에서 찾음</span><br><span class="line">         </span><br><span class="line">greeting &#x3D; GreetingView.as_view()  #이게 views.greeting을 호출시 실행됨</span><br><span class="line"></span><br><span class="line">class MorningGreetingView(GreetingView):</span><br><span class="line">			 message &#x3D; &#39;Morning to ya&#39; # Class Variable 재정의</span><br><span class="line">			 </span><br><span class="line">morning_greeting &#x3D; MorningGreetingView.as_view()</span><br><span class="line"></span><br><span class="line">evening_greeting &#x3D; GreetingView.as_view(message&#x3D;&#39;Evening to ya&#39;) #as_view 인스턴스 변수가 클래스 변수보다 우선순위 높으므로 evening to ya 로 출력됨</span><br></pre></td></tr></table></figure>
+
+<h3 id="view-fn-CBV-as-view-init-kwargs-의-동작방식"><a href="#view-fn-CBV-as-view-init-kwargs-의-동작방식" class="headerlink" title="view_fn = CBV.as_view(**init_kwargs) 의 동작방식"></a>view_fn = CBV.as_view(**init_kwargs) 의 동작방식</h3><p>아래 코드는 주요루틴만 간략히 기술했습니다.(즉 view_fn함수= view(request, <em>args, *</em>kwargs)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 1)2)3) 순서로 잘보기</span><br><span class="line"></span><br><span class="line">class View(object):</span><br><span class="line">   def __init__(self, **kwargs):</span><br><span class="line">     for key, value in kwargs.items(): # 3) 인스턴스 변수 세팅</span><br><span class="line">       setattr(self, key, value) # &#x3D;&gt; 이는 클래스 변수값 변경이 아닙니다.</span><br><span class="line">       </span><br><span class="line"> @classmethod</span><br><span class="line"> def as_view(cls, **initkwargs): # 1) as_view 클래스함수의 인자로 주어진 keyword arguments는</span><br><span class="line">     def view(request, *args, **kwargs):</span><br><span class="line">         self &#x3D; cls(**initkwargs) # 2) 내부적으로 CBV클래스 생성자의 인자로 넘겨지다!</span><br><span class="line">         return self.dispatch(request, *args, **kwargs) #dispatch함수아직세팅안함</span><br><span class="line">     return view</span><br></pre></td></tr></table></figure>
+
+<h4 id="함수로-재구현-스타일1"><a href="#함수로-재구현-스타일1" class="headerlink" title="함수로 재구현(스타일1)"></a>함수로 재구현(스타일1)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">def greeting(request, message&#x3D;&#39;Good Day&#39;):</span><br><span class="line">	 return HttpResponse(message)</span><br><span class="line">	 </span><br><span class="line">def morning_greeting(request):</span><br><span class="line">	 return greeting(request, &#39;Morning to ya&#39;)</span><br><span class="line">	 </span><br><span class="line">def evening_greeting(request):</span><br><span class="line">	 return greeting(request, &#39;Evening to ya&#39;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="함수로-재구현-스타일2"><a href="#함수로-재구현-스타일2" class="headerlink" title="함수로 재구현 (스타일2)"></a>함수로 재구현 (스타일2)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">def greeting_view(message):</span><br><span class="line">    def view_fn(request):</span><br><span class="line">        return HttpResponse(message)</span><br><span class="line">    return view_fn</span><br><span class="line"></span><br><span class="line">greeting &#x3D; greeting_view(&#39;Good Day&#39;)</span><br><span class="line">morning_greeting &#x3D; greeting_view(&#39;Morning to ya&#39;)</span><br><span class="line">evening_greeting &#x3D; greeting_view(&#39;Evenign to ya&#39;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="복잡한-뷰를-여러-함수에-나눠-구현하고-재사용할-때-필요한-루틴만-재정의하기"><a href="#복잡한-뷰를-여러-함수에-나눠-구현하고-재사용할-때-필요한-루틴만-재정의하기" class="headerlink" title="복잡한 뷰를 여러 함수에 나눠 구현하고, 재사용할 때 필요한 루틴만 재정의하기"></a>복잡한 뷰를 여러 함수에 나눠 구현하고, 재사용할 때 필요한 루틴만 재정의하기</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">def post_edit(request, id):</span><br><span class="line">   instance &#x3D;  get_object_or_404(Post, id&#x3D;id) # Case 1) 인스턴스 획득 조건을 커스텀</span><br><span class="line">   </span><br><span class="line">   if request.method &#x3D;&#x3D; &#39;POST&#39;:</span><br><span class="line">  		 form &#x3D; PostForm(request.POST, request.FILES, instance&#x3D;instance)</span><br><span class="line">  		 if form.is_valid():</span><br><span class="line">  				 post &#x3D; form.save()</span><br><span class="line">  				 return redirect(&#39;&#x2F;success_url&#x2F;&#39;) # Case 2) 이동할 URL 변경</span><br><span class="line">	 else:</span><br><span class="line">		 form &#x3D; PostForm()</span><br><span class="line">	 return render(request, &#39;myapp&#x2F;post_form.html&#39;, &#123;&#39;form&#39;: form&#125;) # Case 3) 추가 파라미터 지정</span><br><span class="line"> </span><br><span class="line">def article_edit(request, id):</span><br><span class="line">   # 위 post_edit 뷰와 비슷한 루틴인데, 중복을 최소화하고 재사용성을 어떻게 높일 수 있을까요?</span><br><span class="line">     raise NotImplementedError</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="재사용이-가능토록-CBV패턴으로-재구현"><a href="#재사용이-가능토록-CBV패턴으로-재구현" class="headerlink" title="재사용이 가능토록, CBV패턴으로 재구현"></a>재사용이 가능토록, CBV패턴으로 재구현</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">from django.views import View</span><br><span class="line"></span><br><span class="line">class EditFormView(View):</span><br><span class="line">   model &#x3D; None</span><br><span class="line">   form_class &#x3D; None</span><br><span class="line">   success_url &#x3D; None</span><br><span class="line">   template_name &#x3D; None</span><br><span class="line">   </span><br><span class="line">   def get_object(self):</span><br><span class="line">       pk &#x3D; self.kwargs[&#39;pk&#39;]</span><br><span class="line">       return get_object_or_404(self.model, id&#x3D;pk)</span><br><span class="line"></span><br><span class="line">   def get_success_url(self):</span><br><span class="line">   		return self.success_url #없다면 클래스 변수를 가져옴</span><br><span class="line">   		</span><br><span class="line">   def get_template_name(self):</span><br><span class="line">   		return self.template_name  #없다면 클래스 변수를 가져옴</span><br><span class="line">   		</span><br><span class="line"> 	 def get_form(self):</span><br><span class="line">       form_kwargs &#x3D; &#123;</span><br><span class="line">       &#39;instance&#39;: self.get_object(),</span><br><span class="line">       &#125;</span><br><span class="line">       if self.request.method &#x3D;&#x3D; &#39;POST&#39;:</span><br><span class="line">           form_kwargs.update(&#123;</span><br><span class="line">               &#39;data&#39;: self.request.POST,</span><br><span class="line">               &#39;files&#39;: self.request.FILES,</span><br><span class="line">       &#125;)</span><br><span class="line"> 	    	return self.form_class(**form_kwargs) #form_class까지!!</span><br><span class="line"> 		</span><br><span class="line">    def get_context_data(self, **kwargs):  #폼에넘길 인자들 사전현태로 만들기</span><br><span class="line">        if &#39;form&#39; not in kwargs:</span><br><span class="line">            kwargs[&#39;form&#39;] &#x3D; self.get_form()</span><br><span class="line">        return kwargs</span><br><span class="line"> </span><br><span class="line">    def get(self, *args, **kwargs):  #get요청일때 실행되는 함수</span><br><span class="line">			   return render(self.request, self.get_template_name(), self.get_context_data())</span><br><span class="line"> </span><br><span class="line">    def post(self, *args, **kwargs): #post요청일떄 실행되는 함수</span><br><span class="line">        form &#x3D; self.get_form()</span><br><span class="line">         if form.is_valid():</span><br><span class="line">             form.save()</span><br><span class="line">             return redirect(self.get_success_url())</span><br><span class="line">         return render(self.request, self.get_template_name(), self.get_context_data(form&#x3D;form))</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="활용-1-클래스-변수값만-재정의"><a href="#활용-1-클래스-변수값만-재정의" class="headerlink" title="활용 1) 클래스 변수값만 재정의"></a>활용 1) 클래스 변수값만 재정의</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">post_edit &#x3D; EditFormView.as_view(</span><br><span class="line">     model&#x3D;Post,</span><br><span class="line">     form_class&#x3D;PostForm,</span><br><span class="line">     success_url&#x3D;&#39;&#x2F;weblog&#x2F;&#39;,</span><br><span class="line">     template_name&#x3D;&#39;blog&#x2F;post_form.html&#39;)  #인자로 들어갈때는 self.이 앞에 붙나보네</span><br></pre></td></tr></table></figure>
+
+<p>혹은</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class PostEditFormView(EditFormView):</span><br><span class="line">       model &#x3D; Post</span><br><span class="line">       success_url &#x3D; &#39;&#x2F;weblog&#x2F;&#39;</span><br><span class="line">       template_name &#x3D; &#39;blog&#x2F;post_form.html&#39;</span><br><span class="line">post_edit &#x3D; PostEditFormView.as_view()</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="각-인스턴스-함수들을-재정의"><a href="#각-인스턴스-함수들을-재정의" class="headerlink" title="각 인스턴스 함수들을 재정의"></a>각 인스턴스 함수들을 재정의</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from django.shortcuts import resolve_url</span><br><span class="line"></span><br><span class="line">class PostEditFormView(EditFormView):</span><br><span class="line">     model &#x3D; Post</span><br><span class="line">     template_name&#x3D;&#39;blog&#x2F;post_form.html&#39;</span><br><span class="line">     </span><br><span class="line">     def get_object(self):</span><br><span class="line">         pk &#x3D; self.kwargs[&#39;pk&#39;]</span><br><span class="line">         return get_object_or_404(self.model, id&#x3D;pk, created_at__year&#x3D;2017) # 2017년 포스팅 중에서  #field에 publish이나 유저가 슈펴만도가능</span><br><span class="line">     def get_context_data(self, **kwargs):</span><br><span class="line">         context &#x3D; super().get_context_data(**kwargs)</span><br><span class="line">         context[&#39;dummy_params&#39;] &#x3D; &#39;더미 인자&#39;   #추가로하여 템플릿에서 값가져오기가능</span><br><span class="line">         return context</span><br><span class="line">         </span><br><span class="line">     def get_success_url(self):</span><br><span class="line">         return resolve_url(&#39;blog:post_detail&#39;, self.kwargs[&#39;pk&#39;]) #함수구현을 통해서 매 다른 경로로 이동가능</span><br><span class="line">         </span><br><span class="line">post_edit &#x3D; PostEditFormView.as_view()</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="정리"><a href="#정리" class="headerlink" title="정리"></a>정리</h2><ul>
+<li><p>각 CBV 동작은 소스코드를 직접 살펴보고 이해해야 합니다. </p>
+<p>문서로는 설명하는 데에 한계가 있어요. </p>
+</li>
+<li><p>파이썬에서 멤버함수 호출순서는 MRO 순서를 따릅니다. </p>
+<p>파이썬 차근차근 시작하기 &lt;클래스 상속과 MRO&gt; 에피소드 참고</p>
+</li>
+</ul>
+<h1 id="HTTP-메소드별-처리"><a href="#HTTP-메소드별-처리" class="headerlink" title="HTTP 메소드별 처리"></a>HTTP 메소드별 처리</h1><h2 id="다양한-HTTP-메소드"><a href="#다양한-HTTP-메소드" class="headerlink" title="다양한 HTTP 메소드"></a>다양한 HTTP 메소드</h2><ul>
+<li>GET #spec : 요청 URI의 정보 </li>
+<li>POST #spec : 요청 URI에 새로운 정보 보냄</li>
+<li>PUT #spec : 요청 URI에 갱신할 정보 보냄 (전체를 교체) </li>
+<li>PATCH #spec : 요청 URI에 갱신할 정보 보냄 (일부를 교체) </li>
+<li>DELETE #spec : 요청 URI의 리소스를 삭제 </li>
+<li>HEAD #spec : GET요청에서 body는 제외하고 헤더만 응답  &gt;get요청 할지말지 판단빠르게가능</li>
+<li>OPTIONS #spec : 요청 URI에서 사용할 수 있는 Method를 응답 </li>
+<li>TRACE #spec : 보낸 메시지를 다시 돌려보낸다.</li>
+</ul>
+<h2 id="HTTP-메소드별-인스턴스함수-지원"><a href="#HTTP-메소드별-인스턴스함수-지원" class="headerlink" title="HTTP 메소드별 인스턴스함수 지원"></a>HTTP 메소드별 인스턴스함수 지원</h2><p>하나의 뷰 (즉 하나의 URL) 에서 다양한 HTTP 메소드를 지원해야할 때</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class View(object):</span><br><span class="line">     http_method_names &#x3D; [&#39;get&#39;, &#39;post&#39;, &#39;put&#39;, &#39;patch&#39;, &#39;delete&#39;, &#39;head&#39;, &#39;options&#39;, &#39;trace&#39;]</span><br><span class="line">     </span><br><span class="line">     # 중략</span><br><span class="line">     </span><br><span class="line">     def dispatch(self, request, *args, **kwargs): #모든 http메소드에 다쓰임 </span><br><span class="line">         &#39;&#39;&#39;</span><br><span class="line">         본 함수를 통해 각 인스턴스 함수로의 분기를 처리</span><br><span class="line">         CBV에서는 모든 HTTP 요청은 dispatch 인스턴스 함수를 통해 처리됩니다.</span><br><span class="line">         &#39;&#39;&#39;</span><br><span class="line">         if request.method.lower() in self.http_method_names:</span><br><span class="line">        		 handler &#x3D; getattr(self, request.method.lower(), self.http_method_not_allowed) #self이므로 현재요청에대해, get, post에 맞는 인스턴스함수들(요소들 attribute)을 획득시도, 없다면 3번째 인자 return 해라</span><br><span class="line">         else:</span><br><span class="line">        		 handler &#x3D; self.http_method_not_allowed</span><br><span class="line">         return handler(requset, *args, **kwargs)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Example-ListView에서-head1-요청을-처리할-경우"><a href="#Example-ListView에서-head1-요청을-처리할-경우" class="headerlink" title="Example) ListView에서 head1 요청을 처리할 경우"></a>Example) ListView에서 head1 요청을 처리할 경우</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">ipython에서 head만 받고싶은 경우 requests.head(&#39;http:&#x2F;&#x2F;~~&#39;).headers</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">from django.http import Http404, HttpResponse</span><br><span class="line"></span><br><span class="line">class PostListView(ListView):</span><br><span class="line">   model &#x3D; Post</span><br><span class="line">   queryset &#x3D; Post.objects.all().ordered_by(&#39;-id&#39;) #쿼리 추가 옵션</span><br><span class="line">   </span><br><span class="line">   def head(self, *args, **kwargs):</span><br><span class="line">       try:</span><br><span class="line">      		 post &#x3D; self.get_queryset().latest(&#39;created_at&#39;) #추가 옵션적용된 쿼리셋가져오는 함수가 .get_queryset()임</span><br><span class="line">       except Post.DoesNotExist:</span><br><span class="line">      		 raise Http404</span><br><span class="line">      		 </span><br><span class="line">       response &#x3D; HttpResponse()</span><br><span class="line">       # RFC 1123 date format</span><br><span class="line">       response[&#39;Last-Modified&#39;] &#x3D; post.created_at.strftime(&#39;%a, %d %b %Y %H:%M:%S GMT&#39;) #이 형식으로 head응답에 추가해줌</span><br><span class="line">       return response</span><br><span class="line">       </span><br><span class="line">   def delete(self, *args, **kwargs):</span><br><span class="line">   		raise NotImplementedError</span><br><span class="line">   </span><br><span class="line">post_list &#x3D; PostListView.as_view()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">즉 http 메서드에 따라서 이렇게 추가가능</span><br></pre></td></tr></table></figure>
+
+<h3 id="FBV-스타일로-구현"><a href="#FBV-스타일로-구현" class="headerlink" title="FBV 스타일로 구현"></a>FBV 스타일로 구현</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">def post_list(request):</span><br><span class="line">     if request.method &#x3D;&#x3D; &#39;HEAD&#39;:</span><br><span class="line">         try:</span><br><span class="line">         		post &#x3D; Post.objects.all().latest(&#39;created_at&#39;)</span><br><span class="line">         except Post.DoesNotExist:</span><br><span class="line">         		raise Http404</span><br><span class="line">         		</span><br><span class="line">         response &#x3D; HttpResponse()</span><br><span class="line">         # RFC 1123 date format</span><br><span class="line">         response[&#39;Last-Modified&#39;] &#x3D; post.created_at.strftime(&#39;%a, %d %b %Y %H:%M:%S GMT&#39;)</span><br><span class="line">         return response</span><br><span class="line">         </span><br><span class="line">      elif request.method &#x3D;&#x3D; &#39;DELETE&#39;:</span><br><span class="line">     		 raise NotImplementedError</span><br><span class="line">     		</span><br><span class="line">     return render(request, &#39;myapp&#x2F;post_list.html&#39;, &#123;</span><br><span class="line">     		&#39;post_list&#39;: Post.objects.all(),</span><br><span class="line">     &#125;)</span><br></pre></td></tr></table></figure>
+
+<h1 id="CBV에-장식자-입히기"><a href="#CBV에-장식자-입히기" class="headerlink" title="CBV에 장식자 입히기"></a>CBV에 장식자 입히기</h1><h2 id="장식자-Decorators"><a href="#장식자-Decorators" class="headerlink" title="장식자(Decorators)"></a>장식자(Decorators)</h2><ul>
+<li>어떤 함수를 감싸는 (Wrapping) 목적의 함수</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">def base_10(fn):  #장식자 정의</span><br><span class="line">     def wrap(x, y):</span><br><span class="line">         return x + y + 10</span><br><span class="line">     return wrap</span><br><span class="line">     </span><br><span class="line">@base_10</span><br><span class="line">def mysum2(x, y):</span><br><span class="line"> return x + y</span><br><span class="line"> </span><br><span class="line"># 이는 아래 코드와 동일 #함수 감싸주는 형태!</span><br><span class="line"></span><br><span class="line">def mysum1(x, y):</span><br><span class="line"> return x + y</span><br><span class="line">mysum1 &#x3D; base_10(mysum1)</span><br></pre></td></tr></table></figure>
+
+<h3 id="FBV-뷰-함수에-장식자-적용"><a href="#FBV-뷰-함수에-장식자-적용" class="headerlink" title="FBV) 뷰 함수에 장식자 적용"></a>FBV) 뷰 함수에 장식자 적용</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from django.contrib.auth.decorators import login_required</span><br><span class="line">from django.shortcuts import render</span><br><span class="line"></span><br><span class="line">@login_required  #역할은 아래 함수실행전에 로그인되어있는지 안되어있을시 로그인페이지로보냄</span><br><span class="line">def protected_view(request):   #get, post요청 구별못해</span><br><span class="line"> 		return render(request, &#39;myapp&#x2F;secret.html&#39;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="CBV-FBV-스타일로-장식자-적"><a href="#CBV-FBV-스타일로-장식자-적" class="headerlink" title="CBV) FBV 스타일로 장식자 적"></a>CBV) FBV 스타일로 장식자 적</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from django.contrib.auth.decorators import login_required</span><br><span class="line">from django.views.generic import TempalteView</span><br><span class="line"></span><br><span class="line">class SecretView(TemplateView):</span><br><span class="line">		 template_name &#x3D; &#39;myapp&#x2F;secret.html&#39;</span><br><span class="line"> </span><br><span class="line">view_fn &#x3D; SecretView.as_view()</span><br><span class="line"></span><br><span class="line">secret &#x3D; login_required(view_fn) # 생성된 함수에 장식자 입히기</span><br></pre></td></tr></table></figure>
+
+<h3 id="CBV-클래스에-직접-장식자-입히기-1"><a href="#CBV-클래스에-직접-장식자-입히기-1" class="headerlink" title="CBV) 클래스에 직접 장식자 입히기 #1"></a>CBV) 클래스에 직접 장식자 입히기 #1</h3><ul>
+<li>CBV에서 모든 요청은 dispatch 함수를 통해 처리되므로, dispatch 멤버함수를 꾸며야 합니다.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from django.contrib.auth.decorators import login_required</span><br><span class="line">from django.utils.decorators import method_decorator</span><br><span class="line">from django.views.generic import TempalteView</span><br><span class="line"></span><br><span class="line">#아래코드와 FBV뷰 함수에 장식자 적용은 같은 동작을함</span><br><span class="line"></span><br><span class="line">class ProtectedView(TemplateView):</span><br><span class="line">		 template_name &#x3D; &#39;myapp&#x2F;secret.html&#39;</span><br><span class="line"> </span><br><span class="line">		 @method_decorator(login_required) # 인스턴스 함수를 꾸밀 때 #이렇게 장식해줘야함</span><br><span class="line">     def dispatch(self, *args, **kwargs):</span><br><span class="line">    		 return super().dispatch(*args, **kwargs)</span><br><span class="line">protected &#x3D; ProtectedView.as_view()</span><br></pre></td></tr></table></figure>
+
+<h3 id="CBV-클래스에-직접-장식자-입히기-2-추천"><a href="#CBV-클래스에-직접-장식자-입히기-2-추천" class="headerlink" title="CBV) 클래스에 직접 장식자 입히기 #2 (추천)"></a>CBV) 클래스에 직접 장식자 입히기 #2 (추천)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">from django.contrib.auth.decorators import login_required</span><br><span class="line">from django.utils.decorators import method_decorator</span><br><span class="line">from django.views.generic import TempalteView</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 클래스도 장식자 지원함. 클래스를 꾸밀 때, 인스턴스 함수명을 지칭</span><br><span class="line">@method_decorator(login_required, name&#x3D;&#39;dispatch&#39;) #클래스에서 원하는 함수 클래스이름만 적으면됨 </span><br><span class="line"></span><br><span class="line">class AnotherProtectedView(TemplateView):</span><br><span class="line"> 		template_name &#x3D; &#39;myapp&#x2F;secret.html&#39;</span><br><span class="line"> 		</span><br><span class="line">another_protected &#x3D; AnotherProtectedView.as_view()</span><br></pre></td></tr></table></figure>
+
+<h1 id="Mixin과-django-braces"><a href="#Mixin과-django-braces" class="headerlink" title="Mixin과 django-braces"></a>Mixin과 django-braces</h1><h2 id="Mixins을-통해-여러-CBV를-한번에-조합"><a href="#Mixins을-통해-여러-CBV를-한번에-조합" class="headerlink" title="Mixins을 통해 여러 CBV를 한번에 조합"></a>Mixins을 통해 여러 CBV를 한번에 조합</h2><ul>
+<li>Mixins은 그냥 상속이라고 생각하자</li>
+<li>CBV는 재사용성에 초점을 둔 뷰 <ul>
+<li>기존 패턴을 사용할 경우에는 CBV가 단순하지만, </li>
+<li>새로운 루틴의 뷰를 구현하실 때에는 FBV를 사용하시는 것이 구현이 더 단순해지실 경우 가 많습니다.</li>
+</ul>
+</li>
+<li>파이썬은 다중상속을 지원합니다.</li>
+<li>동일 멤버함수가 여러 CBV에 걸쳐서 구현되었을 경우, MRO (Method Resolution Order) 1 순서대로 호출됩니다. (파이썬 차근차근 시작하기 “클래스 상속과 MRO”참조)</li>
+</ul>
+<h3 id="예시-FBV"><a href="#예시-FBV" class="headerlink" title="예시(FBV)"></a>예시(FBV)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def home_page(request): # 요청이 들어왔을 때</span><br><span class="line">     # 템플릿에서 사용할 인자를 준비하고</span><br><span class="line">     context &#x3D; &#123;&#125;</span><br><span class="line">     # 템플릿 파일을 선택한 다음</span><br><span class="line">     template_name &#x3D; &#39;home.html&#39;</span><br><span class="line">     # HttpResponse응답을 생성</span><br><span class="line">     return render(request, template_name, context)</span><br></pre></td></tr></table></figure>
+
+<h3 id="예시-CBV-클래스가-다들-상속되어있다"><a href="#예시-CBV-클래스가-다들-상속되어있다" class="headerlink" title="예시(CBV) (클래스가 다들 상속되어있다)"></a>예시(CBV) (클래스가 다들 상속되어있다)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">class TemplateResponseMixin:</span><br><span class="line">     def render_to_response(self, context, **response_kwargs):</span><br><span class="line">     		&#39;HttpResponse 응답 생성&#39;</span><br><span class="line">     </span><br><span class="line">     def get_template_names(self):</span><br><span class="line">    		 &#39;사용할 템플릿 파일 이름 정하기&#39;</span><br><span class="line">     </span><br><span class="line">class ContextMixin:</span><br><span class="line">		 def get_context_data(self, **kwargs):</span><br><span class="line">				 &#39;템플릿에서 사용할 변수목록 만들기&#39;</span><br><span class="line">class View:</span><br><span class="line">    @classmethod</span><br><span class="line">    def as_view(cls, **initkwargs):</span><br><span class="line">			 &#39;뷰 함수를 생성&#39;</span><br><span class="line"> </span><br><span class="line">    def dispatch(self, request, *args, **kwargs):</span><br><span class="line"> 				&#39;Http 요청이 들어오면 호출되어, 요청을 처리&#39;</span><br><span class="line"> 				</span><br><span class="line">class TemplateView(TemplateResponseMixin, ContextMixin, View):</span><br><span class="line">		 def get(self, request, *args, **kwargs):</span><br><span class="line"> 						context &#x3D; self.get_context_data(**kwargs) # 부모 CBV의 Context 데이터를 받아와서</span><br><span class="line">			 		  return self.render_to_response(context) # HttpResponse 응답 생성</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">#FBV예시와 동일, 여기서부터 위로 분석해보기</span><br><span class="line">class HomePageView(TemplateView):</span><br><span class="line"> 		template_name &#x3D; &#39;home.html&#39; # get_template_names 함수에서 참조하는 값</span><br><span class="line"> 		</span><br><span class="line"> 		def get_context_data(self, **kwargs):</span><br><span class="line"> 		    context &#x3D; super().get_context_data(**kwargs)</span><br><span class="line"> 		    context[&#39;name&#39;&#125; &#x3D; &#39;AskDjango&#39; #이런식으로 템플릿에 전달하는 정보추가 가능</span><br><span class="line"> 		    return context</span><br><span class="line"> 		</span><br><span class="line"># as_view 호출을 통해 뷰 함수 생성</span><br><span class="line">home_page &#x3D; HomePageView.as_view()</span><br></pre></td></tr></table></figure>
+
+<h2 id="django-views-generic-일반적인-활용에좋음"><a href="#django-views-generic-일반적인-활용에좋음" class="headerlink" title="django.views.generic (일반적인 활용에좋음)"></a>django.views.generic (일반적인 활용에좋음)</h2><p><strong>사용법들은 개발 문서보기</strong></p>
+<p>더 필요한 옵션을 추가하고싶다면 코드를 뜯고 부모, 부모의부모를 super()로 부르고 거기에 추가만 해주면됨</p>
+<h3 id="django-views-generic-base"><a href="#django-views-generic-base" class="headerlink" title="django.views.generic.base"></a>django.views.generic.base</h3><ul>
+<li>ContextMixin</li>
+<li>TemplateResponseMixin</li>
+<li><strong>TemplateView</strong>(TemplateResonseMixin, ContextMixin, View) </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from django.views.generic.base import TemplateView</span><br><span class="line"></span><br><span class="line">class HomePageView(TemplateView):</span><br><span class="line"></span><br><span class="line">     template_name &#x3D; &#39;home.html&#39;</span><br><span class="line">     def get_context_data(self, **kwargs):</span><br><span class="line">         context &#x3D; super().get_context_data(**kwargs)</span><br><span class="line">         context[&#39;latest_articles&#39;] &#x3D; Article.objects.all()[:5]</span><br><span class="line">         return context</span><br></pre></td></tr></table></figure>
+
+<h3 id="django-views-generic-dates"><a href="#django-views-generic-dates" class="headerlink" title="django.views.generic.dates"></a>django.views.generic.dates</h3><ul>
+<li>YearMixin, MonthMixin, DayMixin, WeekMixin -</li>
+<li>BaseDateListView(MultipleObjectMixin, DateMixin, View) </li>
+<li><strong>ArchiveIndexView</strong>(MultipleObjectTemplateResponseMixin, BaseArchiveIndexView) </li>
+<li>BaseYearArchiveView(YearMixin, BaseDateListView) </li>
+<li><strong>YearArchiveView</strong>(MultipleObjectTemplateResponseMixin, BaseYearArchiveView)</li>
+<li>BaseMonthArchiveView(YearMixin, MonthMixin, BaseDateListView) </li>
+<li><strong>MonthArchiveView</strong>(MultipleObjectTemplateResponseMixin, BaseMonthArchiveView) </li>
+<li>BaseWeekArchiveView(YearMixin, WeekMixin, BaseDateListView) </li>
+<li><strong>WeekArchiveView</strong>(MultipleObjectTemplateResponseMixin, BaseWeekArchiveView) </li>
+<li>BaseDayArchiveView(YearMixin, MonthMixin, DayMixin, BaseDateListView) </li>
+<li><strong>DayArchiveView</strong>(MultipleObjectTemplateResponseMixin, BaseDayArchiveView)</li>
+<li><strong>TodayArchiveView</strong>(MultipleObjectTemplateResponseMixin, BaseTodayArchiveView) </li>
+<li>BaseDateDetailView(YearMixin, MonthMixin, DayMixin, DateMixin, BaseDetailView) </li>
+<li><strong>DateDetailView</strong>(SingleObjectTemplateResponseMixin, BaseDateDetailView)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from django.views.generic.dates import ArchiveIndexView, YearArchiveView, MonthArchiveView</span><br><span class="line"></span><br><span class="line">class PostArchiveIndexView(ArchiveIndexView): #모델과 저거 기준으로 정렬됨 </span><br><span class="line">     model &#x3D; Article</span><br><span class="line">     date_field &#x3D; &#39;pub_date&#39;</span><br><span class="line">     </span><br><span class="line">class ArticleYearArchiveView(YearArchiveView): #년단위</span><br><span class="line">     queryset &#x3D; Article.objects.all()</span><br><span class="line">     date_field &#x3D; &#39;pub_date&#39;</span><br><span class="line">     make_object_list &#x3D; True</span><br><span class="line">     allow_future &#x3D; True</span><br><span class="line">     </span><br><span class="line">class ArticleMonthArchiveView(MonthArchiveView): #월단위</span><br><span class="line">     queryset &#x3D; Article.objects.all()</span><br><span class="line">     date_field &#x3D; &quot;pub_date&quot;</span><br><span class="line">     allow_future &#x3D; True</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="django-views-generic-detail"><a href="#django-views-generic-detail" class="headerlink" title="django.views.generic.detail"></a>django.views.generic.detail</h3><ul>
+<li>SingleObjectMixin(ContextMixin)</li>
+<li>BaseDetailView(SingleObjectMixin, View) </li>
+<li>SingleObjectTemplateResponseMixin(TemplateResponseMixin) </li>
+<li><strong>DetailView</strong>(SingleObjectTemplateResponseMixin, BaseDetailView)</li>
+</ul>
+<h3 id="django-views-generic-edit"><a href="#django-views-generic-edit" class="headerlink" title="django.views.generic.edit"></a>django.views.generic.edit</h3><ul>
+<li>FormMixin(ContextMixin) </li>
+<li>ModelFormMixin(FormMixin, SingleObjectMixin) </li>
+<li>BaseFormView(FormMixin, ProcessFormView) </li>
+<li><strong>FormView</strong>(TemplateResponseMixin, BaseFormView)</li>
+<li>BaseCreateView(ModelFormMixin, ProcessFormView)</li>
+<li><strong>CreateView</strong>(SingleObjectTemplateResponseMixin, BaseCreateView)</li>
+<li>BaseUpdateView(ModelFormMixin, ProcessFormView) </li>
+<li><strong>UpdateView</strong>(SingleObjectTemplateResponseMixin, BaseUpdateView) </li>
+<li>DeletionMixin</li>
+<li>BaseDeleteView(DeletionMixin, BaseDetailView) </li>
+<li><strong>DeleteView</strong>(SingleObjectTemplateResponseMixin, BaseDeleteView)</li>
+</ul>
+<h3 id="django-views-generic-list"><a href="#django-views-generic-list" class="headerlink" title="django.views.generic.list"></a>django.views.generic.list</h3><ul>
+<li>MultipleObjectMixin(ContextMixin)</li>
+<li>BaseListView(MultipleObjectMixin, View) </li>
+<li>MultipleObjectTemplateResponseMixin(TemplateResponseMixin)</li>
+<li><strong>ListView</strong>(MultipleObjectTemplateResponseMixin, BaseListView)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from django.views.generic.list import ListView</span><br><span class="line"></span><br><span class="line">class ArticleListView(ListView):</span><br><span class="line">		 model &#x3D; Article</span><br></pre></td></tr></table></figure>
+
+<h2 id="django-braces-써드파티-Class-Based-View"><a href="#django-braces-써드파티-Class-Based-View" class="headerlink" title="django-braces (써드파티 Class Based View)"></a>django-braces (써드파티 Class Based View)</h2><ul>
+<li><p>LoginRequiredMixin : 로그아웃 시에 로그인URL로 이동 </p>
+<ul>
+<li>장고 1.9부터 django.contrib.auth.mixins.LoginRequiredMixin에 서 동일 기능을 제공 </li>
+</ul>
+</li>
+<li><p>PermissionRequiredMixin(AccessMixin)</p>
+</li>
+<li><p>MultiplePermissionsRequiredMixin(PermissionRequiredMixin)</p>
+</li>
+<li><p>GroupRequiredMixin(AccessMixin)</p>
+</li>
+<li><p>UserPassesTestMixin(AccessMixin) </p>
+</li>
+<li><p>SuperuserRequiredMixin(AccessMixin)</p>
+</li>
+<li><p>AnonymousRequiredMixin(object) </p>
+</li>
+<li><p>StaffuserRequiredMixin(AccessMixin) </p>
+<ul>
+<li>staff 제한 </li>
+</ul>
+</li>
+<li><p><strong>SSLRequiredMixin(object)</strong></p>
+<ul>
+<li>현재 페이지의 https URL로 이동 응답 (301). raise_exception=True 설정으로 404 응답도 가능</li>
+</ul>
+</li>
+<li><p><strong>RecentLoginRequiredMixin</strong>(LoginRequiredMixin</p>
+<ul>
+<li>지정 시간 (디폴트 30분) 내 로그인 여부 체크</li>
+<li>시간을 넘겼다면, 로그아웃/로그인 요청</li>
+</ul>
+</li>
+</ul>
+<h3 id="Form-Mixins"><a href="#Form-Mixins" class="headerlink" title="Form Mixins"></a>Form Mixins</h3><ul>
+<li>CsrfExemptMixin </li>
+<li>UserFormKwargsMixin </li>
+<li>UserKwargModelFormMixin </li>
+<li>SuccessURLRedirectListMixin</li>
+<li>FormValidMessageMixin</li>
+<li>FormInvalidMessageMixin</li>
+<li>FormMessagesMixin</li>
+</ul>
+<p>Other Mixins</p>
+<blockquote>
+<p>• SetHeadlineMixin • StaticContextMixin • SelectRelatedMixin • PrefetchRelatedMixin • JSONResponseMixin • JsonRequestResponseMixin • AjaxResponseMixin • OrderableListMixin • CanonicalSlugDetailMixin • MessageMixin • AllVerbsMixin • HeaderMixin</p>
+</blockquote>
+<p>2019.12.10</p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2019/12/06/class-view2/" title= "클래스뷰 정확히 쓰기 2">
+                    <div class="nextTitle">클래스뷰 정확히 쓰기 2</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2019/11/26/django6/" title= "Django 기본 여섯번째이야기">
+                    <div class="prevTitle">Django 기본 여섯번째이야기</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 사각형 반응형 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="2080063347"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#overview"><span class="toc-number">1.</span> <span class="toc-text">overview</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#View"><span class="toc-number">1.1.</span> <span class="toc-text">View?</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#함수기반뷰-or-클래스-기반뷰"><span class="toc-number">1.1.1.</span> <span class="toc-text">함수기반뷰 or 클래스 기반뷰</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#참고-클래스의-3가지-함수-형식"><span class="toc-number">1.1.2.</span> <span class="toc-text">참고) 클래스의 3가지 함수 형식</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ClassBasedView-CBV"><span class="toc-number">1.2.</span> <span class="toc-text">ClassBasedView(CBV)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-FBV코드"><span class="toc-number">1.2.1.</span> <span class="toc-text">1) FBV코드</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-동일한-동작을-하는-CBV를-직접-컨셉만-구현"><span class="toc-number">1.2.2.</span> <span class="toc-text">2) 동일한 동작을 하는 CBV를 직접 컨셉만 구현</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-장고-기본제공-CBV-쓰기"><span class="toc-number">1.2.3.</span> <span class="toc-text">3) 장고 기본제공 CBV 쓰기</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#샘플-urls-py"><span class="toc-number">1.3.</span> <span class="toc-text">샘플 urls.py</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CBV는-구현은-복잡해도-가져다-쓸-때는-SO-SIMPLE"><span class="toc-number">1.3.1.</span> <span class="toc-text">CBV는 구현은 복잡해도, 가져다 쓸 때는 SO SIMPLE !!!</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CBV는-코드-재사용성을-높이기-위한-목적"><span class="toc-number">1.4.</span> <span class="toc-text">CBV는 코드 재사용성을 높이기 위한 목적</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#상속을-통해-특정-루틴-재정의-Overriding"><span class="toc-number">2.</span> <span class="toc-text">상속을 통해 특정 루틴 재정의 (Overriding)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#파이썬에서의-Overriding"><span class="toc-number">2.1.</span> <span class="toc-text">파이썬에서의 Overriding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CBV에-Overriding-활용"><span class="toc-number">2.2.</span> <span class="toc-text">CBV에 Overriding 활용</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#view-fn-CBV-as-view-init-kwargs-의-동작방식"><span class="toc-number">2.2.1.</span> <span class="toc-text">view_fn &#x3D; CBV.as_view(**init_kwargs) 의 동작방식</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#함수로-재구현-스타일1"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">함수로 재구현(스타일1)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#함수로-재구현-스타일2"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">함수로 재구현 (스타일2)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#복잡한-뷰를-여러-함수에-나눠-구현하고-재사용할-때-필요한-루틴만-재정의하기"><span class="toc-number">2.3.</span> <span class="toc-text">복잡한 뷰를 여러 함수에 나눠 구현하고, 재사용할 때 필요한 루틴만 재정의하기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#재사용이-가능토록-CBV패턴으로-재구현"><span class="toc-number">2.3.1.</span> <span class="toc-text">재사용이 가능토록, CBV패턴으로 재구현</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#활용-1-클래스-변수값만-재정의"><span class="toc-number">2.3.2.</span> <span class="toc-text">활용 1) 클래스 변수값만 재정의</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#각-인스턴스-함수들을-재정의"><span class="toc-number">2.3.3.</span> <span class="toc-text">각 인스턴스 함수들을 재정의</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#정리"><span class="toc-number">2.4.</span> <span class="toc-text">정리</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-메소드별-처리"><span class="toc-number">3.</span> <span class="toc-text">HTTP 메소드별 처리</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#다양한-HTTP-메소드"><span class="toc-number">3.1.</span> <span class="toc-text">다양한 HTTP 메소드</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-메소드별-인스턴스함수-지원"><span class="toc-number">3.2.</span> <span class="toc-text">HTTP 메소드별 인스턴스함수 지원</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Example-ListView에서-head1-요청을-처리할-경우"><span class="toc-number">3.2.1.</span> <span class="toc-text">Example) ListView에서 head1 요청을 처리할 경우</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FBV-스타일로-구현"><span class="toc-number">3.2.2.</span> <span class="toc-text">FBV 스타일로 구현</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CBV에-장식자-입히기"><span class="toc-number">4.</span> <span class="toc-text">CBV에 장식자 입히기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#장식자-Decorators"><span class="toc-number">4.1.</span> <span class="toc-text">장식자(Decorators)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FBV-뷰-함수에-장식자-적용"><span class="toc-number">4.1.1.</span> <span class="toc-text">FBV) 뷰 함수에 장식자 적용</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CBV-FBV-스타일로-장식자-적"><span class="toc-number">4.1.2.</span> <span class="toc-text">CBV) FBV 스타일로 장식자 적</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CBV-클래스에-직접-장식자-입히기-1"><span class="toc-number">4.1.3.</span> <span class="toc-text">CBV) 클래스에 직접 장식자 입히기 #1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CBV-클래스에-직접-장식자-입히기-2-추천"><span class="toc-number">4.1.4.</span> <span class="toc-text">CBV) 클래스에 직접 장식자 입히기 #2 (추천)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mixin과-django-braces"><span class="toc-number">5.</span> <span class="toc-text">Mixin과 django-braces</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mixins을-통해-여러-CBV를-한번에-조합"><span class="toc-number">5.1.</span> <span class="toc-text">Mixins을 통해 여러 CBV를 한번에 조합</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#예시-FBV"><span class="toc-number">5.1.1.</span> <span class="toc-text">예시(FBV)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#예시-CBV-클래스가-다들-상속되어있다"><span class="toc-number">5.1.2.</span> <span class="toc-text">예시(CBV) (클래스가 다들 상속되어있다)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#django-views-generic-일반적인-활용에좋음"><span class="toc-number">5.2.</span> <span class="toc-text">django.views.generic (일반적인 활용에좋음)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#django-views-generic-base"><span class="toc-number">5.2.1.</span> <span class="toc-text">django.views.generic.base</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#django-views-generic-dates"><span class="toc-number">5.2.2.</span> <span class="toc-text">django.views.generic.dates</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#django-views-generic-detail"><span class="toc-number">5.2.3.</span> <span class="toc-text">django.views.generic.detail</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#django-views-generic-edit"><span class="toc-number">5.2.4.</span> <span class="toc-text">django.views.generic.edit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#django-views-generic-list"><span class="toc-number">5.2.5.</span> <span class="toc-text">django.views.generic.list</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#django-braces-써드파티-Class-Based-View"><span class="toc-number">5.3.</span> <span class="toc-text">django-braces (써드파티 Class Based View)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Form-Mixins"><span class="toc-number">5.3.1.</span> <span class="toc-text">Form Mixins</span></a></li></ol></li></ol></li></ol>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 수직형 반응형 디스플레이광고 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="1645513725"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 216
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2023 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/2023/08/18/BasicDB/" >DB에 대한 전반적인 개념(SQL,NoSQL)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/11</span><a class="archive-post-title" href= "/2023/07/11/Advenced-JPA2-CH01/" >Advenced-JPA2-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/27</span><a class="archive-post-title" href= "/2023/06/27/Advenced-JPA1-CH04/" >Advenced-JPA1-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/19</span><a class="archive-post-title" href= "/2023/06/19/Advenced-JPA1-CH03/" >Advenced-JPA1-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/28</span><a class="archive-post-title" href= "/2023/05/28/Review-The-Essence-Of-Object-Orientation/" >(리뷰)객체 지향의 사실과 오해 책 리뷰</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2023/05/20/Advenced-JPA1-CH02/" >Advenced-JPA1-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2023/05/08/Advenced-JPA1-CH01/" >(JPA) Advenced-JPA1-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2023/04/26/JPA-Basic-CH10/" >(JPA) JPA-Basic-CH10(fetch-join)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2023/04/22/Design-pattern-3/" >(ETC) 디자인 패턴에 대해서 CH3 (행동 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2023/04/22/JPA-Basic-CH09/" >(JPA) JPA-Basic-CH09(객체지향 쿼리 언어)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/20</span><a class="archive-post-title" href= "/2023/04/20/JPA-Basic-CH08/" >(JPA)JPA-Basic-CH08(값 타입)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/18</span><a class="archive-post-title" href= "/2023/04/18/JPA-Basic-CH07/" >(JPA) JPA-Basic-CH07(프록시)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/17</span><a class="archive-post-title" href= "/2023/04/17/JPA-Basic-CH06/" >(JPA) JPA-Basic-CH06(고급매핑- 상속관계 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/13</span><a class="archive-post-title" href= "/2023/04/13/Issue-Java-ClassCastException/" >(Issue) ResponseBodyAdvice에서 ClassCastException 발생</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/13</span><a class="archive-post-title" href= "/2023/04/13/JPA-Basic-CH05/" >(JPA) JPA-Basic-CH05(다양한 연관관계 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/09</span><a class="archive-post-title" href= "/2023/04/09/JPA-Basic-CH04/" >(JPA) JPA-Basic-CH04 (연관관계 매핑 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/08</span><a class="archive-post-title" href= "/2023/04/08/JPA-Basic-CH03/" >(JPA) JPA-Basic-CH03 (엔티티 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2023/04/06/JPA-Basic-CH02/" >(JPA) JPA 기본편 CH02 (JPA 영속성 컨텍스트)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/JPA-Basic-CH01/" >(JPA) JPA 기본편 CH01 (JPA 시작)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/querydsl/" >DataSource, QueryDSL이란?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/29</span><a class="archive-post-title" href= "/2023/03/29/SpringMVC2-CH02/" >SpringMVC2-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/21</span><a class="archive-post-title" href= "/2023/03/21/Design-pattern-2/" >(ETC) 디자인 패턴에 대해서 CH2 (구조 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/12</span><a class="archive-post-title" href= "/2023/03/12/Design-pattern-1/" >(ETC) 디자인 패턴에 대해서 CH1 (생성 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/10</span><a class="archive-post-title" href= "/2023/03/10/l2-l4-l7-switching/" >L2-L4-L7 스위치란? (허브, 스위치, 라우터)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span><a class="archive-post-title" href= "/2023/02/25/Review-System-Design-Interview/" >(리뷰)(강추)가상 면접 사례로 배우는 대규모 시스템 설계 기초</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2023/02/23/gitlab-CI-CD-springproject/" >Gitlab-CI/CD 구축하기(withSpring)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span><a class="archive-post-title" href= "/2023/02/16/SpringMVC2-CH01/" >SpringMVC2-CH01(스프링 thymeleaf)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span><a class="archive-post-title" href= "/2023/02/07/JavaScript-Basic/" >JavaScript-Basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/05</span><a class="archive-post-title" href= "/2023/02/05/Html-JQuery/" >Html-JQuery</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2023/01/22/mysql/" >Mysql 기본 공부 (수정본)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-maven/" >About-maven</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-mybatis/" >About-mybatis</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-xml/" >XML 파일에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/ubuntu-command/" >우분투 자주 쓰는 명령어(2023버전)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2023/01/02/n-plus-1-problem-i/" >JPA N+1 문제와 해결법(수정중)</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/31</span><a class="archive-post-title" href= "/2022/12/31/end-of-2023/" >2023년을 마무리 하며...(2023년 목표 포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/AboutSpring/" >AboutSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/CS-Lock-MutexAndSemaphore/" >CS Lock MutexAndSemaphore</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Isolation-Level-4-And-Lock/" >Isolation Level 4 And Lock</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/READ-ME-Writing/" >READ-ME Writing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Entity-DAO-DTO/" >Spring-Entity-DAO-DTO</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/SpringAndJenkins/" >SpringAndJenkins</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Lambda-Capturing/" >Java Lambda-Capturing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Basic-JVM/" >Java Basic JVM</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-SOLID/" >Java SOLID</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Null-Optional-Empty/" >Null-Optional-Empty</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Singleton-Stateless/" >Spring Singleton Stateless</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutKafka/" >AboutKafka</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutMessageQ/" >AboutMessageQ</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutSpringSecurity/" >AboutSpringSecurity</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Sequence-Diagram/" >Sequence-Diagram</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH01/" >SpringProject-TrackingPost-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH02/" >SpringProject-TrackingPost-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH04/" >SpringProject-TrackingPost-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH03/" >SpringProject-TrackingPost-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH06/" >SpringProject-TrackingPost-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH05/" >SpringProject-TrackingPost-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutLombokAtSpring/" >AboutLombokAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Basic-Vue-js/" >Basic Vue.js</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Http-Status/" >Http-Status</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Spring-Logger/" >Spring-Logger</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH01/" >SpringProject-Board-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH03/" >SpringProject-Board-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH02/" >SpringProject-Board-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH04/" >SpringProject-Board-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH08/" >SpringProject-Board-CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH07/" >SpringProject-Board-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH06/" >SpringProject-Board-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH10/" >SpringProject-Board-CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH05/" >SpringProject-Board-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH09/" >SpringProject-Board-CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/UsingAOPAtSpring/" >UsingAOPAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH00/" >SpringCore CH00</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH01/" >SpringCore CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH02-03/" >SpringCore CH02~03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH04/" >SpringCore CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH05/" >SpringCore CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH06/" >SpringCore CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH07/" >SpringCore CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH01/" >SpringMVC-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH09/" >SpringCore CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH02/" >SpringMVC-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH08/" >SpringCore CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH03/" >SpringMVC-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH04/" >SpringMVC-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH05/" >SpringMVC-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH07/" >SpringMVC-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH06/" >SpringMVC-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/effective-java-review/" >(책리뷰)이펙티브 자바</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH01/" >Java 배우기 CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH02/" >Java 배우기 CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH03/" >Java 배우기 CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH04/" >Java 배우기 CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH05/" >Java 배우기 CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH08/" >Java 배우기 CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH06/" >Java 배우기 CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH09/" >Java 배우기 CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH07/" >Java 배우기 CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH10/" >Java 배우기 CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH11/" >Java 배우기 CH11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH12/" >Java 배우기 CH12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH13/" >Java 배우기 CH13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH14/" >Java 배우기 CH14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/ConnectDomainToNotion/" >Notion과 개인 Domain 연결하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/OSI7layer/" >OSI7계층과 TCP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Structure"><span class="iconfont-archer">&#xe606;</span>Structure</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Interview"><span class="iconfont-archer">&#xe606;</span>Interview</span>
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Lombok"><span class="iconfont-archer">&#xe606;</span>Lombok</span>
+    
+        <span class="sidebar-tag-name" data-tags="MessageQ"><span class="iconfont-archer">&#xe606;</span>MessageQ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kafka"><span class="iconfont-archer">&#xe606;</span>Kafka</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mybatis"><span class="iconfont-archer">&#xe606;</span>Mybatis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Vue"><span class="iconfont-archer">&#xe606;</span>Vue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="CS"><span class="iconfont-archer">&#xe606;</span>CS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Notion"><span class="iconfont-archer">&#xe606;</span>Notion</span>
+    
+        <span class="sidebar-tag-name" data-tags="Domain"><span class="iconfont-archer">&#xe606;</span>Domain</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jquery"><span class="iconfont-archer">&#xe606;</span>Jquery</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="FrontEnd"><span class="iconfont-archer">&#xe606;</span>FrontEnd</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="JPA"><span class="iconfont-archer">&#xe606;</span>JPA</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="Issue"><span class="iconfont-archer">&#xe606;</span>Issue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="Logger"><span class="iconfont-archer">&#xe606;</span>Logger</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jenkins"><span class="iconfont-archer">&#xe606;</span>Jenkins</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thymeleaf"><span class="iconfont-archer">&#xe606;</span>Thymeleaf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="AOP"><span class="iconfont-archer">&#xe606;</span>AOP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Gitlab"><span class="iconfont-archer">&#xe606;</span>Gitlab</span>
+    
+        <span class="sidebar-tag-name" data-tags="CI-CD"><span class="iconfont-archer">&#xe606;</span>CI-CD</span>
+    
+        <span class="sidebar-tag-name" data-tags="Problem"><span class="iconfont-archer">&#xe606;</span>Problem</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="QueryDSL"><span class="iconfont-archer">&#xe606;</span>QueryDSL</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jpa"><span class="iconfont-archer">&#xe606;</span>Jpa</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advance"><span class="iconfont-archer">&#xe606;</span>Advance</span>
+    
+        <span class="sidebar-tag-name" data-tags="Book"><span class="iconfont-archer">&#xe606;</span>Book</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Maven"><span class="iconfont-archer">&#xe60a;</span>Maven</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+        <span class="sidebar-category-name" data-categories="Spring"><span class="iconfont-archer">&#xe60a;</span>Spring</span>
+    
+        <span class="sidebar-category-name" data-categories="MessageQ"><span class="iconfont-archer">&#xe60a;</span>MessageQ</span>
+    
+        <span class="sidebar-category-name" data-categories="Mybatis"><span class="iconfont-archer">&#xe60a;</span>Mybatis</span>
+    
+        <span class="sidebar-category-name" data-categories="Vue"><span class="iconfont-archer">&#xe60a;</span>Vue</span>
+    
+        <span class="sidebar-category-name" data-categories="CS"><span class="iconfont-archer">&#xe60a;</span>CS</span>
+    
+        <span class="sidebar-category-name" data-categories="Tips"><span class="iconfont-archer">&#xe60a;</span>Tips</span>
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="Jquery"><span class="iconfont-archer">&#xe60a;</span>Jquery</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="JPA"><span class="iconfont-archer">&#xe60a;</span>JPA</span>
+    
+        <span class="sidebar-category-name" data-categories="Issue"><span class="iconfont-archer">&#xe60a;</span>Issue</span>
+    
+        <span class="sidebar-category-name" data-categories="Java"><span class="iconfont-archer">&#xe60a;</span>Java</span>
+    
+        <span class="sidebar-category-name" data-categories="Javascript"><span class="iconfont-archer">&#xe60a;</span>Javascript</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Jenkins"><span class="iconfont-archer">&#xe60a;</span>Jenkins</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Gitlab"><span class="iconfont-archer">&#xe60a;</span>Gitlab</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

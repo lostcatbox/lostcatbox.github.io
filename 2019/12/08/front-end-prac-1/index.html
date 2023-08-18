@@ -1,0 +1,6079 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>프론트엔드 기본편 1 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">프론트엔드 기본편 1</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            프론트엔드 기본편 1
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Django">Django</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Frontend">Frontend</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Ajax">Ajax</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">5.3k</span>Reading time: <span class="post-count reading-time">32 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/12/08</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="강의-시작-전"><a href="#강의-시작-전" class="headerlink" title="강의 시작 전"></a>강의 시작 전</h1><h2 id="필요한-기능"><a href="#필요한-기능" class="headerlink" title="필요한 기능"></a>필요한 기능</h2><ul>
+<li>blog앱<ul>
+<li>Post모델의  list/detail/edit/delete</li>
+<li>Comment 모델의 list/edit/delete</li>
+<li>코멘트에 post_id를 선택하는것이 아니라 그것은 자동지정해주고 댓글만 폼에서 받아내는것이므로 아래 코드 참고하자 </li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"># views.py</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def index(request):</span><br><span class="line">    return render(request, &#39;blog&#x2F;index.html&#39;)</span><br><span class="line"></span><br><span class="line">index &#x3D; ListView.as_view(model&#x3D;Post, template_name&#x3D;&#39;blog&#x2F;index.html&#39;)</span><br><span class="line">post_new &#x3D; CreateView.as_view(model&#x3D;Post, fields&#x3D;&quot;__all__&quot;)</span><br><span class="line">post_detail &#x3D; DetailView.as_view(model&#x3D;Post)</span><br><span class="line">post_edit &#x3D; UpdateView.as_view(model&#x3D;Post, fields&#x3D;&#39;__all__&#39;)</span><br><span class="line"></span><br><span class="line">class PostDeleteView(DeleteView):</span><br><span class="line">    model &#x3D; Post</span><br><span class="line">    success_url &#x3D; reverse_lazy(&#39;blog:index&#39;)</span><br><span class="line"></span><br><span class="line">class CommentCreatView(CreateView):</span><br><span class="line">    model &#x3D; Comment</span><br><span class="line">    fields &#x3D; [&#39;message&#39;]</span><br><span class="line"></span><br><span class="line">    def form_valid(self, form):</span><br><span class="line">        comment &#x3D; form.save(commit&#x3D;False)</span><br><span class="line">        comment.post &#x3D; get_object_or_404(Post, pk&#x3D;self.kwargs[&#39;post_pk&#39;]) #kwargs는 url인자</span><br><span class="line">        return super().form_valid(form)</span><br><span class="line"></span><br><span class="line">    def get_success_url(self):</span><br><span class="line">        #현재 저장한 object가 self.object에 존재함!!!</span><br><span class="line">        return resolve_url(self.object.post)</span><br><span class="line"></span><br><span class="line">comment_new &#x3D; CommentCreatView.as_view()</span><br><span class="line"></span><br><span class="line">class CommentUpdateView(UpdateView):</span><br><span class="line">    model &#x3D; Comment</span><br><span class="line">    fields &#x3D; [&#39;message&#39;]</span><br><span class="line"></span><br><span class="line">    def get_success_url(self):</span><br><span class="line">        # 현재 저장한 object가 self.object에 존재함!!!(self.commnet인득?)</span><br><span class="line">        return resolve_url(self.object.post)</span><br><span class="line"></span><br><span class="line">comment_edit &#x3D; CommentUpdateView.as_view(model&#x3D;Comment, fields&#x3D;[&#39;message&#39;])</span><br><span class="line"></span><br><span class="line">class CommentDeleteView(DeleteView):</span><br><span class="line">    model &#x3D; Comment</span><br><span class="line"></span><br><span class="line">    def get_success_url(self):</span><br><span class="line">        # 현재 저장한 object가 self.object에 존재함!!!(self.commnet인득?)</span><br><span class="line">        return resolve_url(self.object.post)</span><br><span class="line"></span><br><span class="line">comment_delete &#x3D; CommentDeleteView.as_view(model&#x3D;Comment)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="시작하기"><a href="#시작하기" class="headerlink" title="시작하기"></a>시작하기</h1><ul>
+<li>HTML </li>
+<li>CSS</li>
+<li>JavaScript </li>
+</ul>
+<p>위 세 언어는 웹브라우저에서 구동되는 언어입니다. 그래서 웹프론트엔드 언어라고 부릅니다.</p>
+<p>웹브라우저는 서버로부터 HTML/CSS/JavaScript 코드를 받아서, 이를 그래픽적으로 해석해서 유저에게 보여줍니다. </p>
+<ul>
+<li>HTML (Hyper Text Markup Language) : 문서를 구조적으로 표현</li>
+<li>CSS (Cascasding Style Sheet) : 웹페이지의 각 스타일을 정의</li>
+<li>JavaScript : 웹페이지내 로직을 구현</li>
+</ul>
+<h2 id="1-한-HTML파일에-CSS-JavaScript를-모두-넣을-수도-있구요"><a href="#1-한-HTML파일에-CSS-JavaScript를-모두-넣을-수도-있구요" class="headerlink" title="1) 한 HTML파일에 CSS/JavaScript를 모두 넣을 수도 있구요"></a>1) 한 HTML파일에 CSS/JavaScript를 모두 넣을 수도 있구요</h2><p>css는 내용보다 앞에 둠(스타일이 먼저 로딩되어야하므로)</p>
+<p>js를 맨뒤에 두는게 좋음 (로직쪽이며 로딩이 느릴가능성높음)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">   &lt;meta charset&#x3D;&quot;utf-8&quot; &#x2F;&gt;</span><br><span class="line">   &lt;title&gt;AskDjango Blog&lt;&#x2F;title&gt;</span><br><span class="line">   &lt;style&gt; #CSS를 inline으로 넣을수있다.</span><br><span class="line">       body &#123; background-color: lightyellow; &#125;</span><br><span class="line">       #post_list .post &#123; margin-bottom: 3px; &#125;</span><br><span class="line">   &lt;&#x2F;style&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">   &lt;ul id&#x3D;&quot;post_list&quot;&gt;</span><br><span class="line">       &lt;li class&#x3D;&quot;post&quot;&gt;파이썬 차근차근 시작하기&lt;&#x2F;li&gt;</span><br><span class="line">       &lt;li class&#x3D;&quot;post&quot;&gt;크롤링 차근차근 시작하기&lt;&#x2F;li&gt;</span><br><span class="line">       &lt;li class&#x3D;&quot;post&quot;&gt;파이썬으로 업무 자동화하기&lt;&#x2F;li&gt;</span><br><span class="line">       &lt;li class&#x3D;&quot;post&quot;&gt;장고 기본편&lt;&#x2F;li&gt;</span><br><span class="line">       &lt;li class&#x3D;&quot;post&quot;&gt;서비스 배포하기&lt;&#x2F;li&gt;</span><br><span class="line">   &lt;&#x2F;ul&gt;</span><br><span class="line">   &lt;script&gt; #js도 inline으로 넣음</span><br><span class="line">       &#x2F;* CSS만으로 충분하지만, Javascript도 같이 넣어봤습니다. *&#x2F;</span><br><span class="line">       var posts &#x3D; document.getElementsByClassName(&#39;post&#39;);</span><br><span class="line">       for(var i&#x3D;0; i&lt;posts.length; i++) &#123;</span><br><span class="line">           var post &#x3D; posts[i];</span><br><span class="line">           post.style.backgroundColor &#x3D; &#39;pink&#39;;</span><br><span class="line">       &#125;</span><br><span class="line">   &lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-CSS-JavaScript-파일을-별도-파일로-관리하실-수도-있습니다"><a href="#2-CSS-JavaScript-파일을-별도-파일로-관리하실-수도-있습니다" class="headerlink" title="2) CSS/JavaScript 파일을 별도 파일로 관리하실 수도 있습니다."></a>2) CSS/JavaScript 파일을 별도 파일로 관리하실 수도 있습니다.</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#blog.html</span><br><span class="line"></span><br><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">     &lt;meta charset&#x3D;&quot;utf-8&quot; &#x2F;&gt;</span><br><span class="line">     &lt;title&gt;AskDjango Blog&lt;&#x2F;title&gt;</span><br><span class="line">     &lt;link rel&#x3D;&quot;stylesheet&quot; href&#x3D;&quot;blog.css&quot; &#x2F;&gt;  #rel속성을 꼭 넣어줘야함</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">     &lt;ul id&#x3D;&quot;post_list&quot;&gt;</span><br><span class="line">         &lt;li class&#x3D;&quot;post&quot;&gt;파이썬 차근차근 시작하기&lt;&#x2F;li&gt;</span><br><span class="line">         &lt;li class&#x3D;&quot;post&quot;&gt;크롤링 차근차근 시작하기&lt;&#x2F;li&gt;</span><br><span class="line">         &lt;li class&#x3D;&quot;post&quot;&gt;파이썬으로 업무 자동화하기&lt;&#x2F;li&gt;</span><br><span class="line">         &lt;li class&#x3D;&quot;post&quot;&gt;장고 기본편&lt;&#x2F;li&gt;</span><br><span class="line">         &lt;li class&#x3D;&quot;post&quot;&gt;서비스 배포하기&lt;&#x2F;li&gt;</span><br><span class="line">     &lt;&#x2F;ul&gt;</span><br><span class="line">     &lt;script type&#x3D;&quot;text&#x2F;javascript&quot;src&#x3D;&quot;blog.js&quot;&gt;&lt;&#x2F;script&gt; #type구지사용안해도 지금js로 통일되어있으므로 안써도 작동함, 꼭 &#x2F;&gt;하면안됨</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>별도 파일 css 예시</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">body &#123;</span><br><span class="line"> background-color: lightyellow;</span><br><span class="line">&#125;</span><br><span class="line">#post_list .post &#123;</span><br><span class="line"> margin-bottom: 3px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>별도 파일 js 예시</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var posts &#x3D; document.getElementsByClassName(&#39;post&#39;);  #포스팅들을 얻어와서</span><br><span class="line">for(var i&#x3D;0; i&lt;posts.length; i++)  #posts.length: 포스트 총 갯수반환, 순회를 돌면서 i를 1씩 증가시킴, post[i]각각에 접근해서 post돔에 . style . backgroundColor로 핑크!</span><br><span class="line">&#123;</span><br><span class="line"> var post &#x3D; posts[i];</span><br><span class="line"> post.style.backgroundColor &#x3D; &#39;pink&#39;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="대개의-경우-CSS-JavaScript와-같은-정적인-파일은-별도-파일로-관리"><a href="#대개의-경우-CSS-JavaScript와-같은-정적인-파일은-별도-파일로-관리" class="headerlink" title="대개의 경우 CSS/JavaScript와 같은 정적인 파일은 별도 파일로 관리"></a>대개의 경우 CSS/JavaScript와 같은 정적인 파일은 별도 파일로 관리</h3><ul>
+<li>HTML 응답크기를 줄일 수 있습니다. </li>
+<li>여러 번 새로고침하더라도, 브라우저 캐싱기능을 통해 같은 파일을 서버 로부터 다시 읽어들이지 않습니다. </li>
+<li>웹페이지 응답성을 높여줄 수 있습니다.</li>
+</ul>
+<h3 id="CSS-파일"><a href="#CSS-파일" class="headerlink" title="CSS 파일"></a>CSS 파일</h3><ul>
+<li>처음에는 직접 CSS 날코딩을 하시고,</li>
+<li>추후에는 성향에 따라 <strong>Sass</strong>, Less를 검토해보세요.</li>
+<li>sass, less 문법으로 작성된 코드를 빌드하여, css파일을 만들어냅니다.(Sass추천?)</li>
+</ul>
+<h3 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h3><ul>
+<li>처음에는 직접 JavaScript 날코딩을 하시고,</li>
+<li>추후에는 성향에 따라 TypeScript를 검토해보세요.(언어임)<ul>
+<li>TypeScript 문법으로 작성되는 코드를 빌드하여, javascript파일을 만들어냅니다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="웹-프론트엔드와-백엔드"><a href="#웹-프론트엔드와-백엔드" class="headerlink" title="웹 프론트엔드와 백엔드"></a>웹 프론트엔드와 백엔드</h2><ul>
+<li>웹개발은 크게 백엔드와 프론트엔드 개발로 나눠집니다. 장고는 백엔드에 초점이 맞춰 진 웹프레임워크입니다.</li>
+<li>장고를 공부하실 때에는 백엔드에 포커스를 맞춰서 공부하시고, 웹프론트엔드는 최소화 하세요.<ul>
+<li>2가지를 모두 한번에 잘할 수는 없습니다. 우선순위를 백엔드에 먼저 두세요. Android/iOS 앱도 일단 미뤄두세요.</li>
+<li>단 1번에 완전한(?) 웹서비스를 만들 순 없습니다. 점진적으로 개선해가세요.</li>
+</ul>
+</li>
+</ul>
+<h2 id="백엔드-개발언어와-프론트엔드-개발언어"><a href="#백엔드-개발언어와-프론트엔드-개발언어" class="headerlink" title="백엔드 개발언어와 프론트엔드 개발언어"></a>백엔드 개발언어와 프론트엔드 개발언어</h2><ul>
+<li>프론트엔드 개발언어 (클라이언트단 중 하나1 ) <ul>
+<li>브라우저 단에서 실행이 됩니다. </li>
+<li>HTML/CSS/JavaScript의 조합 • 백엔드 개발언어 (서버 단) </li>
+</ul>
+</li>
+<li>클라이언트 단의 요청을 처리/응답만 할 수 있으면 됩니다.<ul>
+<li>다양한 언어가 가능하며, 여러 언어/프레임워크를 섞어쓰실 수도 있습니다. (Python, NodeJS, Ruby, Java 등)</li>
+</ul>
+</li>
+</ul>
+<h2 id="웹-요청-응답"><a href="#웹-요청-응답" class="headerlink" title="웹 요청/응답"></a>웹 요청/응답</h2><ul>
+<li>웹은 HTTP(S) 프로토콜로 동작합니다.</li>
+<li>하나의 요청은 클라이언트가 웹서버로 요청하며, 웹서버는 요청에 맞게 응답을 해야합니다. <ul>
+<li>응답은 HTML 코드 문자열, CSS 코드 문자열, JavaScript 코드 문자열, Zip, MP4 등 어떠한 포맷이라도 가능합니다. </li>
+</ul>
+</li>
+<li>웹서버에서 응답을 만들 때, 요청의 종류를 구분하는 기준 <ul>
+<li>URL (일반적), 요청헤더, 세션, 쿠키 등 </li>
+</ul>
+</li>
+<li>웹서버 구성에 따라 <ul>
+<li>/static/flower.jpg : JPG파일 내용을 응답으로 내어주도록 설정했습니다. </li>
+<li>/blog/images/flower.jpg : 장고 View를 통해, JPG파일 내용을 응답으로 내어주도록 설정했습니다.</li>
+<li>/blog/images/flower/ : 장고 View를 통해, JPG파일 내용을 응답으로 내어주도록 설정했습니다.</li>
+</ul>
+</li>
+<li>웹서버 구성에 따라, 특정 요청에 대한 응답을 Apache/Nginx 웹서버에도 할 수도 있고 Django 뷰에서 응답을 할 수도 있다</li>
+</ul>
+<h3 id="일반적인-장고-페이지의-예"><a href="#일반적인-장고-페이지의-예" class="headerlink" title="일반적인 장고 페이지의 예"></a>일반적인 장고 페이지의 예</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">포스팅 목록 페이지 : &#x2F;blog&#x2F;</span><br><span class="line"># blog&#x2F;urls.py</span><br><span class="line">from django.conf.urls import url</span><br><span class="line">from . import views</span><br><span class="line"></span><br><span class="line">urlpatterns &#x3D; [</span><br><span class="line">	 url(r&#39;^blog&#x2F;$&#39;, views.post_list, name&#x3D;&#39;post_list&#39;),</span><br><span class="line">]</span><br><span class="line"># bl</span><br><span class="line">og&#x2F;views.py</span><br><span class="line">from django.shortcuts import render</span><br><span class="line">from .models import Post</span><br><span class="line"></span><br><span class="line">def post_list(request):</span><br><span class="line">     return render(request, &#39;blog&#x2F;post_list.html&#39;, &#123;</span><br><span class="line">           &#39;post_list&#39;: Post.objects.all(),</span><br><span class="line">     &#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="HTML-템플릿"><a href="#HTML-템플릿" class="headerlink" title="HTML 템플릿"></a>HTML 템플릿</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">blog&#x2F;post_list.html</span><br><span class="line">&lt;!doctype html&gt; &lt;html&gt; &lt;head&gt;</span><br><span class="line"></span><br><span class="line">    &lt;meta charset&#x3D;&quot;utf-8&quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;title&gt;AskDjango Blog&lt;&#x2F;title&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">    &lt;h1&gt;AskDjango Blog&lt;&#x2F;h1&gt;</span><br><span class="line"></span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">         &#123;% for post in post_list %&#125;</span><br><span class="line"></span><br><span class="line">        &lt;li&gt;</span><br><span class="line">         &#123;&#123; post.title &#125;&#125;</span><br><span class="line">         &lt;&#x2F;li&gt;</span><br><span class="line">         &#123;% endfor %&#125;</span><br><span class="line">     &lt;&#x2F;ul&gt;</span><br><span class="line"></span><br><span class="line">&lt;hr&#x2F;&gt;</span><br><span class="line"> &amp;copy; 2017, AskDjango.</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="이-화면이-그려지기까지-처리순서"><a href="#이-화면이-그려지기까지-처리순서" class="headerlink" title="이 화면이 그려지기까지, 처리순서"></a>이 화면이 그려지기까지, 처리순서</h3><p>단지, 하나의 HTTP 요청에 대해, 하나의 HTTP 응답을 받습니다.</p>
+<ol>
+<li><p>브라우저에서 서버로 HTTP 요청</p>
+</li>
+<li><p>서버에서는 해당 HTTP요청에 대한 처리 실행 : 장고에서는 관련 뷰 함수가 호출</p>
+</li>
+<li><p>뷰 함수에서 리턴해야만 비로소 HTTP응답이 시작되며, 그 HTTP 응답을 받기 전까지는 하얀 화면만 보여집니다. <strong>따라서 뷰 처리시간이 길어질수록 긴 화면이 보여지는 시간이 길어집니다.</strong></p>
+</li>
+<li><p>브라우저는 서버로부터 HTTP 문자열 응답을 1줄씩 해석하여, 그래픽적으로 표현합니다. </p>
+</li>
+</ol>
+<p>   아직, HTML 문자열 응답에 추가 리소스 (CSS, JavaScript, Image 등) 가 없습니다.</p>
+<h3 id="만약-HTML-문자열-응답에-추가-리소스가-지정되어있다면"><a href="#만약-HTML-문자열-응답에-추가-리소스가-지정되어있다면" class="headerlink" title="만약 HTML 문자열 응답에 추가 리소스가 지정되어있다면?"></a>만약 HTML 문자열 응답에 추가 리소스가 지정되어있다면?</h3><p>HTML 문자열은 1줄씩 처리되며, 외부 리소스는 해당 리소스가 로딩완료/실행될 때까지 대기합니다.</p>
+<p>아래 예시에는 link, script 가 외부이므로.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">     &lt;meta charset&#x3D;&quot;utf-8&quot; &#x2F;&gt;</span><br><span class="line">     &lt;title&gt;AskDjango Blog&lt;&#x2F;title&gt;</span><br><span class="line">     &lt;link rel&#x3D;&quot;stylesheet&quot; href&#x3D;&quot;&#x2F;static&#x2F;style.css&quot; &#x2F;&gt;</span><br><span class="line">     &lt;script src&#x3D;&quot;&#x2F;static&#x2F;jquery-3.2.1.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">     &lt;h1&gt;AskDjango Blog&lt;&#x2F;h1&gt;</span><br><span class="line">     &lt;ul&gt;</span><br><span class="line">         &#123;% for post in post_list %&#125;</span><br><span class="line">         &lt;li&gt;</span><br><span class="line">         &#123;&#123; post.title &#125;&#125;</span><br><span class="line">         &lt;&#x2F;li&gt;</span><br><span class="line">         &#123;% endfor %&#125;</span><br><span class="line">     &lt;&#x2F;ul&gt;</span><br><span class="line">     &lt;hr&#x2F;&gt;</span><br><span class="line">     &amp;copy; 2017, AskDjango.</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="HTML-UI-응답성이-낮아지는-경우"><a href="#HTML-UI-응답성이-낮아지는-경우" class="headerlink" title="HTML UI 응답성이 낮아지는 경우"></a>HTML UI 응답성이 낮아지는 경우</h3><ul>
+<li>과도한 JavaScript 로딩 및 계산</li>
+<li>과도한 CSS 레이아웃 로딩 및 계산</li>
+<li>잦은 시각적 개체 업데이트</li>
+</ul>
+<h3 id="HTML-UI-응답성을-높이기-위해"><a href="#HTML-UI-응답성을-높이기-위해" class="headerlink" title="HTML UI 응답성을 높이기 위해"></a>HTML UI 응답성을 높이기 위해</h3><ul>
+<li>실서비스시에 CSS/JavaScript파일은 <strong>Minify</strong>시켜서 다운로드 용량을 줄입니다.</li>
+<li>대개 CSS를 HTML컨텐츠보다 앞에 위치시키고 <ul>
+<li>CSS가 컨텐츠보다 뒤에 위치한다면, 유저에게는 스타일이 적용되지 않은 HTML컨텐츠가 먼저 노출될 수 있습니다. </li>
+</ul>
+</li>
+<li>JS를 HTML컨텐츠보다 뒤에 위치시킵니다.<ul>
+<li>JS는 스타일에 직접적인 영향을 끼치지 않기 때문에, HTML컨텐츠보다 나중 에 로딩되어도 대개 괜찮습니다. 꼭 필요한 몇몇 JS는 HTML컨텐츠보다 앞에 위치시키기도 합니다</li>
+</ul>
+</li>
+</ul>
+<h2 id="초기-웹과는-달라진-JavaScript의-위상"><a href="#초기-웹과는-달라진-JavaScript의-위상" class="headerlink" title="초기 웹과는 달라진 JavaScript의 위상"></a>초기 웹과는 달라진 JavaScript의 위상</h2><p>js는 그냥 effect였지만</p>
+<p>구글맵이 나면서 웹 애플리케이션의 세계 오픈, 그냥 링크가아니라 웹 애플리케이션! 구글 지도참조</p>
+<h1 id="CSS-Layout"><a href="#CSS-Layout" class="headerlink" title="CSS Layout"></a>CSS Layout</h1><ul>
+<li>각 HTML 엘리먼트에 대한 스타일을 기술</li>
+<li>MDN web docs css에서 참고서 지도서 데모 하면 기초다질수있다</li>
+</ul>
+<h2 id="Table-기반의-레이아웃이-흥하던-시절이-있었습니다"><a href="#Table-기반의-레이아웃이-흥하던-시절이-있었습니다" class="headerlink" title="Table 기반의 레이아웃이 흥하던 시절이 있었습니다"></a>Table 기반의 레이아웃이 흥하던 시절이 있었습니다</h2><ul>
+<li>HTML로 문서의 구조를, CSS로 스타일링을 한다는 개념이 보급되기 전에는 태그로 레이아웃을 잡았었죠.</li>
+</ul>
+<p>NARADESIGN, 웹 표준 코딩의 장점, Table for Layout과 CSS Layout의 비교실험 </p>
+<ul>
+<li>Table for Layout은 개발하기에 직관적인 레이아웃이지만, 웹표준 방식에 맞지 않습니다.</li>
+</ul>
+<p>CSS Layout 방식은? </p>
+<blockquote>
+<p>코드 용량 절감</p>
+<p>사람이나 컴퓨터가 이해하기 쉬운 구조</p>
+<p>쉬운 유지보수</p>
+</blockquote>
+<h2 id="그런데-CSS로-스타일-잡기-너무-어렵습니다"><a href="#그런데-CSS로-스타일-잡기-너무-어렵습니다" class="headerlink" title="그런데, CSS로 스타일 잡기 너무 어렵습니다"></a>그런데, CSS로 스타일 잡기 너무 어렵습니다</h2><ul>
+<li>지금도 브라우저 간의 파편화는 존재합니다.</li>
+<li>바닥부터 한땀한땀 CSS 스타일링을 하는 것은 너무나도 고통스럽습니 다. 더군다나 우리는 백엔드 개발자 !!! :( </li>
+<li>게다가 반응형 웹페이지까지 할려면, @_@;;;</li>
+</ul>
+<h4 id="반응형-웹"><a href="#반응형-웹" class="headerlink" title="반응형 웹"></a>반응형 웹</h4><ul>
+<li>브라우저의 가로크기에 따라 각기 다른 CSS 스타일을 적용 (다른 레이아웃 을 적용) 되는 웹페이지 </li>
+<li>CSS Media Queries를 통해 구현</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 브라우저의 가로크기가 600px 이하일 경우, 아래 스타일이 적용 *&#x2F;</span><br><span class="line">@media (max-width: 600px) &#123;</span><br><span class="line">     body &#123;</span><br><span class="line">     background-color: green;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="반응형-웹의-단점"><a href="#반응형-웹의-단점" class="headerlink" title="반응형 웹의 단점"></a>반응형 웹의 단점</h4><ul>
+<li>예전에는 모바일/데스크탑 페이지를 따로 만드는 경우도 많았으나, 반응형 웹으로 구현 하면 한 페이지에서 모바일/데스크탑 페이지를 한 페이지에서 대응 가능 </li>
+<li>모든 해상도 대응을 위한 CSS/이미지를 모두 불러와야 하므로, 로딩 시간이 길어집니다. </li>
+<li>복잡한 컨텐츠에는 맞지 않습니다. 레이아웃과 컨텐츠가 복잡하지 않아야, 일관된 UX을 제공할 수 있습니다.</li>
+<li>따로 분리하는 것이 더 나은 선택일 수도 있습니다. 네이버는 모바일페이지 https:// m.naver.com 와 데스크탑페이지 <a href="https://naver.com" target="_blank" rel="noopener">https://naver.com</a> 가 서로 분리되어있습니다. </li>
+</ul>
+<h2 id="CSS-Frameworks"><a href="#CSS-Frameworks" class="headerlink" title="CSS Frameworks"></a>CSS Frameworks</h2><ul>
+<li>초기 구성의 용이함</li>
+<li>기본적인 CSS스타일을 이미 구성</li>
+<li>이미 일정 수준의 작업이 되어있기에, 원하는 레이아웃으로 작업해서 초기 웹페이지를 구성하기에 편리</li>
+<li>하지만, 같은 CSS Frameworks를 쓴 사이트는 같은 서비스인 것처럼 보여집니다… :( </li>
+<li>구성하기 나름이죠. CSS Frameworks 만으로 끝나지 않습니다. 시작은 쉽게 하되, 좋 은 디자인을 뽑아내기 위해서는 커스텀이 필요한 시점이 옵니다. 2</li>
+</ul>
+<h3 id="Best-Css-Frameworks-of-2019"><a href="#Best-Css-Frameworks-of-2019" class="headerlink" title="Best Css Frameworks of 2019"></a>Best Css Frameworks of 2019</h3><ul>
+<li><strong>Bootstrap</strong></li>
+<li>Bulma</li>
+<li>Pure.css : 사이즈가 작고 Flat한 디자인</li>
+<li>Kube • Materialize • Vuetify</li>
+</ul>
+<p><strong>Bootstrap4 사용!</strong></p>
+<p>기본 스타일도 좋고 • 반응형도 잘 지원하고 • Bootstrap4는 아직 시작단계이며, 아직 Bootstrap3에서 보다 다양한 무료/유료 테 마들이 있습니다</p>
+<h3 id="Bootstrap34-CDN-배포판-활용"><a href="#Bootstrap34-CDN-배포판-활용" class="headerlink" title="Bootstrap34 , CDN 배포판 활용"></a>Bootstrap34 , CDN 배포판 활용</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;link href&#x3D;&quot;https:&#x2F;&#x2F;maxcdn.bootstrapcdn.com&#x2F;bootstrap&#x2F;3.3.7&#x2F;css&#x2F;bootstrap.min.css&quot; &#x2F;&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;code.jquery.com&#x2F;jquery-2.2.4.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;maxcdn.bootstrapcdn.com&#x2F;bootstrap&#x2F;3.3.7&#x2F;js&#x2F;bootstrap.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>bootstrap은 jquery에 의존성이 있습니다. 필히 bootstrap javascript보다 jquery가 먼저 선언되어야 합니다.</p>
+<h3 id="CDN"><a href="#CDN" class="headerlink" title="CDN"></a>CDN</h3><p>최적화된 전세계적으로 촘촘히 분산된 서버로 이루어진 플랫폼 전 세계의 유저에게 빠르고 안전한 정적파일 전송</p>
+<ul>
+<li>우리는 하나의 원본(Origin)서버를 가지고, </li>
+<li>CDN 서비스 업체에서는 전 세계에 걸쳐 컨텐츠 서버를 가지고 있고, 원본 서버로부터 각 컨텐츠 서버로 데이터를 복제합니다.</li>
+<li>전 세계의 유저들이 동일한 주소로 컨텐츠를 요청을 하면, CDN 서비스에서 는 이 요청을 해당 유저와 물리적으로 가까운 CDN 콘텐츠 서버에서 응답토 록 구성합니다.</li>
+</ul>
+<h3 id="다양한-Bootstrap3-테마-사이트"><a href="#다양한-Bootstrap3-테마-사이트" class="headerlink" title="다양한 Bootstrap3 테마 사이트"></a>다양한 Bootstrap3 테마 사이트</h3><ul>
+<li>Bootswatch</li>
+<li>Start Boostrap</li>
+<li>Wrap Bootstrap</li>
+<li>themeforest </li>
+</ul>
+<p>이쁘다고 아무 테마나 사지마세요. 어떤 프론트엔드 기술이 적용되어있는 지 꼼꼼하게 체크하셔야 합니다</p>
+<p>장고 프로젝트에 Bootstrap3 및 커스텀 테마를 적용해보세요.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">프로젝트에 template&#x2F;layout.html</span><br><span class="line">특히 css는 head에 js는 body맨끝에 놓기</span><br><span class="line">그리고 프로젝트에 template폴더이므로 settings.py에 templates에 dirs에 경로 추가해주기</span><br><span class="line"></span><br><span class="line">&#39;DIRS&#39;: [</span><br><span class="line">            os.path.join(BASE_DIR, &#39;front_end_prac&#39;, &#39;templates&#39;),</span><br><span class="line">        ],</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">    &lt;head&gt;</span><br><span class="line">        &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">        &lt;title&gt;AskDjango Blog&lt;&#x2F;title&gt;</span><br><span class="line"></span><br><span class="line">        &lt;link rel&#x3D;&quot;stylesheet&quot; href&#x3D;&quot;&#x2F;&#x2F;maxcdn.bootstrapcdn.com&#x2F;bootstrap&#x2F;3.3.7&#x2F;css&#x2F;bootstrap.min.css&quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;&#x2F;head&gt;</span><br><span class="line">    &lt;body&gt;</span><br><span class="line">         &lt;h1&gt;AskDjango Blog&lt;&#x2F;h1&gt;</span><br><span class="line"></span><br><span class="line">         &#123;% block content %&#125;</span><br><span class="line">         &#123;% endblock %&#125;</span><br><span class="line">    &lt;hr&#x2F;&gt;</span><br><span class="line"></span><br><span class="line">    2017 &amp;copy; &lt;a href&#x3D;&quot;https:&#x2F;&#x2F;nomade.kr&quot;</span><br><span class="line">                   target&#x3D;_blank&quot;&gt;nomade.kr&quot;&lt;&#x2F;a&gt;</span><br><span class="line"></span><br><span class="line">    &lt;script src&#x3D;&quot;&#x2F;&#x2F;code.jquery.com&#x2F;jquery-2.2.4.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">    &lt;script src&#x3D;&quot;&#x2F;&#x2F;maxcdn.bootstrapcdn.com&#x2F;bootstrap&#x2F;3.3.7&#x2F;js&#x2F;bootstrap.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">    &lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#blog&#x2F;templates&#x2F;layout.html</span><br><span class="line"></span><br><span class="line">&#123;% extends &quot;layout.html&quot; %&#125;</span><br><span class="line"></span><br><span class="line">#blog&#x2F;templates&#x2F;index.html 등다른것들은</span><br><span class="line">&#123;% extends &quot;blog&#x2F;layout.html&quot; %&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="꿀팁"><a href="#꿀팁" class="headerlink" title="꿀팁"></a>꿀팁</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pip install django-bootstrap3</span><br><span class="line">한다음에</span><br><span class="line">settings.py에서 installed_apps에서 &#39;bootstrap3&#39; 추가후</span><br><span class="line"></span><br><span class="line">해당 원하는 곳에가서</span><br><span class="line">&#123;% load bootstrap3 %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% bootstrap_form form %&#125;같이 쓸수있음</span><br><span class="line">위 명령어 안에               &#123;&#123; form.as_table &#125;&#125;까지 포함되어있으므로 삭제하자</span><br></pre></td></tr></table></figure>
+
+<h1 id="JavaScript와-jQuery"><a href="#JavaScript와-jQuery" class="headerlink" title="JavaScript와 jQuery"></a>JavaScript와 jQuery</h1><h2 id="JavaScript-1"><a href="#JavaScript-1" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul>
+<li>웹브라우저 내에서 주로 구동되던 프로그래밍 언어</li>
+<li>구글이 크롬 브라우저에서 사용되는 V8엔진을 오픈소스로 풀어버림.<ul>
+<li>자바스크립트를 실행하기 전에 컴파일한 후에 실행</li>
+<li>이 V8엔진을 통해 nodejs1 플랫폼이 개발됨</li>
+</ul>
+</li>
+<li>주로 웹서비스 개발에 많이 사용, Electron을 통해 Desktop 애플리케이션도 만듬</li>
+</ul>
+<h2 id="jQuery"><a href="#jQuery" class="headerlink" title="jQuery"></a>jQuery</h2><ul>
+<li>2006년, jQuery 출시<ul>
+<li>그 전에는 브라우저 별로 파편화가 무척 심했습니다. 프론트엔드 개발 HELL ~</li>
+<li>jQuery는 단일 API로 Ajax요청과 DOM조작을 편리하게 해줍니다.</li>
+</ul>
+</li>
+<li>하지만, 최근에는 jQuery를 안 쓰는 경우가 많음. <ul>
+<li>무거워진 jQuery, 하지만 방대한 기존 jQuery 플러그인</li>
+<li>보다 근대화된 브라우저</li>
+<li>보다 발전된 Web API</li>
+</ul>
+</li>
+</ul>
+<h3 id="jQuery-CDN-버전"><a href="#jQuery-CDN-버전" class="headerlink" title="jQuery CDN 버전"></a>jQuery CDN 버전</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;code.jquery.com&#x2F;jquery-2.2.4.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">&#x2F;&#x2F; 이후에 필요한 자바스크립트 코드 구현</span><br><span class="line">$(function() &#123;</span><br><span class="line"> 		console.log(&quot;웹페이지 로딩 완료&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="각-코드-비교"><a href="#각-코드-비교" class="headerlink" title="각 코드 비교"></a>각 코드 비교</h3><p>모두 동일한 동작을 하는 코드</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 예전 JavaScript 스타일</span><br><span class="line">var div &#x3D; document.getElementsByTagName(&#39;div&#39;)[0];</span><br><span class="line">div.className +&#x3D; &#39; foo&#39;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; jQuery</span><br><span class="line">jQuery(&#39;div:first&#39;).addClass(&#39;foo&#39;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 최신 브라우저에서 지원하는 자바스크립트 API</span><br><span class="line">document.querySelector(&#39;div&#39;).classList.add(&#39;foo&#39;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="이제-더-이상-jQuery를-잘-사용하지-않게-되었습니다"><a href="#이제-더-이상-jQuery를-잘-사용하지-않게-되었습니다" class="headerlink" title="이제 더 이상 jQuery를 잘 사용하지 않게 되었습니다.."></a>이제 더 이상 jQuery를 잘 사용하지 않게 되었습니다..</h3><ul>
+<li>구글검색: jQuery를 쓰면 안 되는 이유</li>
+<li>대부분의 jQuery 메소드의 대안을 최근 브라우저에서는 네이티브 구현으로 제공<ul>
+<li>출처: You Don’t Need jQuery</li>
+</ul>
+</li>
+<li>그렇지만, 자바스크립트를 처음 시작할 때에는 jQuery를 쓰시면, 보다 쉽게 코드를 만들어보실 수 있습니다.<ul>
+<li>추후에 프론트엔드 프레임워크인 Vue.js와 React-JS를 적용해보겠습니다.</li>
+</ul>
+</li>
+<li>우리는 jQuery를 통해, 장고 프로젝트를 좀 더 개선해보도록 하겠습니다</li>
+</ul>
+<h2 id="jQuery사용"><a href="#jQuery사용" class="headerlink" title="jQuery사용"></a>jQuery사용</h2><h3 id="일단-브라우저의-개발자-도구-열기"><a href="#일단-브라우저의-개발자-도구-열기" class="headerlink" title="일단, 브라우저의 개발자 도구 열기"></a>일단, 브라우저의 개발자 도구 열기</h3><ul>
+<li>프론트엔드 개발에서는 필히 브라우저의 “개발자 도구”를 열어주세요.<ul>
+<li>웹 개발 시의 브라우저는 Chrome이나 Firefox가 좋습니다. </li>
+</ul>
+</li>
+<li>브라우저 자바스크립트 수행 중에 발생한 오류는 <strong>“console 탭”</strong>에서 확 인하실 수 있어요.</li>
+</ul>
+<h3 id="구현해볼-기능"><a href="#구현해볼-기능" class="headerlink" title="구현해볼 기능"></a>구현해볼 기능</h3><ol>
+<li>Event Listener 등록<ul>
+<li><strong>수많은 이벤트(상황)</strong>가 있지만, 이 중에 대표적으로 onload(현재 문서 로딩완료), click(특정 엘리먼트가 클릭됨), submit(form태그에서 submit이 발생했을때) 이벤트에 대해서만 살펴보겠습니다.</li>
+</ul>
+</li>
+<li>DOM 엘리먼트 추가/제거</li>
+<li>Ajax GET/POST 요청</li>
+</ol>
+<p>무조건 jQuery먼저 CDN으로 불러오고 그다음 쓰자</p>
+<h4 id="기능1-이벤트-리스너-등록"><a href="#기능1-이벤트-리스너-등록" class="headerlink" title="기능1) 이벤트 리스너 등록"></a>기능1) 이벤트 리스너 등록</h4><p>onload 이벤트 리스너</p>
+<p>이벤트 리스너 등록은 웹페이지 로딩 후에 하는 것이 안전합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;code.jquery.com&#x2F;jquery-2.2.4.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">#(document)대상이 레디가 되었을때 대한 콜백을 등록함 ready(콜백!!)</span><br><span class="line">$(document).ready(function() &#123;</span><br><span class="line"> console.log(&quot;웹페이지 로딩 완료&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>위를 축약표현으로는</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;code.jquery.com&#x2F;jquery-2.2.4.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">  $(function() &#123;</span><br><span class="line">   console.log(&quot;웹페이지 로딩완료&quot;);</span><br><span class="line">  &#125;);</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="click-이벤트-리스너"><a href="#click-이벤트-리스너" class="headerlink" title="click 이벤트 리스너"></a>click 이벤트 리스너</h4><p>어떤 DOM 3 엘리먼트에도 click 이벤트 리스너를 등록하실 수 있습니다.</p>
+<p>(ul에는 여러가지항목에 대해 리스너 등록 예시)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;a id&#x3D;&quot;btn-naver-1&quot; href&#x3D;&quot;http:&#x2F;&#x2F;m.naver.com&quot; target&#x3D;&quot;_blank&quot;&gt;Naver Button 1&lt;&#x2F;a&gt;</span><br><span class="line">&lt;a id&#x3D;&quot;btn-naver-2&quot; href&#x3D;&quot;http:&#x2F;&#x2F;m.naver.com&quot; target&#x3D;&quot;_blank&quot;&gt;Naver Button 2&lt;&#x2F;a&gt;</span><br><span class="line">&lt;ul id&#x3D;&quot;my-list&quot;&gt;</span><br><span class="line">   &lt;li&gt;list1&lt;&#x2F;li&gt;</span><br><span class="line">   &lt;li&gt;list2&lt;&#x2F;li&gt;</span><br><span class="line">   &lt;li&gt;list3&lt;&#x2F;li&gt;</span><br><span class="line">&lt;&#x2F;ul&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">$(function() &#123;</span><br><span class="line">     &#x2F;&#x2F; 리스너에 리턴값이 없기 때문에</span><br><span class="line">     &#x2F;&#x2F; 아래 리스너가 호출될 뿐만 아니라, href 링크가 동작</span><br><span class="line">     &#x2F;&#x2F; #은 id를 가르킴!!</span><br><span class="line">     $(&#39;#btn-naver-1&#39;).click(function() &#123;</span><br><span class="line">     console.log(&#39;clicked btn-naver-1&#39;);</span><br><span class="line">     &#125;);</span><br><span class="line">     </span><br><span class="line">     &#x2F;&#x2F; 아래 리스너가 호출되지만, href 링크는 동작하지 않습니다.</span><br><span class="line">     &#x2F;&#x2F; function(이벤트)에서 이벤트 지정가능</span><br><span class="line">     $(&#39;#btn-naver-2&#39;).click(function(e) &#123;</span><br><span class="line">     e.preventDefault(); &#x2F;&#x2F; 디폴트 동작 수행 방지. 혹은 이부분지우고 return false; 도 동일한 효과!!</span><br><span class="line">     console.log(&#39;clicked btn-naver-2&#39;);</span><br><span class="line">     &#x2F;&#x2F; return false; &#x2F;&#x2F; true를 리턴하면, 위 태그 클릭 시의 디폴트 동작 수행</span><br><span class="line">     &#125;);</span><br><span class="line">     </span><br><span class="line">     &#x2F;&#x2F;id&#x3D;my-list밑에 li에검</span><br><span class="line">     $(&#39;#my-list li&#39;).click(function() &#123;  </span><br><span class="line">     var content &#x3D; $(this).html();</span><br><span class="line">     console.log(&#39;clicked : &#39; + content);</span><br><span class="line">     &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="submit-이벤트-리스너"><a href="#submit-이벤트-리스너" class="headerlink" title="submit 이벤트 리스너"></a>submit 이벤트 리스너</h4><p>Form 엘리먼트에 대한 submit 이벤트 리스너를 등록하실 수 있습니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;form id&#x3D;&quot;query-form&quot;&gt;</span><br><span class="line">     &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;query&quot; &#x2F;&gt;</span><br><span class="line">     &lt;input type&#x3D;&quot;submit&quot; value&#x3D;&quot;조회&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;form&gt;</span><br><span class="line"></span><br><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;code.jquery.com&#x2F;jquery-2.2.4.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">&#x2F;&#x2F;id가 quert-form인 태그에서 submit을 막는것</span><br><span class="line">$(function() &#123;</span><br><span class="line">     $(&#39;#query-form&#39;).submit(function(e) &#123;</span><br><span class="line">         e.preventDefault();</span><br><span class="line">         console.log(&quot;form submit&quot;);</span><br><span class="line">     &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="기능2-DOM-엘리먼트-추가-제거"><a href="#기능2-DOM-엘리먼트-추가-제거" class="headerlink" title="기능2) DOM 엘리먼트 추가/제거"></a>기능2) DOM 엘리먼트 추가/제거</h4><ul>
+<li>버튼 태그는 form태그안에서는 submit효과를 가지지만 밖이면 이렇게 쓰면 아무런 효과없다</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;button id&#x3D;&quot;lotto-btn&quot;&gt;로또 번호를 점지해주세요.&lt;&#x2F;button&gt;</span><br><span class="line">&lt;button id&#x3D;&quot;remove-at-first&quot;&gt;처음을 삭제&lt;&#x2F;button&gt;</span><br><span class="line">&lt;button id&#x3D;&quot;remove-at-last&quot;&gt;마지막을 삭제&lt;&#x2F;button&gt;</span><br><span class="line"></span><br><span class="line">&lt;div id&#x3D;&quot;lotto-list&quot;&gt;&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;code.jquery.com&#x2F;jquery-2.2.4.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">$(function() &#123;</span><br><span class="line">     $(&#39;#lotto-btn&#39;).click(function() &#123;</span><br><span class="line">         var rendered &#x3D; &#39;&lt;div class&#x3D;&quot;post&quot;&gt;로또 번호를 뽑아봅시다 : &#39; + (new Date()) + &#39;&lt;&#x2F;div&gt;&#39;;</span><br><span class="line">         </span><br><span class="line">         &#x2F;&#x2F; var container &#x3D; $(&#39;#lotto-list&#39;).append(rendered); &#x2F;&#x2F; append 활용</span><br><span class="line">         var $added &#x3D; $(rendered).appendTo(&#39;#lotto-list&#39;); &#x2F;&#x2F; appendTo 활용. 추가된 jQuery객체를 리턴.</span><br><span class="line">         $added.click(function() &#123;</span><br><span class="line">       		  $(this).remove(); &#x2F;&#x2F; 각 항목</span><br><span class="line">         &#125;);</span><br><span class="line">     &#125;);</span><br><span class="line">     </span><br><span class="line">     $(&#39;#remove-at-first&#39;).click(function() &#123;</span><br><span class="line">         $(&#39;#lotto-list div:first&#39;).remove(); &#x2F;&#x2F;id&#x3D;lotto-list에서 div태그에 첫번째꺼!</span><br><span class="line">     &#125;);</span><br><span class="line">     </span><br><span class="line">     $(&#39;#remove-at-last&#39;).click(function() &#123;</span><br><span class="line">    		 $(&#39;#lotto-list div:last&#39;).remove();</span><br><span class="line">     &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>참고) jQuery에서 지원하는 Selector : <a href="https://api.jquery.com/category/selectors/" target="_blank" rel="noopener">https://api.jquery.com/category/selectors/</a></p>
+<h4 id="별도-템플릿을-통한-추가"><a href="#별도-템플릿을-통한-추가" class="headerlink" title="별도 템플릿을 통한 추가"></a>별도 템플릿을 통한 추가</h4><p>underscore.js  의 템플릿 시스템 활용(django템플릿처럼)</p>
+<p><a href="https://underscorejs.org/#template" target="_blank" rel="noopener">https://underscorejs.org/#template</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;button id&#x3D;&quot;lotto-btn&quot;&gt;로또번호 생성하기&lt;&#x2F;button&gt;</span><br><span class="line"></span><br><span class="line">&lt;div id&#x3D;&quot;lotto-list&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 복잡한 문자열을 custom script 태그를 통해 정의하기 --&gt;</span><br><span class="line">&lt;!-- javascript로서 처리되지 않도록, 임의 type 지정!!!!!!!! --&gt;</span><br><span class="line">&lt;!-- 아래&lt;%&#x3D; numbers %&gt;는 underscorejs의 변수 출력 문법임 --&gt;</span><br><span class="line">&lt;script id&#x3D;&quot;post-template&quot; type&#x3D;&quot;text&#x2F;x-template&quot;&gt;</span><br><span class="line">     &lt;div class&#x3D;&quot;post&quot;&gt;</span><br><span class="line">     		당첨번호는 &lt;%&#x3D; numbers %&gt;이며, 보너스 번호는 &lt;%&#x3D; bonus %&gt;입니다.</span><br><span class="line">     &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;code.jquery.com&#x2F;jquery-2.2.4.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;cdnjs.cloudflare.com&#x2F;ajax&#x2F;libs&#x2F;underscore.js&#x2F;1.8.3&#x2F;underscore-min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">$(function() &#123;</span><br><span class="line">     var raw_template &#x3D; $(&#39;#post-template&#39;).html(); &#x2F;&#x2F;해당아래것들을 문자열로만가져옴</span><br><span class="line">     var tpl &#x3D; _.template(raw_template); &#x2F;&#x2F;이렇게 문자열을 넣어주면 템플릿반환</span><br><span class="line">     </span><br><span class="line">     $(&#39;#lotto-btn&#39;).click(function() &#123;</span><br><span class="line">         var sample &#x3D; _.sample(_.range(1, 46), 6);</span><br><span class="line">         &#x2F;&#x2F;이렇게 아래처럼 쓰면 알아서 받아서 집어넣고 문자열로 만들어줌</span><br><span class="line">         var rendered &#x3D; tpl(&#123;</span><br><span class="line">         numbers: sample.slice(0, 5).sort(function(x, y) &#123; return x - y; &#125;), </span><br><span class="line">         bonus: sample[5]</span><br><span class="line">         &#125;); </span><br><span class="line">         console.log(rendered);</span><br><span class="line">         $(rendered).appendTo(&#39;#lotto-list&#39;);</span><br><span class="line">     &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>프론트단에서 모두 계산완료</p>
+<h4 id="기능3-Ajax-GET-POST-요청"><a href="#기능3-Ajax-GET-POST-요청" class="headerlink" title="기능3) Ajax GET/POST 요청"></a>기능3) Ajax GET/POST 요청</h4><p>자바스크립트를 통한 비동기 HTTP 요청 - Asynchronous JavaScript and XML</p>
+<ul>
+<li><p>HTTP 요청 Method</p>
+<ul>
+<li><p>GET 요청 : 주로 검색/조회/페이징처리 시에 사용</p>
+</li>
+<li><p>POST 요청 : 주로 수정/삭제 처리 시에 사용 </p>
+</li>
+</ul>
+</li>
+<li><p>브라우저의 동일 도메인 참조 정책 (Same-Origin Policy) </p>
+<ul>
+<li><p>같은 프로토콜/호스트명/포트 내에서만 Ajax 요청이 가능 </p>
+</li>
+<li><p>초기에는 웹사이트의 보안을 위한 좋은 방법으로 생각되었으나, 최근 여러 도메인에 걸쳐서 구성되는 웹서비스가 늘어나는 시점에서는 거추장스 러운(?) 기술??? 그래서, Cross Domain Request를 허용하기 위해 <strong>CORS(Cross Origin Resource Sharing) 지원</strong> (서버측 셋업이 필요) </p>
+<p>CORS 설정: 모든 도메인에 대해서 허용한다면, 서버 측 응답헤더에 Access-Control-Allow-Origin: *를 추가</p>
+</li>
+<li><p>혹은 서버에 요청을 위임하여, 요청을 Proxy처리하기도 합니다.</p>
+</li>
+<li><p>JSONP방식은 Proxy처리에 사용되는 방식이아니라, Same-Origin Policy를 우회하는 방식입니다.</p>
+</li>
+</ul>
+</li>
+<li><p>Django 뷰에서는 POST를 받을 때 CSRF Token값을 체크합니다. CSRF Token값이 없거나 값이 맞지 않으면 400 Bad Request 응답을 합니다. Django에서의 대응은 Django 공식문서를 참고하세요.</p>
+</li>
+</ul>
+<h4 id="다른-도메인에-요청으로-하므로-실패하는-Ajax-GET-요청"><a href="#다른-도메인에-요청으로-하므로-실패하는-Ajax-GET-요청" class="headerlink" title="다른 도메인에 요청으로 하므로, 실패하는 Ajax GET 요청"></a>다른 도메인에 요청으로 하므로, 실패하는 Ajax GET 요청</h4><p>같은 도메인이라면 요청이 성공할 것입니다</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">     method: &quot;GET&quot;,</span><br><span class="line">     url: &#39;http:&#x2F;&#x2F;www.melon.com&#x2F;search&#x2F;keyword&#x2F;index.json?jscallback&#x3D;?&#39;, &#x2F;&#x2F; 다른 도메인입니다 !!!</span><br><span class="line">     data: &#123;query: &#39;윤종신&#39;&#125;,</span><br><span class="line">     cache: false &#x2F;&#x2F; true 지정 : GET인자로 &quot;_&#x3D;&#123;timestamp&#125;&quot; 를 붙여줍니다. 매번 URL이 달라지므로 브라우저 캐싱되지 않습니다.</span><br><span class="line">&#125;)</span><br><span class="line">.done(function(response, textStatus, xhr) &#123;</span><br><span class="line">     console.log(&quot;---- done ----&quot;);</span><br><span class="line">     console.log(response);</span><br><span class="line">     console.log(textStatus);</span><br><span class="line">     console.log(xhr);</span><br><span class="line">&#125;)</span><br><span class="line">.fail(function(xhr, textStatus, error) &#123;</span><br><span class="line">     console.log(&quot;---- fail ----&quot;);</span><br><span class="line">     console.log(xhr);</span><br><span class="line">     console.log(textStatus);</span><br><span class="line">     console.log(error);</span><br><span class="line">&#125;)</span><br><span class="line">.always(function(response_or_xhr, textStatus, xhr_or_error) &#123;</span><br><span class="line"> &#x2F;&#x2F; 인자가 done&#x2F;fail 인자 매핑과 동일</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="개발자도구-오류-메세지"><a href="#개발자도구-오류-메세지" class="headerlink" title="개발자도구, 오류 메세지"></a>개발자도구, 오류 메세지</h4><blockquote>
+<p>XMLHttpRequest cannot load <a href="http://www.melon.com/search/" target="_blank" rel="noopener">http://www.melon.com/search/</a> keyword/index.json?jscallback=? &amp;query=%EC%9C%A4%EC%A2%85%EC%8B%A0&amp;_=150451 5550905. No ‘Access-Control-Allow-Origin’ header is present on the requested resource. Origin ‘null’ is therefore not allowed access.</p>
+</blockquote>
+<p>교차 원본 요청 차단: 동일 출처 정책으로 인해 [요청한 도메인]에 있는 원 격 자원을 읽을 수 없습니다. 자원을 같은 도메인으로 이동시키거나 CORS 를 활성화하여 해결할 수 있습니다.</p>
+<h4 id="JSONP-5-의-예"><a href="#JSONP-5-의-예" class="headerlink" title="JSONP 5 의 예"></a>JSONP 5 의 예</h4><p> JSONP:  태그는 SOP정책에 속하지 않음을 이용하여, 서로 다른 도메인/포트 간에 JSON GET통신을 할 수 있는 방법</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">     method: &quot;GET&quot;,</span><br><span class="line">     url: &#39;http:&#x2F;&#x2F;www.melon.com&#x2F;search&#x2F;keyword&#x2F;index.json?jscallback&#x3D;?&#39;, &#x2F;&#x2F; jsonp 핵심포인트 1) : jscallback&#x3D;? 인자</span><br><span class="line">     data: &#123;query: &#39;윤종신&#39;&#125;,</span><br><span class="line">     dataType: &#39;json&#39;, &#x2F;&#x2F; jsonp 핵심포인트 2)</span><br><span class="line">     cache: false &#x2F;&#x2F; true 지정 : GET인자로 &quot;_&#x3D;&#123;timestamp&#125;&quot; 를 붙여줍니다. 매번 URL이 달라지므로 브라우저 캐싱되지 않습니다.</span><br><span class="line">	 &#125;)</span><br><span class="line">   .done(function(response, textStatus, xhr) &#123;</span><br><span class="line">     console.log(&quot;---- done ----&quot;);</span><br><span class="line">     console.log(response);</span><br><span class="line">     console.log(textStatus);</span><br><span class="line">     console.log(xhr);</span><br><span class="line">	 &#125;)</span><br><span class="line">   .fail(function(xhr, textStatus, error) &#123;</span><br><span class="line">     console.log(&quot;---- fail ----&quot;);</span><br><span class="line">     console.log(xhr);</span><br><span class="line">     console.log(textStatus);</span><br><span class="line">     console.log(error);</span><br><span class="line">	 &#125;)</span><br><span class="line">     .always(function(response_or_xhr, textStatus, xhr_or_error) &#123;</span><br><span class="line">     &#x2F;&#x2F; 인자가 done&#x2F;fail 인자 매핑과 동일</span><br><span class="line"> 	&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="Shortcut-jQuery-get-https-api-jquery-com-jquery-get"><a href="#Shortcut-jQuery-get-https-api-jquery-com-jquery-get" class="headerlink" title="Shortcut: jQuery.get (https://api.jquery.com/jquery.get/)"></a>Shortcut: jQuery.get (<a href="https://api.jquery.com/jquery.get/" target="_blank" rel="noopener">https://api.jquery.com/jquery.get/</a>)</h4><p>dataType=’json’지정이 필요한데, dataType 속성을 지정할 수 없으므로, 아래 요청은 실패합니다.</p>
+<p>3가지</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">var params &#x3D; &#123;query: &#39;윤종신&#39;&#125;;</span><br><span class="line"></span><br><span class="line">$.get(&quot;http:&#x2F;&#x2F;www.melon.com&#x2F;search&#x2F;keyword&#x2F;index.json?jscallback&#x3D;?&quot;, params)</span><br><span class="line">     .done(function(response, textStatus, xhr) &#123;</span><br><span class="line">         console.log(&quot;---- done ----&quot;);</span><br><span class="line">     &#125;)</span><br><span class="line">     .fail(function(xhr, textStatus, error) &#123;</span><br><span class="line">         console.log(&quot;---- fail ----&quot;);</span><br><span class="line">         console.log(xhr);</span><br><span class="line">         console.log(textStatus);</span><br><span class="line">         console.log(error);</span><br><span class="line">     &#125;)</span><br><span class="line">     .always(function(response_or_xhr, textStatus, xhr_or_error) &#123;</span><br><span class="line">         &#x2F;&#x2F; 인자가 done&#x2F;fail 인자 매핑과 동일</span><br><span class="line">     &#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="Shortcut-jQuery-getJSON"><a href="#Shortcut-jQuery-getJSON" class="headerlink" title="Shortcut: jQuery.getJSON"></a>Shortcut: jQuery.getJSON</h4><p><strong>dataType 속성이 ‘json’으로 자동지정</strong>되므로, 아래 요청은 성공합니다.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">var params &#x3D; &#123;query: &#39;윤종신&#39;&#125;;</span><br><span class="line"></span><br><span class="line">$.getJSON(&quot;http:&#x2F;&#x2F;www.melon.com&#x2F;search&#x2F;keyword&#x2F;index.json?jscallback&#x3D;?&quot;, params)</span><br><span class="line">     .done(function(response, textStatus, xhr) &#123;</span><br><span class="line">         console.log(&quot;---- done ----&quot;);</span><br><span class="line">         console.log(response);</span><br><span class="line">         console.log(textStatus);</span><br><span class="line">         console.log(xhr);</span><br><span class="line">     &#125;)</span><br><span class="line">     .fail(function(xhr, textStatus, error) &#123;</span><br><span class="line">         console.log(&quot;---- fail ----&quot;);</span><br><span class="line">         console.log(xhr);</span><br><span class="line">         console.log(textStatus);</span><br><span class="line">         console.log(error);</span><br><span class="line">     &#125;)</span><br><span class="line">     .always(function(response_or_xhr, textStatus, xhr_or_error) &#123;</span><br><span class="line">         &#x2F;&#x2F; 인자가 done&#x2F;fail 인자 매핑과 동일</span><br><span class="line">     &#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="Shortcut-jQuery-post"><a href="#Shortcut-jQuery-post" class="headerlink" title="Shortcut: jQuery.post"></a>Shortcut: jQuery.post</h4><p>추후 장고 연동 시에 샘플을 살펴보겠습니다</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">var params &#x3D; &#123;&#125;;</span><br><span class="line">$.post(&quot;&#x2F;posts&#x2F;100&#x2F;delete&#x2F;&quot;, params)</span><br><span class="line">       .done(function</span><br><span class="line">      (response, textStatus, xhr)&#123;</span><br><span class="line">           console.log(&quot;---- done ----&quot;);</span><br><span class="line">           console.log(response);</span><br><span class="line">           console.log(textStatus);</span><br><span class="line">           console.log(xhr);</span><br><span class="line">       &#125;)</span><br><span class="line">       .fail(function</span><br><span class="line">      (xhr, textStatus, error)&#123;</span><br><span class="line">           console.log(&quot;---- fail ----&quot;);</span><br><span class="line">           console.log(xhr);</span><br><span class="line">           console.log(textStatus);</span><br><span class="line">           console.log(error);</span><br><span class="line">       &#125;)</span><br><span class="line">       .always(function</span><br><span class="line">      (response_or_xhr, textStatus, xhr_or_error)&#123;</span><br><span class="line">           &#x2F;&#x2F; 인자가 done&#x2F;fail 인자 매핑과 동일</span><br><span class="line">       &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="실습-멜론-검색결과-구현하기"><a href="#실습-멜론-검색결과-구현하기" class="headerlink" title="실습(멜론 검색결과 구현하기)"></a>실습(멜론 검색결과 구현하기)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;utf-8&quot; &#x2F;&gt;</span><br><span class="line">    &lt;title&gt;Melon 검색&lt;&#x2F;title&gt;</span><br><span class="line">    &lt;link rel&#x3D;&quot;stylesheet&quot; href&#x3D;&quot;https:&#x2F;&#x2F;maxcdn.bootstrapcdn.com&#x2F;bootstrap&#x2F;3.3.7&#x2F;css&#x2F;bootstrap.min.css&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div class&#x3D;&quot;container&quot;&gt;</span><br><span class="line">        &lt;div class&#x3D;&quot;row&quot;&gt;</span><br><span class="line">            &lt;div class&#x3D;&quot;col-sm-12&quot;&gt;</span><br><span class="line">                &lt;form id&#x3D;&quot;melon-query-form&quot; class&#x3D;&quot;input-group&quot; style&#x3D;&quot;margin: 20px 0;&quot;&gt;</span><br><span class="line">                    &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;q&quot; class&#x3D;&quot;form-control&quot; autocomplete&#x3D;&quot;off&quot; &#x2F;&gt;</span><br><span class="line">                    &lt;span class&#x3D;&quot;input-group-btn&quot;&gt;</span><br><span class="line">                        &lt;input type&#x3D;&quot;submit&quot; class&#x3D;&quot;btn btn-default&quot; &#x2F;&gt;</span><br><span class="line">                    &lt;&#x2F;span&gt;</span><br><span class="line">                &lt;&#x2F;form&gt;</span><br><span class="line"></span><br><span class="line">                &lt;ul id&#x3D;&quot;media-list&quot;&gt;</span><br><span class="line">                &lt;&#x2F;ul&gt;</span><br><span class="line">            &lt;&#x2F;div&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;code.jquery.com&#x2F;jquery-2.2.4.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;cdnjs.cloudflare.com&#x2F;ajax&#x2F;libs&#x2F;underscore.js&#x2F;1.8.3&#x2F;underscore-min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;maxcdn.bootstrapcdn.com&#x2F;bootstrap&#x2F;3.3.7&#x2F;js&#x2F;bootstrap.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script id&#x3D;&quot;song-template&quot; type&#x3D;&quot;text&#x2F;x-template&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;media&quot;&gt;</span><br><span class="line">        &lt;div class&#x3D;&quot;media-left&quot;&gt;</span><br><span class="line">            &lt;a href&#x3D;&quot;http:&#x2F;&#x2F;www.melon.com&#x2F;song&#x2F;detail.htm?songId&#x3D;&lt;%&#x3D; SONGID %&gt;&quot; target&#x3D;&quot;_blank&quot;&gt;</span><br><span class="line">                &lt;img src&#x3D;&quot;&lt;%&#x3D; ALBUMIMG %&gt;&quot; class&#x3D;&quot;media-object&quot; style&#x3D;&quot;widwth: 64px; height: 64px;&quot; &#x2F;&gt;</span><br><span class="line">            &lt;&#x2F;a&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">        &lt;div class&#x3D;&quot;media-body&quot;&gt;</span><br><span class="line">            &lt;h4&gt;</span><br><span class="line">                &lt;a href&#x3D;&quot;http:&#x2F;&#x2F;www.melon.com&#x2F;song&#x2F;detail.htm?songId&#x3D;&lt;%&#x3D; SONGID %&gt;&quot; target&#x3D;&quot;_blank&quot;&gt;</span><br><span class="line">                    &lt;%&#x3D; SONGNAME %&gt;</span><br><span class="line">                &lt;&#x2F;a&gt;</span><br><span class="line">            &lt;&#x2F;h4&gt;</span><br><span class="line">            &lt;%&#x3D; ALBUMNAME %&gt; by</span><br><span class="line">            &lt;%&#x3D; ARTISTNAME %&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">function melon_search(query) &#123;</span><br><span class="line">    var params &#x3D; &#123;</span><br><span class="line">        &#39;query&#39;: query,</span><br><span class="line">    &#125;;</span><br><span class="line">    $.getJSON(&#39;http:&#x2F;&#x2F;www.melon.com&#x2F;search&#x2F;keyword&#x2F;index.json?jscallback&#x3D;?&#39;, params)</span><br><span class="line">        .done(function(resp) &#123;</span><br><span class="line">            console.log(resp);</span><br><span class="line">            $(&#39;#media-list&#39;).html(&#39;&#39;);</span><br><span class="line">            var tpl &#x3D; _.template($(&#39;#song-template&#39;).html());</span><br><span class="line">            $(resp.SONGCONTENTS).each(function() &#123;</span><br><span class="line">                console.log(this);</span><br><span class="line">                &#x2F;&#x2F; var html &#x3D; tpl(this);</span><br><span class="line">                &#x2F;&#x2F; $(html).appendTo(&#39;#media-list&#39;);</span><br><span class="line">                $(&#39;&lt;div class&#x3D;&quot;media&quot;&gt;&#39; +</span><br><span class="line">                    &#39;&lt;div class&#x3D;&quot;media-left&quot;&gt;&#39; +</span><br><span class="line">                    &#39;&lt;a href&#x3D;&quot;http:&#x2F;&#x2F;www.melon.com&#x2F;song&#x2F;detail.htm?songId&#x3D;&#39; + this.SONGID + &#39;&quot; target&#x3D;&quot;_blank&quot;&gt;&#39; +</span><br><span class="line">                    &#39;&lt;img src&#x3D;&quot;&#39; + this.ALBUMIMG + &#39;&quot; class&#x3D;&quot;media-object&quot; style&#x3D;&quot;widwth: 64px; height: 64px;&quot; &#x2F;&gt;&#39; +</span><br><span class="line">                    &#39;&lt;&#x2F;a&gt;&#39; +</span><br><span class="line">                    &#39;&lt;&#x2F;div&gt;&#39; +</span><br><span class="line">                    &#39;&lt;div class&#x3D;&quot;media-body&quot;&gt;&#39; +</span><br><span class="line">                    &#39;&lt;h4&gt;&#39; +</span><br><span class="line">                    &#39;&lt;a href&#x3D;&quot;http:&#x2F;&#x2F;www.melon.com&#x2F;song&#x2F;detail.htm?songId&#x3D;&#39; + this.SONGID + &#39;&quot; target&#x3D;&quot;_blank&quot;&gt;&#39; +</span><br><span class="line">                    this.SONGNAME +</span><br><span class="line">                    &#39;&lt;&#x2F;a&gt;&#39; +</span><br><span class="line">                    &#39;&lt;&#x2F;h4&gt;&#39; +</span><br><span class="line">                    this.ALBUMNAME + &#39; by &#39; + this.ARTISTNAME +</span><br><span class="line">                    &#39;&lt;&#x2F;div&gt;&#39; +</span><br><span class="line">                    &#39;&lt;&#x2F;div&gt;&#39;).appendTo(&#39;#media-list&#39;);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;;</span><br><span class="line">$(function() &#123;</span><br><span class="line">    $(&#39;#melon-query-form&#39;).submit(function(e) &#123;</span><br><span class="line">        e.preventDefault()</span><br><span class="line">        var q &#x3D; $(this).find(&#39;input[name&#x3D;q]&#39;).val();</span><br><span class="line">        melon_search(q);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2019/12/15/Devfesjunior/" title= "한빛소프트 devfest for junior">
+                    <div class="nextTitle">한빛소프트 devfest for junior</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2019/12/06/class-view2/" title= "클래스뷰 정확히 쓰기 2">
+                    <div class="prevTitle">클래스뷰 정확히 쓰기 2</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 사각형 반응형 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="2080063347"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#강의-시작-전"><span class="toc-number">1.</span> <span class="toc-text">강의 시작 전</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#필요한-기능"><span class="toc-number">1.1.</span> <span class="toc-text">필요한 기능</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#시작하기"><span class="toc-number">2.</span> <span class="toc-text">시작하기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-한-HTML파일에-CSS-JavaScript를-모두-넣을-수도-있구요"><span class="toc-number">2.1.</span> <span class="toc-text">1) 한 HTML파일에 CSS&#x2F;JavaScript를 모두 넣을 수도 있구요</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-CSS-JavaScript-파일을-별도-파일로-관리하실-수도-있습니다"><span class="toc-number">2.2.</span> <span class="toc-text">2) CSS&#x2F;JavaScript 파일을 별도 파일로 관리하실 수도 있습니다.</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#대개의-경우-CSS-JavaScript와-같은-정적인-파일은-별도-파일로-관리"><span class="toc-number">2.2.1.</span> <span class="toc-text">대개의 경우 CSS&#x2F;JavaScript와 같은 정적인 파일은 별도 파일로 관리</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CSS-파일"><span class="toc-number">2.2.2.</span> <span class="toc-text">CSS 파일</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript"><span class="toc-number">2.2.3.</span> <span class="toc-text">JavaScript</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#웹-프론트엔드와-백엔드"><span class="toc-number">2.3.</span> <span class="toc-text">웹 프론트엔드와 백엔드</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#백엔드-개발언어와-프론트엔드-개발언어"><span class="toc-number">2.4.</span> <span class="toc-text">백엔드 개발언어와 프론트엔드 개발언어</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#웹-요청-응답"><span class="toc-number">2.5.</span> <span class="toc-text">웹 요청&#x2F;응답</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#일반적인-장고-페이지의-예"><span class="toc-number">2.5.1.</span> <span class="toc-text">일반적인 장고 페이지의 예</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTML-템플릿"><span class="toc-number">2.5.2.</span> <span class="toc-text">HTML 템플릿</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#이-화면이-그려지기까지-처리순서"><span class="toc-number">2.5.3.</span> <span class="toc-text">이 화면이 그려지기까지, 처리순서</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#만약-HTML-문자열-응답에-추가-리소스가-지정되어있다면"><span class="toc-number">2.5.4.</span> <span class="toc-text">만약 HTML 문자열 응답에 추가 리소스가 지정되어있다면?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTML-UI-응답성이-낮아지는-경우"><span class="toc-number">2.5.5.</span> <span class="toc-text">HTML UI 응답성이 낮아지는 경우</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTML-UI-응답성을-높이기-위해"><span class="toc-number">2.5.6.</span> <span class="toc-text">HTML UI 응답성을 높이기 위해</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#초기-웹과는-달라진-JavaScript의-위상"><span class="toc-number">2.6.</span> <span class="toc-text">초기 웹과는 달라진 JavaScript의 위상</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CSS-Layout"><span class="toc-number">3.</span> <span class="toc-text">CSS Layout</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Table-기반의-레이아웃이-흥하던-시절이-있었습니다"><span class="toc-number">3.1.</span> <span class="toc-text">Table 기반의 레이아웃이 흥하던 시절이 있었습니다</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#그런데-CSS로-스타일-잡기-너무-어렵습니다"><span class="toc-number">3.2.</span> <span class="toc-text">그런데, CSS로 스타일 잡기 너무 어렵습니다</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#반응형-웹"><span class="toc-number">3.2.0.1.</span> <span class="toc-text">반응형 웹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#반응형-웹의-단점"><span class="toc-number">3.2.0.2.</span> <span class="toc-text">반응형 웹의 단점</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSS-Frameworks"><span class="toc-number">3.3.</span> <span class="toc-text">CSS Frameworks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Best-Css-Frameworks-of-2019"><span class="toc-number">3.3.1.</span> <span class="toc-text">Best Css Frameworks of 2019</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bootstrap34-CDN-배포판-활용"><span class="toc-number">3.3.2.</span> <span class="toc-text">Bootstrap34 , CDN 배포판 활용</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CDN"><span class="toc-number">3.3.3.</span> <span class="toc-text">CDN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#다양한-Bootstrap3-테마-사이트"><span class="toc-number">3.3.4.</span> <span class="toc-text">다양한 Bootstrap3 테마 사이트</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#꿀팁"><span class="toc-number">3.3.5.</span> <span class="toc-text">꿀팁</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaScript와-jQuery"><span class="toc-number">4.</span> <span class="toc-text">JavaScript와 jQuery</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript-1"><span class="toc-number">4.1.</span> <span class="toc-text">JavaScript</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jQuery"><span class="toc-number">4.2.</span> <span class="toc-text">jQuery</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#jQuery-CDN-버전"><span class="toc-number">4.2.1.</span> <span class="toc-text">jQuery CDN 버전</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#각-코드-비교"><span class="toc-number">4.2.2.</span> <span class="toc-text">각 코드 비교</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#이제-더-이상-jQuery를-잘-사용하지-않게-되었습니다"><span class="toc-number">4.2.3.</span> <span class="toc-text">이제 더 이상 jQuery를 잘 사용하지 않게 되었습니다..</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jQuery사용"><span class="toc-number">4.3.</span> <span class="toc-text">jQuery사용</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#일단-브라우저의-개발자-도구-열기"><span class="toc-number">4.3.1.</span> <span class="toc-text">일단, 브라우저의 개발자 도구 열기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#구현해볼-기능"><span class="toc-number">4.3.2.</span> <span class="toc-text">구현해볼 기능</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#기능1-이벤트-리스너-등록"><span class="toc-number">4.3.2.1.</span> <span class="toc-text">기능1) 이벤트 리스너 등록</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#click-이벤트-리스너"><span class="toc-number">4.3.2.2.</span> <span class="toc-text">click 이벤트 리스너</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#submit-이벤트-리스너"><span class="toc-number">4.3.2.3.</span> <span class="toc-text">submit 이벤트 리스너</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#기능2-DOM-엘리먼트-추가-제거"><span class="toc-number">4.3.2.4.</span> <span class="toc-text">기능2) DOM 엘리먼트 추가&#x2F;제거</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#별도-템플릿을-통한-추가"><span class="toc-number">4.3.2.5.</span> <span class="toc-text">별도 템플릿을 통한 추가</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#기능3-Ajax-GET-POST-요청"><span class="toc-number">4.3.2.6.</span> <span class="toc-text">기능3) Ajax GET&#x2F;POST 요청</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#다른-도메인에-요청으로-하므로-실패하는-Ajax-GET-요청"><span class="toc-number">4.3.2.7.</span> <span class="toc-text">다른 도메인에 요청으로 하므로, 실패하는 Ajax GET 요청</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#개발자도구-오류-메세지"><span class="toc-number">4.3.2.8.</span> <span class="toc-text">개발자도구, 오류 메세지</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JSONP-5-의-예"><span class="toc-number">4.3.2.9.</span> <span class="toc-text">JSONP 5 의 예</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Shortcut-jQuery-get-https-api-jquery-com-jquery-get"><span class="toc-number">4.3.2.10.</span> <span class="toc-text">Shortcut: jQuery.get (https:&#x2F;&#x2F;api.jquery.com&#x2F;jquery.get&#x2F;)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Shortcut-jQuery-getJSON"><span class="toc-number">4.3.2.11.</span> <span class="toc-text">Shortcut: jQuery.getJSON</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Shortcut-jQuery-post"><span class="toc-number">4.3.2.12.</span> <span class="toc-text">Shortcut: jQuery.post</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#실습-멜론-검색결과-구현하기"><span class="toc-number">4.3.3.</span> <span class="toc-text">실습(멜론 검색결과 구현하기)</span></a></li></ol></li></ol></li></ol>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 수직형 반응형 디스플레이광고 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="1645513725"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 216
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2023 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/2023/08/18/BasicDB/" >DB에 대한 전반적인 개념(SQL,NoSQL)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/11</span><a class="archive-post-title" href= "/2023/07/11/Advenced-JPA2-CH01/" >Advenced-JPA2-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/27</span><a class="archive-post-title" href= "/2023/06/27/Advenced-JPA1-CH04/" >Advenced-JPA1-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/19</span><a class="archive-post-title" href= "/2023/06/19/Advenced-JPA1-CH03/" >Advenced-JPA1-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/28</span><a class="archive-post-title" href= "/2023/05/28/Review-The-Essence-Of-Object-Orientation/" >(리뷰)객체 지향의 사실과 오해 책 리뷰</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2023/05/20/Advenced-JPA1-CH02/" >Advenced-JPA1-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2023/05/08/Advenced-JPA1-CH01/" >(JPA) Advenced-JPA1-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2023/04/26/JPA-Basic-CH10/" >(JPA) JPA-Basic-CH10(fetch-join)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2023/04/22/Design-pattern-3/" >(ETC) 디자인 패턴에 대해서 CH3 (행동 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2023/04/22/JPA-Basic-CH09/" >(JPA) JPA-Basic-CH09(객체지향 쿼리 언어)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/20</span><a class="archive-post-title" href= "/2023/04/20/JPA-Basic-CH08/" >(JPA)JPA-Basic-CH08(값 타입)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/18</span><a class="archive-post-title" href= "/2023/04/18/JPA-Basic-CH07/" >(JPA) JPA-Basic-CH07(프록시)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/17</span><a class="archive-post-title" href= "/2023/04/17/JPA-Basic-CH06/" >(JPA) JPA-Basic-CH06(고급매핑- 상속관계 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/13</span><a class="archive-post-title" href= "/2023/04/13/Issue-Java-ClassCastException/" >(Issue) ResponseBodyAdvice에서 ClassCastException 발생</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/13</span><a class="archive-post-title" href= "/2023/04/13/JPA-Basic-CH05/" >(JPA) JPA-Basic-CH05(다양한 연관관계 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/09</span><a class="archive-post-title" href= "/2023/04/09/JPA-Basic-CH04/" >(JPA) JPA-Basic-CH04 (연관관계 매핑 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/08</span><a class="archive-post-title" href= "/2023/04/08/JPA-Basic-CH03/" >(JPA) JPA-Basic-CH03 (엔티티 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2023/04/06/JPA-Basic-CH02/" >(JPA) JPA 기본편 CH02 (JPA 영속성 컨텍스트)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/JPA-Basic-CH01/" >(JPA) JPA 기본편 CH01 (JPA 시작)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/querydsl/" >DataSource, QueryDSL이란?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/29</span><a class="archive-post-title" href= "/2023/03/29/SpringMVC2-CH02/" >SpringMVC2-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/21</span><a class="archive-post-title" href= "/2023/03/21/Design-pattern-2/" >(ETC) 디자인 패턴에 대해서 CH2 (구조 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/12</span><a class="archive-post-title" href= "/2023/03/12/Design-pattern-1/" >(ETC) 디자인 패턴에 대해서 CH1 (생성 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/10</span><a class="archive-post-title" href= "/2023/03/10/l2-l4-l7-switching/" >L2-L4-L7 스위치란? (허브, 스위치, 라우터)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span><a class="archive-post-title" href= "/2023/02/25/Review-System-Design-Interview/" >(리뷰)(강추)가상 면접 사례로 배우는 대규모 시스템 설계 기초</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2023/02/23/gitlab-CI-CD-springproject/" >Gitlab-CI/CD 구축하기(withSpring)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span><a class="archive-post-title" href= "/2023/02/16/SpringMVC2-CH01/" >SpringMVC2-CH01(스프링 thymeleaf)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span><a class="archive-post-title" href= "/2023/02/07/JavaScript-Basic/" >JavaScript-Basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/05</span><a class="archive-post-title" href= "/2023/02/05/Html-JQuery/" >Html-JQuery</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2023/01/22/mysql/" >Mysql 기본 공부 (수정본)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-maven/" >About-maven</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-mybatis/" >About-mybatis</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-xml/" >XML 파일에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/ubuntu-command/" >우분투 자주 쓰는 명령어(2023버전)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2023/01/02/n-plus-1-problem-i/" >JPA N+1 문제와 해결법(수정중)</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/31</span><a class="archive-post-title" href= "/2022/12/31/end-of-2023/" >2023년을 마무리 하며...(2023년 목표 포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/AboutSpring/" >AboutSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/CS-Lock-MutexAndSemaphore/" >CS Lock MutexAndSemaphore</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Isolation-Level-4-And-Lock/" >Isolation Level 4 And Lock</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/READ-ME-Writing/" >READ-ME Writing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Entity-DAO-DTO/" >Spring-Entity-DAO-DTO</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/SpringAndJenkins/" >SpringAndJenkins</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Lambda-Capturing/" >Java Lambda-Capturing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Basic-JVM/" >Java Basic JVM</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-SOLID/" >Java SOLID</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Null-Optional-Empty/" >Null-Optional-Empty</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Singleton-Stateless/" >Spring Singleton Stateless</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutKafka/" >AboutKafka</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutMessageQ/" >AboutMessageQ</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutSpringSecurity/" >AboutSpringSecurity</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Sequence-Diagram/" >Sequence-Diagram</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH01/" >SpringProject-TrackingPost-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH02/" >SpringProject-TrackingPost-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH04/" >SpringProject-TrackingPost-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH03/" >SpringProject-TrackingPost-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH06/" >SpringProject-TrackingPost-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH05/" >SpringProject-TrackingPost-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutLombokAtSpring/" >AboutLombokAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Basic-Vue-js/" >Basic Vue.js</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Http-Status/" >Http-Status</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Spring-Logger/" >Spring-Logger</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH01/" >SpringProject-Board-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH03/" >SpringProject-Board-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH02/" >SpringProject-Board-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH04/" >SpringProject-Board-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH08/" >SpringProject-Board-CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH07/" >SpringProject-Board-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH06/" >SpringProject-Board-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH10/" >SpringProject-Board-CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH05/" >SpringProject-Board-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH09/" >SpringProject-Board-CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/UsingAOPAtSpring/" >UsingAOPAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH00/" >SpringCore CH00</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH01/" >SpringCore CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH02-03/" >SpringCore CH02~03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH04/" >SpringCore CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH05/" >SpringCore CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH06/" >SpringCore CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH07/" >SpringCore CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH01/" >SpringMVC-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH09/" >SpringCore CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH02/" >SpringMVC-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH08/" >SpringCore CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH03/" >SpringMVC-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH04/" >SpringMVC-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH05/" >SpringMVC-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH07/" >SpringMVC-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH06/" >SpringMVC-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/effective-java-review/" >(책리뷰)이펙티브 자바</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH01/" >Java 배우기 CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH02/" >Java 배우기 CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH03/" >Java 배우기 CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH04/" >Java 배우기 CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH05/" >Java 배우기 CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH08/" >Java 배우기 CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH06/" >Java 배우기 CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH09/" >Java 배우기 CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH07/" >Java 배우기 CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH10/" >Java 배우기 CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH11/" >Java 배우기 CH11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH12/" >Java 배우기 CH12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH13/" >Java 배우기 CH13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH14/" >Java 배우기 CH14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/ConnectDomainToNotion/" >Notion과 개인 Domain 연결하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/OSI7layer/" >OSI7계층과 TCP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Structure"><span class="iconfont-archer">&#xe606;</span>Structure</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Interview"><span class="iconfont-archer">&#xe606;</span>Interview</span>
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Lombok"><span class="iconfont-archer">&#xe606;</span>Lombok</span>
+    
+        <span class="sidebar-tag-name" data-tags="MessageQ"><span class="iconfont-archer">&#xe606;</span>MessageQ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kafka"><span class="iconfont-archer">&#xe606;</span>Kafka</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mybatis"><span class="iconfont-archer">&#xe606;</span>Mybatis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Vue"><span class="iconfont-archer">&#xe606;</span>Vue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="CS"><span class="iconfont-archer">&#xe606;</span>CS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Notion"><span class="iconfont-archer">&#xe606;</span>Notion</span>
+    
+        <span class="sidebar-tag-name" data-tags="Domain"><span class="iconfont-archer">&#xe606;</span>Domain</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jquery"><span class="iconfont-archer">&#xe606;</span>Jquery</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="FrontEnd"><span class="iconfont-archer">&#xe606;</span>FrontEnd</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="JPA"><span class="iconfont-archer">&#xe606;</span>JPA</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="Issue"><span class="iconfont-archer">&#xe606;</span>Issue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="Logger"><span class="iconfont-archer">&#xe606;</span>Logger</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jenkins"><span class="iconfont-archer">&#xe606;</span>Jenkins</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thymeleaf"><span class="iconfont-archer">&#xe606;</span>Thymeleaf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="AOP"><span class="iconfont-archer">&#xe606;</span>AOP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Gitlab"><span class="iconfont-archer">&#xe606;</span>Gitlab</span>
+    
+        <span class="sidebar-tag-name" data-tags="CI-CD"><span class="iconfont-archer">&#xe606;</span>CI-CD</span>
+    
+        <span class="sidebar-tag-name" data-tags="Problem"><span class="iconfont-archer">&#xe606;</span>Problem</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="QueryDSL"><span class="iconfont-archer">&#xe606;</span>QueryDSL</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jpa"><span class="iconfont-archer">&#xe606;</span>Jpa</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advance"><span class="iconfont-archer">&#xe606;</span>Advance</span>
+    
+        <span class="sidebar-tag-name" data-tags="Book"><span class="iconfont-archer">&#xe606;</span>Book</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Maven"><span class="iconfont-archer">&#xe60a;</span>Maven</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+        <span class="sidebar-category-name" data-categories="Spring"><span class="iconfont-archer">&#xe60a;</span>Spring</span>
+    
+        <span class="sidebar-category-name" data-categories="MessageQ"><span class="iconfont-archer">&#xe60a;</span>MessageQ</span>
+    
+        <span class="sidebar-category-name" data-categories="Mybatis"><span class="iconfont-archer">&#xe60a;</span>Mybatis</span>
+    
+        <span class="sidebar-category-name" data-categories="Vue"><span class="iconfont-archer">&#xe60a;</span>Vue</span>
+    
+        <span class="sidebar-category-name" data-categories="CS"><span class="iconfont-archer">&#xe60a;</span>CS</span>
+    
+        <span class="sidebar-category-name" data-categories="Tips"><span class="iconfont-archer">&#xe60a;</span>Tips</span>
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="Jquery"><span class="iconfont-archer">&#xe60a;</span>Jquery</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="JPA"><span class="iconfont-archer">&#xe60a;</span>JPA</span>
+    
+        <span class="sidebar-category-name" data-categories="Issue"><span class="iconfont-archer">&#xe60a;</span>Issue</span>
+    
+        <span class="sidebar-category-name" data-categories="Java"><span class="iconfont-archer">&#xe60a;</span>Java</span>
+    
+        <span class="sidebar-category-name" data-categories="Javascript"><span class="iconfont-archer">&#xe60a;</span>Javascript</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Jenkins"><span class="iconfont-archer">&#xe60a;</span>Jenkins</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Gitlab"><span class="iconfont-archer">&#xe60a;</span>Gitlab</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

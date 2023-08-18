@@ -1,0 +1,6378 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>PEP 규칙 읽어보기 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">PEP 규칙 읽어보기</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            PEP 규칙 읽어보기
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Python">Python</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PEP">PEP</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">7.2k</span>Reading time: <span class="post-count reading-time">44 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/08/15</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p><a href="https://github.com/python/peps/blob/master/pep-0008.txt" target="_blank" rel="noopener">자세히</a></p>
+<h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><p>python으로 코드를 만든다면 이렇게 공식문서를 참고하는것이좋다. 모두가 약속한대로 코드를 짜면 서로 보기 편하기 때문이다</p>
+<p>천천히 시간날때마다 읽어보자</p>
+<p>PEP: 8<br>Title: Style Guide for Python Code<br>Version: $Revision$<br>Last-Modified: $Date$<br>Author: Guido van Rossum <a href="mailto:&#x67;&#x75;&#105;&#x64;&#111;&#64;&#112;&#x79;&#116;&#104;&#x6f;&#x6e;&#x2e;&#x6f;&#114;&#103;">&#x67;&#x75;&#105;&#x64;&#111;&#64;&#112;&#x79;&#116;&#104;&#x6f;&#x6e;&#x2e;&#x6f;&#114;&#103;</a>,<br>        Barry Warsaw <a href="mailto:&#98;&#x61;&#x72;&#114;&#121;&#64;&#x70;&#x79;&#116;&#x68;&#111;&#110;&#46;&#x6f;&#x72;&#103;">&#98;&#x61;&#x72;&#114;&#121;&#64;&#x70;&#x79;&#116;&#x68;&#111;&#110;&#46;&#x6f;&#x72;&#103;</a>,<br>        Nick Coghlan <a href="mailto:&#110;&#99;&#111;&#103;&#x68;&#x6c;&#x61;&#110;&#64;&#103;&#109;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#x6d;">&#110;&#99;&#111;&#103;&#x68;&#x6c;&#x61;&#110;&#64;&#103;&#109;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#x6d;</a><br>Status: Active<br>Type: Process<br>Content-Type: text/x-rst<br>Created: 05-Jul-2001<br>Post-History: 05-Jul-2001, 01-Aug-2013</p>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>This document gives coding conventions for the Python code comprising<br>the standard library in the main Python distribution.  Please see the<br>companion informational PEP describing style guidelines for the C code<br>in the C implementation of Python [1]_.</p>
+<p>This document and PEP 257 (Docstring Conventions) were adapted from<br>Guido’s original Python Style Guide essay, with some additions from<br>Barry’s style guide [2]_.</p>
+<p>This style guide evolves over time as additional conventions are<br>identified and past conventions are rendered obsolete by changes in<br>the language itself.</p>
+<p>Many projects have their own coding style guidelines. In the event of any<br>conflicts, such project-specific guides take precedence for that project.</p>
+<h1 id="A-Foolish-Consistency-is-the-Hobgoblin-of-Little-Minds"><a href="#A-Foolish-Consistency-is-the-Hobgoblin-of-Little-Minds" class="headerlink" title="A Foolish Consistency is the Hobgoblin of Little Minds"></a>A Foolish Consistency is the Hobgoblin of Little Minds</h1><p>One of Guido’s key insights is that code is read much more often than<br>it is written.  The guidelines provided here are intended to improve<br>the readability of code and make it consistent across the wide<br>spectrum of Python code.  As PEP 20 says, “Readability counts”.</p>
+<p>A style guide is about consistency.  Consistency with this style guide<br>is important.  Consistency within a project is more important.<br>Consistency within one module or function is the most important.</p>
+<p>However, know when to be inconsistent – sometimes style guide<br>recommendations just aren’t applicable.  When in doubt, use your best<br>judgment.  Look at other examples and decide what looks best.  And<br>don’t hesitate to ask!</p>
+<p>In particular: do not break backwards compatibility just to comply with<br>this PEP!</p>
+<p>Some other good reasons to ignore a particular guideline:</p>
+<ol>
+<li><p>When applying the guideline would make the code less readable, even<br>for someone who is used to reading code that follows this PEP.</p>
+</li>
+<li><p>To be consistent with surrounding code that also breaks it (maybe<br>for historic reasons) – although this is also an opportunity to<br>clean up someone else’s mess (in true XP style).</p>
+</li>
+<li><p>Because the code in question predates the introduction of the<br>guideline and there is no other reason to be modifying that code.</p>
+</li>
+<li><p>When the code needs to remain compatible with older versions of<br>Python that don’t support the feature recommended by the style guide.</p>
+</li>
+</ol>
+<h1 id="Code-Lay-out"><a href="#Code-Lay-out" class="headerlink" title="Code Lay-out"></a>Code Lay-out</h1><h2 id="Indentation"><a href="#Indentation" class="headerlink" title="Indentation"></a>Indentation</h2><p>Use 4 spaces per indentation level.</p>
+<p>Continuation lines should align wrapped elements either vertically<br>using Python’s implicit line joining inside parentheses, brackets and<br>braces, or using a <em>hanging indent</em> [#fn-hi]_.  When using a hanging<br>indent the following should be considered; there should be no<br>arguments on the first line and further indentation should be used to<br>clearly distinguish itself as a continuation line::</p>
+<pre><code># Correct:
+
+# Aligned with opening delimiter.
+foo = long_function_name(var_one, var_two,
+                         var_three, var_four)
+
+# Add 4 spaces (an extra level of indentation) to distinguish arguments from the rest.
+def long_function_name(
+        var_one, var_two, var_three,
+        var_four):
+    print(var_one)
+
+# Hanging indents should add a level.
+foo = long_function_name(
+    var_one, var_two,
+    var_three, var_four)</code></pre><p>::</p>
+<pre><code># Wrong:
+
+# Arguments on first line forbidden when not using vertical alignment.
+foo = long_function_name(var_one, var_two,
+    var_three, var_four)
+
+# Further indentation required as indentation is not distinguishable.
+def long_function_name(
+    var_one, var_two, var_three,
+    var_four):
+    print(var_one)</code></pre><p>The 4-space rule is optional for continuation lines.</p>
+<p>Optional::</p>
+<pre><code># Hanging indents *may* be indented to other than 4 spaces.
+foo = long_function_name(
+  var_one, var_two,
+  var_three, var_four)</code></pre><p>.. _<code>multiline if-statements</code>:</p>
+<p>When the conditional part of an <code>if</code>-statement is long enough to require<br>that it be written across multiple lines, it’s worth noting that the<br>combination of a two character keyword (i.e. <code>if</code>), plus a single space,<br>plus an opening parenthesis creates a natural 4-space indent for the<br>subsequent lines of the multiline conditional.  This can produce a visual<br>conflict with the indented suite of code nested inside the <code>if</code>-statement,<br>which would also naturally be indented to 4 spaces.  This PEP takes no<br>explicit position on how (or whether) to further visually distinguish such<br>conditional lines from the nested suite inside the <code>if</code>-statement.<br>Acceptable options in this situation include, but are not limited to::</p>
+<pre><code># No extra indentation.
+if (this_is_one_thing and
+    that_is_another_thing):
+    do_something()
+
+# Add a comment, which will provide some distinction in editors
+# supporting syntax highlighting.
+if (this_is_one_thing and
+    that_is_another_thing):
+    # Since both conditions are true, we can frobnicate.
+    do_something()
+
+# Add some extra indentation on the conditional continuation line.
+if (this_is_one_thing
+        and that_is_another_thing):
+    do_something()</code></pre><p>(Also see the discussion of whether to break before or after binary<br>operators below.)</p>
+<p>The closing brace/bracket/parenthesis on multiline constructs may<br>either line up under the first non-whitespace character of the last<br>line of list, as in::</p>
+<pre><code>my_list = [
+    1, 2, 3,
+    4, 5, 6,
+    ]
+result = some_function_that_takes_arguments(
+    &apos;a&apos;, &apos;b&apos;, &apos;c&apos;,
+    &apos;d&apos;, &apos;e&apos;, &apos;f&apos;,
+    )</code></pre><p>or it may be lined up under the first character of the line that<br>starts the multiline construct, as in::</p>
+<pre><code>my_list = [
+    1, 2, 3,
+    4, 5, 6,
+]
+result = some_function_that_takes_arguments(
+    &apos;a&apos;, &apos;b&apos;, &apos;c&apos;,
+    &apos;d&apos;, &apos;e&apos;, &apos;f&apos;,
+)</code></pre><h2 id="Tabs-or-Spaces"><a href="#Tabs-or-Spaces" class="headerlink" title="Tabs or Spaces?"></a>Tabs or Spaces?</h2><p>Spaces are the preferred indentation method.</p>
+<p>Tabs should be used solely to remain consistent with code that is<br>already indented with tabs.</p>
+<p>Python 3 disallows mixing the use of tabs and spaces for indentation.</p>
+<p>Python 2 code indented with a mixture of tabs and spaces should be<br>converted to using spaces exclusively.</p>
+<p>When invoking the Python 2 command line interpreter with<br>the <code>-t</code> option, it issues warnings about code that illegally mixes<br>tabs and spaces.  When using <code>-tt</code> these warnings become errors.<br>These options are highly recommended!</p>
+<h2 id="Maximum-Line-Length"><a href="#Maximum-Line-Length" class="headerlink" title="Maximum Line Length"></a>Maximum Line Length</h2><p>Limit all lines to a maximum of 79 characters.</p>
+<p>For flowing long blocks of text with fewer structural restrictions<br>(docstrings or comments), the line length should be limited to 72<br>characters.</p>
+<p>Limiting the required editor window width makes it possible to have<br>several files open side-by-side, and works well when using code<br>review tools that present the two versions in adjacent columns.</p>
+<p>The default wrapping in most tools disrupts the visual structure of the<br>code, making it more difficult to understand. The limits are chosen to<br>avoid wrapping in editors with the window width set to 80, even<br>if the tool places a marker glyph in the final column when wrapping<br>lines. Some web based tools may not offer dynamic line wrapping at all.</p>
+<p>Some teams strongly prefer a longer line length.  For code maintained<br>exclusively or primarily by a team that can reach agreement on this<br>issue, it is okay to increase the line length limit up to 99 characters,<br>provided that comments and docstrings are still wrapped at 72<br>characters.</p>
+<p>The Python standard library is conservative and requires limiting<br>lines to 79 characters (and docstrings/comments to 72).</p>
+<p>The preferred way of wrapping long lines is by using Python’s implied<br>line continuation inside parentheses, brackets and braces.  Long lines<br>can be broken over multiple lines by wrapping expressions in<br>parentheses. These should be used in preference to using a backslash<br>for line continuation.</p>
+<p>Backslashes may still be appropriate at times.  For example, long,<br>multiple <code>with</code>-statements cannot use implicit continuation, so<br>backslashes are acceptable::</p>
+<pre><code>with open(&apos;/path/to/some/file/you/want/to/read&apos;) as file_1, \
+     open(&apos;/path/to/some/file/being/written&apos;, &apos;w&apos;) as file_2:
+    file_2.write(file_1.read())</code></pre><p>(See the previous discussion on <code>multiline if-statements</code>_ for further<br>thoughts on the indentation of such multiline <code>with</code>-statements.)</p>
+<p>Another such case is with <code>assert</code> statements.</p>
+<p>Make sure to indent the continued line appropriately.</p>
+<h2 id="Should-a-Line-Break-Before-or-After-a-Binary-Operator"><a href="#Should-a-Line-Break-Before-or-After-a-Binary-Operator" class="headerlink" title="Should a Line Break Before or After a Binary Operator?"></a>Should a Line Break Before or After a Binary Operator?</h2><p>For decades the recommended style was to break after binary operators.<br>But this can hurt readability in two ways: the operators tend to get<br>scattered across different columns on the screen, and each operator is<br>moved away from its operand and onto the previous line.  Here, the eye<br>has to do extra work to tell which items are added and which are<br>subtracted::</p>
+<pre><code># Wrong:
+# operators sit far away from their operands
+income = (gross_wages +
+          taxable_interest +
+          (dividends - qualified_dividends) -
+          ira_deduction -
+          student_loan_interest)</code></pre><p>To solve this readability problem, mathematicians and their publishers<br>follow the opposite convention.  Donald Knuth explains the traditional<br>rule in his <em>Computers and Typesetting</em> series: “Although formulas<br>within a paragraph always break after binary operations and relations,<br>displayed formulas always break before binary operations” [3]_.</p>
+<p>Following the tradition from mathematics usually results in more<br>readable code::</p>
+<pre><code># Correct:
+# easy to match operators with operands
+income = (gross_wages
+          + taxable_interest
+          + (dividends - qualified_dividends)
+          - ira_deduction
+          - student_loan_interest)</code></pre><p>In Python code, it is permissible to break before or after a binary<br>operator, as long as the convention is consistent locally.  For new<br>code Knuth’s style is suggested.</p>
+<h2 id="Blank-Lines"><a href="#Blank-Lines" class="headerlink" title="Blank Lines"></a>Blank Lines</h2><p>Surround top-level function and class definitions with two blank<br>lines.</p>
+<p>Method definitions inside a class are surrounded by a single blank<br>line.</p>
+<p>Extra blank lines may be used (sparingly) to separate groups of<br>related functions.  Blank lines may be omitted between a bunch of<br>related one-liners (e.g. a set of dummy implementations).</p>
+<p>Use blank lines in functions, sparingly, to indicate logical sections.</p>
+<p>Python accepts the control-L (i.e. ^L) form feed character as<br>whitespace; Many tools treat these characters as page separators, so<br>you may use them to separate pages of related sections of your file.<br>Note, some editors and web-based code viewers may not recognize<br>control-L as a form feed and will show another glyph in its place.</p>
+<h2 id="Source-File-Encoding"><a href="#Source-File-Encoding" class="headerlink" title="Source File Encoding"></a>Source File Encoding</h2><p>Code in the core Python distribution should always use UTF-8 (or ASCII<br>in Python 2).</p>
+<p>Files using ASCII (in Python 2) or UTF-8 (in Python 3) should not have<br>an encoding declaration.</p>
+<p>In the standard library, non-default encodings should be used only for<br>test purposes or when a comment or docstring needs to mention an author<br>name that contains non-ASCII characters; otherwise, using <code>\x</code>,<br><code>\u</code>, <code>\U</code>, or <code>\N</code> escapes is the preferred way to include<br>non-ASCII data in string literals.</p>
+<p>For Python 3.0 and beyond, the following policy is prescribed for the<br>standard library (see PEP 3131): All identifiers in the Python<br>standard library MUST use ASCII-only identifiers, and SHOULD use<br>English words wherever feasible (in many cases, abbreviations and<br>technical terms are used which aren’t English). In addition, string<br>literals and comments must also be in ASCII. The only exceptions are<br>(a) test cases testing the non-ASCII features, and<br>(b) names of authors. Authors whose names are not based on the<br>Latin alphabet (latin-1, ISO/IEC 8859-1 character set) MUST provide<br>a transliteration of their names in this character set.</p>
+<p>Open source projects with a global audience are encouraged to adopt a<br>similar policy.</p>
+<h2 id="Imports"><a href="#Imports" class="headerlink" title="Imports"></a>Imports</h2><ul>
+<li><p>Imports should usually be on separate lines::</p>
+<pre><code># Correct:
+import os
+import sys</code></pre><p>::</p>
+<pre><code># Wrong:
+import sys, os</code></pre></li>
+</ul>
+<p>  It’s okay to say this though::</p>
+<pre><code># Correct:
+from subprocess import Popen, PIPE</code></pre><ul>
+<li><p>Imports are always put at the top of the file, just after any module<br>comments and docstrings, and before module globals and constants.</p>
+<p>Imports should be grouped in the following order:</p>
+<ol>
+<li>Standard library imports.</li>
+<li>Related third party imports.</li>
+<li>Local application/library specific imports.</li>
+</ol>
+<p>You should put a blank line between each group of imports.</p>
+</li>
+<li><p>Absolute imports are recommended, as they are usually more readable<br>and tend to be better behaved (or at least give better error<br>messages) if the import system is incorrectly configured (such as<br>when a directory inside a package ends up on <code>sys.path</code>)::</p>
+<pre><code>import mypkg.sibling
+from mypkg import sibling
+from mypkg.sibling import example</code></pre><p>However, explicit relative imports are an acceptable alternative to<br>absolute imports, especially when dealing with complex package layouts<br>where using absolute imports would be unnecessarily verbose::</p>
+<pre><code>from . import sibling
+from .sibling import example</code></pre><p>Standard library code should avoid complex package layouts and always<br>use absolute imports.</p>
+<p>Implicit relative imports should <em>never</em> be used and have been removed<br>in Python 3.</p>
+</li>
+<li><p>When importing a class from a class-containing module, it’s usually<br>okay to spell this::</p>
+<pre><code>from myclass import MyClass
+from foo.bar.yourclass import YourClass</code></pre><p>If this spelling causes local name clashes, then spell them explicitly::</p>
+<pre><code>import myclass
+import foo.bar.yourclass</code></pre><p>and use “myclass.MyClass” and “foo.bar.yourclass.YourClass”.</p>
+</li>
+<li><p>Wildcard imports (<code>from &lt;module&gt; import *</code>) should be avoided, as<br>they make it unclear which names are present in the namespace,<br>confusing both readers and many automated tools. There is one<br>defensible use case for a wildcard import, which is to republish an<br>internal interface as part of a public API (for example, overwriting<br>a pure Python implementation of an interface with the definitions<br>from an optional accelerator module and exactly which definitions<br>will be overwritten isn’t known in advance).</p>
+<p>When republishing names this way, the guidelines below regarding<br>public and internal interfaces still apply.</p>
+</li>
+</ul>
+<h2 id="Module-Level-Dunder-Names"><a href="#Module-Level-Dunder-Names" class="headerlink" title="Module Level Dunder Names"></a>Module Level Dunder Names</h2><p>Module level “dunders” (i.e. names with two leading and two trailing<br>underscores) such as <code>__all__</code>, <code>__author__</code>, <code>__version__</code>,<br>etc. should be placed after the module docstring but before any import<br>statements <em>except</em> <code>from __future__</code> imports.  Python mandates that<br>future-imports must appear in the module before any other code except<br>docstrings::</p>
+<pre><code>&quot;&quot;&quot;This is the example module.
+
+This module does stuff.
+&quot;&quot;&quot;
+
+from __future__ import barry_as_FLUFL
+
+__all__ = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;]
+__version__ = &apos;0.1&apos;
+__author__ = &apos;Cardinal Biggles&apos;
+
+import os
+import sys</code></pre><h1 id="String-Quotes"><a href="#String-Quotes" class="headerlink" title="String Quotes"></a>String Quotes</h1><p>In Python, single-quoted strings and double-quoted strings are the<br>same.  This PEP does not make a recommendation for this.  Pick a rule<br>and stick to it.  When a string contains single or double quote<br>characters, however, use the other one to avoid backslashes in the<br>string. It improves readability.</p>
+<p>For triple-quoted strings, always use double quote characters to be<br>consistent with the docstring convention in PEP 257.</p>
+<h1 id="Whitespace-in-Expressions-and-Statements"><a href="#Whitespace-in-Expressions-and-Statements" class="headerlink" title="Whitespace in Expressions and Statements"></a>Whitespace in Expressions and Statements</h1><h2 id="Pet-Peeves"><a href="#Pet-Peeves" class="headerlink" title="Pet Peeves"></a>Pet Peeves</h2><p>Avoid extraneous whitespace in the following situations:</p>
+<ul>
+<li><p>Immediately inside parentheses, brackets or braces::</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Correct:</span><br><span class="line"></span><br><span class="line">spam(ham[1], &#123;eggs: 2&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>::</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Wrong:</span><br><span class="line"></span><br><span class="line">spam( ham[ 1 ], &#123; eggs: 2 &#125; )</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>Between a trailing comma and a following close parenthesis::</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Correct:</span><br><span class="line">foo &#x3D; (0,)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Wrong:</span><br><span class="line">bar &#x3D; (0, )</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Immediately before a comma, semicolon, or colon::</p>
+<pre><code># Correct:
+if x == 4: print x, y; x, y = y, x</code></pre><p>::</p>
+<pre><code># Wrong:
+if x == 4 : print x , y ; x , y = y , x</code></pre></li>
+<li><p>However, in a slice the colon acts like a binary operator, and<br>should have equal amounts on either side (treating it as the<br>operator with the lowest priority).  In an extended slice, both<br>colons must have the same amount of spacing applied.  Exception:<br>when a slice parameter is omitted, the space is omitted::</p>
+<pre><code># Correct:
+ham[1:9], ham[1:9:3], ham[:9:3], ham[1::3], ham[1:9:]
+ham[lower:upper], ham[lower:upper:], ham[lower::step]
+ham[lower+offset : upper+offset]
+ham[: upper_fn(x) : step_fn(x)], ham[:: step_fn(x)]
+ham[lower + offset : upper + offset]</code></pre><p>::</p>
+<pre><code># Wrong:
+ham[lower + offset:upper + offset]
+ham[1: 9], ham[1 :9], ham[1:9 :3]
+ham[lower : : upper]
+ham[ : upper]</code></pre></li>
+<li><p>Immediately before the open parenthesis that starts the argument<br>list of a function call::</p>
+<pre><code># Correct:
+spam(1)</code></pre><p>::</p>
+<pre><code># Wrong:
+spam (1)</code></pre></li>
+<li><p>Immediately before the open parenthesis that starts an indexing or<br>slicing::</p>
+<pre><code># Correct:
+dct[&apos;key&apos;] = lst[index]</code></pre><p>::</p>
+<pre><code># Wrong:
+dct [&apos;key&apos;] = lst [index]</code></pre></li>
+<li><p>More than one space around an assignment (or other) operator to<br>align it with another::</p>
+<pre><code># Correct:
+x = 1
+y = 2
+long_variable = 3</code></pre><p>::</p>
+<pre><code># Wrong:
+x             = 1
+y             = 2
+long_variable = 3</code></pre></li>
+</ul>
+<h2 id="Other-Recommendations"><a href="#Other-Recommendations" class="headerlink" title="Other Recommendations"></a>Other Recommendations</h2><ul>
+<li><p>Avoid trailing whitespace anywhere.  Because it’s usually invisible,<br>it can be confusing: e.g. a backslash followed by a space and a<br>newline does not count as a line continuation marker.  Some editors<br>don’t preserve it and many projects (like CPython itself) have<br>pre-commit hooks that reject it.</p>
+</li>
+<li><p>Always surround these binary operators with a single space on either<br>side: assignment (<code>=</code>), augmented assignment (<code>+=</code>, <code>-=</code><br>etc.), comparisons (<code>==</code>, <code>&lt;</code>, <code>&gt;</code>, <code>!=</code>, <code>&lt;&gt;</code>, <code>&lt;=</code>,<br><code>&gt;=</code>, <code>in</code>, <code>not in</code>, <code>is</code>, <code>is not</code>), Booleans (<code>and</code>,<br><code>or</code>, <code>not</code>).</p>
+</li>
+<li><p>If operators with different priorities are used, consider adding<br>whitespace around the operators with the lowest priority(ies). Use<br>your own judgment; however, never use more than one space, and<br>always have the same amount of whitespace on both sides of a binary<br>operator::</p>
+<pre><code># Correct:
+i = i + 1
+submitted += 1
+x = x*2 - 1
+hypot2 = x*x + y*y
+c = (a+b) * (a-b)</code></pre><p>::</p>
+<pre><code># Wrong:
+i=i+1
+submitted +=1
+x = x * 2 - 1
+hypot2 = x * x + y * y
+c = (a + b) * (a - b)</code></pre></li>
+<li><p>Function annotations should use the normal rules for colons and<br>always have spaces around the <code>-&gt;</code> arrow if present.  (See<br><code>Function Annotations</code>_ below for more about function annotations.)::</p>
+<pre><code># Correct:
+def munge(input: AnyStr): ...
+def munge() -&gt; PosInt: ...</code></pre><p>::</p>
+<pre><code># Wrong:
+def munge(input:AnyStr): ...
+def munge()-&gt;PosInt: ...</code></pre></li>
+<li><p>Don’t use spaces around the <code>=</code> sign when used to indicate a<br>keyword argument, or when used to indicate a default value for an<br><em>unannotated</em> function parameter::</p>
+<pre><code># Correct:
+def complex(real, imag=0.0):
+    return magic(r=real, i=imag)</code></pre><p>::</p>
+<pre><code># Wrong:
+def complex(real, imag = 0.0):
+    return magic(r = real, i = imag)</code></pre></li>
+</ul>
+<p>  When combining an argument annotation with a default value, however, do use<br>  spaces around the <code>=</code> sign::</p>
+<pre><code># Correct:
+def munge(sep: AnyStr = None): ...
+def munge(input: AnyStr, sep: AnyStr = None, limit=1000): ...</code></pre><p>  ::</p>
+<pre><code># Wrong:
+def munge(input: AnyStr=None): ...
+def munge(input: AnyStr, limit = 1000): ...</code></pre><ul>
+<li><p>Compound statements (multiple statements on the same line) are<br>generally discouraged::</p>
+<pre><code># Correct:
+if foo == &apos;blah&apos;:
+    do_blah_thing()
+do_one()
+do_two()
+do_three()</code></pre><p>Rather not::</p>
+<pre><code># Wrong:
+if foo == &apos;blah&apos;: do_blah_thing()
+do_one(); do_two(); do_three()</code></pre></li>
+<li><p>While sometimes it’s okay to put an if/for/while with a small body<br>on the same line, never do this for multi-clause statements.  Also<br>avoid folding such long lines!</p>
+<p>Rather not::</p>
+<pre><code># Wrong:
+if foo == &apos;blah&apos;: do_blah_thing()
+for x in lst: total += x
+while t &lt; 10: t = delay()</code></pre><p>Definitely not::</p>
+<pre><code># Wrong:
+if foo == &apos;blah&apos;: do_blah_thing()
+else: do_non_blah_thing()
+
+try: something()
+finally: cleanup()
+
+do_one(); do_two(); do_three(long, argument,
+                             list, like, this)
+
+if foo == &apos;blah&apos;: one(); two(); three()</code></pre></li>
+</ul>
+<h1 id="When-to-Use-Trailing-Commas"><a href="#When-to-Use-Trailing-Commas" class="headerlink" title="When to Use Trailing Commas"></a>When to Use Trailing Commas</h1><p>Trailing commas are usually optional, except they are mandatory when<br>making a tuple of one element (and in Python 2 they have semantics for<br>the <code>print</code> statement).  For clarity, it is recommended to surround<br>the latter in (technically redundant) parentheses::</p>
+<pre><code># Correct:
+FILES = (&apos;setup.cfg&apos;,)</code></pre><p>::</p>
+<pre><code># Wrong:
+FILES = &apos;setup.cfg&apos;,</code></pre><p>When trailing commas are redundant, they are often helpful when a<br>version control system is used, when a list of values, arguments or<br>imported items is expected to be extended over time.  The pattern is<br>to put each value (etc.) on a line by itself, always adding a trailing<br>comma, and add the close parenthesis/bracket/brace on the next line.<br>However it does not make sense to have a trailing comma on the same<br>line as the closing delimiter (except in the above case of singleton<br>tuples)::</p>
+<pre><code># Correct:
+FILES = [
+    &apos;setup.cfg&apos;,
+    &apos;tox.ini&apos;,
+    ]
+initialize(FILES,
+           error=True,
+           )</code></pre><p>::</p>
+<pre><code># Wrong:
+FILES = [&apos;setup.cfg&apos;, &apos;tox.ini&apos;,]
+initialize(FILES, error=True,)</code></pre><h1 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h1><p>Comments that contradict the code are worse than no comments.  Always<br>make a priority of keeping the comments up-to-date when the code<br>changes!</p>
+<p>Comments should be complete sentences.  The first word should be<br>capitalized, unless it is an identifier that begins with a lower case<br>letter (never alter the case of identifiers!).</p>
+<p>Block comments generally consist of one or more paragraphs built out of<br>complete sentences, with each sentence ending in a period.</p>
+<p>You should use two spaces after a sentence-ending period in multi-<br>sentence comments, except after the final sentence.</p>
+<p>Ensure that your comments are clear and easily understandable to other<br>speakers of the language you are writing in.</p>
+<p>Python coders from non-English speaking countries: please write your<br>comments in English, unless you are 120% sure that the code will never<br>be read by people who don’t speak your language.</p>
+<h2 id="Block-Comments"><a href="#Block-Comments" class="headerlink" title="Block Comments"></a>Block Comments</h2><p>Block comments generally apply to some (or all) code that follows<br>them, and are indented to the same level as that code.  Each line of a<br>block comment starts with a <code>#</code> and a single space (unless it is<br>indented text inside the comment).</p>
+<p>Paragraphs inside a block comment are separated by a line containing a<br>single <code>#</code>.</p>
+<h2 id="Inline-Comments"><a href="#Inline-Comments" class="headerlink" title="Inline Comments"></a>Inline Comments</h2><p>Use inline comments sparingly.</p>
+<p>An inline comment is a comment on the same line as a statement.<br>Inline comments should be separated by at least two spaces from the<br>statement.  They should start with a # and a single space.</p>
+<p>Inline comments are unnecessary and in fact distracting if they state<br>the obvious.  Don’t do this::</p>
+<pre><code>x = x + 1                 # Increment x</code></pre><p>But sometimes, this is useful::</p>
+<pre><code>x = x + 1                 # Compensate for border</code></pre><h2 id="Documentation-Strings"><a href="#Documentation-Strings" class="headerlink" title="Documentation Strings"></a>Documentation Strings</h2><p>Conventions for writing good documentation strings<br>(a.k.a. “docstrings”) are immortalized in PEP 257.</p>
+<ul>
+<li><p>Write docstrings for all public modules, functions, classes, and<br>methods.  Docstrings are not necessary for non-public methods, but<br>you should have a comment that describes what the method does.  This<br>comment should appear after the <code>def</code> line.</p>
+</li>
+<li><p>PEP 257 describes good docstring conventions.  Note that most<br>importantly, the <code>&quot;&quot;&quot;</code> that ends a multiline docstring should be<br>on a line by itself::</p>
+<pre><code>&quot;&quot;&quot;Return a foobang
+
+Optional plotz says to frobnicate the bizbaz first.
+&quot;&quot;&quot;</code></pre></li>
+<li><p>For one liner docstrings, please keep the closing <code>&quot;&quot;&quot;</code> on<br>the same line.</p>
+</li>
+</ul>
+<h1 id="Naming-Conventions"><a href="#Naming-Conventions" class="headerlink" title="Naming Conventions"></a>Naming Conventions</h1><p>The naming conventions of Python’s library are a bit of a mess, so<br>we’ll never get this completely consistent – nevertheless, here are<br>the currently recommended naming standards.  New modules and packages<br>(including third party frameworks) should be written to these<br>standards, but where an existing library has a different style,<br>internal consistency is preferred.</p>
+<h2 id="Overriding-Principle"><a href="#Overriding-Principle" class="headerlink" title="Overriding Principle"></a>Overriding Principle</h2><p>Names that are visible to the user as public parts of the API should<br>follow conventions that reflect usage rather than implementation.</p>
+<h2 id="Descriptive-Naming-Styles"><a href="#Descriptive-Naming-Styles" class="headerlink" title="Descriptive: Naming Styles"></a>Descriptive: Naming Styles</h2><p>There are a lot of different naming styles.  It helps to be able to<br>recognize what naming style is being used, independently from what<br>they are used for.</p>
+<p>The following naming styles are commonly distinguished:</p>
+<ul>
+<li><p><code>b</code> (single lowercase letter)</p>
+</li>
+<li><p><code>B</code> (single uppercase letter)</p>
+</li>
+<li><p><code>lowercase</code></p>
+</li>
+<li><p><code>lower_case_with_underscores</code></p>
+</li>
+<li><p><code>UPPERCASE</code></p>
+</li>
+<li><p><code>UPPER_CASE_WITH_UNDERSCORES</code></p>
+</li>
+<li><p><code>CapitalizedWords</code> (or CapWords, or CamelCase – so named because<br>of the bumpy look of its letters [4]_).  This is also sometimes known<br>as StudlyCaps.</p>
+<p>Note: When using acronyms in CapWords, capitalize all the<br>letters of the acronym.  Thus HTTPServerError is better than<br>HttpServerError.</p>
+</li>
+<li><p><code>mixedCase</code> (differs from CapitalizedWords by initial lowercase<br>character!)</p>
+</li>
+<li><p><code>Capitalized_Words_With_Underscores</code> (ugly!)</p>
+</li>
+</ul>
+<p>There’s also the style of using a short unique prefix to group related<br>names together.  This is not used much in Python, but it is mentioned<br>for completeness.  For example, the <code>os.stat()</code> function returns a<br>tuple whose items traditionally have names like <code>st_mode</code>,<br><code>st_size</code>, <code>st_mtime</code> and so on.  (This is done to emphasize the<br>correspondence with the fields of the POSIX system call struct, which<br>helps programmers familiar with that.)</p>
+<p>The X11 library uses a leading X for all its public functions.  In<br>Python, this style is generally deemed unnecessary because attribute<br>and method names are prefixed with an object, and function names are<br>prefixed with a module name.</p>
+<p>In addition, the following special forms using leading or trailing<br>underscores are recognized (these can generally be combined with any<br>case convention):</p>
+<ul>
+<li><p><code>_single_leading_underscore</code>: weak “internal use” indicator.<br>E.g. <code>from M import *</code> does not import objects whose names start<br>with an underscore.</p>
+</li>
+<li><p><code>single_trailing_underscore_</code>: used by convention to avoid<br>conflicts with Python keyword, e.g. ::</p>
+<pre><code>tkinter.Toplevel(master, class_=&apos;ClassName&apos;)</code></pre></li>
+<li><p><code>__double_leading_underscore</code>: when naming a class attribute,<br>invokes name mangling (inside class FooBar, <code>__boo</code> becomes<br><code>_FooBar__boo</code>; see below).</p>
+</li>
+<li><p><code>__double_leading_and_trailing_underscore__</code>: “magic” objects or<br>attributes that live in user-controlled namespaces.<br>E.g. <code>__init__</code>, <code>__import__</code> or <code>__file__</code>.  Never invent<br>such names; only use them as documented.</p>
+</li>
+</ul>
+<h2 id="Prescriptive-Naming-Conventions"><a href="#Prescriptive-Naming-Conventions" class="headerlink" title="Prescriptive: Naming Conventions"></a>Prescriptive: Naming Conventions</h2><p>Names to Avoid</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Never use the characters &#39;l&#39; (lowercase letter el), &#39;O&#39; (uppercase</span><br><span class="line">letter oh), or &#39;I&#39; (uppercase letter eye) as single character variable</span><br><span class="line">names.</span><br><span class="line"></span><br><span class="line">In some fonts, these characters are indistinguishable from the</span><br><span class="line">numerals one and zero.  When tempted to use &#39;l&#39;, use &#39;L&#39; instead.</span><br><span class="line"></span><br><span class="line">ASCII Compatibility</span><br><span class="line">~~~~~</span><br></pre></td></tr></table></figure>
+
+<p>Identifiers used in the standard library must be ASCII compatible<br>as described in the<br><code>policy section &lt;https://www.python.org/dev/peps/pep-3131/#policy-specification&gt;</code>_<br>of PEP 3131.</p>
+<p>Package and Module Names</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Modules should have short, all-lowercase names.  Underscores can be</span><br><span class="line">used in the module name if it improves readability.  Python packages</span><br><span class="line">should also have short, all-lowercase names, although the use of</span><br><span class="line">underscores is discouraged.</span><br><span class="line"></span><br><span class="line">When an extension module written in C or C++ has an accompanying</span><br><span class="line">Python module that provides a higher level (e.g. more object oriented)</span><br><span class="line">interface, the C&#x2F;C++ module has a leading underscore</span><br><span class="line">(e.g. &#96;&#96;_socket&#96;&#96;).</span><br><span class="line"></span><br><span class="line">Class Names</span><br><span class="line">~~~~~~~~~~~</span><br><span class="line"></span><br><span class="line">Class names should normally use the CapWords convention.</span><br><span class="line"></span><br><span class="line">The naming convention for functions may be used instead in cases where</span><br><span class="line">the interface is documented and used primarily as a callable.</span><br><span class="line"></span><br><span class="line">Note that there is a separate convention for builtin names: most builtin</span><br><span class="line">names are single words (or two words run together), with the CapWords</span><br><span class="line">convention used only for exception names and builtin constants.</span><br><span class="line"></span><br><span class="line">Type Variable Names</span><br><span class="line">~~~~~~~~~~~~~~~~~~~</span><br><span class="line"></span><br><span class="line">Names of type variables introduced in PEP 484 should normally use CapWords</span><br><span class="line">preferring short names: &#96;&#96;T&#96;&#96;, &#96;&#96;AnyStr&#96;&#96;, &#96;&#96;Num&#96;&#96;. It is recommended to add</span><br><span class="line">suffixes &#96;&#96;_co&#96;&#96; or &#96;&#96;_contra&#96;&#96; to the variables used to declare covariant</span><br><span class="line">or contravariant behavior correspondingly::</span><br><span class="line"></span><br><span class="line">    from typing import TypeVar</span><br><span class="line"></span><br><span class="line">    VT_co &#x3D; TypeVar(&#39;VT_co&#39;, covariant&#x3D;True)</span><br><span class="line">    KT_contra &#x3D; TypeVar(&#39;KT_contra&#39;, contravariant&#x3D;True)</span><br><span class="line"></span><br><span class="line">Exception Names</span><br><span class="line">~~~~~~~~~~~~~~~</span><br><span class="line"></span><br><span class="line">Because exceptions should be classes, the class naming convention</span><br><span class="line">applies here.  However, you should use the suffix &quot;Error&quot; on your</span><br><span class="line">exception names (if the exception actually is an error).</span><br><span class="line"></span><br><span class="line">Global Variable Names</span><br><span class="line">~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line"></span><br><span class="line">(Let&#39;s hope that these variables are meant for use inside one module</span><br><span class="line">only.)  The conventions are about the same as those for functions.</span><br><span class="line"></span><br><span class="line">Modules that are designed for use via &#96;&#96;from M import *&#96;&#96; should use</span><br><span class="line">the &#96;&#96;__all__&#96;&#96; mechanism to prevent exporting globals, or use the</span><br><span class="line">older convention of prefixing such globals with an underscore (which</span><br><span class="line">you might want to do to indicate these globals are &quot;module</span><br><span class="line">non-public&quot;).</span><br><span class="line"></span><br><span class="line">Function and Variable Names</span><br><span class="line">~~~</span><br></pre></td></tr></table></figure>
+
+<p>Function names should be lowercase, with words separated by<br>underscores as necessary to improve readability.</p>
+<p>Variable names follow the same convention as function names.</p>
+<p>mixedCase is allowed only in contexts where that’s already the<br>prevailing style (e.g. threading.py), to retain backwards<br>compatibility.</p>
+<p>Function and Method Arguments</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Always use &#96;&#96;self&#96;&#96; for the first argument to instance methods.</span><br><span class="line"></span><br><span class="line">Always use &#96;&#96;cls&#96;&#96; for the first argument to class methods.</span><br><span class="line"></span><br><span class="line">If a function argument&#39;s name clashes with a reserved keyword, it is</span><br><span class="line">generally better to append a single trailing underscore rather than</span><br><span class="line">use an abbreviation or spelling corruption.  Thus &#96;&#96;class_&#96;&#96; is better</span><br><span class="line">than &#96;&#96;clss&#96;&#96;.  (Perhaps better is to avoid such clashes by using a</span><br><span class="line">synonym.)</span><br><span class="line"></span><br><span class="line">Method Names and Instance Variables</span><br><span class="line">~~~~~~</span><br></pre></td></tr></table></figure>
+
+<p>Use the function naming rules: lowercase with words separated by<br>underscores as necessary to improve readability.</p>
+<p>Use one leading underscore only for non-public methods and instance<br>variables.</p>
+<p>To avoid name clashes with subclasses, use two leading underscores to<br>invoke Python’s name mangling rules.</p>
+<p>Python mangles these names with the class name: if class Foo has an<br>attribute named <code>__a</code>, it cannot be accessed by <code>Foo.__a</code>.  (An<br>insistent user could still gain access by calling <code>Foo._Foo__a</code>.)<br>Generally, double leading underscores should be used only to avoid<br>name conflicts with attributes in classes designed to be subclassed.</p>
+<p>Note: there is some controversy about the use of __names (see below).</p>
+<p>Constants</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Constants are usually defined on a module level and written in all</span><br><span class="line">capital letters with underscores separating words.  Examples include</span><br><span class="line">&#96;&#96;MAX_OVERFLOW&#96;&#96; and &#96;&#96;TOTAL&#96;&#96;.</span><br><span class="line"></span><br><span class="line">Designing for Inheritance</span><br><span class="line">~~~~~~~~~~~~~~~~</span><br></pre></td></tr></table></figure>
+
+<p>Always decide whether a class’s methods and instance variables<br>(collectively: “attributes”) should be public or non-public.  If in<br>doubt, choose non-public; it’s easier to make it public later than to<br>make a public attribute non-public.</p>
+<p>Public attributes are those that you expect unrelated clients of your<br>class to use, with your commitment to avoid backwards incompatible<br>changes.  Non-public attributes are those that are not intended to be<br>used by third parties; you make no guarantees that non-public<br>attributes won’t change or even be removed.</p>
+<p>We don’t use the term “private” here, since no attribute is really<br>private in Python (without a generally unnecessary amount of work).</p>
+<p>Another category of attributes are those that are part of the<br>“subclass API” (often called “protected” in other languages).  Some<br>classes are designed to be inherited from, either to extend or modify<br>aspects of the class’s behavior.  When designing such a class, take<br>care to make explicit decisions about which attributes are public,<br>which are part of the subclass API, and which are truly only to be<br>used by your base class.</p>
+<p>With this in mind, here are the Pythonic guidelines:</p>
+<ul>
+<li><p>Public attributes should have no leading underscores.</p>
+</li>
+<li><p>If your public attribute name collides with a reserved keyword,<br>append a single trailing underscore to your attribute name.  This is<br>preferable to an abbreviation or corrupted spelling.  (However,<br>notwithstanding this rule, ‘cls’ is the preferred spelling for any<br>variable or argument which is known to be a class, especially the<br>first argument to a class method.)</p>
+<p>Note 1: See the argument name recommendation above for class methods.</p>
+</li>
+<li><p>For simple public data attributes, it is best to expose just the<br>attribute name, without complicated accessor/mutator methods.  Keep<br>in mind that Python provides an easy path to future enhancement,<br>should you find that a simple data attribute needs to grow<br>functional behavior.  In that case, use properties to hide<br>functional implementation behind simple data attribute access<br>syntax.</p>
+<p>Note 1: Properties only work on new-style classes.</p>
+<p>Note 2: Try to keep the functional behavior side-effect free,<br>although side-effects such as caching are generally fine.</p>
+<p>Note 3: Avoid using properties for computationally expensive<br>operations; the attribute notation makes the caller believe that<br>access is (relatively) cheap.</p>
+</li>
+<li><p>If your class is intended to be subclassed, and you have attributes<br>that you do not want subclasses to use, consider naming them with<br>double leading underscores and no trailing underscores.  This<br>invokes Python’s name mangling algorithm, where the name of the<br>class is mangled into the attribute name.  This helps avoid<br>attribute name collisions should subclasses inadvertently contain<br>attributes with the same name.</p>
+<p>Note 1: Note that only the simple class name is used in the mangled<br>name, so if a subclass chooses both the same class name and attribute<br>name, you can still get name collisions.</p>
+<p>Note 2: Name mangling can make certain uses, such as debugging and<br><code>__getattr__()</code>, less convenient.  However the name mangling<br>algorithm is well documented and easy to perform manually.</p>
+<p>Note 3: Not everyone likes name mangling.  Try to balance the<br>need to avoid accidental name clashes with potential use by<br>advanced callers.</p>
+</li>
+</ul>
+<h2 id="Public-and-Internal-Interfaces"><a href="#Public-and-Internal-Interfaces" class="headerlink" title="Public and Internal Interfaces"></a>Public and Internal Interfaces</h2><p>Any backwards compatibility guarantees apply only to public interfaces.<br>Accordingly, it is important that users be able to clearly distinguish<br>between public and internal interfaces.</p>
+<p>Documented interfaces are considered public, unless the documentation<br>explicitly declares them to be provisional or internal interfaces exempt<br>from the usual backwards compatibility guarantees. All undocumented<br>interfaces should be assumed to be internal.</p>
+<p>To better support introspection, modules should explicitly declare the<br>names in their public API using the <code>__all__</code> attribute. Setting<br><code>__all__</code> to an empty list indicates that the module has no public API.</p>
+<p>Even with <code>__all__</code> set appropriately, internal interfaces (packages,<br>modules, classes, functions, attributes or other names) should still be<br>prefixed with a single leading underscore.</p>
+<p>An interface is also considered internal if any containing namespace<br>(package, module or class) is considered internal.</p>
+<p>Imported names should always be considered an implementation detail.<br>Other modules must not rely on indirect access to such imported names<br>unless they are an explicitly documented part of the containing module’s<br>API, such as <code>os.path</code> or a package’s <code>__init__</code> module that exposes<br>functionality from submodules.</p>
+<h1 id="Programming-Recommendations"><a href="#Programming-Recommendations" class="headerlink" title="Programming Recommendations"></a>Programming Recommendations</h1><ul>
+<li><p>Code should be written in a way that does not disadvantage other<br>implementations of Python (PyPy, Jython, IronPython, Cython, Psyco,<br>and such).</p>
+<p>For example, do not rely on CPython’s efficient implementation of<br>in-place string concatenation for statements in the form <code>a += b</code><br>or <code>a = a + b</code>.  This optimization is fragile even in CPython (it<br>only works for some types) and isn’t present at all in implementations<br>that don’t use refcounting.  In performance sensitive parts of the<br>library, the <code>&#39;&#39;.join()</code> form should be used instead.  This will<br>ensure that concatenation occurs in linear time across various<br>implementations.</p>
+</li>
+<li><p>Comparisons to singletons like None should always be done with<br><code>is</code> or <code>is not</code>, never the equality operators.</p>
+<p>Also, beware of writing <code>if x</code> when you really mean <code>if x is not
+None</code> – e.g. when testing whether a variable or argument that<br>defaults to None was set to some other value.  The other value might<br>have a type (such as a container) that could be false in a boolean<br>context!</p>
+</li>
+<li><p>Use <code>is not</code> operator rather than <code>not ... is</code>.  While both<br>expressions are functionally identical, the former is more readable<br>and preferred::</p>
+<pre><code># Correct:
+if foo is not None:</code></pre><p>::</p>
+<pre><code># Wrong:
+if not foo is None:</code></pre></li>
+<li><p>When implementing ordering operations with rich comparisons, it is<br>best to implement all six operations (<code>__eq__</code>, <code>__ne__</code>,<br><code>__lt__</code>, <code>__le__</code>, <code>__gt__</code>, <code>__ge__</code>) rather than relying<br>on other code to only exercise a particular comparison.</p>
+<p>To minimize the effort involved, the <code>functools.total_ordering()</code><br>decorator provides a tool to generate missing comparison methods.</p>
+<p>PEP 207 indicates that reflexivity rules <em>are</em> assumed by Python.<br>Thus, the interpreter may swap <code>y &gt; x</code> with <code>x &lt; y</code>, <code>y &gt;= x</code><br>with <code>x &lt;= y</code>, and may swap the arguments of <code>x == y</code> and <code>x !=
+y</code>.  The <code>sort()</code> and <code>min()</code> operations are guaranteed to use<br>the <code>&lt;</code> operator and the <code>max()</code> function uses the <code>&gt;</code><br>operator.  However, it is best to implement all six operations so<br>that confusion doesn’t arise in other contexts.</p>
+</li>
+<li><p>Always use a def statement instead of an assignment statement that binds<br>a lambda expression directly to an identifier::</p>
+<pre><code># Correct:
+def f(x): return 2*x</code></pre><p>::</p>
+<pre><code># Wrong:
+f = lambda x: 2*x</code></pre><p>The first form means that the name of the resulting function object is<br>specifically ‘f’ instead of the generic ‘<lambda>‘. This is more<br>useful for tracebacks and string representations in general. The use<br>of the assignment statement eliminates the sole benefit a lambda<br>expression can offer over an explicit def statement (i.e. that it can<br>be embedded inside a larger expression)</p>
+</li>
+<li><p>Derive exceptions from <code>Exception</code> rather than <code>BaseException</code>.<br>Direct inheritance from <code>BaseException</code> is reserved for exceptions<br>where catching them is almost always the wrong thing to do.</p>
+<p>Design exception hierarchies based on the distinctions that code<br><em>catching</em> the exceptions is likely to need, rather than the locations<br>where the exceptions are raised. Aim to answer the question<br>“What went wrong?” programmatically, rather than only stating that<br>“A problem occurred” (see PEP 3151 for an example of this lesson being<br>learned for the builtin exception hierarchy)</p>
+<p>Class naming conventions apply here, although you should add the<br>suffix “Error” to your exception classes if the exception is an<br>error.  Non-error exceptions that are used for non-local flow control<br>or other forms of signaling need no special suffix.</p>
+</li>
+<li><p>Use exception chaining appropriately. In Python 3, “raise X from Y”<br>should be used to indicate explicit replacement without losing the<br>original traceback.</p>
+<p>When deliberately replacing an inner exception (using “raise X” in<br>Python 2 or “raise X from None” in Python 3.3+), ensure that relevant<br>details are transferred to the new exception (such as preserving the<br>attribute name when converting KeyError to AttributeError, or<br>embedding the text of the original exception in the new exception<br>message).</p>
+</li>
+<li><p>When raising an exception in Python 2, use <code>raise ValueError(&#39;message&#39;)</code><br>instead of the older form <code>raise ValueError, &#39;message&#39;</code>.</p>
+<p>The latter form is not legal Python 3 syntax.</p>
+<p>The paren-using form also means that when the exception arguments are<br>long or include string formatting, you don’t need to use line<br>continuation characters thanks to the containing parentheses.</p>
+</li>
+<li><p>When catching exceptions, mention specific exceptions whenever<br>possible instead of using a bare <code>except:</code> clause::</p>
+<pre><code>try:
+    import platform_specific_module
+except ImportError:
+    platform_specific_module = None</code></pre><p>A bare <code>except:</code> clause will catch SystemExit and<br>KeyboardInterrupt exceptions, making it harder to interrupt a<br>program with Control-C, and can disguise other problems.  If you<br>want to catch all exceptions that signal program errors, use<br><code>except Exception:</code> (bare except is equivalent to <code>except
+BaseException:</code>).</p>
+<p>A good rule of thumb is to limit use of bare ‘except’ clauses to two<br>cases:</p>
+<ol>
+<li><p>If the exception handler will be printing out or logging the<br>traceback; at least the user will be aware that an error has<br>occurred.</p>
+</li>
+<li><p>If the code needs to do some cleanup work, but then lets the<br>exception propagate upwards with <code>raise</code>.  <code>try...finally</code><br>can be a better way to handle this case.</p>
+</li>
+</ol>
+</li>
+<li><p>When binding caught exceptions to a name, prefer the explicit name<br>binding syntax added in Python 2.6::</p>
+<pre><code>try:
+    process_data()
+except Exception as exc:
+    raise DataProcessingFailedError(str(exc))</code></pre><p>This is the only syntax supported in Python 3, and avoids the<br>ambiguity problems associated with the older comma-based syntax.</p>
+</li>
+<li><p>When catching operating system errors, prefer the explicit exception<br>hierarchy introduced in Python 3.3 over introspection of <code>errno</code><br>values.</p>
+</li>
+<li><p>Additionally, for all try/except clauses, limit the <code>try</code> clause<br>to the absolute minimum amount of code necessary.  Again, this<br>avoids masking bugs::</p>
+<pre><code># Correct:
+try:
+    value = collection[key]
+except KeyError:
+    return key_not_found(key)
+else:
+    return handle_value(value)</code></pre><p>::</p>
+<pre><code># Wrong:
+try:
+    # Too broad!
+    return handle_value(collection[key])
+except KeyError:
+    # Will also catch KeyError raised by handle_value()
+    return key_not_found(key)</code></pre></li>
+<li><p>When a resource is local to a particular section of code, use a<br><code>with</code> statement to ensure it is cleaned up promptly and reliably<br>after use. A try/finally statement is also acceptable.</p>
+</li>
+<li><p>Context managers should be invoked through separate functions or methods<br>whenever they do something other than acquire and release resources::</p>
+<pre><code># Correct:
+with conn.begin_transaction():
+    do_stuff_in_transaction(conn)</code></pre><p>::</p>
+<pre><code># Wrong:
+with conn:
+    do_stuff_in_transaction(conn)</code></pre><p>The latter example doesn’t provide any information to indicate that<br>the <code>__enter__</code> and <code>__exit__</code> methods are doing something other<br>than closing the connection after a transaction.  Being explicit is<br>important in this case.</p>
+</li>
+<li><p>Be consistent in return statements.  Either all return statements in<br>a function should return an expression, or none of them should.  If<br>any return statement returns an expression, any return statements<br>where no value is returned should explicitly state this as <code>return
+None</code>, and an explicit return statement should be present at the<br>end of the function (if reachable)::</p>
+<pre><code># Correct:
+
+def foo(x):
+    if x &gt;= 0:
+        return math.sqrt(x)
+    else:
+        return None
+
+def bar(x):
+    if x &lt; 0:
+        return None
+    return math.sqrt(x)</code></pre><p>::</p>
+<pre><code># Wrong:
+
+def foo(x):
+    if x &gt;= 0:
+        return math.sqrt(x)
+
+def bar(x):
+    if x &lt; 0:
+        return
+    return math.sqrt(x)</code></pre></li>
+<li><p>Use string methods instead of the string module.</p>
+<p>String methods are always much faster and share the same API with<br>unicode strings.  Override this rule if backwards compatibility with<br>Pythons older than 2.0 is required.</p>
+</li>
+<li><p>Use <code>&#39;&#39;.startswith()</code> and <code>&#39;&#39;.endswith()</code> instead of string<br>slicing to check for prefixes or suffixes.</p>
+<p>startswith() and endswith() are cleaner and less error prone::</p>
+<pre><code># Correct:
+if foo.startswith(&apos;bar&apos;):</code></pre><p>::</p>
+<pre><code># Wrong:
+if foo[:3] == &apos;bar&apos;:</code></pre></li>
+<li><p>Object type comparisons should always use isinstance() instead of<br>comparing types directly::</p>
+<pre><code># Correct:
+if isinstance(obj, int):</code></pre><p>::</p>
+<pre><code># Wrong:
+if type(obj) is type(1):</code></pre></li>
+</ul>
+<p>When checking if an object is a string, keep in mind that it might<br>be a unicode string too!  In Python 2, str and unicode have a<br>common base class, basestring, so you can do::</p>
+<pre><code>if isinstance(obj, basestring):</code></pre><p>Note that in Python 3, <code>unicode</code> and <code>basestring</code> no longer exist<br>(there is only <code>str</code>) and a bytes object is no longer a kind of<br>string (it is a sequence of integers instead).</p>
+<ul>
+<li><p>For sequences, (strings, lists, tuples), use the fact that empty<br>sequences are false::</p>
+<pre><code># Correct:
+if not seq:
+if seq:</code></pre><p>::</p>
+<pre><code># Wrong:
+if len(seq):
+if not len(seq):</code></pre></li>
+<li><p>Don’t write string literals that rely on significant trailing<br>whitespace.  Such trailing whitespace is visually indistinguishable<br>and some editors (or more recently, reindent.py) will trim them.</p>
+</li>
+<li><p>Don’t compare boolean values to True or False using <code>==</code>::</p>
+<pre><code># Correct:
+if greeting:</code></pre><p>::</p>
+<pre><code># Wrong:
+if greeting == True:</code></pre><p>Worse::</p>
+<pre><code># Wrong:
+if greeting is True:</code></pre></li>
+<li><p>Use of the flow control statements <code>return</code>/<code>break</code>/<code>continue</code><br>within the finally suite of a <code>try...finally</code>, where the flow control<br>statement would jump outside the finally suite, is discouraged.  This<br>is because such statements will implicitly cancel any active exception<br>that is propagating through the finally suite::</p>
+<pre><code># Wrong:
+def foo():
+    try:
+        1 / 0
+    finally:
+        return 42</code></pre></li>
+</ul>
+<h2 id="Function-Annotations"><a href="#Function-Annotations" class="headerlink" title="Function Annotations"></a>Function Annotations</h2><p>With the acceptance of PEP 484, the style rules for function<br>annotations are changing.</p>
+<ul>
+<li><p>In order to be forward compatible, function annotations in Python 3<br>code should preferably use PEP 484 syntax.  (There are some<br>formatting recommendations for annotations in the previous section.)</p>
+</li>
+<li><p>The experimentation with annotation styles that was recommended<br>previously in this PEP is no longer encouraged.</p>
+</li>
+<li><p>However, outside the stdlib, experiments within the rules of PEP 484<br>are now encouraged.  For example, marking up a large third party<br>library or application with PEP 484 style type annotations,<br>reviewing how easy it was to add those annotations, and observing<br>whether their presence increases code understandability.</p>
+</li>
+<li><p>The Python standard library should be conservative in adopting such<br>annotations, but their use is allowed for new code and for big<br>refactorings.</p>
+</li>
+<li><p>For code that wants to make a different use of function annotations<br>it is recommended to put a comment of the form::</p>
+<pre><code># type: ignore</code></pre><p>near the top of the file; this tells type checker to ignore all<br>annotations.  (More fine-grained ways of disabling complaints from<br>type checkers can be found in PEP 484.)</p>
+</li>
+<li><p>Like linters, type checkers are optional, separate tools.  Python<br>interpreters by default should not issue any messages due to type<br>checking and should not alter their behavior based on annotations.</p>
+</li>
+<li><p>Users who don’t want to use type checkers are free to ignore them.<br>However, it is expected that users of third party library packages<br>may want to run type checkers over those packages.  For this purpose<br>PEP 484 recommends the use of stub files: .pyi files that are read<br>by the type checker in preference of the corresponding .py files.<br>Stub files can be distributed with a library, or separately (with<br>the library author’s permission) through the typeshed repo [5]_.</p>
+</li>
+<li><p>For code that needs to be backwards compatible, type annotations<br>can be added in the form of comments.  See the relevant section of<br>PEP 484 [6]_.</p>
+</li>
+</ul>
+<h2 id="Variable-Annotations"><a href="#Variable-Annotations" class="headerlink" title="Variable Annotations"></a>Variable Annotations</h2><p>PEP 526 introduced variable annotations. The style recommendations for them are<br>similar to those on function annotations described above:</p>
+<ul>
+<li><p>Annotations for module level variables, class and instance variables,<br>and local variables should have a single space after the colon.</p>
+</li>
+<li><p>There should be no space before the colon.</p>
+</li>
+<li><p>If an assignment has a right hand side, then the equality sign should have<br>exactly one space on both sides::</p>
+<pre><code># Correct:
+
+code: int
+
+class Point:
+    coords: Tuple[int, int]
+    label: str = &apos;&lt;unknown&gt;&apos;</code></pre><p>::</p>
+<pre><code># Wrong:
+
+code:int  # No space after colon
+code : int  # Space before colon
+
+class Test:
+    result: int=0  # No spaces around equality sign</code></pre></li>
+<li><p>Although the PEP 526 is accepted for Python 3.6, the variable annotation<br>syntax is the preferred syntax for stub files on all versions of Python<br>(see PEP 484 for details).</p>
+</li>
+</ul>
+<p>.. rubric:: Footnotes</p>
+<p>.. [#fn-hi] <em>Hanging indentation</em> is a type-setting style where all<br>   the lines in a paragraph are indented except the first line.  In<br>   the context of Python, the term is used to describe a style where<br>   the opening parenthesis of a parenthesized statement is the last<br>   non-whitespace character of the line, with subsequent lines being<br>   indented until the closing parenthesis.</p>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p>.. [1] PEP 7, Style Guide for C Code, van Rossum</p>
+<p>.. [2] Barry’s GNU Mailman style guide<br>       <a href="http://barry.warsaw.us/software/STYLEGUIDE.txt" target="_blank" rel="noopener">http://barry.warsaw.us/software/STYLEGUIDE.txt</a></p>
+<p>.. [3] Donald Knuth’s <em>The TeXBook</em>, pages 195 and 196.</p>
+<p>.. [4] <a href="http://www.wikipedia.com/wiki/CamelCase" target="_blank" rel="noopener">http://www.wikipedia.com/wiki/CamelCase</a></p>
+<p>.. [5] Typeshed repo<br>   <a href="https://github.com/python/typeshed" target="_blank" rel="noopener">https://github.com/python/typeshed</a></p>
+<p>.. [6] Suggested syntax for Python 2.7 and straddling code<br>   <a href="https://www.python.org/dev/peps/pep-0484/#suggested-syntax-for-python-2-7-and-straddling-code" target="_blank" rel="noopener">https://www.python.org/dev/peps/pep-0484/#suggested-syntax-for-python-2-7-and-straddling-code</a></p>
+<h1 id="Copyright"><a href="#Copyright" class="headerlink" title="Copyright"></a>Copyright</h1><p>This document has been placed in the public domain.</p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/08/23/python-basic-library/" title= "파이썬 기본 라이브러리 정리">
+                    <div class="nextTitle">파이썬 기본 라이브러리 정리</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/08/12/nginx-proxy/" title= "Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)">
+                    <div class="prevTitle">Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 사각형 반응형 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="2080063347"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction"><span class="toc-number">2.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#A-Foolish-Consistency-is-the-Hobgoblin-of-Little-Minds"><span class="toc-number">3.</span> <span class="toc-text">A Foolish Consistency is the Hobgoblin of Little Minds</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Code-Lay-out"><span class="toc-number">4.</span> <span class="toc-text">Code Lay-out</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Indentation"><span class="toc-number">4.1.</span> <span class="toc-text">Indentation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tabs-or-Spaces"><span class="toc-number">4.2.</span> <span class="toc-text">Tabs or Spaces?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maximum-Line-Length"><span class="toc-number">4.3.</span> <span class="toc-text">Maximum Line Length</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Should-a-Line-Break-Before-or-After-a-Binary-Operator"><span class="toc-number">4.4.</span> <span class="toc-text">Should a Line Break Before or After a Binary Operator?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Blank-Lines"><span class="toc-number">4.5.</span> <span class="toc-text">Blank Lines</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Source-File-Encoding"><span class="toc-number">4.6.</span> <span class="toc-text">Source File Encoding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Imports"><span class="toc-number">4.7.</span> <span class="toc-text">Imports</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Module-Level-Dunder-Names"><span class="toc-number">4.8.</span> <span class="toc-text">Module Level Dunder Names</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#String-Quotes"><span class="toc-number">5.</span> <span class="toc-text">String Quotes</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Whitespace-in-Expressions-and-Statements"><span class="toc-number">6.</span> <span class="toc-text">Whitespace in Expressions and Statements</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Pet-Peeves"><span class="toc-number">6.1.</span> <span class="toc-text">Pet Peeves</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Other-Recommendations"><span class="toc-number">6.2.</span> <span class="toc-text">Other Recommendations</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#When-to-Use-Trailing-Commas"><span class="toc-number">7.</span> <span class="toc-text">When to Use Trailing Commas</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Comments"><span class="toc-number">8.</span> <span class="toc-text">Comments</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Block-Comments"><span class="toc-number">8.1.</span> <span class="toc-text">Block Comments</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Inline-Comments"><span class="toc-number">8.2.</span> <span class="toc-text">Inline Comments</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Documentation-Strings"><span class="toc-number">8.3.</span> <span class="toc-text">Documentation Strings</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Naming-Conventions"><span class="toc-number">9.</span> <span class="toc-text">Naming Conventions</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overriding-Principle"><span class="toc-number">9.1.</span> <span class="toc-text">Overriding Principle</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Descriptive-Naming-Styles"><span class="toc-number">9.2.</span> <span class="toc-text">Descriptive: Naming Styles</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Prescriptive-Naming-Conventions"><span class="toc-number">9.3.</span> <span class="toc-text">Prescriptive: Naming Conventions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Public-and-Internal-Interfaces"><span class="toc-number">9.4.</span> <span class="toc-text">Public and Internal Interfaces</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Programming-Recommendations"><span class="toc-number">10.</span> <span class="toc-text">Programming Recommendations</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Function-Annotations"><span class="toc-number">10.1.</span> <span class="toc-text">Function Annotations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Variable-Annotations"><span class="toc-number">10.2.</span> <span class="toc-text">Variable Annotations</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#References"><span class="toc-number">11.</span> <span class="toc-text">References</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Copyright"><span class="toc-number">12.</span> <span class="toc-text">Copyright</span></a></li></ol>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 수직형 반응형 디스플레이광고 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="1645513725"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 216
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2023 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/2023/08/18/BasicDB/" >DB에 대한 전반적인 개념(SQL,NoSQL)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/11</span><a class="archive-post-title" href= "/2023/07/11/Advenced-JPA2-CH01/" >Advenced-JPA2-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/27</span><a class="archive-post-title" href= "/2023/06/27/Advenced-JPA1-CH04/" >Advenced-JPA1-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/19</span><a class="archive-post-title" href= "/2023/06/19/Advenced-JPA1-CH03/" >Advenced-JPA1-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/28</span><a class="archive-post-title" href= "/2023/05/28/Review-The-Essence-Of-Object-Orientation/" >(리뷰)객체 지향의 사실과 오해 책 리뷰</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2023/05/20/Advenced-JPA1-CH02/" >Advenced-JPA1-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2023/05/08/Advenced-JPA1-CH01/" >(JPA) Advenced-JPA1-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2023/04/26/JPA-Basic-CH10/" >(JPA) JPA-Basic-CH10(fetch-join)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2023/04/22/Design-pattern-3/" >(ETC) 디자인 패턴에 대해서 CH3 (행동 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2023/04/22/JPA-Basic-CH09/" >(JPA) JPA-Basic-CH09(객체지향 쿼리 언어)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/20</span><a class="archive-post-title" href= "/2023/04/20/JPA-Basic-CH08/" >(JPA)JPA-Basic-CH08(값 타입)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/18</span><a class="archive-post-title" href= "/2023/04/18/JPA-Basic-CH07/" >(JPA) JPA-Basic-CH07(프록시)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/17</span><a class="archive-post-title" href= "/2023/04/17/JPA-Basic-CH06/" >(JPA) JPA-Basic-CH06(고급매핑- 상속관계 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/13</span><a class="archive-post-title" href= "/2023/04/13/Issue-Java-ClassCastException/" >(Issue) ResponseBodyAdvice에서 ClassCastException 발생</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/13</span><a class="archive-post-title" href= "/2023/04/13/JPA-Basic-CH05/" >(JPA) JPA-Basic-CH05(다양한 연관관계 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/09</span><a class="archive-post-title" href= "/2023/04/09/JPA-Basic-CH04/" >(JPA) JPA-Basic-CH04 (연관관계 매핑 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/08</span><a class="archive-post-title" href= "/2023/04/08/JPA-Basic-CH03/" >(JPA) JPA-Basic-CH03 (엔티티 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2023/04/06/JPA-Basic-CH02/" >(JPA) JPA 기본편 CH02 (JPA 영속성 컨텍스트)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/JPA-Basic-CH01/" >(JPA) JPA 기본편 CH01 (JPA 시작)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/querydsl/" >DataSource, QueryDSL이란?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/29</span><a class="archive-post-title" href= "/2023/03/29/SpringMVC2-CH02/" >SpringMVC2-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/21</span><a class="archive-post-title" href= "/2023/03/21/Design-pattern-2/" >(ETC) 디자인 패턴에 대해서 CH2 (구조 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/12</span><a class="archive-post-title" href= "/2023/03/12/Design-pattern-1/" >(ETC) 디자인 패턴에 대해서 CH1 (생성 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/10</span><a class="archive-post-title" href= "/2023/03/10/l2-l4-l7-switching/" >L2-L4-L7 스위치란? (허브, 스위치, 라우터)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span><a class="archive-post-title" href= "/2023/02/25/Review-System-Design-Interview/" >(리뷰)(강추)가상 면접 사례로 배우는 대규모 시스템 설계 기초</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2023/02/23/gitlab-CI-CD-springproject/" >Gitlab-CI/CD 구축하기(withSpring)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span><a class="archive-post-title" href= "/2023/02/16/SpringMVC2-CH01/" >SpringMVC2-CH01(스프링 thymeleaf)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span><a class="archive-post-title" href= "/2023/02/07/JavaScript-Basic/" >JavaScript-Basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/05</span><a class="archive-post-title" href= "/2023/02/05/Html-JQuery/" >Html-JQuery</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2023/01/22/mysql/" >Mysql 기본 공부 (수정본)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-maven/" >About-maven</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-mybatis/" >About-mybatis</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-xml/" >XML 파일에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/ubuntu-command/" >우분투 자주 쓰는 명령어(2023버전)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2023/01/02/n-plus-1-problem-i/" >JPA N+1 문제와 해결법(수정중)</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/31</span><a class="archive-post-title" href= "/2022/12/31/end-of-2023/" >2023년을 마무리 하며...(2023년 목표 포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/AboutSpring/" >AboutSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/CS-Lock-MutexAndSemaphore/" >CS Lock MutexAndSemaphore</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Isolation-Level-4-And-Lock/" >Isolation Level 4 And Lock</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/READ-ME-Writing/" >READ-ME Writing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Entity-DAO-DTO/" >Spring-Entity-DAO-DTO</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/SpringAndJenkins/" >SpringAndJenkins</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Lambda-Capturing/" >Java Lambda-Capturing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Basic-JVM/" >Java Basic JVM</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-SOLID/" >Java SOLID</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Null-Optional-Empty/" >Null-Optional-Empty</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Singleton-Stateless/" >Spring Singleton Stateless</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutKafka/" >AboutKafka</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutMessageQ/" >AboutMessageQ</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutSpringSecurity/" >AboutSpringSecurity</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Sequence-Diagram/" >Sequence-Diagram</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH01/" >SpringProject-TrackingPost-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH02/" >SpringProject-TrackingPost-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH04/" >SpringProject-TrackingPost-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH03/" >SpringProject-TrackingPost-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH06/" >SpringProject-TrackingPost-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH05/" >SpringProject-TrackingPost-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutLombokAtSpring/" >AboutLombokAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Basic-Vue-js/" >Basic Vue.js</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Http-Status/" >Http-Status</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Spring-Logger/" >Spring-Logger</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH01/" >SpringProject-Board-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH03/" >SpringProject-Board-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH02/" >SpringProject-Board-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH04/" >SpringProject-Board-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH08/" >SpringProject-Board-CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH07/" >SpringProject-Board-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH06/" >SpringProject-Board-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH10/" >SpringProject-Board-CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH05/" >SpringProject-Board-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH09/" >SpringProject-Board-CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/UsingAOPAtSpring/" >UsingAOPAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH00/" >SpringCore CH00</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH01/" >SpringCore CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH02-03/" >SpringCore CH02~03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH04/" >SpringCore CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH05/" >SpringCore CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH06/" >SpringCore CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH07/" >SpringCore CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH01/" >SpringMVC-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH09/" >SpringCore CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH02/" >SpringMVC-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH08/" >SpringCore CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH03/" >SpringMVC-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH04/" >SpringMVC-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH05/" >SpringMVC-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH07/" >SpringMVC-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH06/" >SpringMVC-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/effective-java-review/" >(책리뷰)이펙티브 자바</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH01/" >Java 배우기 CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH02/" >Java 배우기 CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH03/" >Java 배우기 CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH04/" >Java 배우기 CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH05/" >Java 배우기 CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH08/" >Java 배우기 CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH06/" >Java 배우기 CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH09/" >Java 배우기 CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH07/" >Java 배우기 CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH10/" >Java 배우기 CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH11/" >Java 배우기 CH11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH12/" >Java 배우기 CH12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH13/" >Java 배우기 CH13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH14/" >Java 배우기 CH14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/ConnectDomainToNotion/" >Notion과 개인 Domain 연결하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/OSI7layer/" >OSI7계층과 TCP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Structure"><span class="iconfont-archer">&#xe606;</span>Structure</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Interview"><span class="iconfont-archer">&#xe606;</span>Interview</span>
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Lombok"><span class="iconfont-archer">&#xe606;</span>Lombok</span>
+    
+        <span class="sidebar-tag-name" data-tags="MessageQ"><span class="iconfont-archer">&#xe606;</span>MessageQ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kafka"><span class="iconfont-archer">&#xe606;</span>Kafka</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mybatis"><span class="iconfont-archer">&#xe606;</span>Mybatis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Vue"><span class="iconfont-archer">&#xe606;</span>Vue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="CS"><span class="iconfont-archer">&#xe606;</span>CS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Notion"><span class="iconfont-archer">&#xe606;</span>Notion</span>
+    
+        <span class="sidebar-tag-name" data-tags="Domain"><span class="iconfont-archer">&#xe606;</span>Domain</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jquery"><span class="iconfont-archer">&#xe606;</span>Jquery</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="FrontEnd"><span class="iconfont-archer">&#xe606;</span>FrontEnd</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="JPA"><span class="iconfont-archer">&#xe606;</span>JPA</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="Issue"><span class="iconfont-archer">&#xe606;</span>Issue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="Logger"><span class="iconfont-archer">&#xe606;</span>Logger</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jenkins"><span class="iconfont-archer">&#xe606;</span>Jenkins</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thymeleaf"><span class="iconfont-archer">&#xe606;</span>Thymeleaf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="AOP"><span class="iconfont-archer">&#xe606;</span>AOP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Gitlab"><span class="iconfont-archer">&#xe606;</span>Gitlab</span>
+    
+        <span class="sidebar-tag-name" data-tags="CI-CD"><span class="iconfont-archer">&#xe606;</span>CI-CD</span>
+    
+        <span class="sidebar-tag-name" data-tags="Problem"><span class="iconfont-archer">&#xe606;</span>Problem</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="QueryDSL"><span class="iconfont-archer">&#xe606;</span>QueryDSL</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jpa"><span class="iconfont-archer">&#xe606;</span>Jpa</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advance"><span class="iconfont-archer">&#xe606;</span>Advance</span>
+    
+        <span class="sidebar-tag-name" data-tags="Book"><span class="iconfont-archer">&#xe606;</span>Book</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Maven"><span class="iconfont-archer">&#xe60a;</span>Maven</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+        <span class="sidebar-category-name" data-categories="Spring"><span class="iconfont-archer">&#xe60a;</span>Spring</span>
+    
+        <span class="sidebar-category-name" data-categories="MessageQ"><span class="iconfont-archer">&#xe60a;</span>MessageQ</span>
+    
+        <span class="sidebar-category-name" data-categories="Mybatis"><span class="iconfont-archer">&#xe60a;</span>Mybatis</span>
+    
+        <span class="sidebar-category-name" data-categories="Vue"><span class="iconfont-archer">&#xe60a;</span>Vue</span>
+    
+        <span class="sidebar-category-name" data-categories="CS"><span class="iconfont-archer">&#xe60a;</span>CS</span>
+    
+        <span class="sidebar-category-name" data-categories="Tips"><span class="iconfont-archer">&#xe60a;</span>Tips</span>
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="Jquery"><span class="iconfont-archer">&#xe60a;</span>Jquery</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="JPA"><span class="iconfont-archer">&#xe60a;</span>JPA</span>
+    
+        <span class="sidebar-category-name" data-categories="Issue"><span class="iconfont-archer">&#xe60a;</span>Issue</span>
+    
+        <span class="sidebar-category-name" data-categories="Java"><span class="iconfont-archer">&#xe60a;</span>Java</span>
+    
+        <span class="sidebar-category-name" data-categories="Javascript"><span class="iconfont-archer">&#xe60a;</span>Javascript</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Jenkins"><span class="iconfont-archer">&#xe60a;</span>Jenkins</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Gitlab"><span class="iconfont-archer">&#xe60a;</span>Gitlab</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

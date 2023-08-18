@@ -1,0 +1,6185 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>네트워크 지식 01 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">네트워크 지식 01</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            네트워크 지식 01
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Basic">Basic</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Network">Network</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Tip">Tip</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Server">Server</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">4.5k</span>Reading time: <span class="post-count reading-time">28 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/05/07</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="네트워크-지식-01"><a href="#네트워크-지식-01" class="headerlink" title="네트워크 지식 01"></a>네트워크 지식 01</h1><p><a href="https://aaasssddd25.tistory.com/9?category=617816" target="_blank" rel="noopener">자세히</a></p>
+<h2 id="상식"><a href="#상식" class="headerlink" title="상식"></a>상식</h2><ul>
+<li><p>LAN  - Local &gt;어느 한정된 공간에서 네트워크를 구성하는것 (사무실 네트워크구성)</p>
+</li>
+<li><p>WAN - 서로 멀리 떨어진 곳을 네트워크로 연결하는 것</p>
+</li>
+<li><p>이더넷 - 네트워킹의 한 방식 (우리나라에서는 거의 대부분 이더넷 방식사용),</p>
+<p>이더넷 방식의 가장 큰 특징은 CSMA/CD라는 프로토콜을 사용하여 통신</p>
+<p>(다른 네트워킹의 방식으로 이더넷, 토큰링, FDDI가 있는데 각 방식에 따라 랜카드부터 네트워크 장비들을 다르게 구입해야함)</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>※ CMSA/CD 통신 순서 요약</strong></p>
+<ol>
+<li><p>이더넷 환경에서 통신하고 싶은 PC, 서버는 지금 네트워크에 통신이일어나는지 확인</p>
+<p>(이를 Carrier Sense라고 함, 캐리어는 네트워크상의 나타나는 신호임)</p>
+</li>
+<li><p>캐리어가 감지되면(누군가 통신을 하고있으면) 자기가 보낼 정보를 보내지 않고 기다림  </p>
+<p>캐리어가 감지가 되지 않으면 <strong>무작정</strong> 자기가 보낼 정보를 네트워크상에 보냄</p>
+</li>
+<li><p>만약 다른 PC,서버도 같이 보냈을 경우를 Multiple Access(다중접근)이라고 함</p>
+<p>또한 두개 이상의 장비가 데이터를 보내려다 부딪힌 경우를 Collision(충돌)이 발생했다함 </p>
+</li>
+<li><p>따라서 이더넷에서는 충돌이 발생하지 않게 데이터를 보낸뒤 콜리전이 발생 하지 않았는지 점검한다.<br>이걸 Collision Detection(충돌감지)라고 한다.</p>
+</li>
+<li><p>콜리전이 발생할 경우 데이터를 전송한 PC들은 랜덤한 시간동안 기다린 다음 다시 데이터를 보냄<br>(이 시간은 사람이 감지하기 힘듬)</p>
+</li>
+<li><p>계속해서 충돌이 일어나면 5번을 반복함</p>
+</li>
+</ol>
+</blockquote>
+<ul>
+<li><p>토큰링(네트워킹방식의 한 종류)</p>
+<p>이더넷과 다르게 한 네트워크상에 딴 한개 존재한 토큰으로 돌아가며 데이터를 보냄(토큰이 몇개 되는경우도 있음)(토큰을 가지고있는 컴퓨터만 데이터를 보낼수있으므로 충돌은 일어나지않지만 받을때까지 기다려야하므로 존나느려 안씀)</p>
+</li>
+<li><p>케이블</p>
+<p>케이블은 장비와 장비의 연결에는 어디에나 들어감</p>
+<p>(pc에서 허브나 스위치까지의 연결, 스위치-스위치, 스위치-라우터)</p>
+<p>(UTP, STP등 존재)</p>
+<ul>
+<li><p>케이블의 종류 : 10 Base T, 10 Base 2 등</p>
+<p>10 Base T : 10Mbps로 통신하고 최대 전송 거리 100미터인 UTP 케이블</p>
+<p>10 Base 2 : 10Mbps로 통신이 가능하고 최대 전송거리 200미터인 케이블</p>
+</li>
+</ul>
+</li>
+<li><p>맥 어드레스(MAC Address)</p>
+<ul>
+<li><p>통신을 위해서 서로를 구분할 일종의 주소</p>
+</li>
+<li><p>Q) 앞에서는 TCP/IP로만 통신을 한다던데?</p>
+<p>A) 물론 인터넷은 TCP/IP로 통신을 함. 즉, 통신을 위해 IP주소를 사용하지만 맥 어드레스도 사용함</p>
+<p>우리는 IP주소를 다시 MAC주소로 바꾸는 절차 ARP(Address Resolution Protocol)를 사용중임(즉, 네트워크상에서 IP주소를 물리적 네트워크 주소로 대응시키기 위해 사용되는 프로토콜이다. 여기서 물리적 네트워크 주소는 이더넷또는 토큰링의 48비트 네트워크 카드 주소를 뜻함(MAC))</p>
+<p>MAC 주소는 </p>
+<p>00-60-97-8F-4F-86</p>
+<p>00:60:97:8F:4F:86</p>
+<p>0060.978F.4F86</p>
+<p>와 같이 8자리 마다 하이픈,콜론,점으로 구분되어짐</p>
+<p>앞에 6자리는 생산자를 나타내는 코드 (OUI, 회사 제품 넘버)</p>
+<p>뒤에 6자리는 메이커에서 각 장비에 분배하는 Host Identifier이다.(시리얼 넘버)</p>
+<p>즉, 맥 주소 중에서 앞쪽 반은 미리 약속된 규정에 따라 각 네트워크 장비를 만드는 회사에 분배해주고 그 회사에서는 나머지 반을 일련 번호를 만들어 각 장비에 부여하는 것임</p>
+<blockquote>
+<p>이를테면, IP 호스트 A가 IP 호스트 B에게 IP 패킷을 전송하려고 할 때 IP 호스트 B의 물리적 네트워크 주소를 모른다면, <a href="https://ko.wikipedia.org/wiki/ARP" target="_blank" rel="noopener">ARP</a> 프로토콜을 사용하여 목적지 IP 주소 B와 <a href="https://ko.wikipedia.org/wiki/브로드캐스팅" target="_blank" rel="noopener">브로드캐스팅</a> 물리적 네트워크 주소 FFFFFFFFFFFF를 가지는 ARP 패킷을 네트워크 상에 전송한다. IP 호스트 B는 자신의 IP 주소가 목적지에 있는 ARP 패킷을 수신하면 자신의 물리적 네트워크 주소를 A에게 응답한다.</p>
+<p>이와 같은 방식으로 수집된 IP 주소와 이에 해당하는 물리적 네트워크 주소 정보는 각 IP 호스트의 ARP 캐시라 불리는 메모리에 테이블 형태로 저장된 다음, 패킷을 전송할 때에 다시 사용된다. ARP와는 반대로, IP 호스트가 자신의 물리 네트워크 주소는 알지만 IP 주소를 모르는 경우, 서버로부터 IP주소를 요청하기 위해 <a href="https://ko.wikipedia.org/wiki/RARP" target="_blank" rel="noopener">RARP</a>를 사용한다.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>유니캐스트, 브로드캐스트, 멀티캐스트</p>
+<ul>
+<li><p><strong>유니캐스트(Unicast)</strong></p>
+<p>데이터를 보내고자 하는 PC의 맥 어드레스 : 00-60-80-AA-BB-CC</p>
+<p>데이터를 받고자 하는 PC의 맥 어드레스 : 00-60-80-DD-EE-FF</p>
+<p>유니캐스트 통신 방식은 받는 PC가 하나여야 한다. (편지 생각)</p>
+<ol>
+<li><p>어떤 PC가 유니캐스트 프레임을 뿌이게 될 경우 로컬 네트워크 상에 있는 모든 PC들은 일단 이 프레임을 받아들여서 랜카드에서 자신의 맥 어드레스와 비교</p>
+</li>
+<li><p>자신의 랜카드 맥 어드레스와 목적지 맥 어드레스가 서로 다른경우 바로 그 프레임을 버림</p>
+<p>(CPU에 영향이 X, PC의 성능저하 X)</p>
+</li>
+<li><p>만약 자신의 랜카드 맥어드레스와 목적지 맥 어드레스가 서로 일치할경우 랜카드는 이 프레임을 CPU로 올려보냄</p>
+<p>(유니캐스트는 현재 네트워크에서 가장 많이 사용되는 통신 방식임)</p>
+</li>
+</ol>
+</li>
+<li><p><strong>브로드캐스트(Broadcast)</strong></p>
+<p>브로드 캐스트는 유니캐스트와 다르게 로컬 랜 상에 붙어있는 모든 네트워크 장비들에게 보내는 통신임 (로컬 랜이란 라우터에 의해서 구분지어진 공간, 즉 브로드캐스트 도메인이라는 공간)</p>
+<p>브로드 캐스트는 통신의 대상이 특정 장비가 아닌 내가 살고 있는 네트워크 안의 모든 네트워크 장비들에게 통신할 때 쓰기 위한 방식임 (받는사람이 브로드캐스트 도메인 내 모든 네트웍 장비)</p>
+<p>쉽게 생각해서 이장님의 마이크 방송을 생각하면됨</p>
+<p>듣기 싫어도 무조건 듣게됨</p>
+<p>이처럼 브로드 캐스트 주소(FFFF.FFFF.FFFF)가 자신의 맥 어드레스와 달라도 패킷을 CPU에 보낸다. 그 후 CPU가 알아서 이 패킷을 처리함</p>
+<p>결국 CPU의 성능저하를 불러옴</p>
+<blockquote>
+<p><strong>브로드캐스트는 어떤경우에 발생하는가?</strong> (ARP!)</p>
+<p>A) 예를들어 처음 2개의 PC간에 통신을 하는경우 상대편의 IP주소는 알아도 맥 어드레스는 모름</p>
+<p>  이 경우에 상대편의 맥 어드레스를 알아내기 위해서 ARP(IP주소를 맥 주소로 변환)를 한다.</p>
+<p>  이때 브로드 캐스트가 발생함</p>
+</blockquote>
+</li>
+<li><p><strong>멀티캐스트(Multicast)</strong></p>
+<p>만약 200명의 사용자가 있는 네트워크에서 150명에게만 같은 정보를 동시에 보내야 하는 상황이라고 가정해보자</p>
+<p><strong>방법 1) 유니캐스트 이용</strong></p>
+<p>유니캐스트는 1:1이기때문에 같은 데이터를 총 150번 보내야하므로 네트워크 트래픽을 가중시킴</p>
+<p><strong>방법 2) 브로드캐스트 이용</strong></p>
+<p>브로드캐스트는 전체를 상대로 보내기때문에 유니캐스트 처럼 150번 반복은 아니어도 200명중 남은 50명이 쓸모없는 데이터를 받게된다. 브로드캐스트는 CPU로 올려보내기에 PC 성능을 저하시킴</p>
+<p><strong>방법 3) 멀티캐스트</strong></p>
+<p>보내고자 하는 인원들에게만 한번에 보낼수 있기 떄문에 이런 경우 제일 유용함</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="OSI-계층-구조"><a href="#OSI-계층-구조" class="headerlink" title="OSI 계층 구조"></a>OSI 계층 구조</h1><p><a href="https://jwprogramming.tistory.com/31?category=680194" target="_blank" rel="noopener">자세히</a></p>
+<p>네트워크는 기기간, 기기와 서버간 통신</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gejqy66v23j310k0smkh6.jpg" alt="스크린샷 2020-05-07 오후 12.50.45"></p>
+<h2 id="데이터-단위"><a href="#데이터-단위" class="headerlink" title="데이터 단위"></a>데이터 단위</h2><ul>
+<li><strong>PDU(Protocol Data Unit)</strong>는 동일 계층 간에 교환되는 정보의 단위</li>
+<li><strong>SDU(Service Data Unit)</strong>은 상,하위 계층끼리 주고 받는 정보의 단위</li>
+</ul>
+<h2 id="각-계층별-기능"><a href="#각-계층별-기능" class="headerlink" title="각 계층별 기능"></a>각 계층별 기능</h2><ul>
+<li><p><strong>Physical Layer(물리계층)</strong></p>
+<p>실제, 전기적 특성에 대한 규칙을 정의, 물리적 전송 매체와 전송 신호 방식 정의</p>
+<p>대표적인 장치 : 통신 케이블 , 리피터, 허브</p>
+</li>
+<li><p><strong>Data Link Layer(데이터 링크 계층)</strong></p>
+<p>두 개의 인접한 개방 시스템들 간에 신뢰성 있고 효율적인 정보 전송을 할수 있도록함.</p>
+<p>따라서 통신 오류도 찾고 재전송하는 기능이 있음, 또한 맥 어드레스를 가지고 통신 할 수 있게 해줌 (사용되는 통신 단위는 프레임)</p>
+<p>대표적인 장치 : 브리지, 스위치</p>
+</li>
+<li><p><strong>네트워크 계층(Network Layer, 망 계층)</strong></p>
+<p>개방 시스템들 간의 네트워크 연결을 관리하는 기능과 데이터의 교환 및 중계 기능</p>
+<p>이 계층은 경로를 선택하고 주소를 정하고 경로에 따라 패킷을 전달해주는 것이 이 계층의 역할이다. </p>
+<ul>
+<li>IP패킷의 전달 및 라우팅을 담당하고 패킷을 목적지까지 전달하는 역할하는 IP계층도 네트워크 계층의포함됨.</li>
+</ul>
+<p>대표적인 장치 : 라우터, 스위치 </p>
+</li>
+<li><p><strong>전송 계층(Transport Layer)</strong></p>
+<p>종단 시스템(End-to-End)간에 투명한 데이터 전송을 가능하게 합니다.</p>
+<p>TCP, UDP  등의 표준이 존재함</p>
+<p>TCP 소켓도 이때 사용됨</p>
+<p><a href="https://recipes4dev.tistory.com/153?category=789384" target="_blank" rel="noopener">자세히</a></p>
+<p><a href="https://blog.naver.com/PostView.nhn?blogId=myca11&logNo=221389847130" target="_blank" rel="noopener">자세히2</a></p>
+<p><strong>패킷 생성(Assembly/Sequencing/Deassembly/Error detection/Request repeat/Flow control) 및 전송</strong> 담당 계층(상위계층안봐도 전송 계층이 유효한지만 판단하면되도록 설계됨.)</p>
+<blockquote>
+<p>네트워크 상에서는 무수히 많은 데이터가 오고가고, 그에 따라 트래픽 혹은 여러가지 기타 이유로 인하여 패킷이 손실할 수 있는 가능성이 많습니다. 이러한 패킷손실에 대하여 TCP는 신뢰적인 데이터 전송 메카니즘을 가지고 있습니다.</p>
+<p>UDP 프로토콜의 경우에는 비신뢰적인 네트워크 통신방식이므로 에러를 검출해낼 수 없습니다. </p>
+<p>TCP 프로토콜이 신뢰적인 통신 연결방법이므로 이 TCP통신에서 데이터가 전송 될 때 패킷이 깨질 수 있는 가정으로 두어야 합니다.</p>
+<p># 프로토콜이란? </p>
+<ul>
+<li>대화의 규칙(통신 규약. 신호 송신의 순서, 데이터의 표현법, 오류(誤謬) 검출법 등을 정함)</li>
+</ul>
+</blockquote>
+</li>
+<li><p><strong>세션 계층(Session Layer)</strong></p>
+<p>애플리케이션 간에 세션을 구축하고 관리하면 종료시키는 역할을 합니다.</p>
+</li>
+<li><p><strong>표현 계층(Presentation Layer)</strong></p>
+<p>응용 계층으로부터 받은 데이터를 세션 계층에 보내기 전에 통신에 적당한 형태로 변환하고, 세션 계층에서 받은 데이터를 응용 계층에 맞게 변환하는 기능을 담당합니다.</p>
+</li>
+<li><p><strong>응용 계층(Application Layer)</strong></p>
+<p>사용자가 OSI 환경에 접근할 수 있도록 서비스를 제공합니다.</p>
+<p>담고있는 정보들을 어떤 어플리케이션으로 보내 렌더링</p>
+<p>우리가 알고 있는 브라우저나 텔넷같은 서비스가 이 계층에 동작하며, 동작하기 위해서는 전송계층의 주소, 즉 포트번호를 사용합니다.</p>
+<p>이를테면 http는 포트번호 80번을 사용함</p>
+</li>
+</ul>
+<h1 id="TCP-IP"><a href="#TCP-IP" class="headerlink" title="TCP/IP"></a>TCP/IP</h1><p><a href="https://www.joinc.co.kr/w/Site/Network_Programing/Documents/IntroTCPIP" target="_blank" rel="noopener">자세히</a></p>
+<p><a href="https://blog.naver.com/6yujin6/221634449540" target="_blank" rel="noopener">자세히2</a></p>
+<p>(Transmission Control Protocol/Internet Protocol)</p>
+<p>TCP/IP는 인터넷을 사용하기 위해 꼭 필요한 프로토콜이다.</p>
+<p>다시마해 인터넷의 공용어는 TCP/IP인셈 -&gt; 모든 PC는 TCP/IP가 셋팅되어 있음</p>
+<p>요즘에는 인터넷은 같은 IP 주소를 사용하는 경우도 있음</p>
+<p>왜냐하면 IP주소(IPv4,Internet Protocol version 4)를 거의 다 사용해서 내부 네트워크에서는 공인되지 않은 IP주소를 사용하고, 인터넷을 나갈때만 공인주소(유일한 IP주소)를 가지고 나가는 방식인 NAT을 사용</p>
+<blockquote>
+<p>맥에서 ip주소 보는법</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ifconfig | grep inet <span class="comment">#inet 주소모두</span></span><br><span class="line">ifconfig <span class="comment"># 모든 연결정보</span></span><br><span class="line">networksetup -listallhardwareports <span class="comment"># ifconfig en0같은 것들 WIFI인지 구별되는것 출력</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li><p>전송계층으로 서버와 클라이언트간에 데이터를 신뢰성 있게 전달하기 위해<br> 만들어진 프로토콜</p>
+</li>
+<li><p>메시지나 파일들을 좀더 작은 패킷으로 나누어 전달하는 일과, 수신된 패킷들을  원래의 메시지로 재조립하는 일을 담당 (전송계층)</p>
+</li>
+<li><p>데이터는 네트워크 선로를 통해 전달되는 과정에서 손실되거나 순서가 바뀔 수 있는데, TCP는 손실을 검색해내서, 이를 교정하고 순서를 재조합 할 수 있게 함</p>
+</li>
+<li><p>쪼갠 데이터와 필요한 정보를 함께 전송하여 통신링크 마지막 부분에서 합치는데, 합친 부분을 데이터 그램이라고 함</p>
+</li>
+<li><p>TCP를 이용하는 애플리케이션에는 HTTP나 SMTP등이 있음</p>
+</li>
+<li><p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg7tnsjoe3j31f00pgdrx.jpg" alt="스크린샷 2020-06-28 오후 12.02.56"></p>
+<blockquote>
+<p>1.<strong>Application Layer</strong></p>
+<ul>
+<li>네트워크를 사용하는 응용프로그램(FTP, Telnet, SMTP)등으로 이루어짐</li>
+<li>OSI 계층의 Application, Presentation, Session Layer를 모두 포함</li>
+</ul>
+<p>2.<strong>Transport Layer</strong></p>
+<ul>
+<li>목적지까지 데이터를 전송하기 위한 일을 하는 계층</li>
+<li>OSI 계층의 Transport Layer를 포함</li>
+<li>각각의 시스템을 연결하고, TCP 프로토콜을 이용하여 데이터를 전송</li>
+<li>TCP와 UDP가 존재</li>
+</ul>
+<p>3.<strong>Internet Layer</strong></p>
+<ul>
+<li>데이터를 정의하고 데이터의 경로를 배정하는 일(라우팅)을 담당</li>
+<li>데이터를 정확하게 라우팅 하기 위해 IP프로토콜 이용</li>
+<li>OSI 계층의 Network Layer를 포함</li>
+</ul>
+<p>4.<strong>Network Interface Layer(or Network Access Layer)</strong></p>
+<ul>
+<li>인터넷을 거치지 않고 내부 PC끼리 통신을 주고 받을 때 사용되는 근거리통신</li>
+<li>Ethernet을 가장 많이 사용하고, MAC 주소를 사용해 패킷을 주고받음</li>
+<li>OSI 계층의 Date Link, Physical Layer를 포함</li>
+</ul>
+</blockquote>
+</li>
+<li><h3 id="TCP-IP-4계층에-의한-데이타-전송"><a href="#TCP-IP-4계층에-의한-데이타-전송" class="headerlink" title="TCP/IP 4계층에 의한 데이타 전송"></a>TCP/IP 4계층에 의한 데이타 전송</h3></li>
+</ul>
+<p>![스크린샷 2020-06-28 오후 12.09.19](/Users/lostcatbox/Library/Application Support/typora-user-images/스크린샷 2020-06-28 오후 12.09.19.png)</p>
+<blockquote>
+<p>www서비스를 예를 들어 설명해보자, HTTP이라는 프로토콜을 이용한다. 위의 그림을 설명해 보자면, 일단 사용자는 Mozilla 나 IE 같은 브라우저를 사용하여서 <a href="http://www.joinc.co.kr/" target="_blank" rel="noopener">www.joinc.co.kr</a> 같은 <a href="https://www.joinc.co.kr/w/man/12/URL" target="_blank" rel="noopener">URL</a> 입력을 통해서 웹페이지를 요쳥한다.사용자의 요청(문자 메시지가 될것이다)은 인터넷상에서 전달되기 용이한 패킷으로 만들기 위해서 TCP 패킷으로 만들어지게 된다.이것은 다시 인터넷 상에서 원하는 주소로 이동할수 있도록 하기 위해서 IP 패킷으로 다시 만들어 지고(IP 패킷에는 자신의 주소와, 도착해야될 상대방의 주소정보가 들어있을것이다) 이것은 이더넷 카드로 보내어져서 Internet 으로 나가게 된다.</p>
+<p>Internet 상에서는 원하는 주소로 TCP/IP 패킷을 보내기 위한 여러가지 장치들이 존재하는데(라우터, 토큰링 같은), 이들 장치를 통해서, <a href="http://www.joinc.co.kr/" target="_blank" rel="noopener">www.joinc.co.kr</a> 의 이더넷카드로 TCP/IP 패킷이 전달되게 된다. 그럼 이더넷 카드는 TCP/IP 패킷을 바로 윗 계층(Internet Layer)으로 보내는데, 여기에서는 IP 패킷을 분석해서, 이 패킷이 어디에서 왔으며, 그 도착지가 어디인지를 판단하게 된다.(물론 이는 IP주소 기반으로 판단한다)</p>
+<p>그리하여 목적지가 자신이면 이것을 다시 Transport Layer 로 보내고, TCP 프로토콜을 사용하여, 메시지가 누락된게 있으면 다시 요청하고, 순서를 재조합하는등 통신 메시지를 검사해서 이것을 다시 Application Layer 에게 보낸다</p>
+<p>Application Layer 에서는 웹서버(IIS, Apache 같은)가 통신메시지를HTTP 프로토콜에 준하여, 검사를 하여서 사용자가 요청한 웹페이지를 읽어들여서, Transport 계층으로 보내게 된다. 웹페이지를 브라우저까지 전송하는 과정은 위의 정반대의 과정을 순차적으로 거치게 된다.</p>
+<p>최종적으로 웹브라우저는 웹페이지를 받아서(text) 역시 HTTP 프로토콜에 준하여, 렌더링 작업을 거친후 화면에 뿌려주게 된다.</p>
+<p>위의 그림에서 보면 알겠지만 각각의 계층은 각각의 계층만을 상관하고 있음을 알수 있다. 즉 Application Layer 에 위치하는 브라우저와 webserver 는 HTTP 프로토콜에 의해서 자신의 계층끼리만 통신을 하고, Transport Layer 은 역시 TCP 프로토콜에 의해서 Transport Layer 끼리 통시을 함을 알수 있을것이다. 말그대로 계층적 구조를 가지며, 각 계층은 대응되는 상대편의 계층에 대해서만 상관한다.</p>
+</blockquote>
+<h1 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h1><p>네트워크 주소 변환(Network Address Translation, 줄여서 NAT)은 IP 패킷의 TCP/UDP 포트 숫자와 소스 및 목적지의 IP 주소 등을 재기록하면서 라우터를 통해 네트워크 트래픽을 주고 받는 기술을 말합니다.</p>
+<p>패킷에 변화가 생기기 때문에 IP나 TCP/UDP의 체크섬(checksum)도 다시 계산되어 재기록해야 합니다. NAT를 이용하는 이유는 대개 사설 네트워크에 속한 여러 개의 호스트가 하나의 공인 IP 주소를 사용하여 인터넷에 접속하기 위함입니다.</p>
+<h1 id="DHCP"><a href="#DHCP" class="headerlink" title="DHCP"></a>DHCP</h1><p>DHCP란 호스트의 IP주소와 각종 TCP/IP 프로토콜의 기본 설정을 클라이언트에게 자동적으로 제공해주는 프로토콜을 말합니다. DHCP에 대한 표준은 RFC문서에 정의되어 있으며, DHCP는 네트워크에 사용되는 IP주소를 DHCP서버가 중앙집중식으로 관리하는 클라이언트/서버 모델을 사용하게 됩니다. DHCP지원 클라이언트는 네트워크 부팅과정에서 DHCP서버에 IP주소를 요청하고 이를 얻을 수 있습니다.</p>
+<p>네트워크 안에 컴퓨터에 자동으로 네임 서버 주소, IP주소, 게이트웨이 주소를 할당해주는 것을 의미하고, 해당 클라이언트에게 일정 기간 임대를 하는 동적 주소 할당 프로토콜입니다.</p>
+<h1 id="HTTP-HTTPS"><a href="#HTTP-HTTPS" class="headerlink" title="HTTP/HTTPS"></a>HTTP/HTTPS</h1><p>http, https는 통신 규격으로서 애플리케이션 단에서 풀리고 압축됨. 또한 application(가장 추상적) 에서 통신을 위해서 01010바이너리데이터로 BIT까지 내려가야됨. 그와중에 TCP/IP들의 양식을 통해 Network Data Link Layer에서 요청과 응답간의 통신이 어디로 향해야하는지 정확히 도착했는지에 대한 정보가 다 들어가있다. </p>
+<p>하지만 UDP/IP(최근 추세)로 전환</p>
+<p>하여튼 양파처럼 생각하면된다. application에서 밖으로 통신에 필요한 정보들을 layer규격으로 하나씩 감싸고 서버에서는 어디로 보내야할지 알아야하므로 Network layer까지 풀었다가 다시 압축해서 통신을 보낸다. </p>
+<h1 id="UDP-TCP"><a href="#UDP-TCP" class="headerlink" title="UDP, TCP"></a>UDP, TCP</h1><h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><p>TCP는 인터넷상에서 데이터를 메세지의 형태로 보내기 위해 IP와 함께 사용하는 프로토콜, IP는 데이터의 배달을 처리하고 TCP는 패킷을 추척 및 관리함.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghb99pjsmbj30u40ok0we.jpg" alt="스크린샷 2020-08-01 오후 2.40.04"></p>
+<p><strong>특징</strong></p>
+<ul>
+<li><strong>TCP는 연속성보다 신뢰성있는 전송이 중요할 때에 사용하는 프로토콜</strong></li>
+<li>연결형 서비스로 가상 회선 방식을 제공한다.(발신지, 수신지를 연결하여 패킷을 전송하기 위한 논리적 경로를 배정,보장한다!!)(3-way)</li>
+<li>3-way handshaking과정을 통해 연결을 설정하고 4-way handshaking을 통해 해제한다.</li>
+<li>흐름 제어 및 혼잡 제어 기능(UDP보다 속도 느리게된 요인중하나)</li>
+<li>높은 신뢰성을 보장한다.(패킷순서까지 항상유지됨)</li>
+<li>UDP보다 속도가 느리다.</li>
+<li>전이중(Full-Duplex), 점대점(Point to Point) 방식.</li>
+</ul>
+<p><strong>TCP 서버의 특징</strong></p>
+<ul>
+<li>서버소켓은 연결만을 담당한다.</li>
+<li>연결과정에서 반환된 클라이언트 소켓은 데이터의 송수신에 사용된다형 서비스로 가상 회선 방식을 제공한다.</li>
+<li>서버와 클라이언트는 1대1로 연결된다.</li>
+<li>스트림 전송으로 전송 데이터의 크기가 무제한이다.</li>
+<li>패킷에 대한 응답을 해야하기 때문에(시간 지연, CPU 소모) 성능이 낮다.</li>
+<li>Streaming 서비스에 불리하다.(손실된 경우 재전송 요청을 하므로)</li>
+</ul>
+<h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><p>데이터를 데이터그램 단위로 처리하는 프로토콜</p>
+<p>특히 여기에서  <strong>데이터그램이란 독립적인 관계를 지니는 패킷</strong>입니다.</p>
+<p>TCP와  달리  비연결형  프로토콜이므로 할당되는 논리적인 경로가 없다.</p>
+<p>따라서 각각의 패킷은 다른 경로로 전송</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghb99tduq7j30vs0mutcg.jpg" alt="스크린샷 2020-08-01 오후 2.40.16"></p>
+<p><strong>UDP 특징</strong></p>
+<ul>
+<li><strong>신뢰성보다는 연속성이 중요한 서비스 예를 들면 실시간 서비스(streaming)에 자주 사용됩니다.</strong></li>
+<li>비연결형 서비스로 데이터그램 방식을 제공한다</li>
+<li>정보를 주고 받을 때 정보를 보내거나 받는다는 신호절차를 거치지 않는다.(연결필요없으므로 설정, 해제과정도 존재하지않는다.)</li>
+<li>신뢰성이 낮다</li>
+<li>TCP보다 속도가 빠르다</li>
+<li>UDP Header를 확인해보면 목적지 주소, 데이터 순서, checksum과 실데이터만 포함되고, 확인응답 같은 것이 없습니다.</li>
+</ul>
+<p><strong>UDP 서버의  특징</strong></p>
+<ul>
+<li><p>UDP에는 연결 자체가 없어서(connect 함수 불필요)</p>
+<p>서버 소켓과 클라이언트 소켓의 구분이 없다.</p>
+</li>
+<li><p>소켓 대신 IP를 기반으로 데이터를 전송한다.</p>
+<p>(소켓이 연결되어서 지속적 통신x)</p>
+</li>
+<li><p>서버와 클라이언트는 1대1, 1대N, N대M 등으로 연결될 수 있다.</p>
+</li>
+<li><p>데이터그램(메세지) 단위로 전송되며 그 크기는 65535바이트로, 크기가 초과하면 잘라서 보낸다.</p>
+</li>
+<li><p>흐름제어(flow control)가 없어서 패킷이 제대로 전송되었는지, 오류가 없는지 확인할 수 없다.</p>
+</li>
+<li><p>파일 전송과 같은 신뢰성이 필요한 서비스보다 성능이 중요시 되는 경우에 사용된다.</p>
+</li>
+</ul>
+<h1 id="네트워킹을-위한-도구"><a href="#네트워킹을-위한-도구" class="headerlink" title="네트워킹을 위한 도구"></a>네트워킹을 위한 도구</h1><h2 id="허브"><a href="#허브" class="headerlink" title="허브"></a>허브</h2><ul>
+<li><p>포트들이 통신가능하게 함. 즉, 랜카드가 설치된 각각의 PC들은 케이블을 타고 허브에 연결되고, 같은 허브에 연결된 PC끼리는 서로 통신이 가능해짐</p>
+</li>
+<li><p>랜카드, 케이블, 허브만 있으면 일단 내부에서는 허브에 접속되어 있는 모든 PC들이 서로 통신이 가능함(단, 외부 인터넷에는 못나감)</p>
+</li>
+<li><p>쉽게 멀티포트(Multiport) 리피터(Repeater)라고 말할 수 있음</p>
+<p>멀티포트 : 말 그래도 포트가 많이 붙어 있다는 뜻</p>
+<p>리피터 : 들어온 데이터를 그대로 전송한 다는 의미</p>
+<p>즉, 허브란 포트가 여러 개 달린 장비인데, 이것은 한 포트로 들어온 데이터를 나머지 모든 포트로 뿌려주는 것이다</p>
+<blockquote>
+<p><strong>※ 참고</strong></p>
+<p>리피터란?</p>
+<p>네트워크는 케이블에 따라서 전송거리 제약이 존재하는데, 케이블이 갈 수 있는 최대 거리 이상 떨어진 장비를 연결하기 위해서 중간에서 다리 역할(들어온 데이터를 다른쪽으로 전달해주는)을 하는 것을 ‘<strong>리피터</strong>‘라 함</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p><strong>같은 콜리전 도메인 상에 있다?</strong></p>
+<p>허브는 이더넷 허브인 만큼 CSMA/CD의 적용을 받는다. 따라서 하나의 PC가 허브에 데이터를 보내고 있을 때 또 다른 PC가 데이터를 보내려고 하면 충돌(Collision, 콜리전)이 발생함</p>
+<p>따라서 같은 허브에 연결되어 있는 모든 PC들은 ‘같은 콜리전 도메인 상에 있다’라고 말함</p>
+<p>그 의미는 허브에 붙어있는 하나의 PC에서 콜리전이 발생하면 모든 PC가 영향을 받는다는 뜻</p>
+<p>허브에 연결된 모든 PC들은 서로간에 통신이 가능하고, 하나의 콜리전 도메인 안에 있기 때문에 안정성이 가장 중요함</p>
+<p>또한 허브는 어느 한 순간에 한 PC만이 데이터를 보낼 수 있는데, 이러한 기능을 수행하는 허브를 ‘<strong>Shared(쉐어드, 공유 방식) 허브</strong>‘라고 함</p>
+<p>즉 10Mbps의 속도를 그 허브에 연결돈 모든 PC들이 공유한다는 것</p>
+<p>규모가 커질수록 허브의 데이터 전송방식으로는 속도의 한계가 있고, 여러대의 허브를 연결한 곳에 콜리전이 발생하면 허브에 연결된 전체 PC에 영향이 가기 때문에 안정성이 중요하고</p>
+<p>허브만으로 연결하는 것에는 한계가 있음</p>
+</li>
+<li><p>허브 종류</p>
+<ul>
+<li>인텔리전트 허브(Intelligent Hub) -&gt; 지능형 허브</li>
+<li>더미 허브(Dummy Hub)</li>
+<li>세미 인텔리전트 허브(SemiIntelligent Hub)</li>
+</ul>
+</li>
+</ul>
+<h2 id="브릿지-스위치-라우터"><a href="#브릿지-스위치-라우터" class="headerlink" title="브릿지, 스위치, 라우터"></a>브릿지, 스위치, 라우터</h2><p><a href="https://coding-chobo.tistory.com/38" target="_blank" rel="noopener">자세히</a></p>
+<h3 id="브릿지와-스위치"><a href="#브릿지와-스위치" class="headerlink" title="브릿지와 스위치"></a>브릿지와 스위치</h3><p>콜리전의 한계를 가진 허브는 다른 모든 PC들에도 영향을 끼치기 때문에 통신의 속도는 점점 떨어지게 됨</p>
+<p>이러한 문제를 해결하기 위해 콜리전 도메인을 나누어 줄 수 있는 장비가 나왔는데 이것이 바로<strong>스위치(Switch)</strong>또는<strong>브릿지(bridge)</strong>이다. </p>
+<p>이를 ‘포트별로 콜리전 도메인이 나뉘어져 있다’라고 함</p>
+<p>결론적으로 1,2번 사이에 통신이 일어나면 다른 PC들은 기다려야만 하는 허브와는 달리 스위치는 다른 PC들도 동시에 통신이 가능함</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg6zhyd6qoj310a0iwq55.jpg" alt="스크린샷 2020-06-27 오후 6.39.30"></p>
+<blockquote>
+<p><strong>※ 스위치가 하는일?</strong></p>
+<p>스위치는 예를들어 1번 포트에 연결된 PC가 2번 포트에 연결된 PC와 데이터를 주고 받는 동안에도 3번포트에 연결된 PC와 4번 포트에 연결된 PC가 서로 데이터를 주고받을 수 있게함</p>
+</blockquote>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg6zkf9uqij310u0igwhn.jpg" alt="스크린샷 2020-06-27 오후 6.41.52"></p>
+<h3 id="브릿지-스위치-기능"><a href="#브릿지-스위치-기능" class="headerlink" title="브릿지, 스위치 기능"></a>브릿지, 스위치 기능</h3><ol>
+<li><p>Learning, 배운다.</p>
+<p>출발지의 맥 어드레스(MAC Address)를 배움</p>
+<p>즉, 브리지나 스위치는 자신의 포트에 연결된 ‘A’라는 PC가 통신을 위해 프레임을 내보내면 ‘A’의 맥 어드레스를 읽어서 자신의 맥 어드레스 테이블(브리지 테이블)에 저장해놓고 후에 어떤 PC가 ‘A’에게 통신할 경우, 브리지 테이블을 참고해서 다리를 건너게 할 지 못건너게 할 지 정함</p>
+</li>
+<li><p>Flooding, 모르면 들어온 포트를 제외한 다른 모든 포트로 뿌린다.</p>
+<p>-&gt; 들어온 포트를 제외한 나머지를 모든 포트로 뿌림 </p>
+<p>(브로드 캐스트나 멀티캐스트의 경우에도 발생)</p>
+<p>위에 말했듯이 다리를 건너게 할지 말지에 대한 정보를 맥 어드레스 테이블(브리지 테이블)을 통해서 결정함</p>
+<p>만일 들어온 프레임이 찾아가는 주소를 보니 맥 어드레스 테이블에 없는 주소일 경우 자신을 제외한 나머지 포트로 들어온 프레임을 뿌리는 것을 ‘Flooding’ 이라고 함</p>
+</li>
+<li><p>Forwarding, 해당포트로 건네준다</p>
+<p>-&gt; Flooding과 달리 오직 해당 포트(목적지)쪽으로만 프레임을 뿌림</p>
+</li>
+<li><p>Filtering, 다른 포트로는 못 건너가게 막는다.</p>
+<p>-&gt; 브리지를 못 넘어가게 막는것</p>
+<p>만일 브리지가 이미 목적지 어드레스를 알고 있고, 출발지와 목적지가 같은 세그먼트(다리 북단 or 다리남단, 쉽게 콜리전 도메인) 상에 있는 경우</p>
+<p>브리지를 건너지 않아도 통신이 되기때문에 브리지를 막는 필터링을 하게됨</p>
+</li>
+<li><p>Aging, 나이를 먹는다.</p>
+<p>-&gt; 브리지가 학습한 정보들을 디폴트(5분)시간 동안 테이블에 저장하고 있다 300초 동안 해당 </p>
+<p>  출발지를 가진 프레임이 들어오지 않으면 주소를 테이블에서 삭제(용량 한계 때문)</p>
+</li>
+</ol>
+<p>브리지에 프레임이 들어왔는데, 그 프레임의 출발지 주소가 AAAA인 경우 AAAA를 5분동안 브리지 테이블에 저장해둔다. 280초가 지났을때 또 다시 출발지 주소가 AAAA인 프레임이 들어오면 시간을 다시 0부터 세는 리플래시(Refresh)를 하게 됨</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg6zrfzz5fj30xw0laaeq.jpg" alt="스크린샷 2020-06-27 오후 6.48.37"></p>
+<h3 id="라우터"><a href="#라우터" class="headerlink" title="라우터"></a>라우터</h3><p>LAN을 연결시켜주는 장치로써 정보를 주고 받을 때 송신정보 (패킷)에 담긴 수신처의 주소를 읽고, 가장 적절한 통신경로를 이용하여 다른 통신망으로 전송하는 장치입니다.</p>
+<p>서로 다른 프로토콜로 운영하는 통신망에서 정보를 전송하기 위해 경로를 설정하는 역할을 제공하는 핵심적인 통신 장비입니다</p>
+<p>단순히 통신망을 연결해주는 브리지 (Bridge)기능에 더하여 경로배정표에 따라 다른 통신망을 인식하여 경로를 배정하며</p>
+<p>수신된 패킷에 의하여 다른 통신망 또는 자신이 연결되어 있는 통신망 내의 수신처 (노드)를 결정하여 여러 경로 중 가장 효율적인 경로를 선택하여 패킷을 보내는데,</p>
+<p>통신흐름을 제어하며 통신망 내부에 여러 보조 통신망을 구성하는 등의 다양한 통신망 관리 기능을 수행합니다.</p>
+<p>내부 네트워크는 사용하는 컴퓨터의 기종이나 OS, 프로토콜 등은 알 수 있기때문에 네트워크의 최적화를 이룰 수 있습니다.</p>
+<p>그러나 내부 네트워크를 외부와 연결할 때는 외부 네트워크에서 사용하는 프로토콜이나 컴퓨터의 기종을 알 수 없으므로,</p>
+<p>이러한 알 수 없는 임의의 네트워크와 내부 네트워크를 위한 네트워크 장비가 라우터입니다.</p>
+<p>장점은 통신 환경설정을 가능하게 하여 전체 네트워크의 성능을 개선할 수 있고, 표준 논리에 따라 통신방법이 자동으로 결정되므로 유지보수가 용이합니다.</p>
+<p>또한, 통신방법에 구애 받지 않으므로 대규모 통신망을 쉽게 구성할 수 있으며, 다양한 경로를 따라 통신량을 분산할 수 있습니다.</p>
+<p>스위치는 유선 네트워크에만 사용되지만 라우터는 무선 네트워크와도 연결할 수 있습니다.</p>
+<p>단점은 초기 환경 설정에 대한 어려움과 특정한 프로토콜에 의존하므로 다양한 프로토콜 지원 또한 어려우며,</p>
+<p>하위 프로토콜 지원이 불가능하고 기능이 복잡하므로 가격이 비쌉니다.</p>
+<p>구성은 다음 이미지와 같다</p>
+<p>라우터는 IP 주소 등 L3에 있는 주소를 참조하여 목적지와 연결되는 포트로 패킷을 전송합니다.</p>
+<p>서브넷 마스크가 다른 IP 주소를 가진 장비간 통신을 하기 위해서는 반드시 L3 장비를 거쳐야만 합니다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg6wy6noe2j30t80cy7bv.jpg" alt="스크린샷 2020-06-27 오후 5.11.05"></p>
+<h2 id="공유기"><a href="#공유기" class="headerlink" title="공유기"></a>공유기</h2><p>ISP(Internet Service Provider) 업체에서 제공하는 한 개의 인터넷 IP Address로 여러 대의 컴퓨터, 노트북, IP폰 등이 인터넷을 공유할 수 있는 기능을 제공합니다. </p>
+<p>공유기를 사용하면 ISP에서 할당받은 하나의 공인 IP Address를 내부 네트웍에서 여러 개의 IP 주소로 변환 사용가능하기 때문에,</p>
+<p>한 대의 컴퓨터에서만 인터넷 접속이나 외부 네트워크와 연결되던 것을 내부 IP 값으로 최대 253대까지 동시에 인터넷 접속이 가능합니다.</p>
+<p>또한, 인터넷 공유기는 허브 기능을 포함하고 있어서, 여러 대의 PC를 연결할 수 있습니다.</p>
+<p>대부분의 인터넷 공유기는 4포트를 내장하고 있는데, 4대 이상의 PC가 하나의 인터넷 IP를 공유하기 위해서는 인터넷 공유기와 스위칭 허브를 이용하면 됩니다.</p>
+<p>공유기에는 보통 1개의 WAN 포트와 4개의 LAN 포트가 있는데, 외부에서 들어오는 공인 IP의 LAN 선을 WAN 포트에 연결하고</p>
+<p>나머지 LAN 포트들은 내부 IP (ex 192.168.0.~)로 사용할 장치들에 LAN 선을 연결하는 것이 일반적인 사용법입니다.</p>
+<p>공유기에서 나오는 LAN 선을 또 다른 하위 공유기에 연결할 수 있는데,</p>
+<p>하위 공유기의 WAN 포트에 연결하면 새로운 영역의 네트워크 (ex 192.168.1.~)을 만드는 것이고,</p>
+<p>하위 공유기의 LAN 포트에 연결하면 허브로 멀티포트 기능을 사용하는 것 (ex 192.168.0.~)입니다.</p>
+<p>공유기 구성</p>
+<p>외부에서 들어오는 공인 IP의 LAN 선을 WAN 포트에 연결하고, 나머지 LAN 포트들은 내부 IP로 사용할 장치들에 LAN 선을 연결한 일반적인 사용법입니다.</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg6wyvpfu7j30wi0n0tna.jpg" alt="스크린샷 2020-06-27 오후 5.11.57"></p>
+<h2 id="라우터-L3"><a href="#라우터-L3" class="headerlink" title="라우터(L3)"></a>라우터(L3)</h2><p>논리적으로 분리된 망, 혹은 물리적으로 분리된 망 사이를 지나가야 하는 패킷들에 IP 주소 뜯어서 경로를 뽑아 자기가 아는 <strong>최상의 경로를 찾아낸 뒤</strong>(물론 안 되는 라우터가 더 많다.) <strong>다른 망으로 패킷을 보내주는 역할</strong>을 하는 기계이다.</p>
+<p>내부 네트워크는 사용하는 컴퓨터의 기종이나 OS, 프로토콜 등은 알 수 있기때문에 네트워크의 최적화를 이룰 수 있습니다. 그러나 내부 네트워크를 외부와 연결할 때는 외부 네트워크에서 사용하는 프로토콜이나 컴퓨터의 기종을 알 수 없으므로, 이러한 알 수 없는 임의의 네트워크와 내부 네트워크를 위한 네트워크 장비가 라우터입니다. (즉, 라우터는 맥주소를 알고있어서 정확한 물리적정보를 가지고있지만 외부망에서는 알수없으므로 라우터로만 해당 요청을 전달함)</p>
+<p>즉, IP주소맞을때까지 옆으로 토스하는 느낌이고 IP 주소가 맞고 맥 어드레스도 맞을경우 그 라우터에서 해당 기기로 패킷전송</p>
+<h1 id="실습"><a href="#실습" class="headerlink" title="실습"></a>실습</h1><h2 id="TCP-연결지향"><a href="#TCP-연결지향" class="headerlink" title="TCP 연결지향"></a>TCP 연결지향</h2><p>연결지향이란 내가 보낼 데이터를  보내기 전에 클라이언트와 서버간에 연결 통로를 확보할때 서로 확인하는절차다. 3-way handshake</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg7u5lmmlnj30kg0ii13k.jpg" alt="image-20200628122013346"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg7w1z48sqj31vu0jcalq.jpg" alt="스크린샷 2020-06-28 오후 1.25.26"></p>
+<p>Wireshark를 통해 패킷을 분석결과</p>
+<p>sequence number, acknowledgment number 를 확인하였고, 3way확인가능, 그리고 연결통로 확보 후 GET HTTP/1.1 요청후  GET HTTP/1.1 200  응답받는것을 확인가능 필요한 정보들을 패킷으로 연속적으로 받아오는것을 확인할수있다.<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gg7yrw5bfyj30xc0mudou.jpg" alt="스크린샷 2020-06-28 오후 2.59.51"></p>
+<h1 id="네트워크-통신-메커니즘"><a href="#네트워크-통신-메커니즘" class="headerlink" title="네트워크  통신 메커니즘"></a>네트워크  통신 메커니즘</h1><p><a href="https://blog.naver.com/PostView.nhn?blogId=goduck2&logNo=220111709554&parentCategoryNo=&categoryNo=73&viewDate=&isShowPopularPosts=false&from=postView" target="_blank" rel="noopener">자세히</a></p>
+<blockquote>
+<p>MAC Table:  switch,bridge만 가지고있으며 맥주소와 포트정보가 매칭된 정보</p>
+<p>Routing Table: 호스트가 가지고있으며 목적지에 따라 어떤 인터페이스, 게이트웨이등을 매칭해놓음(ip통신하는 모든장비가가짐)</p>
+<p>ARP Table: 여기에는 ARP를 하면 MAC과 IP를 기록해놓음(정적, 동적 정보있음)(ip통신하는 모든장비가가짐)</p>
+</blockquote>
+<p>pc0,switch,pc1 이 연결되어있는 상태(처음연결)</p>
+<h2 id="Bridge-LAN환경에서-PC0가-PC1에게-요청-응답을-받는상황이라면-어떻게-통신할까"><a href="#Bridge-LAN환경에서-PC0가-PC1에게-요청-응답을-받는상황이라면-어떻게-통신할까" class="headerlink" title="Bridge+LAN환경에서 PC0가 PC1에게 요청 응답을 받는상황이라면 어떻게 통신할까?"></a>Bridge+LAN환경에서 PC0가 PC1에게 요청 응답을 받는상황이라면 어떻게 통신할까?</h2><ol>
+<li>PC0에서 통신할 상대방 PC1에 IP주소를 알아낸다</li>
+<li>PC0에서 요청을 보낸다</li>
+<li>PC0의 Routing Table에서 PC1의 IP주소로 가려면, 어떤 interface로 나가야 하고, next hop ip(목적지 네트워크를 가기 위한 다음 장치를 Next Hop이라고 한다)가 무엇인지 찾는다</li>
+<li>이 next hop ip의 MAC address가 ARP Table에 등록되어있는지 찾는다</li>
+<li>ARP Table에 Next hop IP의  MAC address 가 없다면 MAC address를 알아오기 위해서 ARP request메시지를 전송한다.</li>
+<li>Switch는 ARP request 메시지를 수신하면  source MAC address를 보고, PC0의 MAC Table entry를 만든다.(PC0의 MAC address와 Frame이 수신된 port번호를 MAC Table에 기록한다.)</li>
+<li>Switch는 ARP request 메세지를 모든 LAN port로 브로드캐스트한다. (ARP 패킷은 LAN구간 끝까지 어디든 날아간다.)</li>
+<li>ARP request를 수신한 PC1은 자신의  ARP Table에 PC0의 IP와 MAC address를 등록하고 ARP reply 메시지를 전송한다.(PC1의 ARP Table에는 ARP request메시지를 받으면서 이미 PC0의  MAC address가 등록되어 있다.)(만약 다른 장비도 ARP request를 수신했다면 ARP reply안하고 ARP Table에는 등록할수도있고 안할수도있다.)</li>
+<li>Swtich는 ARP reply 메시지를 수신하면, source MAC address를 보고, PC1의 MAC Table entry를 만든다.</li>
+<li>PC0은 ARP reply 메시지를 수신하면, ARP Table에 PC1의 IP와 MAC address를 등록하고, PC1으로 전송되어야 할 패킷의  Destination MAC에 PC1의 MAC address를 부착하고 메시지를 전송한다.</li>
+<li>Switch는 PC0가 전송한 Ethernet Frame을 수신하면, Desitnation MAC address가 MAC Table에 존재하는지 찾는다.</li>
+<li>Switch는 MAC Table에 PC1의 정보가 등록되어 있으므로 PC1이 연결되어 있는 port로 메시지를 전송(Unicast)한다.</li>
+<li>PC1은 Destination MAC address가 자신의 NIC MAC address와 동일하므로 메시지를 수신하여 IP layer로 전달하고,</li>
+</ol>
+<h2 id="Router의-통신"><a href="#Router의-통신" class="headerlink" title="Router의 통신"></a>Router의 통신</h2><p>스위치는 NIC에 MAC address가 있지만 Promiscuous mode로 설정이 되어 있어서 MAC address와 상관없이 모든 프레임을 수신한다고 했었습니다. 스위치와는 달리 라우터는 NIC에 MAC address가 있고, IP도 설정이 되어 있습니다. Router의 각 interface는 그림 6과 같이 각각 서로 다른 LAN에 속하게 됩니다. 라우터는 각 NIC(Network Interface Card)는 일반적인 IP 장비의 NIC와 동일하게 아래와 같은 경우에 이너넷 프레임을 수신하여 상위 Layer로 전달합니다.</p>
+<p>1) Destination(목적지) MAC address가 자기 interface의 MAC address와 같을 경우</p>
+<p>2) Destination(목적지) MAC address가 Broadcast MAC address인 경우</p>
+<p>3) Destination(목적지) MAC address가 Multicast MAC address인 경우</p>
+<p>이때 Router는 Routing Table을 보고 Routing을 한다</p>
+<p>Router의 IP Layer에서는 MAC Layer로부터 수신된 IP 패킷에 대하여 아래와 같이 처리합니다. 모든 경우를 열거하는 것은 아니며, 일부 대표적인 경우만 설명함을 알아 주시기 바랍니다.</p>
+<p>1) Destination IP가 Router 자기 자신의 어느 interface(Loopback, serial, ethernet, frame relay, ATM, etc)에 설정 된 IP일 경우, Router 자신의 CPU로 패킷을 전달한다.</p>
+<p>2) Destination IP가 Router 자기 자신의 어느 interface에 설정 된 IP와 동일 LAN(subnet, network)에 속하는 IP일 경우, 직접 전달한다. 직접 전달한다는 의미는 Routing Table에 directly connected로 등록되어 있는 interface의 ARP Table을 확인하고, ARP Table에 목적지 IP에 대한 Entry가 있으면 destination MAC에 해당 MAC을 달고, source MAC에는 자기 interface MAC을 달고 전송한다. ARP Table에 entry가 없으면 ARP Requst를 보내고, ARP Reply를 받으면 destination MAC에 수신된 해당 MAC을 달고 패킷을 보낸다. ARP Reply를 받지 못하면, 패킷은 폐기(Discard) 한다. (직접 전달)</p>
+<p>3) Destination IP가 Router 자기 자신의 어느 interface에 설정 된 IP와 동일 LAN(subnet, network)에 속하는 IP가 아닐 경우, 다른 router로 전달하기 위해서 Routing Table을 검색한다. Routing Table에 Entry가 있거나, Entry는 없지만 default route가 있을 경우 next hop interface로 패킷을 전달한다. (간접 전달). Routing Table에 Entry도 없고, default route도 없는 경우, 해당 패킷은 폐기(Discard)한다.</p>
+<p>상기 열거한 항목 중에서 항목 1)은 라우터 자신에게 온 패킷의 경우이고, 항목 2), 3)은 라우터의 본래 기능인 라우팅 기능을 통해서 다른 LAN으로 routing 되기 위해 수신 된 패킷입니다. Destination IP가 자기 interface에 설정된 IP가 아닌 경우가 Routing을 위해서 수신된 IP 패킷입니다. 서로 다른 LAN(subnet, network)간 통신을 위해서는 Router 기능이 필수적으로 필요합니다. 전통적인 Router 이외에 L3 switch나 routing 기능이 있는 L4~L7 스위치 장비도 서로 다른 LAN간 통신에 이용될 수 있습니다. 그렇게 Routing 기능을 수행할 수 있는 장비들은 모두 한결같이 Routing Table과 ARP Table을 가지고있습니다</p>
+<p>![스크린샷 2020-07-30 오후 3.53.32](/Users/lostcatbox/Desktop/스크린샷 2020-07-30 오후 3.53.32.png)</p>
+<blockquote>
+<p>간단히 요약해서  pc0-router0-router1-router2-server0순으로 연결되어있다면 처음통신할때 pc0에서 arp request를 router0에 보내며 응답으로 router0의 맥주소를 알게된다</p>
+<p>pc0는 sever0의 목적지 IP를 가지며 source MAC을 자신의것, 목적지 MAC을 router0의것으로한 프레임 만들어 전송</p>
+<p>router0에서는 자신에게 직접 연결된 LAN에서 해당 목적지 IP가 없으므로 Routing Table을 참조 후에 default 주소로 보낸다. ARP table에 MAC 주소가 존재하지않으므로  ARP request를 router1에게 보낸다.</p>
+<p>source MAC을 router0의것, 목적지 MAC을 router1의것으로한 프레임 만들어 전송</p>
+<p>router1의 Routing Table에서 default route는 다른 라우터로 나가게 되어있으므로 Routing Table에  해당 목적지 IP이면 server0가 속하는 router2의 주소를 줘야함. 설정되었다면, Routing  Table을 기준으로 router2에게 ARP request를 보내며 MAC 주소를 알아내고.. 앞에과정똑같다</p>
+<p>마지막으로 router2에서는 server0와 직접적으로 연결되어있으므로  router2가 직접적으로 server0에게 ARP request를 보내며 MAC주소를 알아내고.. 앞에 과정과 똑같이 프레임 전송한다.</p>
+<p>이제 모든 기기가 ARP table에 해당 IP에 대한 MAC주소가 기록되어있으므로 보다 간결한 방식으로 통신이 가능하게된다.</p>
+</blockquote>
+<h1 id="참고"><a href="#참고" class="headerlink" title="참고"></a>참고</h1><p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghmty8mqhtj315c0mi4ad.jpg" alt="스크린샷 2020-07-30 오후 3.53.32"></p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ghmty9bieij30qj0hpaex.jpg" alt="스크린샷 2020-07-30 오후 4.09.35"></p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/05/14/review-python-coding-skill05/" title= "파이썬 코딩의 스킬 리뷰 5">
+                    <div class="nextTitle">파이썬 코딩의 스킬 리뷰 5</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/05/07/review-python-coding-skill04/" title= "파이썬 코딩의 스킬 리뷰 4">
+                    <div class="prevTitle">파이썬 코딩의 스킬 리뷰 4</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 사각형 반응형 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="2080063347"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#네트워크-지식-01"><span class="toc-number">1.</span> <span class="toc-text">네트워크 지식 01</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#상식"><span class="toc-number">1.1.</span> <span class="toc-text">상식</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#OSI-계층-구조"><span class="toc-number">2.</span> <span class="toc-text">OSI 계층 구조</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#데이터-단위"><span class="toc-number">2.1.</span> <span class="toc-text">데이터 단위</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#각-계층별-기능"><span class="toc-number">2.2.</span> <span class="toc-text">각 계층별 기능</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP-IP"><span class="toc-number">3.</span> <span class="toc-text">TCP&#x2F;IP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-IP-4계층에-의한-데이타-전송"><span class="toc-number">3.0.1.</span> <span class="toc-text">TCP&#x2F;IP 4계층에 의한 데이타 전송</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#NAT"><span class="toc-number">4.</span> <span class="toc-text">NAT</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP"><span class="toc-number">5.</span> <span class="toc-text">DHCP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP-HTTPS"><span class="toc-number">6.</span> <span class="toc-text">HTTP&#x2F;HTTPS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#UDP-TCP"><span class="toc-number">7.</span> <span class="toc-text">UDP, TCP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP"><span class="toc-number">7.1.</span> <span class="toc-text">TCP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UDP"><span class="toc-number">7.2.</span> <span class="toc-text">UDP</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#네트워킹을-위한-도구"><span class="toc-number">8.</span> <span class="toc-text">네트워킹을 위한 도구</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#허브"><span class="toc-number">8.1.</span> <span class="toc-text">허브</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#브릿지-스위치-라우터"><span class="toc-number">8.2.</span> <span class="toc-text">브릿지, 스위치, 라우터</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#브릿지와-스위치"><span class="toc-number">8.2.1.</span> <span class="toc-text">브릿지와 스위치</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#브릿지-스위치-기능"><span class="toc-number">8.2.2.</span> <span class="toc-text">브릿지, 스위치 기능</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#라우터"><span class="toc-number">8.2.3.</span> <span class="toc-text">라우터</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#공유기"><span class="toc-number">8.3.</span> <span class="toc-text">공유기</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#라우터-L3"><span class="toc-number">8.4.</span> <span class="toc-text">라우터(L3)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#실습"><span class="toc-number">9.</span> <span class="toc-text">실습</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-연결지향"><span class="toc-number">9.1.</span> <span class="toc-text">TCP 연결지향</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#네트워크-통신-메커니즘"><span class="toc-number">10.</span> <span class="toc-text">네트워크  통신 메커니즘</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bridge-LAN환경에서-PC0가-PC1에게-요청-응답을-받는상황이라면-어떻게-통신할까"><span class="toc-number">10.1.</span> <span class="toc-text">Bridge+LAN환경에서 PC0가 PC1에게 요청 응답을 받는상황이라면 어떻게 통신할까?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Router의-통신"><span class="toc-number">10.2.</span> <span class="toc-text">Router의 통신</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#참고"><span class="toc-number">11.</span> <span class="toc-text">참고</span></a></li></ol>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 수직형 반응형 디스플레이광고 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="1645513725"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 216
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2023 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/2023/08/18/BasicDB/" >DB에 대한 전반적인 개념(SQL,NoSQL)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/11</span><a class="archive-post-title" href= "/2023/07/11/Advenced-JPA2-CH01/" >Advenced-JPA2-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/27</span><a class="archive-post-title" href= "/2023/06/27/Advenced-JPA1-CH04/" >Advenced-JPA1-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/19</span><a class="archive-post-title" href= "/2023/06/19/Advenced-JPA1-CH03/" >Advenced-JPA1-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/28</span><a class="archive-post-title" href= "/2023/05/28/Review-The-Essence-Of-Object-Orientation/" >(리뷰)객체 지향의 사실과 오해 책 리뷰</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2023/05/20/Advenced-JPA1-CH02/" >Advenced-JPA1-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2023/05/08/Advenced-JPA1-CH01/" >(JPA) Advenced-JPA1-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2023/04/26/JPA-Basic-CH10/" >(JPA) JPA-Basic-CH10(fetch-join)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2023/04/22/Design-pattern-3/" >(ETC) 디자인 패턴에 대해서 CH3 (행동 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2023/04/22/JPA-Basic-CH09/" >(JPA) JPA-Basic-CH09(객체지향 쿼리 언어)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/20</span><a class="archive-post-title" href= "/2023/04/20/JPA-Basic-CH08/" >(JPA)JPA-Basic-CH08(값 타입)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/18</span><a class="archive-post-title" href= "/2023/04/18/JPA-Basic-CH07/" >(JPA) JPA-Basic-CH07(프록시)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/17</span><a class="archive-post-title" href= "/2023/04/17/JPA-Basic-CH06/" >(JPA) JPA-Basic-CH06(고급매핑- 상속관계 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/13</span><a class="archive-post-title" href= "/2023/04/13/Issue-Java-ClassCastException/" >(Issue) ResponseBodyAdvice에서 ClassCastException 발생</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/13</span><a class="archive-post-title" href= "/2023/04/13/JPA-Basic-CH05/" >(JPA) JPA-Basic-CH05(다양한 연관관계 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/09</span><a class="archive-post-title" href= "/2023/04/09/JPA-Basic-CH04/" >(JPA) JPA-Basic-CH04 (연관관계 매핑 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/08</span><a class="archive-post-title" href= "/2023/04/08/JPA-Basic-CH03/" >(JPA) JPA-Basic-CH03 (엔티티 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2023/04/06/JPA-Basic-CH02/" >(JPA) JPA 기본편 CH02 (JPA 영속성 컨텍스트)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/JPA-Basic-CH01/" >(JPA) JPA 기본편 CH01 (JPA 시작)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/querydsl/" >DataSource, QueryDSL이란?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/29</span><a class="archive-post-title" href= "/2023/03/29/SpringMVC2-CH02/" >SpringMVC2-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/21</span><a class="archive-post-title" href= "/2023/03/21/Design-pattern-2/" >(ETC) 디자인 패턴에 대해서 CH2 (구조 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/12</span><a class="archive-post-title" href= "/2023/03/12/Design-pattern-1/" >(ETC) 디자인 패턴에 대해서 CH1 (생성 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/10</span><a class="archive-post-title" href= "/2023/03/10/l2-l4-l7-switching/" >L2-L4-L7 스위치란? (허브, 스위치, 라우터)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span><a class="archive-post-title" href= "/2023/02/25/Review-System-Design-Interview/" >(리뷰)(강추)가상 면접 사례로 배우는 대규모 시스템 설계 기초</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2023/02/23/gitlab-CI-CD-springproject/" >Gitlab-CI/CD 구축하기(withSpring)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span><a class="archive-post-title" href= "/2023/02/16/SpringMVC2-CH01/" >SpringMVC2-CH01(스프링 thymeleaf)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span><a class="archive-post-title" href= "/2023/02/07/JavaScript-Basic/" >JavaScript-Basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/05</span><a class="archive-post-title" href= "/2023/02/05/Html-JQuery/" >Html-JQuery</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2023/01/22/mysql/" >Mysql 기본 공부 (수정본)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-maven/" >About-maven</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-mybatis/" >About-mybatis</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-xml/" >XML 파일에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/ubuntu-command/" >우분투 자주 쓰는 명령어(2023버전)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2023/01/02/n-plus-1-problem-i/" >JPA N+1 문제와 해결법(수정중)</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/31</span><a class="archive-post-title" href= "/2022/12/31/end-of-2023/" >2023년을 마무리 하며...(2023년 목표 포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/AboutSpring/" >AboutSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/CS-Lock-MutexAndSemaphore/" >CS Lock MutexAndSemaphore</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Isolation-Level-4-And-Lock/" >Isolation Level 4 And Lock</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/READ-ME-Writing/" >READ-ME Writing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Entity-DAO-DTO/" >Spring-Entity-DAO-DTO</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/SpringAndJenkins/" >SpringAndJenkins</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Lambda-Capturing/" >Java Lambda-Capturing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Basic-JVM/" >Java Basic JVM</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-SOLID/" >Java SOLID</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Null-Optional-Empty/" >Null-Optional-Empty</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Singleton-Stateless/" >Spring Singleton Stateless</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutKafka/" >AboutKafka</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutMessageQ/" >AboutMessageQ</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutSpringSecurity/" >AboutSpringSecurity</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Sequence-Diagram/" >Sequence-Diagram</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH01/" >SpringProject-TrackingPost-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH02/" >SpringProject-TrackingPost-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH04/" >SpringProject-TrackingPost-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH03/" >SpringProject-TrackingPost-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH06/" >SpringProject-TrackingPost-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH05/" >SpringProject-TrackingPost-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutLombokAtSpring/" >AboutLombokAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Basic-Vue-js/" >Basic Vue.js</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Http-Status/" >Http-Status</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Spring-Logger/" >Spring-Logger</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH01/" >SpringProject-Board-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH03/" >SpringProject-Board-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH02/" >SpringProject-Board-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH04/" >SpringProject-Board-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH08/" >SpringProject-Board-CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH07/" >SpringProject-Board-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH06/" >SpringProject-Board-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH10/" >SpringProject-Board-CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH05/" >SpringProject-Board-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH09/" >SpringProject-Board-CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/UsingAOPAtSpring/" >UsingAOPAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH00/" >SpringCore CH00</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH01/" >SpringCore CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH02-03/" >SpringCore CH02~03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH04/" >SpringCore CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH05/" >SpringCore CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH06/" >SpringCore CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH07/" >SpringCore CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH01/" >SpringMVC-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH09/" >SpringCore CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH02/" >SpringMVC-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH08/" >SpringCore CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH03/" >SpringMVC-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH04/" >SpringMVC-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH05/" >SpringMVC-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH07/" >SpringMVC-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH06/" >SpringMVC-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/effective-java-review/" >(책리뷰)이펙티브 자바</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH01/" >Java 배우기 CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH02/" >Java 배우기 CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH03/" >Java 배우기 CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH04/" >Java 배우기 CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH05/" >Java 배우기 CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH08/" >Java 배우기 CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH06/" >Java 배우기 CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH09/" >Java 배우기 CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH07/" >Java 배우기 CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH10/" >Java 배우기 CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH11/" >Java 배우기 CH11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH12/" >Java 배우기 CH12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH13/" >Java 배우기 CH13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH14/" >Java 배우기 CH14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/ConnectDomainToNotion/" >Notion과 개인 Domain 연결하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/OSI7layer/" >OSI7계층과 TCP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Structure"><span class="iconfont-archer">&#xe606;</span>Structure</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Interview"><span class="iconfont-archer">&#xe606;</span>Interview</span>
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Lombok"><span class="iconfont-archer">&#xe606;</span>Lombok</span>
+    
+        <span class="sidebar-tag-name" data-tags="MessageQ"><span class="iconfont-archer">&#xe606;</span>MessageQ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kafka"><span class="iconfont-archer">&#xe606;</span>Kafka</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mybatis"><span class="iconfont-archer">&#xe606;</span>Mybatis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Vue"><span class="iconfont-archer">&#xe606;</span>Vue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="CS"><span class="iconfont-archer">&#xe606;</span>CS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Notion"><span class="iconfont-archer">&#xe606;</span>Notion</span>
+    
+        <span class="sidebar-tag-name" data-tags="Domain"><span class="iconfont-archer">&#xe606;</span>Domain</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jquery"><span class="iconfont-archer">&#xe606;</span>Jquery</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="FrontEnd"><span class="iconfont-archer">&#xe606;</span>FrontEnd</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="JPA"><span class="iconfont-archer">&#xe606;</span>JPA</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="Issue"><span class="iconfont-archer">&#xe606;</span>Issue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="Logger"><span class="iconfont-archer">&#xe606;</span>Logger</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jenkins"><span class="iconfont-archer">&#xe606;</span>Jenkins</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thymeleaf"><span class="iconfont-archer">&#xe606;</span>Thymeleaf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="AOP"><span class="iconfont-archer">&#xe606;</span>AOP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Gitlab"><span class="iconfont-archer">&#xe606;</span>Gitlab</span>
+    
+        <span class="sidebar-tag-name" data-tags="CI-CD"><span class="iconfont-archer">&#xe606;</span>CI-CD</span>
+    
+        <span class="sidebar-tag-name" data-tags="Problem"><span class="iconfont-archer">&#xe606;</span>Problem</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="QueryDSL"><span class="iconfont-archer">&#xe606;</span>QueryDSL</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jpa"><span class="iconfont-archer">&#xe606;</span>Jpa</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advance"><span class="iconfont-archer">&#xe606;</span>Advance</span>
+    
+        <span class="sidebar-tag-name" data-tags="Book"><span class="iconfont-archer">&#xe606;</span>Book</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Maven"><span class="iconfont-archer">&#xe60a;</span>Maven</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+        <span class="sidebar-category-name" data-categories="Spring"><span class="iconfont-archer">&#xe60a;</span>Spring</span>
+    
+        <span class="sidebar-category-name" data-categories="MessageQ"><span class="iconfont-archer">&#xe60a;</span>MessageQ</span>
+    
+        <span class="sidebar-category-name" data-categories="Mybatis"><span class="iconfont-archer">&#xe60a;</span>Mybatis</span>
+    
+        <span class="sidebar-category-name" data-categories="Vue"><span class="iconfont-archer">&#xe60a;</span>Vue</span>
+    
+        <span class="sidebar-category-name" data-categories="CS"><span class="iconfont-archer">&#xe60a;</span>CS</span>
+    
+        <span class="sidebar-category-name" data-categories="Tips"><span class="iconfont-archer">&#xe60a;</span>Tips</span>
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="Jquery"><span class="iconfont-archer">&#xe60a;</span>Jquery</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="JPA"><span class="iconfont-archer">&#xe60a;</span>JPA</span>
+    
+        <span class="sidebar-category-name" data-categories="Issue"><span class="iconfont-archer">&#xe60a;</span>Issue</span>
+    
+        <span class="sidebar-category-name" data-categories="Java"><span class="iconfont-archer">&#xe60a;</span>Java</span>
+    
+        <span class="sidebar-category-name" data-categories="Javascript"><span class="iconfont-archer">&#xe60a;</span>Javascript</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Jenkins"><span class="iconfont-archer">&#xe60a;</span>Jenkins</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Gitlab"><span class="iconfont-archer">&#xe60a;</span>Gitlab</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
