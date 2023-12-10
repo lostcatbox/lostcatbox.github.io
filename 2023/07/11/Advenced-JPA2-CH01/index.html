@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">133</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">221</span>Reading time: <span class="post-count reading-time">1 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -421,6 +421,12 @@ height:50vh;
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Long id, String name)</span> </span>&#123;</span><br><span class="line">    Member one = memberRepository.findOne(id);</span><br><span class="line">    one.setName(name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> Member <span class="title">findOne</span><span class="params">(Long id)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> memberRepository.findOne(id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h1 id="쇼핑몰-도메인-모델과-테이블-설계"><a href="#쇼핑몰-도메인-모델과-테이블-설계" class="headerlink" title="쇼핑몰 도메인 모델과 테이블 설계"></a>쇼핑몰 도메인 모델과 테이블 설계</h1><p>![스크린샷 2023-11-28 오전 12.02.38](/Users/lostcatbox/Library/Application Support/typora-user-images/스크린샷 2023-11-28 오전 12.02.38.png)</p>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202311280003677.png" alt="스크린샷 2023-11-28 오전 12.02.38"></p>
+<ul>
+<li>@JsonIgnore 옵션을 한곳에 주어야 한다.</li>
+<li>주의: 지연 로딩(LAZY)을 피하기 위해 즉시 로딩(EARGR)으로 설정하면 안된다! 즉시 로딩 때문에 연관관 계가 필요 없는 경우에도 데이터를 항상 조회해서 성능 문제가 발생할 수 있다. 즉시 로딩으로 설정하면 성능 튜닝이 매우 어려워 진다. &gt;  항상 지연 로딩을 기본으로 하고, 성능 최적화가 필요한 경우에는 페치 조인(fetch join)을 사용해라!(V3에 서 설명)</li>
+</ul>
 
     </article>
     <!-- license  -->
@@ -570,7 +576,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#회원-등록-API"><span class="toc-number">2.</span> <span class="toc-text">회원 등록 API</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#회원-수정-API"><span class="toc-number">3.</span> <span class="toc-text">회원 수정 API</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#회원-등록-API"><span class="toc-number">2.</span> <span class="toc-text">회원 등록 API</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#회원-수정-API"><span class="toc-number">3.</span> <span class="toc-text">회원 수정 API</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#쇼핑몰-도메인-모델과-테이블-설계"><span class="toc-number">4.</span> <span class="toc-text">쇼핑몰 도메인 모델과 테이블 설계</span></a></li></ol>
         <br/>
         <br/>
         <br/>
