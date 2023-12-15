@@ -517,8 +517,8 @@ height:50vh;
 <ul>
 <li><strong>ToOne 관계는 페치 조인해도 페이징에 영향을 주지 않는다.</strong><br>따라서 ToOne 관계는 페치조인으로 쿼리 수를 줄이고 해결하고,<br>나머지는 <strong>hibernate.default_batch_fetch_size</strong> 로 최적화 하자. </li>
 <li>항상 트레이드 오프를 생각하자. <ul>
-<li>쿼리를 적게하는  fetchJoin</li>
-<li>쿼리는 In쿼리를 쓸지</li>
+<li>fetchJoin : 1+N+M+O -&gt; 1개의 쿼리 생성</li>
+<li>lazyLoading + batchSize (In 쿼리 사용) : 1+N+M+O -&gt; 1+1+1+1 쿼리 생성</li>
 </ul>
 </li>
 </ul>
