@@ -425,7 +425,7 @@ height:50vh;
 <p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202311280003677.png" alt="스크린샷 2023-11-28 오전 12.02.38"></p>
 <ul>
 <li><strong>@JsonIgnore 옵션을 한곳에 주어야 한다.</strong></li>
-<li>주의: 지연 로딩(LAZY)을 피하기 위해 즉시 로딩(EARGR)으로 설정하면 안된다! 즉시 로딩 때문에 연관관 계가 필요 없는 경우에도 데이터를 항상 조회해서 성능 문제가 발생할 수 있다. 즉시 로딩으로 설정하면 성능 튜닝이 매우 어려워 진다. &gt;  항상 지연 로딩을 기본으로 하고, 성능 최적화가 필요한 경우에는 페치 조인(fetch join)을 사용해라!(V3에 서 설명</li>
+<li>주의: 지연 로딩(LAZY)을 피하기 위해 즉시 로딩(EARGR)으로 설정하면 안된다! 즉시 로딩 때문에 연관관계가 필요 없는 경우에도 데이터를 항상 조회해서 성능 문제가 발생할 수 있다. 즉시 로딩으로 설정하면 성능 튜닝이 매우 어려워 진다.  -&gt;  <strong>항상 지연 로딩을 기본으로 하고, 성능 최적화가 필요한 경우에는 페치 조인(fetch join)을 사용해라!(V3에서 설명)</strong></li>
 </ul>
 <h1 id="사전-DB-초기화"><a href="#사전-DB-초기화" class="headerlink" title="사전 DB 초기화"></a>사전 DB 초기화</h1><ul>
 <li>참고로, 생성자로 생성후 각 빈에 등록된 서비스들의 메서드를 호출해준다.</li>
@@ -435,12 +435,16 @@ height:50vh;
 
 
 <h1 id="ManyToOne-조회"><a href="#ManyToOne-조회" class="headerlink" title="ManyToOne 조회"></a>ManyToOne 조회</h1><h2 id="V1"><a href="#V1" class="headerlink" title="V1"></a>V1</h2><ul>
-<li>entity 직접반환</li>
+<li>entity 직접반환 <ul>
+<li>장점: 간단.</li>
+<li>단점: 직접 반환 매우위험, 유지보수 안좋음.</li>
+</ul>
+</li>
 </ul>
 <h2 id="V2"><a href="#V2" class="headerlink" title="V2"></a>V2</h2><ul>
 <li>DTO로 반환</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">@Data</span></span><br><span class="line">  <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleOrderDto</span> </span>&#123;</span><br><span class="line"><span class="keyword">private</span> Long orderId;</span><br><span class="line"><span class="keyword">private</span> String name;</span><br><span class="line"><span class="keyword">private</span> LocalDateTime orderDate; <span class="comment">//주문시간 private OrderStatus orderStatus;</span></span><br><span class="line"><span class="keyword">private</span> Address address;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="title">SimpleOrderDto</span><span class="params">(Order order)</span> </span>&#123;</span><br><span class="line">          orderId = order.getId();</span><br><span class="line">          name = order.getMember().getName();</span><br><span class="line">          orderDate = order.getOrderDate();</span><br><span class="line">          orderStatus = order.getStatus();</span><br><span class="line">          address = order.getDelivery().getAddress();</span><br><span class="line">&#125; </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleOrderDto</span> </span>&#123;</span><br><span class="line">      <span class="keyword">private</span> Long orderId;</span><br><span class="line">      <span class="keyword">private</span> String name;</span><br><span class="line">      <span class="keyword">private</span> LocalDateTime orderDate; <span class="comment">//주문시간 private OrderStatus orderStatus;</span></span><br><span class="line">      <span class="keyword">private</span> Address address;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="title">SimpleOrderDto</span><span class="params">(Order order)</span> </span>&#123;</span><br><span class="line">          orderId = order.getId();</span><br><span class="line">          name = order.getMember().getName();</span><br><span class="line">          orderDate = order.getOrderDate();</span><br><span class="line">          orderStatus = order.getStatus();</span><br><span class="line">          address = order.getDelivery().getAddress();</span><br><span class="line">&#125; </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="N-1-문제발생"><a href="#N-1-문제발생" class="headerlink" title="N+1 문제발생"></a>N+1 문제발생</h3><p>엔티티를 DTO로 변환하는 일반적인 방법이다.<br><strong>쿼리가 총 1 + N + N번 실행된다. (v1과 쿼리수 결과는 같다.)</strong></p>
 <p><strong>order 조회 1번(order 조회 결과 수가 N이 된다.) order -&gt; member 지연 로딩 조회 N 번</strong></p>
@@ -448,12 +452,13 @@ height:50vh;
 <p><strong>지연로딩은 영속성 컨텍스트에서 조회하므로, 이미 조회된 경우 쿼리를 생략한다.</strong></p>
 <h2 id="V3"><a href="#V3" class="headerlink" title="V3"></a>V3</h2><ul>
 <li>fetchJoin()으로 N+1문제 해결 한방쿼리</li>
+<li>단점: join을 한번밖에못함.</li>
 </ul>
 <h2 id="V4"><a href="#V4" class="headerlink" title="V4"></a>V4</h2><ul>
 <li>JPA -&gt; entity -&gt; DTO 가 아닌</li>
 <li>JPA -&gt; DTO 로 바로 가져오기</li>
 <li>장점: SELECT 절에서 원하는 데이터를 직접 선택하므로 DB 애플리케이션 네트웍 용량 최적화(생각보다 미비)</li>
-<li>단점: 리포지토리 재사용성 떨어짐, API 스펙에 맞춘 코드가 리포지토리에 들어가</li>
+<li><strong>단점: 리포지토리 재사용성 떨어짐, API 스펙에 맞춘 코드가 리포지토리에 들어가</strong></li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Repository</span></span><br><span class="line">  <span class="meta">@RequiredArgsConstructor</span></span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderSimpleQueryRepository</span> </span>&#123;</span><br><span class="line">      <span class="keyword">private</span> <span class="keyword">final</span> EntityManager em;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> List&lt;OrderSimpleQueryDto&gt; <span class="title">findOrderDtos</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> em.createQuery(</span><br><span class="line">                  <span class="string">"select new jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto(o.id, m.name, o.orderDate, o.status, d.address)"</span> +</span><br><span class="line">            <span class="string">" from Order o"</span> +</span><br><span class="line">        <span class="string">" join o.member m"</span> +</span><br><span class="line">        <span class="string">" join o.delivery d"</span>, OrderSimpleQueryDto.class)</span><br><span class="line">.getResultList();</span><br><span class="line">&#125; &#125;</span><br></pre></td></tr></table></figure>
 
