@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">120</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">679</span>Reading time: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -440,6 +440,91 @@ userEntity.setLastLoginAt(LocalTime.now());
 </ul>
 </li>
 </ul>
+<h1 id="SOLID-원칙은-좋은-테스트-코드를-짜는것과-비례"><a href="#SOLID-원칙은-좋은-테스트-코드를-짜는것과-비례" class="headerlink" title="SOLID 원칙은 좋은 테스트 코드를 짜는것과 비례"></a>SOLID 원칙은 좋은 테스트 코드를 짜는것과 비례</h1><h1 id="테스트-3분류"><a href="#테스트-3분류" class="headerlink" title="테스트 3분류"></a>테스트 3분류</h1><h2 id="유닛-통합-E2E테스트"><a href="#유닛-통합-E2E테스트" class="headerlink" title="유닛, 통합, E2E테스트"></a>유닛, 통합, E2E테스트</h2><ul>
+<li>구글에서는 유닛, 통합, E2E테스트 -&gt; small, medium, large 테스트로 바꿔부름</li>
+</ul>
+<h2 id="small-medium-large-테스트-정의"><a href="#small-medium-large-테스트-정의" class="headerlink" title="small, medium, large 테스트 정의"></a>small, medium, large 테스트 정의</h2><ul>
+<li><strong>Small : 단일 서버, 단일 프로세스, 단일 스레드, 디스크 I/O 사용X, Blocking call 허용 X</strong>(80%)</li>
+<li><strong>Medium : 단일 서버, 멀티 프로세스, 멀티 스레드, h2 같은 테스트 DB 사용가능</strong> (15%)</li>
+<li><strong>Large : 멀티 서버, End to end 테스트</strong> (5%)</li>
+</ul>
+<h1 id="테코-사전개념"><a href="#테코-사전개념" class="headerlink" title="테코 사전개념"></a>테코 사전개념</h1><ul>
+<li>SUT : 테스트 대상</li>
+<li>BDD : 행동 주의 개발 -&gt; 스토리 중요 -&gt; given, when, then</li>
+<li>상호 작용 테스트: 대상 함수의 구현을 호출하지 않으면서, 그 함수가 어떻게 호출되는지를 검증하는 방법 (verify…) -&gt; 객체에 대한 간섭 증대… -&gt; 객체 지향적이지않아? 비추!**</li>
+<li>상태 검증 vs 행위 검증<ul>
+<li>상태 검증 : 행위에 따른 결과를 테스트함 (isTrue 등등)</li>
+<li>행위 검증 : 행위를 실행했는지 테스트함 (verify 등등)</li>
+</ul>
+</li>
+<li>테스트 픽스처 : 테스트에 필요한 자원 생성하는것</li>
+<li>비욘세 규칙 : 유지하고 싶은 상태가 있으면 전부 테스트로 작성 -&gt; 그게 곧 정책이됩니다.<ul>
+<li>예시) 5만원이상 금액 유지 -&gt; 5만원 이하일때 fail테스트 작성</li>
+</ul>
+</li>
+<li>Testablility : 테스트 가능성(소프트웨어가 테스트 가능한 구조인가?)</li>
+<li>Test double : 테스트 대역 (=Mock)<ul>
+<li><strong>Dummy : 아무런 동작하지않고, 코드가 정상적으로 돌아가기 위해 전달하는 객체(빈 객체)</strong></li>
+<li><strong>Fake : Local에서 사용하거나 테스트에서 사용하기위해 가짜 객체, 자체적인 로직이 있다는게 특징</strong></li>
+<li><strong>Stub : 미리 준비된 값을 출력하는 객체</strong> <ul>
+<li>Mokito사용</li>
+</ul>
+</li>
+<li>Mock : 메소드 호출을 확인하기 위한 객체, 자가 검증 능력을 갖춤(요즘은 큰 의미로 사용)</li>
+<li>Spy : 메소드 호출을 전부 기록했다가 나중에 확인하기 위한 객체</li>
+</ul>
+</li>
+</ul>
+<h1 id="의존성과-테스트"><a href="#의존성과-테스트" class="headerlink" title="의존성과 테스트"></a>의존성과 테스트</h1><h2 id="의존성"><a href="#의존성" class="headerlink" title="의존성"></a>의존성</h2><ul>
+<li>Dependency : 어떤 객체가 다른객체의 일부를 사용한다면 의존성을 갖는다.</li>
+<li><strong>Dependency Injection(DI)(의존성 주입)</strong> <ul>
+<li>단순히 주입하는것</li>
+</ul>
+</li>
+<li><strong>Dependency Inversion(DIP)(의존성 역전 원칙)</strong> <strong>(=화살표 방향을 바꾸는 테크닉)</strong><ul>
+<li><strong>첫째, 상위 모듈은 하위 모듈에 의존해서는 안된다. 상위 모듈과 하위 모듈 모두 추상화(정책)에 의존해야한다.</strong></li>
+<li><strong>둘째, 추상화(정책)는 세부 사항(구현체)에 의존해서는 안된다. 세부 사항이 추상화에 의존해야한다.</strong></li>
+<li>예시<ul>
+<li>(역전 X) Chef -&gt; Beef 는 Chef가 Beef에 의존한다. (Chef가 Beef사용 중)</li>
+<li>(역전 O) Chef -&gt; Meat&lt;&lt;interface&gt;&gt;  &lt;- Beef <ul>
+<li>Chef -&gt; Meat 는 Chef가 Meat에 의존한다.</li>
+<li>Beef -&gt; Meat 는 Beef가 Meat에 의존한다.</li>
+<li>따라서 기존 Beef 입장에서 사용당하다가 이제 Meat를 사용하게 바꼇으므로 의존성 역전이 일어났다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="테스트"><a href="#테스트" class="headerlink" title="테스트"></a>테스트</h2><h3 id="의존성-주입과-의존성-역전-예시"><a href="#의존성-주입과-의존성-역전-예시" class="headerlink" title="의존성 주입과 의존성 역전 예시"></a>의존성 주입과 의존성 역전 예시</h3><ul>
+<li>sut 메서드에 숨어있는 의존성(Clock) -&gt; 추상화 및 의존성 역전으로 문제 해결가능</li>
+<li>UserService에서는 알아서 Spring이 SystemclockHolder를 주입시킴(의존성 주입)</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202404222205146.png" alt="스크린샷 2024-04-22 오후 10.05.52"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserServiceTest</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> login_테스트() &#123;</span><br><span class="line">      <span class="comment">// given</span></span><br><span class="line">      Clock clock = Clock.fixed(Instant.parse(<span class="string">"2000-01-01T00:00:00.00Z"</span>), Zoneld.of(<span class="string">"UTC"</span>));</span><br><span class="line">      User user = <span class="keyword">new</span> User</span><br><span class="line">      UserService userService = <span class="keyword">new</span> UserService(<span class="keyword">new</span> TestClockHolder(clock)) ;</span><br><span class="line">      <span class="comment">// when</span></span><br><span class="line">      userService.login(user);</span><br><span class="line">      <span class="comment">// then </span></span><br><span class="line">      assertThat(user.getLastLoginTimestamp()).isEqualTo(<span class="number">946684800000L</span>);</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Testablility"><a href="#Testablility" class="headerlink" title="Testablility"></a>Testablility</h2><ul>
+<li>테스트 가능성 : 얼마나 쉽게 input을 변경하고, output을 쉽게 검증할수있는가</li>
+</ul>
+<h2 id="빌더-패턴-엔티티"><a href="#빌더-패턴-엔티티" class="headerlink" title="빌더 패턴, 엔티티"></a>빌더 패턴, 엔티티</h2><h3 id="엔티티"><a href="#엔티티" class="headerlink" title="엔티티"></a>엔티티</h3><ul>
+<li><strong>도메인 엔티티(domain)</strong> : 소프트웨어에서 어떤 도메인이나 문제를 해결하기 위해 만들어진 모델, 비즈니스 로직을 들고 있고, 식별 가능하며, 일반적으로 생명 주기를 갖는다. (비즈니스 영역)</li>
+<li><strong>DB 엔티티</strong> : 데이터베이스 분야에서 개체 또는 엔티티라고 하는것. 데이터베이스에 표현하려고 하는 유형, 무형의 객체로써 서로 구별되는 것을 뜻한다. (DB 영역)</li>
+<li><strong>영속성 객체(Persistent object)</strong> : ORM (Object Relational (database) Mapping) (비즈니스 &lt;-&gt; DB 영역 연결)</li>
+</ul>
+<h2 id="기타조언"><a href="#기타조언" class="headerlink" title="기타조언"></a>기타조언</h2><h3 id="private-메소드는-테스트하지-않아도-된다"><a href="#private-메소드는-테스트하지-않아도-된다" class="headerlink" title="private 메소드는 테스트하지 않아도 된다."></a>private 메소드는 테스트하지 않아도 된다.</h3><ul>
+<li>테스트 하고싶은 코드가 있다면, 설계 미스 -&gt; 테스트하고 싶은 코드를 다른 클래스로 분리 필요</li>
+</ul>
+<h3 id="final-메소드를-stub하는-상황을-피해야-한다"><a href="#final-메소드를-stub하는-상황을-피해야-한다" class="headerlink" title="final 메소드를 stub하는 상황을 피해야 한다."></a>final 메소드를 stub하는 상황을 피해야 한다.</h3><ul>
+<li>왜냐면 final class란 이 클래스를 대체 할수 없게하겠다는 선언이기때문 </li>
+</ul>
+<h3 id="DRY-lt-DAMP"><a href="#DRY-lt-DAMP" class="headerlink" title="DRY &lt; DAMP"></a>DRY &lt; DAMP</h3><ul>
+<li>DRY : 코드 반복하지 않기</li>
+<li>DAMP : 서술적이고 의미 있는 문구. 테스트할때는 중복되더라도 명시적인게 중요함</li>
+</ul>
+<h3 id="논리-로직을-피해라-for-if-while등등"><a href="#논리-로직을-피해라-for-if-while등등" class="headerlink" title="논리 로직을 피해라 (+, for, if, while등등)"></a>논리 로직을 피해라 (+, for, if, while등등)</h3><ul>
+<li>+ 등 논리 로직 사용후 휴먼에러로 테스트 의도와 다르게 동작 가능성 존재</li>
+</ul>
 
     </article>
     <!-- license  -->
@@ -584,7 +669,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TDD란"><span class="toc-number">2.</span> <span class="toc-text">TDD란?</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#TDD-특징-및-장점"><span class="toc-number">2.1.</span> <span class="toc-text">TDD 특징 및 장점</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TDD-도입-고민점들"><span class="toc-number">2.2.</span> <span class="toc-text">TDD 도입 고민점들</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TDD란"><span class="toc-number">2.</span> <span class="toc-text">TDD란?</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#TDD-특징-및-장점"><span class="toc-number">2.1.</span> <span class="toc-text">TDD 특징 및 장점</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TDD-도입-고민점들"><span class="toc-number">2.2.</span> <span class="toc-text">TDD 도입 고민점들</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SOLID-원칙은-좋은-테스트-코드를-짜는것과-비례"><span class="toc-number">3.</span> <span class="toc-text">SOLID 원칙은 좋은 테스트 코드를 짜는것과 비례</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#테스트-3분류"><span class="toc-number">4.</span> <span class="toc-text">테스트 3분류</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#유닛-통합-E2E테스트"><span class="toc-number">4.1.</span> <span class="toc-text">유닛, 통합, E2E테스트</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#small-medium-large-테스트-정의"><span class="toc-number">4.2.</span> <span class="toc-text">small, medium, large 테스트 정의</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#테코-사전개념"><span class="toc-number">5.</span> <span class="toc-text">테코 사전개념</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#의존성과-테스트"><span class="toc-number">6.</span> <span class="toc-text">의존성과 테스트</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#의존성"><span class="toc-number">6.1.</span> <span class="toc-text">의존성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#테스트"><span class="toc-number">6.2.</span> <span class="toc-text">테스트</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#의존성-주입과-의존성-역전-예시"><span class="toc-number">6.2.1.</span> <span class="toc-text">의존성 주입과 의존성 역전 예시</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Testablility"><span class="toc-number">6.3.</span> <span class="toc-text">Testablility</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#빌더-패턴-엔티티"><span class="toc-number">6.4.</span> <span class="toc-text">빌더 패턴, 엔티티</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#엔티티"><span class="toc-number">6.4.1.</span> <span class="toc-text">엔티티</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#기타조언"><span class="toc-number">6.5.</span> <span class="toc-text">기타조언</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#private-메소드는-테스트하지-않아도-된다"><span class="toc-number">6.5.1.</span> <span class="toc-text">private 메소드는 테스트하지 않아도 된다.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#final-메소드를-stub하는-상황을-피해야-한다"><span class="toc-number">6.5.2.</span> <span class="toc-text">final 메소드를 stub하는 상황을 피해야 한다.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DRY-lt-DAMP"><span class="toc-number">6.5.3.</span> <span class="toc-text">DRY &lt; DAMP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#논리-로직을-피해라-for-if-while등등"><span class="toc-number">6.5.4.</span> <span class="toc-text">논리 로직을 피해라 (+, for, if, while등등)</span></a></li></ol></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
