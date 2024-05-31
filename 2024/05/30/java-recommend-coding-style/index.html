@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">99</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">282</span>Reading time: <span class="post-count reading-time">1 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -437,7 +437,64 @@ height:50vh;
 <li><p><strong>클래스이름은 단어 조합 3개 이하로</strong></p>
 </li>
 </ul>
-
+<h1 id="객체-지향적인-코드짜기"><a href="#객체-지향적인-코드짜기" class="headerlink" title="객체 지향적인 코드짜기"></a>객체 지향적인 코드짜기</h1><h2 id="vo-dto-entity"><a href="#vo-dto-entity" class="headerlink" title="vo, dto, entity"></a>vo, dto, entity</h2><ul>
+<li><p>vo</p>
+<ul>
+<li>불변 객체로만 유지</li>
+<li>생성자 역할<ul>
+<li>생성전 값 검증</li>
+<li>불변값 할당</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>dto</p>
+<ul>
+<li>상태를 보호하지앚ㅎ으면 모든 속성을 노출한다</li>
+<li>데이터 전송에사용</li>
+</ul>
+</li>
+<li><p>엔티티</p>
+<ul>
+<li>유일한 식별자 가짐</li>
+<li>수명 주기 존재</li>
+<li>쓰기 모델에 저장 지속성가짐 (보통 db에저장)</li>
+</ul>
+</li>
+</ul>
+<h2 id="어떤-값을-불변-어떤값을-메서드-노출시킬것인지-중요"><a href="#어떤-값을-불변-어떤값을-메서드-노출시킬것인지-중요" class="headerlink" title="어떤 값을 불변, 어떤값을 메서드 노출시킬것인지 중요"></a>어떤 값을 불변, 어떤값을 메서드 노출시킬것인지 중요</h2><h2 id="디미터법칙"><a href="#디미터법칙" class="headerlink" title="디미터법칙"></a>디미터법칙</h2><ul>
+<li><em>디미터</em>의 <em>법칙</em>은 객체의 내부 구조를 외부로 드러내지 않는 것이 중요</li>
+</ul>
+<h2 id="행동-위주의-사고로-클래스-설계"><a href="#행동-위주의-사고로-클래스-설계" class="headerlink" title="행동 위주의 사고로 클래스 설계"></a>행동 위주의 사고로 클래스 설계</h2><h2 id="순환-참조-하지않기"><a href="#순환-참조-하지않기" class="headerlink" title="순환 참조 하지않기"></a>순환 참조 하지않기</h2><ul>
+<li>결합도 높음</li>
+<li>직렬화 불가능  순환참조가 일어나므로</li>
+</ul>
+<h3 id="순환-참조-해결"><a href="#순환-참조-해결" class="headerlink" title="순환 참조 해결"></a>순환 참조 해결</h3><ul>
+<li>간접 참조로 해결 -&gt; foreignkey로 푸는것이 아닌 간접적으로 id값만 객체에 넣기</li>
+<li>컴포넌트 분리 검토 -&gt;   기존 A &lt;-&gt; 기존 B 가 아니라 -&gt; A -&gt; C &lt;- B 로 별로의 클래스 분리가능한지 생각</li>
+<li>mappedBy 생각안해도됨 -&gt; 단방향 참조를 할것이므로</li>
+</ul>
+<blockquote>
+<p><strong>Final, 메서드 먼저 생각</strong></p>
+<p><strong>VO의 변경자는 구현가능 -&gt; return new VO 형태</strong></p>
+</blockquote>
+<h1 id="설계"><a href="#설계" class="headerlink" title="설계"></a>설계</h1><h2 id="SOLID"><a href="#SOLID" class="headerlink" title="SOLID"></a>SOLID</h2><h2 id="의존성"><a href="#의존성" class="headerlink" title="의존성"></a>의존성</h2><ul>
+<li>의존성 역전: 추상화와 관련된 개념. 상위 모듈은 하위모듈의 구현체에 의지하지않고, 상위 모듈, 하위 모듈은 공통의 인터페이스에 의존해아함</li>
+<li>의존성 주입: Springboot가 해주는것, 의존성이 있는 클래스들을 생성자 등에서 주입해준다<ul>
+<li>Ioc </li>
+</ul>
+</li>
+</ul>
+<h3 id="의존성-조언"><a href="#의존성-조언" class="headerlink" title="의존성 조언"></a>의존성 조언</h3><ul>
+<li>의존성 주입과 책임 <ul>
+<li>생성자 의존성 주입이 7개 이상넘어가거나</li>
+<li>파라미터 의존성 주입이 4개 이상 넘어간다면</li>
+<li>분리 고려대상</li>
+</ul>
+</li>
+<li><h2 id="의존성을-드러내라"><a href="#의존성을-드러내라" class="headerlink" title="의존성을 드러내라"></a>의존성을 드러내라</h2></li>
+</ul>
+<h3 id="CQRS"><a href="#CQRS" class="headerlink" title="CQRS"></a>CQRS</h3>
     </article>
     <!-- license  -->
     
@@ -581,7 +638,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#출처"><span class="toc-number">2.</span> <span class="toc-text">출처</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#컨벤션"><span class="toc-number">3.</span> <span class="toc-text">컨벤션</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#출처"><span class="toc-number">2.</span> <span class="toc-text">출처</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#컨벤션"><span class="toc-number">3.</span> <span class="toc-text">컨벤션</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#객체-지향적인-코드짜기"><span class="toc-number">4.</span> <span class="toc-text">객체 지향적인 코드짜기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#vo-dto-entity"><span class="toc-number">4.1.</span> <span class="toc-text">vo, dto, entity</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#어떤-값을-불변-어떤값을-메서드-노출시킬것인지-중요"><span class="toc-number">4.2.</span> <span class="toc-text">어떤 값을 불변, 어떤값을 메서드 노출시킬것인지 중요</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#디미터법칙"><span class="toc-number">4.3.</span> <span class="toc-text">디미터법칙</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#행동-위주의-사고로-클래스-설계"><span class="toc-number">4.4.</span> <span class="toc-text">행동 위주의 사고로 클래스 설계</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#순환-참조-하지않기"><span class="toc-number">4.5.</span> <span class="toc-text">순환 참조 하지않기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#순환-참조-해결"><span class="toc-number">4.5.1.</span> <span class="toc-text">순환 참조 해결</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#설계"><span class="toc-number">5.</span> <span class="toc-text">설계</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SOLID"><span class="toc-number">5.1.</span> <span class="toc-text">SOLID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#의존성"><span class="toc-number">5.2.</span> <span class="toc-text">의존성</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#의존성-조언"><span class="toc-number">5.2.1.</span> <span class="toc-text">의존성 조언</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#의존성을-드러내라"><span class="toc-number">5.3.</span> <span class="toc-text">의존성을 드러내라</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CQRS"><span class="toc-number">5.3.1.</span> <span class="toc-text">CQRS</span></a></li></ol></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
