@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">681</span>Reading time: <span class="post-count reading-time">4 min</span></span>
+                        <span>Word count: <span class="post-count word-count">740</span>Reading time: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -430,6 +430,19 @@ height:50vh;
 
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="title">runIfTrue</span><span class="params">(condition: <span class="type">Boolean</span>, block: () -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (condition) &#123;</span><br><span class="line">        block()  <span class="comment">// block()은 여기서 호출되기 전에 인라인 처리됨</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    runIfTrue(<span class="literal">true</span>) &#123;</span><br><span class="line">        println(<span class="string">"Condition is true!"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h2 id="companion-object"><a href="#companion-object" class="headerlink" title="companion object"></a>companion object</h2><ul>
+<li>java static 객체라고 생각하면됨. </li>
+<li>클래스에 정의된 static class</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SignUtils</span></span>(<span class="keyword">private</span> <span class="keyword">val</span> signService: SignService) &#123;</span><br><span class="line">  <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">numberOperation</span><span class="params">(message:<span class="type">String</span>,a:<span class="type">Int</span>, b:<span class="type">Int</span>, operation: (<span class="type">Int</span>, <span class="type">Int</span>)-&gt;<span class="type">Int</span>)</span></span>:<span class="built_in">Int</span> &#123;</span><br><span class="line">        println(message)</span><br><span class="line">        <span class="keyword">return</span> operation(a, b)</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>호출시 다음과같이 가능</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SignUtils.numberOperation(<span class="string">"실행쌉가능"</span>, <span class="number">1</span>,<span class="number">2</span>,&#123;x,y-&gt;x*y+x&#125;)</span><br></pre></td></tr></table></figure>
+
 
     </article>
     <!-- license  -->
@@ -579,7 +592,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#코틀린-기본-문법"><span class="toc-number">1.</span> <span class="toc-text">코틀린 기본 문법</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Advanced"><span class="toc-number">2.</span> <span class="toc-text">Advanced</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#엘비스-연산자"><span class="toc-number">2.1.</span> <span class="toc-text">엘비스 연산자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#인라인-inline"><span class="toc-number">2.2.</span> <span class="toc-text">인라인 (inline)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#인라인-함수의-특징"><span class="toc-number">2.2.1.</span> <span class="toc-text">인라인 함수의 특징</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#예시"><span class="toc-number">2.2.2.</span> <span class="toc-text">예시</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#코틀린-기본-문법"><span class="toc-number">1.</span> <span class="toc-text">코틀린 기본 문법</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Advanced"><span class="toc-number">2.</span> <span class="toc-text">Advanced</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#엘비스-연산자"><span class="toc-number">2.1.</span> <span class="toc-text">엘비스 연산자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#인라인-inline"><span class="toc-number">2.2.</span> <span class="toc-text">인라인 (inline)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#인라인-함수의-특징"><span class="toc-number">2.2.1.</span> <span class="toc-text">인라인 함수의 특징</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#예시"><span class="toc-number">2.2.2.</span> <span class="toc-text">예시</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#companion-object"><span class="toc-number">2.3.</span> <span class="toc-text">companion object</span></a></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
