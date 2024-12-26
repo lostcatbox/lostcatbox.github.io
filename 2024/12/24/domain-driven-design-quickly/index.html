@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">158</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">599</span>Reading time: <span class="post-count reading-time">3 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -406,6 +406,10 @@ height:50vh;
         <h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><ul>
 <li>DDD가 왜필요한지 알기위해</li>
 </ul>
+<p>(책리뷰) 도메인 주도 설계란 무엇인가?</p>
+<h1 id="왜-1"><a href="#왜-1" class="headerlink" title="왜?"></a>왜?</h1><ul>
+<li>DDD가 왜필요한지 알기위해</li>
+</ul>
 <h1 id="서문"><a href="#서문" class="headerlink" title="서문"></a>서문</h1><ul>
 <li>도메인 주도 설계를 하면, 기술 변화가 일어나도, 도메인의 변경점은 없다.</li>
 <li>DDD를 널리 알리고싶었다</li>
@@ -418,6 +422,7 @@ height:50vh;
 </li>
 <li>소프트웨어 개발자와 &lt;&gt; 도메인 전문가와의 소통시 유용하다. 설계시 에자일 방식으로 하는것 매우 중요</li>
 <li>전통적 탑다운 방식의 개발(요청문제파악 &gt; 모델 설계 &gt; 개발)에서 에자일 방식(모두가 참여하여 모델 정의)로 변경시 설계단계에서 완벽하지 못한 문제점들 조기의 발견 및 수정 완성할수있는 장점</li>
+<li>모델링에서는 명사와 동사를 구분하여, 각각 클래스와 메서드</li>
 </ul>
 <h1 id="2-유비쿼터스-언어"><a href="#2-유비쿼터스-언어" class="headerlink" title="2. 유비쿼터스 언어"></a>2. 유비쿼터스 언어</h1><ul>
 <li>도메인 전문가 &lt;&gt; 개발자 사이의 공통된 언어가 필요하다<ul>
@@ -437,7 +442,99 @@ height:50vh;
 </li>
 <li>개발자의 역할은 모델→클래스 관계 → 코드화</li>
 </ul>
+<h1 id="3-모델-주도-설계"><a href="#3-모델-주도-설계" class="headerlink" title="3. 모델 주도 설계"></a>3. 모델 주도 설계</h1><h2 id="모델주도-설계를-위한-블록"><a href="#모델주도-설계를-위한-블록" class="headerlink" title="모델주도 설계를 위한 블록"></a>모델주도 설계를 위한 블록</h2><ul>
+<li>DDD 관점에서 객체 모델링 및 소프트웨어 설계의 핵심 요소</li>
+</ul>
+<p>!<a href="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202412261403465.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202412261403465.png</a></p>
+<h2 id="계층형-아키텍처"><a href="#계층형-아키텍처" class="headerlink" title="계층형 아키텍처"></a>계층형 아키텍처</h2><ul>
+<li>사용자 인터페이스: 사용자에게 정보를 보여주고, 사용자의 명령을 해석</li>
+<li>애플리케이션 레이어: 애플리케이션 활동을 조율하는 얇은 레이어. 업무 로직을 포함하지않는다. 비즈니스 객체의 상태는 보관X 단, 애플리케이션 작업의 처리 상태 보관O</li>
+<li>도메인 레이어: 도메인 정보를 포함한다. 도메인 정보를 포함한다.<ul>
+<li>비즈니스 객체와 이 객체의 상태 정보 중 가능한 부분의 영속성에 대한 책임은 인프라스트럭처 레이어로 위임된다.</li>
+</ul>
+</li>
+<li>인프라스트럭처 레이어: 다른 레이어 모두를 지원하는 라이브러리로 동작한다.</li>
+</ul>
+<p>!<a href="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202412261406713.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202412261406713.png</a></p>
+<h2 id="엔티티"><a href="#엔티티" class="headerlink" title="엔티티"></a>엔티티</h2><ul>
+<li>식별성(유일한ID)</li>
+<li>속성 값이 모두 동일하더라도, 구별가능</li>
+</ul>
+<h2 id="값-객체"><a href="#값-객체" class="headerlink" title="값 객체"></a>값 객체</h2><ul>
+<li>속성 값이 동일하면, 동일한 객체</li>
+<li>도메인 객체의 속성들을 담고</li>
+<li>값 객체를 공유할수있다면, 변경 불가능하도록 만든다.</li>
+</ul>
+<h2 id="서비스"><a href="#서비스" class="headerlink" title="서비스"></a>서비스</h2><ul>
+<li>서비스의 특징 3가지<ul>
+<li>객체의 행위, 모델의 행위(서비스에 의해 수행되는 오퍼레이션)은 일반적으로 엔티티 또는 값 객체에 속할 수없는 도메인의 개념을 나타낸다</li>
+<li>수행되는 오퍼레이션은 도메인의 다른 객체를 참조한다</li>
+<li>오퍼레이션은 상태를 저장하지않는다(stateless)</li>
+</ul>
+</li>
+<li>유비쿼터스 언어의 일부로 사용하여 이름 정의</li>
+</ul>
+<h2 id="모듈"><a href="#모듈" class="headerlink" title="모듈"></a>모듈</h2><ul>
+<li>모델 전체에서 관련된 개념과 작업을 조직화함</li>
+<li><strong>낮은 결합도, 높은 응집도</strong></li>
+</ul>
+<h2 id="집합"><a href="#집합" class="headerlink" title="집합"></a>집합</h2><ul>
+<li>도메인 객체의 생명주기 다루는 전략1</li>
+<li>일대다 이상의 관계에서 다양한 연관된 객체를 활용해야할 때, root 엔티티를 활용<ul>
+<li>양방향을 단반향으로 복잡도를 줄이는 것도 방법</li>
+<li>모델의 핵심 사항이 아닌 관계있다면 관계 제거</li>
+<li>root활용(내부 집합된 다른 객체의 참조를 갖는 대상)<ul>
+<li>외부에서는 내부 집합 객체 접근시 root를 통해서만 접근</li>
+<li>root 삭제시 관련 내부 객체 모두 제거됨</li>
+<li>내부 객체 값 필요시 값 복사를 통한 정보 제공</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="팩토리"><a href="#팩토리" class="headerlink" title="팩토리"></a>팩토리</h2><ul>
+<li>도메인 객체의 생명주기 다루는 전략2</li>
+<li>한 도메인에만 속하지 않은 연관된 객체들을 만들어야할때, 팩토리를 사용</li>
+<li>불변식적용</li>
+<li>새로운 객체 생성에만 관여(기존객체 로드X)</li>
+</ul>
+<h2 id="레포지토리"><a href="#레포지토리" class="headerlink" title="레포지토리"></a>레포지토리</h2><ul>
+<li>도메인 객체의 생명주기 다루는 전략3</li>
+<li>인프라 및 DB와 다른 계층간의 분리</li>
+<li>객체의 캐싱 또는 존재했던(DB영구) 객체 가져오는 역할</li>
+</ul>
+<h1 id="4-깊은-통찰을-향한-리팩터링"><a href="#4-깊은-통찰을-향한-리팩터링" class="headerlink" title="4. 깊은 통찰을 향한 리팩터링"></a>4. 깊은 통찰을 향한 리팩터링</h1><ul>
+<li><p>리팩터링은 작게는 메서드부터 크게는 구조 전체이며, 충분한 핵심 도메인 설계를 통해 비용을 줄일 수 있다</p>
+</li>
+<li><p>도메인 설계시 초반에는 암시적 개념에서 유비쿼터스 언어로 변환하여, 일부는 핵심 명시적 개념으로 남는다. 나머지는 암시적 개념으로 존재한다.</p>
+</li>
+<li><p>설계가 잘못되었다면, 비효율이 발생하고, 이때 암시적 개념들을 명시적개념들로 바꾸는 작업들이 필요할수있다.</p>
+</li>
+<li><p>명시적을 만들어낼때 3가지 도구</p>
+<ul>
+<li><p>제약 조건</p>
+<ul>
+<li>객체 데이터는 불변식 로직을 지켜야하며, 해당 로직은 메시드로 정의하여, 리팩토리가능하다</li>
+</ul>
+</li>
+<li><p>처리</p>
+<ul>
+<li>프로세스를 구현하는 최고의 방법은 서비스를 이용하는것이다.</li>
+<li>적합한 객체를 선택하여 해당 행위를 추가</li>
+<li>여러 방법 가능하다면, 전략패턴을 통해 한 객체의 알고리즘으로 캡슐화 표현가능</li>
+</ul>
+</li>
+<li><p>명세</p>
+<ul>
+<li>객체가 특정 기준을 만족하는지 여부를 확인하는 목적으로 활용</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Customer customer =</span><br><span class="line">customerRepository.findCustomer (customerIdentiy);</span><br><span class="line">...</span><br><span class="line">Specification customerEligibleForRefund = <span class="keyword">new</span> Specification(</span><br><span class="line"><span class="keyword">new</span> CustomerPaidHisDebtsInThePast (),</span><br><span class="line"><span class="keyword">new</span> CustomerHasNoOutstandingBalances ());</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (customerEligibleForRefund.isSatisfiedBy (customer)</span><br><span class="line">&#123;</span><br><span class="line">refundService.issueRefundTo (customer);</span><br><span class="line">｝</span><br></pre></td></tr></table></figure>
 
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="5-모델-무결성-보존"><a href="#5-모델-무결성-보존" class="headerlink" title="5. 모델 무결성 보존"></a>5. 모델 무결성 보존</h1><h2 id="분할된-컨텍스트"><a href="#분할된-컨텍스트" class="headerlink" title="분할된 컨텍스트"></a>분할된 컨텍스트</h2><h2 id="지속적인-통합"><a href="#지속적인-통합" class="headerlink" title="지속적인 통합"></a>지속적인 통합</h2><h2 id="컨텍스트-맵"><a href="#컨텍스트-맵" class="headerlink" title="컨텍스트 맵"></a>컨텍스트 맵</h2><h2 id="공유-커널"><a href="#공유-커널" class="headerlink" title="공유 커널"></a>공유 커널</h2><h2 id="고객-공급자"><a href="#고객-공급자" class="headerlink" title="고객-공급자"></a>고객-공급자</h2><h2 id="순응"><a href="#순응" class="headerlink" title="순응"></a>순응</h2><h2 id="변질-방지-레이어"><a href="#변질-방지-레이어" class="headerlink" title="변질 방지 레이어"></a>변질 방지 레이어</h2><h2 id="분할-방식"><a href="#분할-방식" class="headerlink" title="분할 방식"></a>분할 방식</h2><h2 id="호픈-호스트-서비스"><a href="#호픈-호스트-서비스" class="headerlink" title="호픈 호스트 서비스"></a>호픈 호스트 서비스</h2><h2 id="증류"><a href="#증류" class="headerlink" title="증류"></a>증류</h2>
     </article>
     <!-- license  -->
     
@@ -581,7 +678,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#서문"><span class="toc-number">2.</span> <span class="toc-text">서문</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-도메인-주도-설계란-무엇인가"><span class="toc-number">3.</span> <span class="toc-text">1. 도메인 주도 설계란 무엇인가?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-유비쿼터스-언어"><span class="toc-number">4.</span> <span class="toc-text">2. 유비쿼터스 언어</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#왜-1"><span class="toc-number">2.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#서문"><span class="toc-number">3.</span> <span class="toc-text">서문</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-도메인-주도-설계란-무엇인가"><span class="toc-number">4.</span> <span class="toc-text">1. 도메인 주도 설계란 무엇인가?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-유비쿼터스-언어"><span class="toc-number">5.</span> <span class="toc-text">2. 유비쿼터스 언어</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-모델-주도-설계"><span class="toc-number">6.</span> <span class="toc-text">3. 모델 주도 설계</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#모델주도-설계를-위한-블록"><span class="toc-number">6.1.</span> <span class="toc-text">모델주도 설계를 위한 블록</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#계층형-아키텍처"><span class="toc-number">6.2.</span> <span class="toc-text">계층형 아키텍처</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#엔티티"><span class="toc-number">6.3.</span> <span class="toc-text">엔티티</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#값-객체"><span class="toc-number">6.4.</span> <span class="toc-text">값 객체</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#서비스"><span class="toc-number">6.5.</span> <span class="toc-text">서비스</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#모듈"><span class="toc-number">6.6.</span> <span class="toc-text">모듈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#집합"><span class="toc-number">6.7.</span> <span class="toc-text">집합</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#팩토리"><span class="toc-number">6.8.</span> <span class="toc-text">팩토리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#레포지토리"><span class="toc-number">6.9.</span> <span class="toc-text">레포지토리</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-깊은-통찰을-향한-리팩터링"><span class="toc-number">7.</span> <span class="toc-text">4. 깊은 통찰을 향한 리팩터링</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-모델-무결성-보존"><span class="toc-number">8.</span> <span class="toc-text">5. 모델 무결성 보존</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#분할된-컨텍스트"><span class="toc-number">8.1.</span> <span class="toc-text">분할된 컨텍스트</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#지속적인-통합"><span class="toc-number">8.2.</span> <span class="toc-text">지속적인 통합</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#컨텍스트-맵"><span class="toc-number">8.3.</span> <span class="toc-text">컨텍스트 맵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#공유-커널"><span class="toc-number">8.4.</span> <span class="toc-text">공유 커널</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#고객-공급자"><span class="toc-number">8.5.</span> <span class="toc-text">고객-공급자</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#순응"><span class="toc-number">8.6.</span> <span class="toc-text">순응</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#변질-방지-레이어"><span class="toc-number">8.7.</span> <span class="toc-text">변질 방지 레이어</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#분할-방식"><span class="toc-number">8.8.</span> <span class="toc-text">분할 방식</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#호픈-호스트-서비스"><span class="toc-number">8.9.</span> <span class="toc-text">호픈 호스트 서비스</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#증류"><span class="toc-number">8.10.</span> <span class="toc-text">증류</span></a></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
