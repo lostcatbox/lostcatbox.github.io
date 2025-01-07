@@ -272,7 +272,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">392</span>Reading time: <span class="post-count reading-time">2 min</span></span>
+                        <span>Word count: <span class="post-count word-count">589</span>Reading time: <span class="post-count reading-time">3 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -407,12 +407,22 @@ height:50vh;
 <li>(실 예시)<a href="https://blog.doctor-cha.com/event-storming-how-and-why" target="_blank" rel="noopener">https://blog.doctor-cha.com/event-storming-how-and-why</a></li>
 </ul>
 <h1 id="용어정리"><a href="#용어정리" class="headerlink" title="용어정리"></a>용어정리</h1><h2 id="기존-용어"><a href="#기존-용어" class="headerlink" title="기존 용어"></a>기존 용어</h2><ul>
-<li>도메인:<ul>
+<li><p>도메인:</p>
+<ul>
 <li>세상의 어떤 것</li>
 <li>큰 문제점들</li>
 </ul>
 </li>
-<li>에그리거트(집합)<ul>
+<li><p>서브도메인:</p>
+<ul>
+<li>도메인에서 각 문제의 특성에 따라 작게 나눈 것</li>
+<li>작은 문제점들</li>
+<li>병원전자의무기록 시스템을 개발한다면, 병원전자의무기록 도메인은 환자 기록 관리, 진료 예약 스케쥴링, 회원 정보 관리, 파일 저장 등의 서브 도메인</li>
+<li>각 서브도메인은 다른 서브도메인과 구분되는 <strong>컨텍스트(맥락)</strong>을 가집니다. 예를 들어, 환자 기록 관리 서브도메인에서 환자는 병력, 진료 기록 등을 가지지만, 진료 예약 스케쥴링 서브도메인에서의 환자는 예약 일자, 예약 시간, 담당의 등을 가지게 됩니다. 실제로 두 환자가 같은 환자일지라도, 어떤 서브도메인의 <strong>컨텍스트(맥락)</strong>으로 바라보느냐에 따라 다른 개념을 포함합니다.</li>
+</ul>
+</li>
+<li><p><strong>에그리거트(=집합)(연노랑색)</strong></p>
+<ul>
 <li>커맨드를 처리하여 이벤트를 발생시키는 일은 우리가 개발할 시스템이거나 외부 시스템이 될 수 있습니다.</li>
 <li><strong>이 중 우리가 개발할 시스템을 애그리게잇이라고합니다.</strong> </li>
 <li>애그리게잇은 “무엇”이 커맨드를 처리하고 이벤트를 발생시키는지,</li>
@@ -422,8 +432,18 @@ height:50vh;
 </li>
 </ul>
 </li>
+<li><p><strong>비즈니스 규칙(연노란색)</strong></p>
+<ul>
+<li><p>유효성 검사(커멘드, 도메인 이벤트 사이에 존재)</p>
+</li>
+<li><p>시스템이 기대하는 책임을 수행하며, 일관성을 유지하는데 도움</p>
+</li>
+<li><p>일관성은 항상 참이어야 하는 속성을 유지함으로 달성</p>
+</li>
 </ul>
-<h2 id="이벤트-스토밍-용어"><a href="#이벤트-스토밍-용어" class="headerlink" title="이벤트 스토밍 용어"></a>이벤트 스토밍 용어</h2><h3 id="도메인-이벤트-주황색"><a href="#도메인-이벤트-주황색" class="headerlink" title="도메인 이벤트(주황색)"></a>도메인 이벤트(주황색)</h3><ul>
+</li>
+</ul>
+<h2 id="이벤트-스토밍-필수-용어"><a href="#이벤트-스토밍-필수-용어" class="headerlink" title="이벤트 스토밍 필수 용어"></a>이벤트 스토밍 필수 용어</h2><h3 id="도메인-이벤트-주황색"><a href="#도메인-이벤트-주황색" class="headerlink" title="도메인 이벤트(주황색)"></a>도메인 이벤트(주황색)</h3><ul>
 <li>도메인 전문가가 관심있는 어떤 사건</li>
 <li><strong>이벤트 발생 = 상태 변경을 의미</strong><ul>
 <li>단순한 조회 X</li>
@@ -457,14 +477,18 @@ height:50vh;
 </ul>
 </li>
 </ul>
-<h3 id="비즈니스-규칙-연노란색"><a href="#비즈니스-규칙-연노란색" class="headerlink" title="비즈니스 규칙 (연노란색)"></a>비즈니스 규칙 (연노란색)</h3><ul>
-<li>시스템이 기대하는 책임을 수행하며, 일관성을 유지하는데 도움</li>
-<li>일관성은 항상 참이어야 하는 속성을 유지함으로 달성</li>
-</ul>
 <h3 id="바운디드-컨텍스트"><a href="#바운디드-컨텍스트" class="headerlink" title="바운디드 컨텍스트"></a>바운디드 컨텍스트</h3><ul>
-<li>같은 용어라도 의미가 다르고, 같은 대상이라도 지칭하는 용어가 다름</li>
+<li>같은 용어라도 의미가 다르고, 같은 대상이라도 지칭하는 용어가 다름<ul>
+<li>타이어라는 개념이 타이어 바운디드 컨텍스트에서는 타이어라고 불리지만, 주문 바운디드 컨텍스트에서는 상품이라고 불릴 수 있습니다.</li>
+</ul>
+</li>
+<li>정의한 보편 언어가 통용되는 경계를 포스트잇 사이에 선으로 그어 바운디드 컨텍스트를 구분</li>
 <li>명백한 언어 불일치는 동일한 프로세스에서 여러 개 바운디드 컨텍스트 나타내는 지표</li>
-<li><strong>큰 문제를 각각의 해결 영역으로 나눈것</strong></li>
+<li><strong>큰 문제(도메인)를 작은 문제(서브 도메인)로 나누고 각각의 해결 영역으로 나눈것</strong></li>
+<li><strong>바운디드 컨텍스트는 서브도메인의 문제를 해결하기 위한 해결책의 범위</strong>입니다. 해결책의 범위이기 때문에 구현 측면에서는 모듈(컴포넌트)에 대응되고, 조직 측면에서는 해결책 시스템을 개발하고 관리하는 하나의 팀에 대응됩니다. 이상적인 경우 하나의 바운디드 컨텍스트가 한 서브도메인에 대응되지만, 하나의 바운디드 컨텍스트가 여러 서브도메인을 포함하는 경우도 있습니다. 바운디드 컨텍스트는 보편 언어가 통용되는 범위이기도합니다. <ul>
+<li>위 예시에서 환자가 서브도메인에 따라 다른 개념을 가졌듯이, 바운디드 컨텍스트마다 동일한 용어라도 다른 의미를 가질 수 있습니다. 또한 같은 개념이라도 바운디드 컨텍스트마다 다른 용어로 표현될 수도 있습니다. </li>
+</ul>
+</li>
 </ul>
 <h1 id="소통의-부재"><a href="#소통의-부재" class="headerlink" title="소통의 부재"></a>소통의 부재</h1><ul>
 <li>사일로 전문 개발자, 도메인 모르는 개발자로 구성되면, 문제해결 어려움</li>
@@ -516,6 +540,11 @@ height:50vh;
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2025/01/07/bullet-journal/" title= "bullet-journal">
+                    <div class="nextTitle">bullet-journal</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -653,7 +682,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#용어정리"><span class="toc-number">2.</span> <span class="toc-text">용어정리</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#기존-용어"><span class="toc-number">2.1.</span> <span class="toc-text">기존 용어</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#이벤트-스토밍-용어"><span class="toc-number">2.2.</span> <span class="toc-text">이벤트 스토밍 용어</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#도메인-이벤트-주황색"><span class="toc-number">2.2.1.</span> <span class="toc-text">도메인 이벤트(주황색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#핫스폿-자주색"><span class="toc-number">2.2.2.</span> <span class="toc-text">핫스폿(자주색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#액터-노란색"><span class="toc-number">2.2.3.</span> <span class="toc-text">액터(노란색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#시스템-분홍색"><span class="toc-number">2.2.4.</span> <span class="toc-text">시스템(분홍색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#커맨드-또는-액션-파란색"><span class="toc-number">2.2.5.</span> <span class="toc-text">커맨드 또는 액션(파란색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#리드-모델-또는-정보-초록색"><span class="toc-number">2.2.6.</span> <span class="toc-text">리드 모델 또는 정보(초록색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#정책-연보라색"><span class="toc-number">2.2.7.</span> <span class="toc-text">정책(연보라색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#비즈니스-규칙-연노란색"><span class="toc-number">2.2.8.</span> <span class="toc-text">비즈니스 규칙 (연노란색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#바운디드-컨텍스트"><span class="toc-number">2.2.9.</span> <span class="toc-text">바운디드 컨텍스트</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#소통의-부재"><span class="toc-number">3.</span> <span class="toc-text">소통의 부재</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이벤트-스토밍-과정"><span class="toc-number">4.</span> <span class="toc-text">이벤트 스토밍 과정</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이벤트-스토밍-전체-그림"><span class="toc-number">5.</span> <span class="toc-text">이벤트 스토밍 전체 그림</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이벤트-스토밍-실-예시-참고자료"><span class="toc-number">6.</span> <span class="toc-text">이벤트 스토밍 실 예시(참고자료)</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#용어정리"><span class="toc-number">2.</span> <span class="toc-text">용어정리</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#기존-용어"><span class="toc-number">2.1.</span> <span class="toc-text">기존 용어</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#이벤트-스토밍-필수-용어"><span class="toc-number">2.2.</span> <span class="toc-text">이벤트 스토밍 필수 용어</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#도메인-이벤트-주황색"><span class="toc-number">2.2.1.</span> <span class="toc-text">도메인 이벤트(주황색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#핫스폿-자주색"><span class="toc-number">2.2.2.</span> <span class="toc-text">핫스폿(자주색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#액터-노란색"><span class="toc-number">2.2.3.</span> <span class="toc-text">액터(노란색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#시스템-분홍색"><span class="toc-number">2.2.4.</span> <span class="toc-text">시스템(분홍색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#커맨드-또는-액션-파란색"><span class="toc-number">2.2.5.</span> <span class="toc-text">커맨드 또는 액션(파란색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#리드-모델-또는-정보-초록색"><span class="toc-number">2.2.6.</span> <span class="toc-text">리드 모델 또는 정보(초록색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#정책-연보라색"><span class="toc-number">2.2.7.</span> <span class="toc-text">정책(연보라색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#바운디드-컨텍스트"><span class="toc-number">2.2.8.</span> <span class="toc-text">바운디드 컨텍스트</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#소통의-부재"><span class="toc-number">3.</span> <span class="toc-text">소통의 부재</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이벤트-스토밍-과정"><span class="toc-number">4.</span> <span class="toc-text">이벤트 스토밍 과정</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이벤트-스토밍-전체-그림"><span class="toc-number">5.</span> <span class="toc-text">이벤트 스토밍 전체 그림</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이벤트-스토밍-실-예시-참고자료"><span class="toc-number">6.</span> <span class="toc-text">이벤트 스토밍 실 예시(참고자료)</span></a></li></ol>
         <br/>
         <br/>
         <br/>
@@ -4650,9 +4679,26 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 233
+        Total : 234
         </div>
         <!-- search  -->
         
@@ -4665,6 +4711,11 @@ top:50vh;
     
     <div class="archive-year"> 2025 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2025/01/07/bullet-journal/" >bullet-journal</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -6117,6 +6168,10 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
     
         <span class="sidebar-tag-name" data-tags="SpringSecurity"><span class="iconfont-archer">&#xe606;</span>SpringSecurity</span>
+    
+        <span class="sidebar-tag-name" data-tags="ETC"><span class="iconfont-archer">&#xe606;</span>ETC</span>
+    
+        <span class="sidebar-tag-name" data-tags="bulletjournal"><span class="iconfont-archer">&#xe606;</span>bulletjournal</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
