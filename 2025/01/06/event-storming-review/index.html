@@ -272,7 +272,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">278</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">392</span>Reading time: <span class="post-count reading-time">2 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -404,6 +404,7 @@ height:50vh;
         <h1 id="왜"><a href="#왜" class="headerlink" title="왜?"></a>왜?</h1><ul>
 <li>DDD 를 실행하기위한 전략 <strong>이벤트 스토밍</strong> 학습</li>
 <li><a href="https://www.youtube.com/watch?v=gihxS6eE1DM&amp;t=1s" target="_blank" rel="noopener">https://www.youtube.com/watch?v=gihxS6eE1DM&amp;t=1s</a></li>
+<li>(실 예시)<a href="https://blog.doctor-cha.com/event-storming-how-and-why" target="_blank" rel="noopener">https://blog.doctor-cha.com/event-storming-how-and-why</a></li>
 </ul>
 <h1 id="용어정리"><a href="#용어정리" class="headerlink" title="용어정리"></a>용어정리</h1><h2 id="기존-용어"><a href="#기존-용어" class="headerlink" title="기존 용어"></a>기존 용어</h2><ul>
 <li>도메인:<ul>
@@ -411,22 +412,32 @@ height:50vh;
 <li>큰 문제점들</li>
 </ul>
 </li>
-<li>에그리거트(집합)</li>
+<li>에그리거트(집합)<ul>
+<li>커맨드를 처리하여 이벤트를 발생시키는 일은 우리가 개발할 시스템이거나 외부 시스템이 될 수 있습니다.</li>
+<li><strong>이 중 우리가 개발할 시스템을 애그리게잇이라고합니다.</strong> </li>
+<li>애그리게잇은 “무엇”이 커맨드를 처리하고 이벤트를 발생시키는지,</li>
+<li><strong>시스템의 가해진 변경 사항이 하나의 트랜잭션을 통해 데이터베이스에 커밋되어야 하는 범위</strong>를 말합니다. <ul>
+<li>예를 들어, “주문 상태를 확정으로 변경 요청” 커맨드를 처리해 “주문 상태가 확정으로 변경됨” 이벤트를 발생시키는 “주문” 애그리게잇, “가격 정책 생성 요청”을 처리해 “가격 정책 생성됨” 이벤트를 발생시키는 “가격 정책” 애그리게잇이 있을 수 있습니다.</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h2 id="이벤트-스토밍-용어"><a href="#이벤트-스토밍-용어" class="headerlink" title="이벤트 스토밍 용어"></a>이벤트 스토밍 용어</h2><h3 id="도메인-이벤트-주황색"><a href="#도메인-이벤트-주황색" class="headerlink" title="도메인 이벤트(주황색)"></a>도메인 이벤트(주황색)</h3><ul>
 <li>도메인 전문가가 관심있는 어떤 사건</li>
-<li>이벤트 발생 = 상태 변경을 의미<ul>
+<li><strong>이벤트 발생 = 상태 변경을 의미</strong><ul>
 <li>단순한 조회 X</li>
 <li>조회로 인한 조회수 향상 된다면 조회도 포함 O</li>
 </ul>
 </li>
+<li><strong>이벤트 이름은 과거에 일어났던 일이기때문에 과거 시제 사용</strong></li>
 </ul>
 <h3 id="핫스폿-자주색"><a href="#핫스폿-자주색" class="headerlink" title="핫스폿(자주색)"></a>핫스폿(자주색)</h3><ul>
-<li>2단계에서 발생한 질문, 갈등, 불평, 불만사항</li>
+<li><strong>2단계에서 발생한 질문, 갈등, 불평, 불만사항</strong></li>
 <li>당장 토론하지않고, 나중에 문제 해결시 제거</li>
 </ul>
 <h3 id="액터-노란색"><a href="#액터-노란색" class="headerlink" title="액터(노란색)"></a>액터(노란색)</h3><ul>
-<li>단순한 사용자보다는 고객, 배달원, 시스템 등으로 구성</li>
+<li>단순한 사용자보다는 고객, 배달원 등 구체적인 페르소나를 설정</li>
 </ul>
 <h3 id="시스템-분홍색"><a href="#시스템-분홍색" class="headerlink" title="시스템(분홍색)"></a>시스템(분홍색)</h3><ul>
 <li>외부시스템부터 레거시 및 마이크로서비스에 이르기까지 포함하는 시스템</li>
@@ -436,7 +447,7 @@ height:50vh;
 <li><strong>도메인 이벤트가 발생하는 원인</strong></li>
 </ul>
 <h3 id="리드-모델-또는-정보-초록색"><a href="#리드-모델-또는-정보-초록색" class="headerlink" title="리드 모델 또는 정보(초록색)"></a>리드 모델 또는 정보(초록색)</h3><ul>
-<li>결정을 내리는데 필요한 정보</li>
+<li>결정을 내리는데 필요한 정보(화면정보)</li>
 <li>특정 정책으로 인해 발생한 도메인 이벤트 결과 -&gt; 리드 모델에 반영 가능</li>
 </ul>
 <h3 id="정책-연보라색"><a href="#정책-연보라색" class="headerlink" title="정책(연보라색)"></a>정책(연보라색)</h3><ul>
@@ -487,7 +498,18 @@ height:50vh;
 </li>
 </ul>
 <h1 id="이벤트-스토밍-전체-그림"><a href="#이벤트-스토밍-전체-그림" class="headerlink" title="이벤트 스토밍 전체 그림"></a>이벤트 스토밍 전체 그림</h1><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202501061424925.png" alt="image-20250106142428803"></p>
-<h1 id=""><a href="#" class="headerlink" title=""></a></h1>
+<h1 id="이벤트-스토밍-실-예시-참고자료"><a href="#이벤트-스토밍-실-예시-참고자료" class="headerlink" title="이벤트 스토밍 실 예시(참고자료)"></a>이벤트 스토밍 실 예시(참고자료)</h1><ul>
+<li><p>(좋은 예시 제공 정말 감사합니다.)</p>
+</li>
+<li><p>이벤트 도메인과 핫스팟</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202501070923868.jpeg" alt="이벤트 스토밍 초반의 모습"></p>
+<ul>
+<li>전체 그림(정책은 보라색이 아닌 연파랑 사용됨)</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202501070923570.png" alt="타이어 커머스 이벤트 스토밍 결과"> </p>
+
     </article>
     <!-- license  -->
     
@@ -631,7 +653,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#용어정리"><span class="toc-number">2.</span> <span class="toc-text">용어정리</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#기존-용어"><span class="toc-number">2.1.</span> <span class="toc-text">기존 용어</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#이벤트-스토밍-용어"><span class="toc-number">2.2.</span> <span class="toc-text">이벤트 스토밍 용어</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#도메인-이벤트-주황색"><span class="toc-number">2.2.1.</span> <span class="toc-text">도메인 이벤트(주황색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#핫스폿-자주색"><span class="toc-number">2.2.2.</span> <span class="toc-text">핫스폿(자주색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#액터-노란색"><span class="toc-number">2.2.3.</span> <span class="toc-text">액터(노란색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#시스템-분홍색"><span class="toc-number">2.2.4.</span> <span class="toc-text">시스템(분홍색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#커맨드-또는-액션-파란색"><span class="toc-number">2.2.5.</span> <span class="toc-text">커맨드 또는 액션(파란색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#리드-모델-또는-정보-초록색"><span class="toc-number">2.2.6.</span> <span class="toc-text">리드 모델 또는 정보(초록색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#정책-연보라색"><span class="toc-number">2.2.7.</span> <span class="toc-text">정책(연보라색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#비즈니스-규칙-연노란색"><span class="toc-number">2.2.8.</span> <span class="toc-text">비즈니스 규칙 (연노란색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#바운디드-컨텍스트"><span class="toc-number">2.2.9.</span> <span class="toc-text">바운디드 컨텍스트</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#소통의-부재"><span class="toc-number">3.</span> <span class="toc-text">소통의 부재</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이벤트-스토밍-과정"><span class="toc-number">4.</span> <span class="toc-text">이벤트 스토밍 과정</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이벤트-스토밍-전체-그림"><span class="toc-number">5.</span> <span class="toc-text">이벤트 스토밍 전체 그림</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">6.</span> <span class="toc-text"></span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#용어정리"><span class="toc-number">2.</span> <span class="toc-text">용어정리</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#기존-용어"><span class="toc-number">2.1.</span> <span class="toc-text">기존 용어</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#이벤트-스토밍-용어"><span class="toc-number">2.2.</span> <span class="toc-text">이벤트 스토밍 용어</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#도메인-이벤트-주황색"><span class="toc-number">2.2.1.</span> <span class="toc-text">도메인 이벤트(주황색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#핫스폿-자주색"><span class="toc-number">2.2.2.</span> <span class="toc-text">핫스폿(자주색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#액터-노란색"><span class="toc-number">2.2.3.</span> <span class="toc-text">액터(노란색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#시스템-분홍색"><span class="toc-number">2.2.4.</span> <span class="toc-text">시스템(분홍색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#커맨드-또는-액션-파란색"><span class="toc-number">2.2.5.</span> <span class="toc-text">커맨드 또는 액션(파란색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#리드-모델-또는-정보-초록색"><span class="toc-number">2.2.6.</span> <span class="toc-text">리드 모델 또는 정보(초록색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#정책-연보라색"><span class="toc-number">2.2.7.</span> <span class="toc-text">정책(연보라색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#비즈니스-규칙-연노란색"><span class="toc-number">2.2.8.</span> <span class="toc-text">비즈니스 규칙 (연노란색)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#바운디드-컨텍스트"><span class="toc-number">2.2.9.</span> <span class="toc-text">바운디드 컨텍스트</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#소통의-부재"><span class="toc-number">3.</span> <span class="toc-text">소통의 부재</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이벤트-스토밍-과정"><span class="toc-number">4.</span> <span class="toc-text">이벤트 스토밍 과정</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이벤트-스토밍-전체-그림"><span class="toc-number">5.</span> <span class="toc-text">이벤트 스토밍 전체 그림</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이벤트-스토밍-실-예시-참고자료"><span class="toc-number">6.</span> <span class="toc-text">이벤트 스토밍 실 예시(참고자료)</span></a></li></ol>
         <br/>
         <br/>
         <br/>
