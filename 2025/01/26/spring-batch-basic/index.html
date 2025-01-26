@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>spring-batch-basic · lostcatbox</title>
+    <title>spring-batch 해보기 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">spring-batch-basic</a>
+                <a href="#" class="post-name">spring-batch 해보기</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            spring-batch-basic
+            spring-batch 해보기
             <!-- 404 -->
             
         </h1>
@@ -278,7 +278,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">234</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">390</span>Reading time: <span class="post-count reading-time">2 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -461,6 +461,13 @@ height:50vh;
 </ul>
 </li>
 </ul>
+<h1 id="예시"><a href="#예시" class="headerlink" title="예시"></a>예시</h1><ul>
+<li>“1~100 item 처리완료” 메시지 10개씩 10번 출력되는 배치잡이다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableBatchProcessing</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BatchConfig</span>(</span></span><br><span class="line">    private val jobBuilderFactory: JobBuilderFactory,</span><br><span class="line">    <span class="keyword">private</span> val stepBuilderFactory: StepBuilderFactory</span><br><span class="line">) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> val log = LoggerFactory.getLogger(BatchConfig::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">    <span class="title">private</span> <span class="title">val</span> <span class="title">jobName</span> </span>= <span class="string">"testTaskChunkJob"</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">fun <span class="title">testTaskChunkJob</span><span class="params">()</span>: Job </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> jobBuilderFactory.get(jobName)</span><br><span class="line">            .incrementer(RunIdIncrementer())</span><br><span class="line">            .start(chunkStep1())</span><br><span class="line">            .build()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">fun <span class="title">chunkStep1</span><span class="params">()</span>: Step </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> stepBuilderFactory.get(<span class="string">"chunkStep1"</span>)</span><br><span class="line">            .chunk&lt;String, String&gt;(<span class="number">10</span>)</span><br><span class="line">            .reader(itemReader())</span><br><span class="line">            .processor(itemProcessor())</span><br><span class="line">            .writer(itemWriter())</span><br><span class="line">            .build()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> fun <span class="title">itemReader</span><span class="params">()</span>: ItemReader&lt;String&gt; </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ListItemReader(getItems())</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> fun <span class="title">itemProcessor</span><span class="params">()</span>: ItemProcessor&lt;String, String&gt; </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ItemProcessor &#123; item -&gt; <span class="string">"$item 처리완료"</span> &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> fun <span class="title">itemWriter</span><span class="params">()</span>: ItemWriter&lt;String&gt; </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ItemWriter &#123; items -&gt; log.info(<span class="string">"### writer : $&#123;items.toString()&#125;"</span>) &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> fun <span class="title">getItems</span><span class="params">()</span>: List&lt;String&gt; </span>&#123;</span><br><span class="line">        val items = mutableListOf&lt;String&gt;()</span><br><span class="line">        <span class="keyword">for</span> (i in <span class="number">1</span>..<span class="number">100</span>) &#123;</span><br><span class="line">            items.add(<span class="string">"item$i"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> items</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <h1 id="추가적인-용어정리-및-팁"><a href="#추가적인-용어정리-및-팁" class="headerlink" title="추가적인 용어정리 및 팁"></a>추가적인 용어정리 및 팁</h1><h2 id="용어정리"><a href="#용어정리" class="headerlink" title="용어정리"></a>용어정리</h2><ul>
 <li>청크(chunk): 각 커밋 사이에 처리될 row(item)의 수<ul>
 <li>성공시 chunk만큼 커밋, 실패시 chunk 만큼 롤백</li>
@@ -618,7 +625,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#참조"><span class="toc-number">1.</span> <span class="toc-text">참조</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">2.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#배치-구성-및-요약"><span class="toc-number">3.</span> <span class="toc-text">배치 구성 및 요약</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#LobLauncher"><span class="toc-number">3.1.</span> <span class="toc-text">LobLauncher</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JobRepository"><span class="toc-number">3.2.</span> <span class="toc-text">JobRepository</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Job"><span class="toc-number">3.3.</span> <span class="toc-text">Job</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step"><span class="toc-number">3.4.</span> <span class="toc-text">Step</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#추가적인-용어정리-및-팁"><span class="toc-number">4.</span> <span class="toc-text">추가적인 용어정리 및 팁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#용어정리"><span class="toc-number">4.1.</span> <span class="toc-text">용어정리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#팁"><span class="toc-number">4.2.</span> <span class="toc-text">팁</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#참조"><span class="toc-number">1.</span> <span class="toc-text">참조</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">2.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#배치-구성-및-요약"><span class="toc-number">3.</span> <span class="toc-text">배치 구성 및 요약</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#LobLauncher"><span class="toc-number">3.1.</span> <span class="toc-text">LobLauncher</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JobRepository"><span class="toc-number">3.2.</span> <span class="toc-text">JobRepository</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Job"><span class="toc-number">3.3.</span> <span class="toc-text">Job</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step"><span class="toc-number">3.4.</span> <span class="toc-text">Step</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#예시"><span class="toc-number">4.</span> <span class="toc-text">예시</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#추가적인-용어정리-및-팁"><span class="toc-number">5.</span> <span class="toc-text">추가적인 용어정리 및 팁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#용어정리"><span class="toc-number">5.1.</span> <span class="toc-text">용어정리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#팁"><span class="toc-number">5.2.</span> <span class="toc-text">팁</span></a></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
@@ -4667,7 +4674,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2025/01/26/spring-batch-basic/" >spring-batch-basic</a>
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2025/01/26/spring-batch-basic/" >spring-batch 해보기</a>
         </li>
     
     
