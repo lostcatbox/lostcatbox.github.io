@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">1.2k</span>Reading time: <span class="post-count reading-time">7 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.5k</span>Reading time: <span class="post-count reading-time">9 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -773,6 +773,62 @@ height:50vh;
 </ul>
 </li>
 </ul>
+<h1 id="추가-참조사항"><a href="#추가-참조사항" class="headerlink" title="추가 참조사항"></a>추가 참조사항</h1><ul>
+<li>엔티티<ul>
+<li>개별성이 있는 엔티티이며, 속성들이 모두 각자 변화가능하다</li>
+</ul>
+</li>
+<li>값 객체<ul>
+<li>개별성이 없는 객체이며, 속성들이 한꺼번에 추가, 삭제된다.<ul>
+<li>구매에서 구매자, 구매자의 멤버쉽 등급, 구매품(상품, 가격), 수취자(이름, 주소)</li>
+</ul>
+</li>
+<li>값 객체의 특징<ul>
+<li>도메인 내의 어떤 대상을 측정, 수량, 설명한다</li>
+<li>관련 특징을 모은 필수 단위로 개념적 전체를 모델링</li>
+<li>측정이나 설명이 변경될 때는 완벽히 대체 가능하다</li>
+<li>다른 값과 등가성을 사용해 비교</li>
+<li>값 객체는 생성되면 변경될수없다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>표준 타입<ul>
+<li>대상의 타입을 나타내는 서술적 객체다. 멤버쉽 등급 enum으로 하는것처럼 표준을 정의하는것</li>
+</ul>
+</li>
+<li>애그리거트<ul>
+<li>엔티티와 값 객체를 모델링하게 되면, 객체 간의 계층구조가 만들어지고, 연관된 엔티티와 값 객체들의 묶음이 애그리거트다</li>
+<li>1~2개의 엔티티, 값 객체, 표준 타입등으로 구성된다. 비즈니스 정합성을 맞출 필요가있다.</li>
+<li>따라서 애그리거트 단위가 트랜잭션의 기본 단위다.</li>
+<li>애그리거트 내에서 가장 상위의 엔티티를 애그리거트 루트라고 정의한다.<ul>
+<li>루트를 통해서만 애그리거트 내의 엔티티나 값 객체를 변경가능하다</li>
+</ul>
+</li>
+<li>하나의 컨텍스트에 하나이상의 애그리거트가 존재가능하다. 하나의 애그리거트에서 다른 애그리거트를 참조해야한다면, 직접참조(클래스의 정의)가 아닌 간접참조(ID로 참조)하는것을 지향하자.</li>
+<li>만약에 다른 애그리거트 사이에 일관성이 필요하다면 어떻게할까?<ul>
+<li>A 애그리거트 -&gt; 이벤트 발생 -&gt; B 애그리거트 로 설계하면 애그리거트는 단일 트랜잭션 단위니까 결과적 일관성으로 애그리거트가 갱신된다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>도메인 서비스<ul>
+<li>비즈니스 로직 처리가 특정 엔티티나 값 객체에 속하지 않을떄, 단독 객체를 만들어서 처리하게 되는데, 이를 도메인 서비스라고한다. 도메인 서비스에서는 상태를 관리하지 않고, 행위만 존재한다.</li>
+<li>도메인 로직을 처리할 때 엔티티나 값 객체와 함께 특정 작업을 처리하고 상태를 본인이 가지고 있지 않고 엔티티나 값 객체에 전달한다.</li>
+</ul>
+</li>
+<li>도메인 이벤트<ul>
+<li>도메인 이벤트는 DDD 및 이벤트 스토밍에서 말하는 도메인 이벤트의 구현 객체다. 서비스 간의 정합성을 일치시키기 위해 단위 애그리거트의 주요 상태 값을 담아 전달되도록 모델링 된다.<ul>
+<li>주문서비스에서 주문 트랜잭션 처리를 통해 주문 엔티티와 주문아이템 엔티티가 생성되어 저장됨과 동시에 -&gt; [구매완료됨] 이벤트를 발생한다.</li>
+<li>구매완료됨은 주요 주문 정보를 포함하고있다.</li>
+<li>이벤트 발행은 주문 처리를 수행하는 트랜잭션과 묶어서 실행되어야한다.</li>
+<li>이벤트는 메시지 메커니즘을 통해 다른 서비스에 전달되며 이를 통해 배송 서비스는 배송 처리를 수행할수있다.</li>
+<li><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202501151349559.png" alt="스크린샷 2025-01-15 오후 1.49.29"></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
     </article>
     <!-- license  -->
@@ -922,7 +978,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#용어정리"><span class="toc-number">2.</span> <span class="toc-text">용어정리</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-계층형-아키텍처의-문제는-무엇일까"><span class="toc-number">3.</span> <span class="toc-text">1. 계층형 아키텍처의 문제는 무엇일까?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-의존성-역전하기"><span class="toc-number">4.</span> <span class="toc-text">2. 의존성 역전하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-코드-구성하기"><span class="toc-number">5.</span> <span class="toc-text">3. 코드 구성하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-유스케이스-구현"><span class="toc-number">6.</span> <span class="toc-text">4. 유스케이스 구현</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-웹-어댑터-구현하기"><span class="toc-number">7.</span> <span class="toc-text">5. 웹 어댑터 구현하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-영속성-어댑터-구현하기"><span class="toc-number">8.</span> <span class="toc-text">6. 영속성 어댑터 구현하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-아키텍처-요소-테스트하기"><span class="toc-number">9.</span> <span class="toc-text">7. 아키텍처 요소 테스트하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-경계-간-매핑하기"><span class="toc-number">10.</span> <span class="toc-text">8. 경계 간 매핑하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-애플리케이션-조립하기"><span class="toc-number">11.</span> <span class="toc-text">9. 애플리케이션 조립하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-아키텍처-경계-강제하기"><span class="toc-number">12.</span> <span class="toc-text">10. 아키텍처 경계 강제하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-의식적으로-지름길-사용하기"><span class="toc-number">13.</span> <span class="toc-text">11. 의식적으로 지름길 사용하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-아키텍처-스타일-결정하기"><span class="toc-number">14.</span> <span class="toc-text">12. 아키텍처 스타일 결정하기</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#용어정리"><span class="toc-number">2.</span> <span class="toc-text">용어정리</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-계층형-아키텍처의-문제는-무엇일까"><span class="toc-number">3.</span> <span class="toc-text">1. 계층형 아키텍처의 문제는 무엇일까?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-의존성-역전하기"><span class="toc-number">4.</span> <span class="toc-text">2. 의존성 역전하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-코드-구성하기"><span class="toc-number">5.</span> <span class="toc-text">3. 코드 구성하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-유스케이스-구현"><span class="toc-number">6.</span> <span class="toc-text">4. 유스케이스 구현</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-웹-어댑터-구현하기"><span class="toc-number">7.</span> <span class="toc-text">5. 웹 어댑터 구현하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-영속성-어댑터-구현하기"><span class="toc-number">8.</span> <span class="toc-text">6. 영속성 어댑터 구현하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-아키텍처-요소-테스트하기"><span class="toc-number">9.</span> <span class="toc-text">7. 아키텍처 요소 테스트하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-경계-간-매핑하기"><span class="toc-number">10.</span> <span class="toc-text">8. 경계 간 매핑하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-애플리케이션-조립하기"><span class="toc-number">11.</span> <span class="toc-text">9. 애플리케이션 조립하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-아키텍처-경계-강제하기"><span class="toc-number">12.</span> <span class="toc-text">10. 아키텍처 경계 강제하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-의식적으로-지름길-사용하기"><span class="toc-number">13.</span> <span class="toc-text">11. 의식적으로 지름길 사용하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-아키텍처-스타일-결정하기"><span class="toc-number">14.</span> <span class="toc-text">12. 아키텍처 스타일 결정하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#추가-참조사항"><span class="toc-number">15.</span> <span class="toc-text">추가 참조사항</span></a></li></ol>
         <br/>
         <br/>
         <br/>
@@ -4936,9 +4992,26 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 234
+        Total : 235
         </div>
         <!-- search  -->
         
@@ -4951,6 +5024,11 @@ top:50vh;
     
     <div class="archive-year"> 2025 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2025/01/26/spring-batch-basic/" >spring-batch-basic</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -6413,6 +6491,8 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="bulletjournal"><span class="iconfont-archer">&#xe606;</span>bulletjournal</span>
     
+        <span class="sidebar-tag-name" data-tags="Batch"><span class="iconfont-archer">&#xe606;</span>Batch</span>
+    
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -6565,6 +6645,8 @@ jsonContent:
         <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
     
         <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="SpringBatch"><span class="iconfont-archer">&#xe60a;</span>SpringBatch</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
