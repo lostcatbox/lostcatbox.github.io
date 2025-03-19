@@ -677,11 +677,12 @@ height:50vh;
 <p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202501031524994.png" alt="완전매핑"></p>
 <ul>
 <li>각 계층별 전용 모델 존재 및 계층 통과 시 필요한 모델(커맨드 혹은 리퀘스트라고 불림)을 정의하여 매핑<ul>
-<li>SendMoneyUseCase 포트의 입력 모델로 특화도니 SendMoneyCommand</li>
+<li>SendMoneyUseCase 포트의 입력 모델로 특화된 SendMoneyCommand</li>
 </ul>
 </li>
-<li>이러한 전용 모델들은 각자의 전용필드 및 유효성 검증이 가능하다.</li>
+<li><strong>이러한 전용 모델들은 각자의 전용필드 및 유효성 검증이 가능하다.</strong></li>
 <li>보통 코어 ↔ 영속성 계층 사이에서는 매핑 오버헤드 때문에 사용하지않는다.</li>
+<li><strong>입력adapter ↔ core계층 사이에서는 더 명확한 검증 책임 등을 구별할수있기 때문에 사용을 고려하자</strong></li>
 </ul>
 </li>
 <li><p>“단방향” 매핑 전략</p>
@@ -746,7 +747,7 @@ height:50vh;
 </ul>
 </li>
 <li>도메인 엔티티를 입출력 모델로 사용하기<ul>
-<li>간단한 개발시에는 요청사항이 엔티티 변경사항과 일치하여 입력모델 또한 도메인 엔티티를 사용하는것간단하지만, 시간이 지날수록 영향도가 생긴다면, 전용 모델로 교체해야한다.</li>
+<li>간단한 개발시에는 요청사항이 엔티티 변경사항과 일치하여 입력모델 또한 도메인 엔티티를 사용하는것 간단하지만, 시간이 지날수록 영향도가 생긴다면, 전용 모델로 교체해야한다.</li>
 </ul>
 </li>
 <li>인커밍 포트 건너뛰기<ul>
