@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>issue · lostcatbox</title>
+    <title>kotlin 부모-자식 속성 override시 생성주기 주의하기 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">issue</a>
+                <a href="#" class="post-name">kotlin 부모-자식 속성 override시 생성주기 주의하기</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            issue
+            kotlin 부모-자식 속성 override시 생성주기 주의하기
             <!-- 404 -->
             
         </h1>
@@ -264,9 +264,17 @@ height:50vh;
             <div class="post-intros">
                 <!-- 文章页标签  -->
                 
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Issue">Issue</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Kotlin">Kotlin</a>
+    
+</div>
+                
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">572</span>Reading time: <span class="post-count reading-time">3 min</span></span>
+                        <span>Word count: <span class="post-count word-count">671</span>Reading time: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -446,6 +454,8 @@ height:50vh;
 <p>깊은 상속 구조 주의: 복잡한 상속 구조에서는 팩토리 메서드 패턴이나 컴포지션 패턴을 고려하세요.</p>
 <p>검증은 안전한 시점에: 모든 초기화가 완료된 후 검증을 수행하는 패턴을 사용하세요.</p>
 <p>이렇게 override를 제거하는 것만으로도 초기화 순서 문제가 해결되는 경우가 많습니다. 저희가 앞서 제안한 방법들도 이러한 원리를 바탕으로 한 것입니다.</p>
+<h1 id="테스트-코드"><a href="#테스트-코드" class="headerlink" title="테스트 코드"></a>테스트 코드</h1><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.junit.jupiter.api.Test</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EtcTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> `<span class="keyword">open</span> <span class="keyword">val</span>은 나중에 Init 되는지 테스트`<span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">val</span> dog: Dog = Dog(<span class="string">"내가 개다"</span>, <span class="number">10</span>)</span><br><span class="line">        <span class="keyword">val</span> animal = dog <span class="keyword">as</span> Animal</span><br><span class="line">        print(dog)</span><br><span class="line">        print(animal)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">open</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span></span>(</span><br><span class="line">    <span class="keyword">open</span> <span class="keyword">val</span> type: String,</span><br><span class="line">    <span class="keyword">open</span> <span class="keyword">val</span> name: String,</span><br><span class="line">    <span class="keyword">open</span> <span class="keyword">val</span> speed: <span class="built_in">Int</span></span><br><span class="line">) &#123;</span><br><span class="line">    <span class="keyword">init</span> &#123;</span><br><span class="line">        println(<span class="string">"(Ani init) New animal: <span class="variable">$type</span> called <span class="variable">$name</span> with <span class="variable">$speed</span> speed"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span></span>(</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">val</span> name: String,</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">val</span> speed: <span class="built_in">Int</span>,</span><br><span class="line">) : Animal(<span class="string">"Dog"</span>, name, speed) &#123;</span><br><span class="line">    <span class="keyword">init</span> &#123;</span><br><span class="line">        println(<span class="string">"(Dog init) New animal: <span class="variable">$type</span> called <span class="variable">$name</span> with <span class="variable">$speed</span> speed"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
     </article>
     <!-- license  -->
@@ -595,7 +605,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#오버라이드를-사용할-때와-사용하지-않을-때의-차이"><span class="toc-number">1.</span> <span class="toc-text">오버라이드를 사용할 때와 사용하지 않을 때의 차이</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#왜-오버라이드를-제거하니-잘-작동하는가"><span class="toc-number">2.</span> <span class="toc-text">왜 오버라이드를 제거하니 잘 작동하는가?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#왜-이런-문제가-발생하는가"><span class="toc-number">3.</span> <span class="toc-text">왜 이런 문제가 발생하는가?</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#override-키워드를-제거한-효과-분석"><span class="toc-number"></span> <span class="toc-text">override 키워드를 제거한 효과 분석</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#두-방식의-차이점"><span class="toc-number"></span> <span class="toc-text">두 방식의 차이점</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-override-사용-시-문제가-있었던-코드-class-LMSMessage-override-val-id-Long-null-override-val-storeId-String-다른-오버라이드-프로퍼티들…-Message-id-storeId-…"><span class="toc-number">1.</span> <span class="toc-text">1. override 사용 시 (문제가 있었던 코드)class LMSMessage(  override val id: Long? &#x3D; null,  override val storeId: String,  &#x2F;&#x2F; 다른 오버라이드 프로퍼티들…) : Message(id, storeId, …)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-override-미사용-시-정상-작동하는-코드-class-LMSMessage-id-Long-null-storeId-String-일반-파라미터들…-Message-id-storeId-…"><span class="toc-number">2.</span> <span class="toc-text">2. override 미사용 시 (정상 작동하는 코드)class LMSMessage(  id: Long? &#x3D; null,  storeId: String,  &#x2F;&#x2F; 일반 파라미터들…) : Message(id, storeId, …)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#중요한-차이점"><span class="toc-number"></span> <span class="toc-text">중요한 차이점</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#초기화-과정의-차이"><span class="toc-number"></span> <span class="toc-text">초기화 과정의 차이</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#결론-및-권장-사항"><span class="toc-number"></span> <span class="toc-text">결론 및 권장 사항</span></a>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#오버라이드를-사용할-때와-사용하지-않을-때의-차이"><span class="toc-number">1.</span> <span class="toc-text">오버라이드를 사용할 때와 사용하지 않을 때의 차이</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#왜-오버라이드를-제거하니-잘-작동하는가"><span class="toc-number">2.</span> <span class="toc-text">왜 오버라이드를 제거하니 잘 작동하는가?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#왜-이런-문제가-발생하는가"><span class="toc-number">3.</span> <span class="toc-text">왜 이런 문제가 발생하는가?</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#override-키워드를-제거한-효과-분석"><span class="toc-number"></span> <span class="toc-text">override 키워드를 제거한 효과 분석</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#두-방식의-차이점"><span class="toc-number"></span> <span class="toc-text">두 방식의 차이점</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-override-사용-시-문제가-있었던-코드-class-LMSMessage-override-val-id-Long-null-override-val-storeId-String-다른-오버라이드-프로퍼티들…-Message-id-storeId-…"><span class="toc-number">1.</span> <span class="toc-text">1. override 사용 시 (문제가 있었던 코드)class LMSMessage(  override val id: Long? &#x3D; null,  override val storeId: String,  &#x2F;&#x2F; 다른 오버라이드 프로퍼티들…) : Message(id, storeId, …)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-override-미사용-시-정상-작동하는-코드-class-LMSMessage-id-Long-null-storeId-String-일반-파라미터들…-Message-id-storeId-…"><span class="toc-number">2.</span> <span class="toc-text">2. override 미사용 시 (정상 작동하는 코드)class LMSMessage(  id: Long? &#x3D; null,  storeId: String,  &#x2F;&#x2F; 일반 파라미터들…) : Message(id, storeId, …)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#중요한-차이점"><span class="toc-number"></span> <span class="toc-text">중요한 차이점</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#초기화-과정의-차이"><span class="toc-number"></span> <span class="toc-text">초기화 과정의 차이</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#결론-및-권장-사항"><span class="toc-number"></span> <span class="toc-text">결론 및 권장 사항</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#테스트-코드"><span class="toc-number"></span> <span class="toc-text">테스트 코드</span></a>
         <br/>
         <br/>
         <br/>
@@ -4759,7 +4769,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">02/26</span><a class="archive-post-title" href= "/2025/02/26/issue/" >issue</a>
+            <span class="archive-post-date">02/26</span><a class="archive-post-title" href= "/2025/02/26/issue-override-kotlin/" >kotlin 부모-자식 속성 override시 생성주기 주의하기</a>
         </li>
     
     
