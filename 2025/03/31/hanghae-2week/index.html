@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">479</span>Reading time: <span class="post-count reading-time">2 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.5k</span>Reading time: <span class="post-count reading-time">9 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -405,7 +405,14 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="주의사항"><a href="#주의사항" class="headerlink" title="주의사항"></a>주의사항</h1><ul>
+        <h1 id="1주차-마지막-리뷰"><a href="#1주차-마지막-리뷰" class="headerlink" title="1주차 마지막 리뷰"></a>1주차 마지막 리뷰</h1><ul>
+<li>행동했는지 여부도 실패, 성공 테스트때 빼먹지말자</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">단위 테스트 : 대상 객체만 &quot;실체&quot; 로 두고 테스트</span><br><span class="line">- 대상 객체의 고유 기능</span><br><span class="line"></span><br><span class="line">통합 테스트 : 두개 이상의 객체를 &quot;실체&quot; 로 두고 테스트</span><br><span class="line">- 유기적인 동작의 기능</span><br><span class="line"></span><br><span class="line">----</span><br><span class="line">서비스.포인트 충전의 고유 기능?</span><br><span class="line">- 포인트를 조회해 와서, 충전하라고 시키고, 그 결과를 저장하고 내역도 저장한다.</span><br><span class="line"></span><br><span class="line">포인트 충전() &#123;</span><br><span class="line">	포인트 조회</span><br><span class="line">	포인트 충전</span><br><span class="line">	---&gt; 예외가 발생해서 터졌다.</span><br><span class="line">	포인트 저장</span><br><span class="line">	포인트 내역 저장 &#x2F;&#x2F; 얜 테스트 작성한 사람이 거의 없었다..</span><br><span class="line">	return 포인트;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">verify(포인트 내역 저장이 1번 호출되었는가);</span><br><span class="line"></span><br><span class="line">1. 단위테스트로 검증한다면, 포인트 조회, 저장, 포인트 내역 저장 다 stubing (남에꺼니까)</span><br><span class="line">	--&gt; 그리고 내가 정상적으로 동작하게끔 의도한 stub 을 뒀을 때</span><br><span class="line">	---&gt; 정상 수행하고 값을 반환하는지가 서비스의 &quot;고유 기능&quot;</span><br><span class="line">	--&gt;</span><br><span class="line">	verify(조회, 1번)</span><br><span class="line">	verify(충전, 1번)</span><br><span class="line">	verify(저장, 1번)</span><br><span class="line">	verify(내역저장, 1번)</span><br><span class="line">	</span><br><span class="line">	---</span><br><span class="line">	테스트 &quot;포인트 충전이 실패하면, 포인트 내역과 포인트 변경분은 저장되지 않는다&quot;() &#123;</span><br><span class="line">		&#x2F;&#x2F; arrange</span><br><span class="line">	  충전 실패되는 stub 을 세팅 </span><br><span class="line">	  </span><br><span class="line">	  &#x2F;&#x2F; act</span><br><span class="line">	  서비스.포인트 충전()</span><br><span class="line">	  </span><br><span class="line">	  &#x2F;&#x2F; assert</span><br><span class="line">	  verify(포인트 저장, 0번)</span><br><span class="line">	  verify(내역 저장, 0번)</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="주의사항"><a href="#주의사항" class="headerlink" title="주의사항"></a>주의사항</h1><ul>
 <li>휴강 일정 : 5/3일 ~ 5/9일 </li>
 <li>모임 재개: 5/10 -&gt; 7주차 정규모임</li>
 <li>수료 일자 6/7 토요일</li>
@@ -486,34 +493,172 @@ return 포인트;</code></pre><p>}</p>
 <p>—&gt; 선배포 &lt;—<br>위쪽 : HTTP API 통신 Base 의 요구사항에 대한 “추상적인 설계”<br>아래쪽 : 웹 백엔드 애플리케이션의 요구사항을 만족시키기 위한 “구체적인 설계”</p>
 <hr>
 <ol start="4">
-<li>본격적으로 “구체적”인 설계를 들어간다. ( 개발을 위한 )<pre><code>
-
-
-
-
-
-</code></pre></li>
+<li>본격적으로 “구체적”인 설계를 들어간다. ( 개발을 위한 )<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 질문사항</span><br><span class="line"></span><br><span class="line">- 설계 문서는 README? -&gt; 상대 경로 기반으로 참조만</span><br><span class="line">  - &#x2F;docs&#x2F; 에 .md 문서별로 작성</span><br><span class="line">- DB는 RDB 선에서 원하는것?</span><br><span class="line">  - MySql로 고정</span><br><span class="line">- 구체적 접근에 대한 내용 redis 사용여부, kafka는 추상적 접근이 끝난후에 정하는건가 </span><br><span class="line">  - ㅇㅇ -&gt; 점점 디벨롭하면서 대체할 방식임 -&gt; 초기는 RDBMS기준으로 진행</span><br><span class="line">- </span><br><span class="line">- </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 공통 도메인에서는 명확한 경계, 책임만 나눠라</span><br><span class="line"></span><br><span class="line">![스크린샷 2025-03-29 18.03.13](https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;lostcatbox&#x2F;lostcatbox.github.io-image_repo&#x2F;uploadimage&#x2F;img202503291803986.png)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 2주차 공개 Q&amp;A</span><br><span class="line"></span><br><span class="line">- 코드를 해석할수있는 능력 + 대화능력 + 정리 능력이 중요해지는중</span><br><span class="line"></span><br><span class="line">- MockAPI 를 제공할때, 에러 케이스(에러코드)에 대한 제공 어떻게?</span><br><span class="line"></span><br><span class="line">  - mockapi 만들때 -&gt; swagger example 기능 사용하기 -&gt; 에ㅓㄹ케이스에 대한 응답 스펙</span><br><span class="line">  - **request 검증(400 Error 까지는 mock api 작성하는 그 기간에 함께 적용해둔다)** -&gt; request 검증까지는 만들자</span><br><span class="line"></span><br><span class="line">- 객체 지향 설계?</span><br><span class="line"></span><br><span class="line">  - 책임이 제일 중요. 책임의 바운더리?</span><br><span class="line"></span><br><span class="line">    - 단순 동작(검증, 분기, 반복 등등)</span><br><span class="line">    - 비즈니스 (다양한 단순 동작 요소 + 정책)</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96; </span><br><span class="line">    &quot;스토밍&quot;을 통해서 어떤 &quot;개념&quot;들이 존재하는가?</span><br><span class="line">    그다음에 그 &quot;개념&quot;들에 &quot;책임&quot;을 부여하고, </span><br><span class="line">    &quot;개념&quot;들 간의 유기적인 소통에서 누가 &quot;주체&quot;인지를 보는 연습필요</span><br><span class="line">    </span><br><span class="line">    더해져야 하는 것들은</span><br><span class="line">    추상화, 상속, 디자인패턴과 같은 &quot;기술적&quot;, &quot;이론적&quot; 테크닉들이 가미되면 좋다.</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<h1 id="질문사항"><a href="#질문사항" class="headerlink" title="질문사항"></a>질문사항</h1><ul>
-<li>설계 문서는 README? -&gt; 상대 경로 기반으로 참조만<ul>
-<li>/docs/ 에 .md 문서별로 작성</li>
-</ul>
-</li>
-<li>DB는 RDB 선에서 원하는것?<ul>
-<li>MySql로 고정</li>
-</ul>
-</li>
-<li>구체적 접근에 대한 내용 redis 사용여부, kafka는 추상적 접근이 끝난후에 정하는건가 <ul>
-<li>ㅇㅇ -&gt; 점점 디벨롭하면서 대체할 방식임 -&gt; 초기는 RDBMS기준으로 진행</li>
-</ul>
-</li>
-<li></li>
-<li></li>
-</ul>
 <ul>
-<li>공통 도메인에서는 명확한 경계, 책임만 나눠라</li>
+<li><p>시퀀스 다이어그램, erd그리는 것 -&gt; 요구사항 분석</p>
+<ul>
+<li>“문제 정의”를 하고, 그 문제를 해결하기 위한 내 방식을 “설명”하는 수단이다.</li>
+<li>요구사항의 분석 및 설계 단계</li>
+<li>시퀀스 다이어그램 /ERD<ul>
+<li>재료 나열 (분석)</li>
+<li>재료를 다이어그램의 특성에 맞게 재배열 (설계)</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202503291803986.png" alt="스크린샷 2025-03-29 18.03.13"></p>
+</li>
+<li>원하는 만큼 표현 -&gt;”문제정의” -&gt; 어떻게 -&gt; 구체화-&gt;  시퀀스 다이어그램, ERD, 클래스다이어그램</li>
+<li>만만한 방식<ul>
+<li>API 별로 기능별로 깔아놓는다</li>
+<li>깔아놓은 거 밑에 블렛포인트로 어떤 정책이 필요할지, 어떤 동작을 해야할지 풀어적는다</li>
+<li>풀어놓은 걸 재료로 각각 적합한 다이어그램을 그려나가며 구체화한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>시퀀스 다이어그램을 그릴때, 실제 구현체 같은게 드러나지 않을때 추상적으로 큰 틀에서 나타내고, 클래스 다이어그램에서 구체적으로 실제 구현체들이 나오면되는지?</p>
+<ul>
+<li>시퀀스 다이어그램은 큰틀 추상체만 하기. 도메인 간의 추상적인 뷰를 보기위함<ul>
+<li>API 콜 -&gt; 유저(도메인) -&gt; 콘서트 -&gt; 예약 -&gt; 결제</li>
+<li>구체적인 각 도메인에서 객체간의 관계 = 나타내고 싶으면, “클래스다이어그램”</li>
+</ul>
+</li>
+<li>클래스 다이어그램은 객체간의 책임, 경계선, 상관관계를 나타내기위함.<ul>
+<li>Controller -&gt; Service -&gt; Repository는 너무 흔함. 필요없는 설명</li>
+<li>Service -&gt; UserValidator, UserCreator 같은것들은 표시 필요</li>
+<li>User, Product, Order 애내들은 상관관계</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>인기 상품에 대한 기준이 과제 내용에서 최근 3일간 최대 판매량 5개로 나와있는데, 기준잘정하기</p>
+<ul>
+<li>기준을 잘 정해라, 언제부터 언제까지 집계?</li>
+</ul>
+</li>
+<li><p>5주차까지의 마일스톤</p>
+<ul>
+<li>설계, 단위기능, 통합기능, 서버 구축</li>
+<li>마일스톤 과제<ul>
+<li>개발해야하는 기능별 TASK</li>
+<li>설계하는 TASK는 우리가 지금 세분화</li>
+<li>이번 주차 꺼는 TASH깔아두고, 1번 내가 생각하는 우선순위 정도 지정가능</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>도커 설정</p>
+<ul>
+<li>필요없음</li>
+</ul>
+</li>
+<li><p>이번주차 과제 API 작성까지만 인지 service 기능까지 구현?</p>
+<ul>
+<li>과제의 mockAPI 내가 생각한 대로 응답하는 자동 응답기를 만들기</li>
+<li>이번주는 요구사항 분석</li>
+<li>설계(각종 다이어그램, 문서화)</li>
+<li>가능하다면, mockAPI에 대해 내가 생각한대로 API spec이 동작하는지 E2E TEst정도</li>
+</ul>
+</li>
+<li><p>상품 &lt;1:1&gt; 상품재고로 설계할 경우, 상품 Service, 상품 재고 service로 분리? 또는 상품 Service만 생성후 상품 Repository 와 상품 재고 Repository 2개의 의존성 갖는 방식 어떤게좋은가요?</p>
+<ul>
+<li><p>저는 상품이라는 도메인 경계로 나눠서 활용합니다.</p>
+<ul>
+<li>하위 예시는 마치 테이블 기반의 개발방식과 동일하다. 왜 상품과 상품재고를 분리해야하지?</li>
+</ul>
+</li>
+<li><pre><code>ProductService // 상품관련된 무언가를 하는 주인{
+
+ProductRepository // 상품관련된 무언가를 가져다주는 하인 = interface ProductstockRepository // 어..? 얘는 상품 떼어내면 가치가 있나? 그럼 ProductRepository 에 편입시키는 게 맞지 않을까?
+}
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">-</span><br></pre></td></tr></table></figure>
+interface ProductRepository { //이렇게해야 도메인 주도적이지않을까?
+fun getProduct (productId: Long): Product?
+fun
+getStock(productId: Long): ProductStock?
+}</code></pre></li>
+</ul>
+</li>
+<li><p>상품 재고 옵션 기능 요구사항</p>
+<ul>
+<li>당연히.알아서 보강</li>
+</ul>
+</li>
+<li><p>confluent WIKI, notion, github readme.md, docs/xx.md, GitHub wiki  등 사용하여  UML</p>
+</li>
+<li><p>시퀀스 다이어 그램은 API별로 하나씩?</p>
+<ul>
+<li>최소 단위로 API별, 내부시스템 별로도 가능<ul>
+<li>예를 등면, 주기적으로 어떤 기능이 실행(스케줄링) 도 시퀀스 다이어그램잇어야한다</li>
+<li>거기에 더해, 유저의 행동기반, MSA에서 통신에 대해서도 해볼수있음</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Mock API 에서 특정 에러 값은 특정 인풋으로 요청했을때, 에러반환</p>
+<ul>
+<li>swagger Example활용해서 description과 같은 설명 란에 미리 작성</li>
+<li>추후에 구현되었을때(검증 등등) -&gt; 그때 해당 문서를 교체해주는방식 좋음</li>
+</ul>
+</li>
+<li><p>다수의 인스턴스 환경에서도 문제없이 할려면 어플리케이션 설계?</p>
+<ul>
+<li>요거는 5주차 </li>
+<li>같은  API서버가 여러대ㅔ 떠잇고, 앞에 로드밸런서가 있고, 로드밸런서가 서버 골라서 요청줌</li>
+</ul>
+</li>
+<li><p>과제 신경 써야할부분:</p>
+<ul>
+<li><p>마일스톤 = 작업을 쪼개는 것은 자세히 하는데, 어떻게 배치할지나 순서를 빡빡하게 가져가진 않는다.</p>
+</li>
+<li><p>다이어그램=그 그림들을 처음부터 끝까지 보았을 때, “내가 뭘 구현하고자 하는구나” 를 알 수 있는 정도는 되어야 한다.</p>
+</li>
+<li><p>시퀀스다이어그램= API 별로 내부시스템(스케줄러, 배치 등)는 최소한 있어야 하고..</p>
+</li>
+<li><p>클래스다이어그램= 도메인 객체간의 관계 정도는 있어야 하고..</p>
+</li>
+<li><p>ERD = 테이블들과, 테이블들의 속성, 그 테이블들간의 관계까지는 있어야 하고..</p>
+</li>
+<li><p>상태다이어그램 어떤 상태들이 존재하고, 그 상태간의 전이”는 어떤 동작에 의해 수행되는지는 있어야 하고.. 나올 수 있는 상태들은 명확해야 한다.</p>
+<ul>
+<li><p>상태 다이어그램 예시 ( 상태를 구체적으로 하는데에 집중. )</p>
+<p>주문의 상태</p>
+<ul>
+<li>﻿﻿주문서 생성됨</li>
+<li>﻿﻿주문 요청됨</li>
+<li>﻿﻿결제 요청됨</li>
+<li>﻿﻿결제 완료됨</li>
+<li>﻿﻿배송중</li>
+<li>﻿﻿배송 완료됨</li>
+<li>﻿﻿주문 취소됨</li>
+<li>﻿﻿환불 신청됨</li>
+<li>﻿﻿환불 완료됨</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>비기능적 요구사항에는 어떤 것들?</p>
+<ul>
+<li>개발자들이 하는 대부분의 행위</li>
+<li>조회 성능 1s-&gt;0.5s로 줄인다</li>
+<li>코드 가독성, 유지보수, 확장</li>
+<li><strong>테스트 코드는 기능적 요구사항을 검증하는 도구</strong> 이자, 보안, 유지보수성, 이식성 등의 “비기능 요구사항”을 충족하는지 검증하는도구</li>
+</ul>
+</li>
+<li><p>소규모 프로젝트라고 생각하고 ERD를 작성중인데, 사용자 TABLE에 충전금액이 맞을까요? 분리하기엔 큰 규모가 아니라서 또 애매하다고 생각이들어 질문드립니다!</p>
+<ul>
+<li>여러분들이 생각하기에 비기능적”으로 분리하는 요소가 필요할까? 라는 고민..</li>
+<li>큰 규모가 아니여도, 분리해야 할 수도 있고 큰 규모여도 분리하지 않아도 될 수도 있다.여러분들이 동작이나 관련 객체를 어떻게 디자인하느냐에 따라서 달라져요!TDD 때 말했던 거 기억나시는지..?<ul>
+<li>개발자란 . . .?</li>
+<li>“일단 되게 해라”= 기능적 요구사항을 만족시켜라.</li>
+<li>허락이 된다면..”= 내 비기능적 욕심을 충족시켜라.</li>
+<li>그래서 저라면.. 기능적 요구사항을 만족시킬 수 있는 최소스펙으로 다 작성한 후에, 고민할 것 같다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
     </article>
     <!-- license  -->
@@ -663,7 +808,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#주의사항"><span class="toc-number">1.</span> <span class="toc-text">주의사항</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2주차-발제-내용-및-주의사항"><span class="toc-number">2.</span> <span class="toc-text">2주차 발제 내용 및 주의사항</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#질문사항"><span class="toc-number">3.</span> <span class="toc-text">질문사항</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1주차-마지막-리뷰"><span class="toc-number">1.</span> <span class="toc-text">1주차 마지막 리뷰</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#주의사항"><span class="toc-number">2.</span> <span class="toc-text">주의사항</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2주차-발제-내용-및-주의사항"><span class="toc-number">3.</span> <span class="toc-text">2주차 발제 내용 및 주의사항</span></a></li></ol>
         <br/>
         <br/>
         <br/>
