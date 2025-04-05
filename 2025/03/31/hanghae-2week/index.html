@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">2.6k</span>Reading time: <span class="post-count reading-time">16 min</span></span>
+                        <span>Word count: <span class="post-count word-count">2.8k</span>Reading time: <span class="post-count reading-time">17 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -628,13 +628,42 @@ user
 <p>이 두가지를 모두 테스트하면됨<br>어짜피 랜덤하게 AB BA든 둘중 한개의 결과가 나올것</p>
 <p>최종 포인트를 조회해본다. + A,B각각의 성공 실패여부에 따라서 판단한다.</p>
 <p>최종포인트가 0원이다 -&gt; A와 B가 모두 성공했는가.<br>최종포인트가 1000원이다 -&gt; A는 성공하고 B는 의도된 에러에 의해 실패했는가.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Q11. 이슈(github issue)를 사용하신다면 어느정도의 사이즈로 이슈를 나누시나요?</span><br><span class="line">불필요하게 이슈를 작게 나누게 된다면 트래킹하기에 어려운 점이 있지 않을까? 점도 궁금합니다.</span><br><span class="line"></span><br><span class="line">A11. 깃헙 PR에는 project, milestone을 설정할 수 있다. 프로젝트&#x2F;마일스톤을 상위에 두고, 이슈는 굉장히 작게 찢는게 좋다.</span><br><span class="line"></span><br><span class="line">- 하나의 이슈가 다루는 내용이 너무 크다 -&gt; PR 1개가 굉장히 커진다.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 결론</span><br><span class="line"></span><br><span class="line">### Domain-First - 내가 선택하지 않은 폴더 트리</span><br></pre></td></tr></table></figure>
+<p>commerce/<br>├── user/<br>│   ├──domain/<br>│   │   └── User.kt<br>│   ├── presentation/<br>│   │   └── UserPurchaseController.kt  // 유저 구매 관련 API<br>│   └── application/<br>│       └── UserPurchaseFacade.kt      // 유저 payment 도메인 의존 필요<br>└── payment/<br>    ├──domain/<br>    │   └── Payment.kt<br>    ├── presentation/<br>    │   └── PaymentController.kt<br>    └── application/<br>        └── PaymentService.kt</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 장점</span><br><span class="line"></span><br><span class="line">  - MSA 전환용이</span><br><span class="line">  - 도메인 경계가 명확</span><br><span class="line"></span><br><span class="line">- 단점</span><br><span class="line"></span><br><span class="line">  - 새로운 API가 여러 도메인에 걸쳐있을 때 위치 결정이 어려움</span><br><span class="line">    - 예: 주문+결제+배송 같은 복합 프로세스</span><br><span class="line"></span><br><span class="line">  - 도메인 간 의존성 관리의 어려움</span><br><span class="line"></span><br><span class="line">    - 도메인 A가 도메인 B의 서비스를 사용할 때 의존성 방향 결정이 어려움</span><br><span class="line"></span><br><span class="line">    - 순환 참조 위험 (User → Payment → User)</span><br><span class="line"></span><br><span class="line">  - 기능 추적의 어려움</span><br><span class="line">    - 하나의 기능이 여러 도메인에 분산되어 있을 때 흐름 파악이 어려움</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## Layer-First 구조 - 내가 선택한 구조</span><br></pre></td></tr></table></figure>
+<p>commerce/<br>├── domain/<br>│   ├── user/<br>│   │   ├── User.kt          // 핵심 도메인 모델<br>│   │   └── UserPolicy.kt    // 도메인 규칙<br>│   └── payment/<br>│       ├── Payment.kt<br>│       └── PaymentPolicy.kt<br>├── presentation/<br>│   ├── user/<br>│   │   └── UserController.kt<br>│   └── payment/<br>│       └── PaymentController.kt<br>└── application/<br>    ├── user/<br>    │   └── UserService.kt<br>    └── payment/<br>        └── PaymentService.kt</p>
 <pre><code>
-Q11. 이슈(github issue)를 사용하신다면 어느정도의 사이즈로 이슈를 나누시나요?
-불필요하게 이슈를 작게 나누게 된다면 트래킹하기에 어려운 점이 있지 않을까? 점도 궁금합니다.
+- 장점
 
-A11. 깃헙 PR에는 project, milestone을 설정할 수 있다. 프로젝트/마일스톤을 상위에 두고, 이슈는 굉장히 작게 찢는게 좋다.
+  - 기능 중심 개발 용이성
+  - 관련 기능이 계층별로 명확하게 구분
 
-- 하나의 이슈가 다루는 내용이 너무 크다 -&gt; PR 1개가 굉장히 커진다.</code></pre>
+  - 새로운 API 추가 시 위치 결정이 명확
+
+- 단점
+
+  - 도메인 규칙 관리의 어려움, 도메인 로직이 계층별로 분산될 수 있음
+
+  - 높은 결합도, 도메인 간 경계가 모호해질 수 있음
+  - 도메인 로직이 섞일 위험
+
+  - MSA 전환의 어려움
+
+  - 도메인 기준으로 분리가 어려움
+
+  - 서비스 분리 시 많은 리팩토링 필요
+
+- 선택 이유
+  - 계속 변하고, 확장하는 controller 계층이 domain과 상관없이 늘어날수있는 구조가 적합하다고 생각했다.
+  - 단점으로는 도메인 규칙 관리의 어려움이있는데 나는 다음과 같이 처리하려고한다.
+    - facade 도입
+      - 특정 API를 위해서, domain들을 조합시
+        userService, paymentService를 facade에서 호출해서 사용함.
+    - 도메인 서비스 도입
+      - domain들을 조합시 비즈니스 로직이 추가적으로 필요한경우, 
+        PayCalculator와 같은 역할 책임 분리 및 관리
+    - 도메인 모델의 SRP 준수
+      - 단순 비즈니스 로직은 반드시 해당 도메인 모델에 구현</code></pre>
     </article>
     <!-- license  -->
     
@@ -4969,9 +4998,26 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 242
+        Total : 243
         </div>
         <!-- search  -->
         
@@ -4984,6 +5030,11 @@ top:50vh;
     
     <div class="archive-year"> 2025 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2025/04/05/hanghae-3week/" >(항해) 3주차 이커머스 설계(아키택처 및 DDD)</a>
+        </li>
     
     
         <li class="archive-post-item">
