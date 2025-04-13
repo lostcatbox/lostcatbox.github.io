@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">2.3k</span>Reading time: <span class="post-count reading-time">14 min</span></span>
+                        <span>Word count: <span class="post-count word-count">2.4k</span>Reading time: <span class="post-count reading-time">14 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -528,49 +528,33 @@ infra/
 <h2 id="1번-답변"><a href="#1번-답변" class="headerlink" title="1번 답변"></a>1번 답변</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">각 레이어의 네이밍에 이유를 가지고 명명해주면 좋겠다.</span><br><span class="line"></span><br><span class="line">Service와 PayCalculator가 둘 다 서비스인 것은 조금 아쉽다.</span><br><span class="line">⇒ 파사드에서 조합하는 방식이 좋을 것 같다.</span><br><span class="line"></span><br><span class="line">불필요한 주석을 달 필요는 없을 것 같다.</span><br><span class="line"></span><br><span class="line">메소드명은 동사로 만들면 좋겠다.</span><br><span class="line"></span><br><span class="line">파사드가 가장 하위 레벨 → 플로우차트가 나오면 그거 그대로 구현하면됨</span><br><span class="line"></span><br><span class="line">let 사용하는 부분 (로직이 돌아가는 것)이 파사드에 있으면 안됨</span><br><span class="line"></span><br><span class="line">유저 검증은 AOP를 사용하는 것이 조금 더 일반적</span><br><span class="line"></span><br><span class="line">Payment가 쿠폰을 알 필요가 없다고 생각</span><br><span class="line">⇒ 쿠폰이 더 업스트림이라고 생각</span><br><span class="line"></span><br><span class="line">이커머스에 대부분 상품 쿠폰, 장바구니 쿠폰 2가지 있음</span><br><span class="line"></span><br><span class="line">(멘토님 의견) 이커머스에서는 주문이 가장 다운스트림이라고 생각함</span><br><span class="line"></span><br><span class="line">다른 회사는 다를 수 있음</span><br><span class="line"></span><br><span class="line">쿠폰이 해당 상품에서 사용 가능한지 어떻게 검증할 것인지 생각해 볼 수 있음</span><br><span class="line">⇒ 멘토님은 validation 검증을 하지 않는 것을 선호함</span><br><span class="line">⇒ validation은 생성자에서 하는 것이 가장 좋다고 생각함</span><br><span class="line">⇒ 코틀린에서는 emit? init? 을 사용해서 넣어야함</span><br><span class="line"></span><br><span class="line">마이크로서비스를 구현하게 된다면 파사드를 거의 안쓰게됨</span><br><span class="line"></span><br><span class="line">⇒ order에서 쿠폰을 직접 호출하게 될 가능성이 더 높아짐</span><br><span class="line"></span><br><span class="line">파사드는 잼민이 데려와서 읽어도 읽힐 수 있게 해야함</span><br><span class="line">⇒ 복잡하면 잘못 짠 것일 가능성이 높음</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><pre><code class="kotlin">    <span class="meta">@Transactional</span>
-    <span class="function"><span class="keyword">fun</span> <span class="title">order</span><span class="params">(order: <span class="type">Order</span>)</span></span> {
-        <span class="comment">// 1. user 검증</span>
-        userService.checkActiveUser(order.userId)
-        <span class="comment">// 2. 상품 준비 상태로 전환</span>
-        <span class="keyword">val</span> orderInPreparation = orderService.transitionToProductReady(order)
-        <span class="comment">// 3. 상품 재고 확인 및 차감</span>
-        productService.saleProcessBy(order.orderLines)
-        <span class="comment">// 4. 결제 필요 금액 계산</span>
-        <span class="keyword">val</span> finalAmount = order.issuedCouponId.let { couponId -&gt;
-            <span class="keyword">val</span> issuedCouponAndCoupon = couponService.findByIssuedCouponId(order.issuedCouponId)
-            payCalculator.calculateFinalAmount(order, issuedCouponAndCoupon)
-        }
-        <span class="comment">// 5. 결제 대기 상태로 전환</span>
-        <span class="keyword">val</span> orderReadyForPayment = orderService.transitionToPaymentReady(orderInPreparation)
-        <span class="comment">// 6. 포인트 조회 및 결제 처리</span>
-        <span class="keyword">val</span> point = pointService.getPoint(order.userId)
-        <span class="keyword">val</span> paymentResult = paymentService.processPayment(orderReadyForPayment, point, finaAmount)
-        <span class="comment">// 7. 결제 결과에 따른 처리</span>
-        <span class="keyword">val</span> completedOrder = orderService.transitionToPaymentComplete(orderReadyForPayment)
-    }
+<li>모범 예시</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">order</span><span class="params">(cri: <span class="type">OrderCriteria</span>.<span class="type">Order</span>)</span></span> &#123;</span><br><span class="line">  <span class="comment">// orderProduct  &#123;productId: 1, quantity: 20, price: 2000&#125;</span></span><br><span class="line">  <span class="keyword">val</span> products = productService.getProducts(cri.productIds);</span><br><span class="line"><span class="keyword">val</span> coupon = couponService.useCoupon(&#123;cri.coupon, productId&#125;);</span><br><span class="line">  <span class="keyword">val</span> orderCommand = OrderCommand(...);  <span class="comment">// coupon_id</span></span><br><span class="line">  <span class="keyword">val</span> order = orderService.order(orderCommand);</span><br><span class="line">  <span class="keyword">val</span> payment = paymentService.pay(order.totalPrice);</span><br><span class="line">  <span class="keyword">return</span> order </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">orderComand()  <span class="comment">// 쿠폰 종류에는 2가지 있어요.</span></span><br><span class="line">order &#123;</span><br><span class="line"> couponId: <span class="number">123</span> <span class="comment">// 장바구니 쿠폰</span></span><br><span class="line">&#125; </span><br><span class="line">order_item &#123;</span><br><span class="line"> couponId: <span class="number">123124214</span> <span class="comment">// 상품 쿠폰</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    <span class="function"><span class="keyword">fun</span> <span class="title">order</span><span class="params">(cri: <span class="type">OrderCriteria</span>.<span class="type">Order</span>)</span></span> {
-      <span class="comment">// orderProduct  {productId: 1, quantity: 20, price: 2000}</span>
-      <span class="keyword">val</span> products = productService.getProducts(cri.productIds);
-          <span class="keyword">val</span> coupon = couponService.useCopon({cri.coupon, productId});
-      <span class="keyword">val</span> orderCommand = OrderCommand(...);  <span class="comment">// coupon_id</span>
-      <span class="keyword">val</span> order = orderService.order(orderCommand);
-      <span class="keyword">val</span> payment = paymentService.pay(order.totalPrice);
-      <span class="keyword">return</span> order 
-    }
 
-    orderComand()  <span class="comment">// 쿠폰 종류에는 2가지 있어요.</span>
-    order {
-        couponId: <span class="number">123</span> <span class="comment">// 장바구니 쿠폰</span>
-    } 
-    order_item {
-        couponId: <span class="number">123124214</span> <span class="comment">// 상품 쿠폰</span>
-    } 
-&lt;!--￼<span class="number">6</span>--&gt;</code></pre>
+
+
+
+<h2 id="2번-질문"><a href="#2번-질문" class="headerlink" title="2번 질문"></a>2번 질문</h2><ul>
+<li><p>2주차 설계당시 쿠폰을 할인에 한 종류로 생각. 할인으로 묶어 설계를 진행했는데</p>
+<blockquote>
+<p>DIscount를 쿠폰의 형태중 일부로 가져가는 경우, 다른 할인수단 (특정 카드결제시 등등의 프로모션) 과 충돌할 우려가 있고, 발급제어시에도 다른 할인수단과 쿠폰을 구별해야해서 어려울 것 같습니다. 또 결제의 원금액과 할인금액을 따로 관린하는 편입니다. (정산등의 문제)</p>
+</blockquote>
+<p>와 같은 피드백늘 받았습니다.</p>
+<p>멘토님의 생각은 어떤지 궁금합니다.</p>
 </li>
-<li><p>유저가 사용하는 서비스의 메소드들에 대해 UseCase라고 할 수 있음 유저가 사용하지 않으면 UseCase가 아님</p>
-</li>
+</ul>
+<h2 id="2번-답변"><a href="#2번-답변" class="headerlink" title="2번 답변"></a>2번 답변</h2><p>개념을 더 작게 쪼개면 좋을 것 같다 어드민이 분리되어있으면 너무 관리가 복잡해져 campaign개념으로 연결하는 경우도 있음</p>
+<h2 id="3번-질문"><a href="#3번-질문" class="headerlink" title="3번 질문"></a>3번 질문</h2><p>유즈케이스와 파사드의 차이에 대해 아래와 같이 이해했는데 맞는지 궁금합니다.</p>
+<blockquote>
+<p>유즈케이스 -&gt; 하나의 기능 단위(ex. 주문 생성, 쿠폰 발급 등) 파사드 -&gt; 기능 여러 개의 조합(ex. 주문을 완료했을 때 쿠폰을 발급해줘야 하는 경우?)</p>
+</blockquote>
+<p>실무에서 유즈케이스와 파사드 각각을 사용하는 디테일한 예시가 궁금합니다! (검지, 중지 서비스는 잘 이해가 안됐습니다 죄송합니다 ㅜ)</p>
+<h2 id="3번-답변"><a href="#3번-답변" class="headerlink" title="3번 답변"></a>3번 답변</h2><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">orderService &#123;</span><br><span class="line"> 결제();</span><br><span class="line"> [토스카드] <span class="comment">// 내화면이 아니라고,, 우리 서비스 화면이 아니라고,, iframe pg사의 웹사이트</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">주문서 만들고 pg사에 요청함.  completedOrder(); <span class="comment">// callback</span></span><br><span class="line">OrderFacade &#123;</span><br><span class="line">	정기결제() &#123;</span><br><span class="line">		<span class="keyword">val</span> users = paymentService.<span class="keyword">get</span>정기결제대상s();</span><br><span class="line">		users.forEach &#123;</span><br><span class="line">			orderService.order();</span><br><span class="line">			payservice.pay(...);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>유저가 사용하는 서비스의 메소드들에 대해 UseCase라고 할 수 있음 유저가 사용하지 않으면 UseCase가 아님</li>
 </ul>
 <p>디자인 패턴의 파사드 패턴을 찾아보면 좋겠다.</p>
 <p>일반적인 서비스에서는 주문서를 만들고 결제를 함 결제는 PG에서 진행, 결제시 콜백 URL을 받았다가 결제 완료시 callback URL로 결과를 넘겨줌 그 때 주문 완료라고 업데이트 ⇒ 따라서 파사드를 사용하지 않는 경우가 많음</p>
@@ -665,6 +649,11 @@ infra/
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2025/04/12/hanghae-4week/" title= "(항해) 4주차 서버 DB 설계 및 성능테스트">
+                    <div class="nextTitle">(항해) 4주차 서버 DB 설계 및 성능테스트</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -802,7 +791,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#3주차-발제"><span class="toc-number">1.</span> <span class="toc-text">3주차 발제</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Clean-Layered-Architecture"><span class="toc-number">1.0.1.</span> <span class="toc-text">Clean + Layered Architecture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#도메인"><span class="toc-number">1.0.2.</span> <span class="toc-text">도메인?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Clean-Code에서-추구하는-것"><span class="toc-number">1.0.3.</span> <span class="toc-text">Clean Code에서 추구하는 것</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#발제-후-Q-A"><span class="toc-number">2.</span> <span class="toc-text">발제 후 Q&#x2F;A</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1번-답변"><span class="toc-number">2.1.</span> <span class="toc-text">1번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4번-질문"><span class="toc-number">2.2.</span> <span class="toc-text">4번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4번-답변"><span class="toc-number">2.3.</span> <span class="toc-text">4번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5번-질문"><span class="toc-number">2.4.</span> <span class="toc-text">5번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5번-답변"><span class="toc-number">2.5.</span> <span class="toc-text">5번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6번-질문"><span class="toc-number">2.6.</span> <span class="toc-text">6번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7번-답변"><span class="toc-number">2.7.</span> <span class="toc-text">7번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8번-질문"><span class="toc-number">2.8.</span> <span class="toc-text">8번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8번-답변"><span class="toc-number">2.9.</span> <span class="toc-text">8번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9번-질문"><span class="toc-number">2.10.</span> <span class="toc-text">9번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9번-답변"><span class="toc-number">2.11.</span> <span class="toc-text">9번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10번-질문"><span class="toc-number">2.12.</span> <span class="toc-text">10번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10번-답변"><span class="toc-number">2.13.</span> <span class="toc-text">10번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#꿀팁"><span class="toc-number">2.14.</span> <span class="toc-text">꿀팁</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#3주차-발제"><span class="toc-number">1.</span> <span class="toc-text">3주차 발제</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Clean-Layered-Architecture"><span class="toc-number">1.0.1.</span> <span class="toc-text">Clean + Layered Architecture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#도메인"><span class="toc-number">1.0.2.</span> <span class="toc-text">도메인?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Clean-Code에서-추구하는-것"><span class="toc-number">1.0.3.</span> <span class="toc-text">Clean Code에서 추구하는 것</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#발제-후-Q-A"><span class="toc-number">2.</span> <span class="toc-text">발제 후 Q&#x2F;A</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1번-답변"><span class="toc-number">2.1.</span> <span class="toc-text">1번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2번-질문"><span class="toc-number">2.2.</span> <span class="toc-text">2번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2번-답변"><span class="toc-number">2.3.</span> <span class="toc-text">2번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3번-질문"><span class="toc-number">2.4.</span> <span class="toc-text">3번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3번-답변"><span class="toc-number">2.5.</span> <span class="toc-text">3번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4번-질문"><span class="toc-number">2.6.</span> <span class="toc-text">4번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4번-답변"><span class="toc-number">2.7.</span> <span class="toc-text">4번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5번-질문"><span class="toc-number">2.8.</span> <span class="toc-text">5번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5번-답변"><span class="toc-number">2.9.</span> <span class="toc-text">5번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6번-질문"><span class="toc-number">2.10.</span> <span class="toc-text">6번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7번-답변"><span class="toc-number">2.11.</span> <span class="toc-text">7번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8번-질문"><span class="toc-number">2.12.</span> <span class="toc-text">8번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8번-답변"><span class="toc-number">2.13.</span> <span class="toc-text">8번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9번-질문"><span class="toc-number">2.14.</span> <span class="toc-text">9번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9번-답변"><span class="toc-number">2.15.</span> <span class="toc-text">9번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10번-질문"><span class="toc-number">2.16.</span> <span class="toc-text">10번 질문</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10번-답변"><span class="toc-number">2.17.</span> <span class="toc-text">10번 답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#꿀팁"><span class="toc-number">2.18.</span> <span class="toc-text">꿀팁</span></a></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
@@ -5005,9 +4994,26 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 243
+        Total : 244
         </div>
         <!-- search  -->
         
@@ -5020,6 +5026,11 @@ top:50vh;
     
     <div class="archive-year"> 2025 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/12</span><a class="archive-post-title" href= "/2025/04/12/hanghae-4week/" >(항해) 4주차 서버 DB 설계 및 성능테스트</a>
+        </li>
     
     
         <li class="archive-post-item">
