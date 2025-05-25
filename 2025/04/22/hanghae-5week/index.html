@@ -1,0 +1,7010 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>(항해) 5주차 서버 동시성 설계 및 테스트 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">(항해) 5주차 서버 동시성 설계 및 테스트</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            (항해) 5주차 서버 동시성 설계 및 테스트
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Java">Java</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "TDD">TDD</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Kotlin">Kotlin</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">2.3k</span>Reading time: <span class="post-count reading-time">14 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2025/04/22</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="5주차-공개-Q-A"><a href="#5주차-공개-Q-A" class="headerlink" title="5주차 공개 Q/A"></a>5주차 공개 Q/A</h1><h2 id="결제가-외부-API를-이용할-경우-트랜잭션-전략"><a href="#결제가-외부-API를-이용할-경우-트랜잭션-전략" class="headerlink" title="결제가 외부 API를 이용할 경우 트랜잭션 전략"></a>결제가 외부 API를 이용할 경우 트랜잭션 전략</h2><ul>
+<li><p>주문 -&gt; 포인트 사용 -&gt; 결제 방식으로 진행해야한다. </p>
+<ul>
+<li>결제가 외부 API면 취소가 안된다. -&gt; 따라서 결제를 맨 나중에 해야함</li>
+</ul>
+</li>
+<li><p>내부 DB 트랜잭션 롤백은 쉽지만, 외부 API를 사용하는경우, 보상로직이 돌아야한다.</p>
+<blockquote>
+<p><strong>보상로직</strong></p>
+<p>ApplicationEvent를 만들고, EventListener가 받아서 처리한다.</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="낙관락-비관락"><a href="#낙관락-비관락" class="headerlink" title="낙관락, 비관락"></a>낙관락, 비관락</h2><h3 id="낙관락"><a href="#낙관락" class="headerlink" title="낙관락"></a>낙관락</h3><ul>
+<li><strong>재시도 2 ~3번 시 반드시 성공가능한 케이스에서만 도입하자</strong><ul>
+<li>내부적인 재시도 처리를 한다면, 성공할 확률이 매우 높아야한다.</li>
+</ul>
+</li>
+<li><strong>application단에서 락을 관리하며, 테이블의 version 필드 등을 이용하여 구현된다.</strong></li>
+<li>예시<ul>
+<li>맥북 상시 10%할인 -&gt; 사용자가 몰리지 않음. -&gt; 낙관적락으로 구현해도 크게 문제되지않음 -&gt; 재고가 겹칠 타이밍이 많이나오지 않음 </li>
+<li>포인트 충전은 낙관락 + 재시도로만 접근하면 큰일 난다.<ul>
+<li>“같은 요청” 으로 포인트 충전을 여러번 실제 요청했는지 구별도 해야한다.</li>
+<li>멱등키 </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="비관락"><a href="#비관락" class="headerlink" title="비관락"></a>비관락</h3><ul>
+<li><strong>어떻게든 “연산” 을 성공시켜야 하는 것!</strong></li>
+<li>db 의 lock 기능을 이용하여, db connection을 소모한다.</li>
+<li>단점: <ul>
+<li>롱-트랜잭션의 데드락 발생 가능성이 높아짐</li>
+<li>락을 걸고 해제하는게 잦아서 성능 문제가 생길 수있다.</li>
+</ul>
+</li>
+<li>예시<ul>
+<li>맥북 50% 할인 -&gt; 사용자가 몰림. -&gt; 재시도의 수행 등을 고려했을때, 비관적락이 훨씬 결과적으로 db부하가 적다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="비관적락-낙관적락-테스트시-고려사항"><a href="#비관적락-낙관적락-테스트시-고려사항" class="headerlink" title="비관적락, 낙관적락 테스트시 고려사항"></a>비관적락, 낙관적락 테스트시 고려사항</h2><ul>
+<li>성능테스트 -&gt;Time Space 가 같이 존재<ul>
+<li>시간적인 성능 측정<ul>
+<li>api latency P50, P95, P99</li>
+<li>재처리가언제 완료되는가</li>
+</ul>
+</li>
+<li>공간적 측정<ul>
+<li>Blocking i/o의 발생</li>
+<li>idle thread의 개수</li>
+<li>connection 점유 비율 수준</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>정합성 검증 테스트</li>
+<li><strong>부하테스트 도구 사용하기</strong> + 힙덤프 등등</li>
+</ul>
+<h2 id="filter는-로깅-interceptor-는-인증-이외에-e-commerce에-적용할만한-예시"><a href="#filter는-로깅-interceptor-는-인증-이외에-e-commerce에-적용할만한-예시" class="headerlink" title="filter는 로깅, interceptor 는 인증 이외에 e-commerce에 적용할만한 예시"></a>filter는 로깅, interceptor 는 인증 이외에 e-commerce에 적용할만한 예시</h2><ul>
+<li>Filter<ul>
+<li>Trace /Span (분산 추적) - 쓰레드 아이디 추적 요청 아이디 추적</li>
+<li>Multi-Tenancy - (다국어 처리 등등) - 접근한 국가가 어디냐에 따라 번역 응답이 달라짐. filter에서 번역만함<ul>
+<li>filter가 사전을 알고잇고 번역책임함</li>
+</ul>
+</li>
+<li>A/B Test</li>
+<li>RateLimitter</li>
+<li>CORS 제어</li>
+</ul>
+</li>
+<li>Interceptor<ul>
+<li>회원 정보, 회원 등급 핸들링 -&gt; ThreadLocal에 씌우고, 비즈니스에서 활용<ul>
+<li>유저를 쓰레드 로컬에 넣어놓는다.</li>
+</ul>
+</li>
+<li>레퍼럴 체크 (친구 추천 코드 검증 등등)</li>
+<li>기간 한정이벤트용 API일 경우 , 검증</li>
+</ul>
+</li>
+</ul>
+<h2 id="도메인-엔티티-JPA-엔티티-분리에-대한-견해"><a href="#도메인-엔티티-JPA-엔티티-분리에-대한-견해" class="headerlink" title="도메인 엔티티 - JPA 엔티티 분리에 대한 견해"></a>도메인 엔티티 - JPA 엔티티 분리에 대한 견해</h2><ul>
+<li><p>실무에서 JPA를 사용할 때 N+1 문제를 방지하기 위해 @OneToMany는 지양하는 것으로 알고 있습니다. @ManyToOne도 결국 1번의 쿼리가 더 발생하게 되는데 … 이런 이슈를 차단 하기 위해, 엔티티 간에는 식별자(ID)만 저장해두고, 필요한 경우 QueryDSL을 활용해 명시적으로 조인하는 방식이 더 낫지 않을까 생각해봤습니다. 이런 접근이 괜찮은 방식일까요? (도메인 엔티티 - JPA 엔티티 분리하였습니다.)</p>
+</li>
+<li><p>JPA의 컨셉 및 목적</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Order ( 주문 )</span><br><span class="line">OrderItem ( 주문 항목 )</span><br><span class="line">User ( 사용자 )</span><br><span class="line"></span><br><span class="line">Order -&gt; User 를 항상 알아야 함..</span><br><span class="line">id 만 들고 있으면... 매번 따로 쿼리를 날려야 함..</span><br><span class="line">근데 그게 싫어... 그래서 연관관계로 풀면 같이 가져온다는 컨셉에 맞아..</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>그래서 @OneToMany = 거의 안씀..</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@OneToMany &#x3D; 거의 안씀..</span><br><span class="line">연관관계 &#x3D; 최소화하여 쓴다. &lt;- 사이드 이펙트가 큼.</span><br><span class="line"></span><br><span class="line">현업에서의 문제는 연관관계로 풀었을 때 지옥이 되는 경우가 많음..</span><br><span class="line"></span><br><span class="line">브랜드 : 상품</span><br><span class="line"></span><br><span class="line">Brand &#123;</span><br><span class="line">	@OneToMany</span><br><span class="line">	List&lt;Product&gt; -&gt; 10만개?</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Product &#123;</span><br><span class="line">	@ManyToOne</span><br><span class="line">	Brand</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">실제로 대부분의 조회 -&gt; Projection 으로 한다...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>JPA 도메인 모델 적합한 케이스</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">JPA 이 자식.. 너는 그냥 테이블 매퍼야..</span><br><span class="line">---&gt; 장점... 테이블의 명세가 도메인에 간섭하는 걸 아예 없앤다..</span><br><span class="line">이렇게 쓸려면...</span><br><span class="line">도메인 모델은 객체간의 관계로 나타내야함.</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">엔티티는 Id 만 그냥 컬럼처럼 알고 있어야 함..</span><br><span class="line"></span><br><span class="line">그리고 내가 주문 내놔 했을 떄,,</span><br><span class="line">알아서 infra 구현체에서 조립해서 올린다...</span><br><span class="line"></span><br><span class="line">연관관계 기반의 JPA 도메인 모델을 쓰는 경우 -&gt; &quot;명시적으로 수정 라이프사이클&quot; 이 같은애들을</span><br><span class="line">대장격인 도메인 모델 &#x3D; 어그리거트 루트 ( e.g. 주문 , 결제 )</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>JPA 도메인 모델 부적합한 케이스</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">(조회) 내가 좋아한 웹툰 내놔.</span><br><span class="line">-&gt; JPA 도메인 모델 ? 부적합. 왜? 연관관계는 페이지네이션 수용 못함</span><br><span class="line">user_webtoon_like &#123; user_id, webtoon_id &#125;</span><br><span class="line">webtoon &#123; id, .. &#125;</span><br><span class="line"></span><br><span class="line">@Entity</span><br><span class="line">UserLikedWebtoonList &#123;</span><br><span class="line">	User</span><br><span class="line">	List&lt;Webtoon&gt;   &#x2F;&#x2F;100만개면 터짐</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">(수정) 내가 좋아한 웹툰에 &quot;패션왕&quot; 추가해.</span><br><span class="line"></span><br><span class="line">(수정) 내 프로필 이미지 수정해.</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>JPA-entity와 도메인 모델 분리시. infra 구현체 참조</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Webtoon 객체 구성에는 user를 의존한다. user의 AUTHOR, user의 DESIGNER</span><br><span class="line">&#x2F;&#x2F; 그렇다면 webtoon은 도메인 모델로 돌아다니고, JPA-Entity로 전환하는 로직을 구현해야한다.</span><br><span class="line">Webtoon &#123;</span><br><span class="line">	Author; &lt;- user &#123; type &#x3D; AUTHOR &#125;</span><br><span class="line">	Designer; &lt;- user &#123; type &#x3D; DESIGNER &#125;</span><br><span class="line">	ReviewPoint;	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">save(webtoon)를 infra에서 구현한다면</span><br><span class="line">---&gt;</span><br><span class="line">webtoonJpaRepository.save(WebtoonEntity.from(webtoon);</span><br><span class="line">userJpaRepository.save(UserEntity.from(webtoon.author));</span><br><span class="line">userJpaRepository.save(UserEntity.from(webtoon.designer));</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h2 id="분산락의-목적"><a href="#분산락의-목적" class="headerlink" title="분산락의 목적"></a>분산락의 목적</h2><ul>
+<li>추후 분산락을 사용하게 된다면 비관적 락을 모두 제거 해도 괜찮을지 궁금합니다. </li>
+<li>분산락 ttl(time to live) 설정 이슈 등으로 예상치 못한 상황이 생길 수 있을것 같은데 실무에서는 어떻게 처리하시는지 궁금합니다.</li>
+<li>완벽히 대체할 수 없기 때문에 안된다.<ul>
+<li>DB Lock은 완벽하게 Transaction에 대해서 완벽한 롤백이가능하다.</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Redis, Zookeeper, .. DB NamedLock.. 다양한 방식이 있음.</span><br><span class="line">&quot;원자성&quot;을 완전하게 보장하기 어렵다.</span><br><span class="line">잠금 해제가 실패한다거나... TTL 이 지나기 전에 작업이 완료가 안된다거나..</span><br><span class="line"></span><br><span class="line">왜? 연산 주체는 DB 니까..</span><br><span class="line"></span><br><span class="line">DB Lock &#x3D; 연산 주체가 락을 가지고 있음. ( 안정성이 높음 )</span><br><span class="line">DB Lock 과 시스템적 분리 &#x2F; 분산락 등을 활용한다면 ( 안정성이 낮음 )</span><br><span class="line"></span><br><span class="line">현업에서 사용 할 때는...</span><br><span class="line"></span><br><span class="line">1차 방어선 &#x3D; 분산락 사용하는 상황</span><br><span class="line">2차 방어선으로 DB Lock 도 둔다. ( 일반적으로 DB Lock 만 뒀을 떄보다 성능 하락이 적음 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">분산락 사용하는 이유 자체가 하나의 트랜잭션을 보호하기 위함이 아니다.</span><br><span class="line"></span><br><span class="line">DB 트랜잭션이라는 개념을 초월한 자물쇠를 만드는 게 목적.</span><br><span class="line"></span><br><span class="line">예를 들면, 동시에 결제 API 를 못쏘게 한다던가..</span><br><span class="line"></span><br><span class="line">1번 결제에 대해서 배송지 수정과 환불을 동시에 못하게 한다던가..</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="실무에서는-성능-db-부하-문제로-비관적락을-많이-안쓴다-경합이-있다고-판단할때-Redis-사용"><a href="#실무에서는-성능-db-부하-문제로-비관적락을-많이-안쓴다-경합이-있다고-판단할때-Redis-사용" class="headerlink" title="실무에서는 성능, db 부하 문제로 비관적락을 많이 안쓴다? 경합이 있다고 판단할때, Redis 사용?"></a>실무에서는 성능, db 부하 문제로 비관적락을 많이 안쓴다? 경합이 있다고 판단할때, Redis 사용?</h2><ul>
+<li>어느 정도 경합이 있을때, redis 분산락을 사용하느냐?<ul>
+<li>분산락을 “지양”하자 </li>
+<li>redis는 분산락에 특화되어있지만, 디버깅이 어렵다 그래서</li>
+<li>시스템 설계로 많이 푼다<ul>
+<li>메시지 큐 같은 것을 이용해서 해결시도</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Redis는 개수기로써 많이 사용된다.<ul>
+<li>남은 쿠폰 개수, 좋아 개수 등등 DB로 연산했을떄, 잠금 경합이 되게 많다.</li>
+<li>redis보안으로, SQL DB를 영속화를 따로 해줘서, redis날아가도 복구가능하도록함</li>
+</ul>
+</li>
+</ul>
+<h2 id="mysql이-mvcc기반이여서-상품-재고-차감시-쓰기-락을-걸더라도-상품-조회에-대한-지연이-없어보이는데-상품-정보와-상품-재고-테이블-분리하면-좋은-이유가있을까"><a href="#mysql이-mvcc기반이여서-상품-재고-차감시-쓰기-락을-걸더라도-상품-조회에-대한-지연이-없어보이는데-상품-정보와-상품-재고-테이블-분리하면-좋은-이유가있을까" class="headerlink" title="mysql이 mvcc기반이여서 상품 재고 차감시, 쓰기 락을 걸더라도 상품 조회에 대한 지연이 없어보이는데 상품 정보와 상품 재고 테이블 분리하면 좋은 이유가있을까?"></a>mysql이 mvcc기반이여서 상품 재고 차감시, 쓰기 락을 걸더라도 상품 조회에 대한 지연이 없어보이는데 상품 정보와 상품 재고 테이블 분리하면 좋은 이유가있을까?</h2><ul>
+<li>어차피 쓰기락있든 말든 상품 조회가능한데? -&gt;mvcc니까</li>
+<li>확장성, 운영 안정성 같은 면에서 충분히 이점이있다.<ul>
+<li>상품 정보 = 변경이 자주일어나는가? X</li>
+<li>재고 정보 = 변경이 자주일어나는가 ? 0</li>
+<li>재고 때문에 상품 정보를 수정할 때 기다려야 한다면 굳이?</li>
+<li>비즈니스를 제공할떄, (파트너사) “재고 충전” 기능을 제공함</li>
+<li>상품 정보 수정 기능에서 재고 충전을 넣진않음. -&gt; 분리 필요해짐</li>
+<li>상품 서비스와 재고 서비스를 MSA로 가르기도함</li>
+<li>[물류 시스템] &lt;-&gt; [운영 시스템] &lt;-&gt; [카탈로그(상품) 시스템]</li>
+<li>보통 상품수가 많고, 실시간으로 많은 트래픽이 있을때, 재고 테이블 분리함</li>
+<li>아니면 선착순 쿠폰 같이 “개수”가 예민한 애들은 재고 테이블 분리함</li>
+</ul>
+</li>
+</ul>
+<h2 id="어떤-락은-활용하는가-실무에서"><a href="#어떤-락은-활용하는가-실무에서" class="headerlink" title="어떤 락은 활용하는가 실무에서"></a>어떤 락은 활용하는가 실무에서</h2><ul>
+<li>분산락은 개수기로 사용됨</li>
+<li>비관적락은 DB에서 동작하도록함</li>
+<li><strong>kafka로 이벤트 기반으로 한번에 하나만 처리되게끔함 -&gt; 동시성 문제를 메시지 큐로 한번에 한번만 접근하여 해결</strong></li>
+</ul>
+<h2 id="롱-트랜잭션이-비관적락일때-안좋은이유"><a href="#롱-트랜잭션이-비관적락일때-안좋은이유" class="headerlink" title="롱-트랜잭션이 비관적락일때, 안좋은이유"></a>롱-트랜잭션이 비관적락일때, 안좋은이유</h2><ul>
+<li><p>성능적 이슈를 많이 발생</p>
+</li>
+<li><p>낙관락과 비관락 충돌이 많냐 적냐 차이 -&gt; 사용 사례로 판단해야한다.</p>
+<ul>
+<li>“내가 어떻게 동시성 문제를 처리할 건지”에 따라 다른다</li>
+<li>내가 어떤 락을 쓰느냐? 동시성 이슈는 1개의 빵을 N명이 먹고싶어하는 상황<ol>
+<li>락을 안쓰고 해결한다 = 시스템 설계</li>
+<li>1명만 먹고, 나머지 다 울어도됨 = 낙관적 락 (실패 시 재시도 X), 점유도 하지않아</li>
+<li>“내꺼”라서 동시에 접근하는 게 나바껭 없을때, 2~3번 재시도 하면 성공 가능(자기 포인트 사용+ 적립) -&gt; 낙관적 락</li>
+<li>어떻게든 “내 연산”을 성공시켜야함 -&gt; 원자성 보장 -&gt; 비관적락(DB Lock)</li>
+<li>무조건 “내 유산”이 지켜져야 함 -&gt; 정합성 보장 -&gt; 비관적락 (DB Lock)</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="현업에서-낙관적-락-사용시-주의사항-flush"><a href="#현업에서-낙관적-락-사용시-주의사항-flush" class="headerlink" title="현업에서 낙관적 락 사용시 주의사항(flush)"></a>현업에서 낙관적 락 사용시 주의사항(flush)</h2><ul>
+<li><p>낙관적 락을 적용한 동시성 테스트 케이스에서 <code>ObjectOptimisticLockingFailureException</code>  가 발생하면 catch 해서 예외를 커스텀해주고 싶은데 catch가 안 잡혀서 삽질 중…</p>
+<ul>
+<li>entityManager.flush 시점에서 예외가 터지는 게 아닐까 추정됩니다.</li>
+</ul>
+</li>
+<li><p>락을 걸어야 할 만한 케이스들은 알겠는데, 낙관적 락을 적용해야 할지, 비관적 락을 적용해야 할지 너무 헷갈립니다.</p>
+</li>
+<li><p>RetryTemplate 등의 Retry 로직이 꼭 필요할지 고민이 됩니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">현업에서 낙관적 락을 사용할 때는 명시적 flush 를 해줍니다.</span><br><span class="line">JPA 를 사용하고 있고, 트랜잭션 범위 내에서 해당 수정이 일어남.</span><br><span class="line"></span><br><span class="line">그런데, 트랜잭션 범위 내에서 낙관적 락을 적용한 수정 로직이 <span class="string">"마지막"</span> 이라는 보장이 없음.</span><br><span class="line"></span><br><span class="line">JPA 특성상 지연 쿼리를 발생시킴.</span><br><span class="line">-&gt; 트랜잭션 커밋직전 시점에 flush 를 하게되고, 그때가서 예외가 터짐.</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">	payment.complete()</span><br><span class="line">	xxRepository.flush()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+</li>
+</ul>
+<h2 id="동일한-자원에-대해-각각의-비즈니스-로직에서-서로-다른-락-전략-적용-시-발생할-수-있는-문제가-궁금했습니다"><a href="#동일한-자원에-대해-각각의-비즈니스-로직에서-서로-다른-락-전략-적용-시-발생할-수-있는-문제가-궁금했습니다" class="headerlink" title="동일한 자원에 대해 각각의 비즈니스 로직에서 서로 다른 락 전략 적용 시 발생할 수 있는 문제가 궁금했습니다."></a>동일한 자원에 대해 각각의 비즈니스 로직에서 서로 다른 락 전략 적용 시 발생할 수 있는 문제가 궁금했습니다.</h2><ul>
+<li><p><strong>같은 자원에 대해서는 같은 락을 거는것이 관리 용이함</strong></p>
+</li>
+<li><p>낙관락이 디비 리소스를 아낄 수 있어 일부라도 적용하는 것이 자원관리 측면에서 괜찮다고 생각했지만, 비관락 로직이 commit되기 전까지 낙관락 로직도 update 쿼리를 치기위해 대기하므로 해당 리소스에 비관락 로직이 동시에 1개라도 수행된다면 리소스 사용은 비슷하다. 따라서 이점이 적거나 거의 없다. 그리고 유지보수 복잡도가 올라가므로 하나만 사용하기로 했다.</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">비관적 락 .. -&gt; 같은 자원에 대해서는 같은 락을 거는것이 관리 용이함</span><br><span class="line">PESSIMISTIC_WRITE ( x-lock ) &#x3D; 사생활 보호 필름</span><br><span class="line">PESSIMISTIC_READ ( s-lock ) &#x3D; 일반 보호 필름</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>전제<ul>
+<li>포인트 충전의 경우 유사시 재시도하도록 처리해도 괜찮다.</li>
+<li>차감의 경우 주문과 관련돼 실패하면 안된다.</li>
+</ul>
+</li>
+<li>차감시에만 배타락을 걸고 충전시에는 걸지 않는다.</li>
+<li>Version 어노테이션이 달려있으면 비관락이든 아니든 version관리가 진행된다.</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">차감(비관락)이 먼저 조회할 경우</span><br><span class="line"></span><br><span class="line">차감</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">where</span> <span class="keyword">id</span> = <span class="number">1</span> <span class="keyword">and</span> <span class="keyword">version</span> = <span class="number">1</span> <span class="keyword">for</span> <span class="keyword">update</span></span><br><span class="line"></span><br><span class="line">충전</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">where</span> <span class="keyword">id</span> =<span class="number">1</span> <span class="keyword">and</span> <span class="keyword">version</span> = <span class="number">1</span> (MVCC여서 가능)</span><br><span class="line"></span><br><span class="line">충전</span><br><span class="line"><span class="keyword">update</span> <span class="keyword">set</span> <span class="keyword">version</span> = <span class="number">2</span> <span class="keyword">where</span> <span class="keyword">id</span> = <span class="number">1</span> <span class="keyword">and</span> <span class="keyword">version</span> = <span class="number">1</span></span><br><span class="line">시도하려하지만 차감이 점유중이므로 디비 내부에서 블로킹</span><br><span class="line"></span><br><span class="line">차감</span><br><span class="line"><span class="keyword">update</span> <span class="keyword">set</span> <span class="keyword">version</span> = <span class="number">2</span> <span class="keyword">where</span> <span class="keyword">id</span> = <span class="number">1</span> <span class="keyword">and</span> <span class="keyword">version</span> = <span class="number">1</span></span><br><span class="line">완료</span><br><span class="line"></span><br><span class="line">충전</span><br><span class="line"><span class="keyword">update</span> <span class="keyword">set</span> <span class="keyword">version</span> = <span class="number">2</span> <span class="keyword">where</span> <span class="keyword">id</span> = <span class="number">1</span> <span class="keyword">and</span> <span class="keyword">version</span> = <span class="number">1</span> </span><br><span class="line">(업데이트 된 <span class="keyword">row</span> <span class="number">0</span>)</span><br><span class="line"><span class="keyword">exception</span> 발생 및 재시도후 정상 적용</span><br><span class="line"></span><br><span class="line">논블로킹 기반 로직에 블로킹을 섞을 경우에 스레드 점유에 대한 병목이 일어나는 것처럼 </span><br><span class="line">공유자원에 대한 병목현상이 생긴다.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>낙관락 비관락의 기준이 맞는지 아직도 애매모호하다</p>
+<ul>
+<li><p>충돌이 적다? 많다?</p>
+<ul>
+<li><p>처음엔 단순히 이벤트 쿠폰, 기한한정 상품 재고등에 대한 순간적 트래픽의 존재 여부라고 생각</p>
+</li>
+<li><p>그렇다면 순간적 트래픽이 발생하지 않는 API에 관련된 리소스는 모두 낙관락인가</p>
+</li>
+<li><p>저 말이 의미하는 게 무엇인지 고민</p>
+<ul>
+<li>충돌이 많을 때 낙관락을 건다면?<ul>
+<li>많은요청이 계속해서 최대횟수까지 재시도하기 때문에 조회요청으로 디비 네트워크 부하 (타 멘토링 청강)</li>
+<li><strong>여러 사용자</strong>가 계속 접근하는 경우 사용자는 예외가 발생해 재요청을 비교적 많이 해야함.</li>
+</ul>
+</li>
+<li>충돌이 적을 때 비관락을 건다면?<ul>
+<li>불필요한 디비 부하로 병목이 걸려 좋지 않은 선택</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">**(어떻게든 연산을 성공시켜야하는 경우에)** 충돌이 많을 때 <span class="string">"비관락"</span> 충돌이 적을 때 <span class="string">"낙관락"</span></span><br><span class="line"></span><br><span class="line">동시성 문제</span><br><span class="line">- 어떻게든 성공시켜야하는 연산 -&gt; 비관적락 -&gt; DB가 줄세움. 계속 나머지들은 기다림</span><br><span class="line">- FAST-FAIL 이 가능한 연산 -&gt; 낙관적락 -&gt; DB에 경쟁적으로 요청함. 실패도 빨리나옴</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>결론</p>
+<ul>
+<li>비관락<ul>
+<li>자원 낭비가 있더라도 사용자에게 예외를 던지지 않고 수행시키고 싶을 때</li>
+<li>여러 사용자 혹은 API가 동시에 접근해 여러번 수정할 수 있는 자원<ul>
+<li>ex) 주문생성시 재고처리, 선착순 쿠폰 발급 (발급시 재고가 -1된다. 콘서트 좌석이나 멘토링 예약 일정처럼 각각 1개만 적용되지 않는다. 따라서 0에 도달하기 전까지는 점유하지 못했다는 이유로 예외를 던져 빠르게 실패해서는 안된다.)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>낙관락<ul>
+<li>예외를 던지지 않고 수행시키고 싶은데, 접근 지점이 적을 때 (한 자원에 대한 사용자 수, 사용 API)</li>
+<li>충돌 시 예외를 던지고 싶을 때 빠르게 실패시켜도될때 (잠시 후 다시 시도해주세요, 요청에 실패했습니다.)<ul>
+<li>ex) 포인트 충전</li>
+<li>포인트 사용(주문 결제)</li>
+<li>사용자에게 발급된 쿠폰 사용(주문 생성)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="퍼사드의-한-메소드에서-낙관락-비관락-로직이-섞여있을-때-되도록-예외-가능성이-높은-낙관락을-먼저-수행하려고-early-return-처럼-합니다-괜찮은-생각일까요"><a href="#퍼사드의-한-메소드에서-낙관락-비관락-로직이-섞여있을-때-되도록-예외-가능성이-높은-낙관락을-먼저-수행하려고-early-return-처럼-합니다-괜찮은-생각일까요" class="headerlink" title="퍼사드의 한 메소드에서 낙관락 비관락 로직이 섞여있을 때 되도록 예외 가능성이 높은 낙관락을 먼저 수행하려고(early return 처럼..)합니다. 괜찮은 생각일까요?"></a>퍼사드의 한 메소드에서 낙관락 비관락 로직이 섞여있을 때 되도록 예외 가능성이 높은 낙관락을 먼저 수행하려고(early return 처럼..)합니다. 괜찮은 생각일까요?</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">fun createOrder() &#123;</span><br><span class="line">	&#x2F;&#x2F; 재고확인 및 선차감 (비관락)</span><br><span class="line">	&#x2F;&#x2F; 내 쿠폰 사용처리 (낙관락)</span><br><span class="line">	&#x2F;&#x2F; 주문 생성</span><br><span class="line">	&#x2F;&#x2F; 임의의 낙관락</span><br><span class="line">&#125;</span><br><span class="line">일 때, 낙관락에서 예외 발생률이 높으므로 다른 로직의 결과에 의존성이 없는 경우 </span><br><span class="line">임의로 해당 로직을 우선 수행해도 괜찮은지 궁금합니다.</span><br><span class="line"></span><br><span class="line">flush 안하면 말짱 도루묵이다.. JPA 특성상 지연 쿼리이므로</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>팁</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//아래 부분은 비관락이 걸리는게 매우적다</span></span><br><span class="line">Tx &#123;</span><br><span class="line">	...</span><br><span class="line">	..</span><br><span class="line">	....</span><br><span class="line">	...</span><br><span class="line">	...</span><br><span class="line">	..</span><br><span class="line">	비관락</span><br><span class="line">	처리</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//아래 부분은 비관락이 걸리는게 매우길다</span></span><br><span class="line">Tx &#123;</span><br><span class="line">	비관락</span><br><span class="line">	..</span><br><span class="line">	..</span><br><span class="line">	.</span><br><span class="line">	.</span><br><span class="line">	.</span><br><span class="line">	.</span><br><span class="line">	처리</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>(14팀 질문과 완전 중복) MySQL이 MVCC이기 때문에 stock테이블을 분리하지 않고 변경을 위해 배타락을 걸더라도 읽기에 대한 병목은 없어보이는데 분리하면 좋은 이유가 궁금합니다.</p>
+</li>
+<li><p>최대한 가설을 세워 동시성 테스트케이스를 작성하시는지, 락을 섣불리 거는 것보다는 관찰에 의해 발견되면 테스트케이스로 작성하시는지 궁금합니다. 만약 가설을 세우신다면 가설을 세우는 노하우가 있을까요?</p>
+<ul>
+<li><pre><code>저는 그냥 가설을 세워 동시성 테스트케이스를 작성했었다..
+&quot;이제는&quot; 경험치 기반으로 작성한다.
+---- 잘 작성하려고 한다.
+
+동시성 이슈가 발생할 수 있는 거를 식별할 수 있는 가설..,
+
+데이터 변경 케이스 -&gt; 동시성 이슈가 발생할까?
+상태 기반 로직 -&gt; 다 의심함
+    - if ( status == .. ) 근데 누군가는 status 를 바꿈..
+    - if (강의.capacity &gt; 강의.applyCount) .. 
+
+타임라인 ( 순서 ) 가 중요한 로직 -&gt; 의심함
+    - 선착순
+    - 최근 요청만 반영한다고 하면... 업데이트 collision 일어날 수 있음.저는 그냥 가설을 세워 동시성 테스트케이스를 작성했었다..
+&quot;이제는&quot; 경험치 기반으로 작성한다.
+---- 잘 작성하려고 한다.
+
+동시성 이슈가 발생할 수 있는 거를 식별할 수 있는 가설..,
+
+데이터 변경 케이스 -&gt; 동시성 이슈가 발생할까?
+상태 기반 로직 -&gt; 다 의심함
+    - if ( status == .. ) 근데 누군가는 status 를 바꿈..
+    - if (강의.capacity &gt; 강의.applyCount) .. 
+
+타임라인 ( 순서 ) 가 중요한 로직 -&gt; 의심함
+    - 선착순
+    - 최근 요청만 반영한다고 하면... 업데이트 collision 일어날 수 있음.
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">- 낙관적락에서 재시도를 한다는거 자체가 우선 성공시키고 보겠다는 행위 인거 같은데 재시도를 하기보다는 비관락을 선택하는게 나은 선택일 수 있는지 궁금합니다.</span><br><span class="line"></span><br><span class="line">  - 1번 retry 정도까지는 낙관락 쓴다.</span><br><span class="line"></span><br><span class="line">- 이번 과제에서 꼭 하면 좋은 게 있다면 무엇이 있을까요?</span><br><span class="line"></span><br><span class="line">  -</span><br></pre></td></tr></table></figure>
+동시성
+- 어떤 문제를 식별/가정
+- 어떻게 동시성 이슈를 해결할거ㅓ고
+- 그렇기에 어떤 방식을 적용할건지
+
+완성
+- 기능적으로 다 동작하는가 ( 필터 / 인터셉터 별로 안 중요하다 )
+
+하나더
+DB Lock 기반 조회나 findXXwithLock 반드시 붙이기.POST_FIX붙여라
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 재고가 충분하지 않더라도 실적을 위해 우선 주문을 받아두고 실제보다 적은 게 (0보다 작을 때) 어드민에서 포착되면 배송지연이 될 수 있다는 알림 팝업 정도만 띄워두고 주문은 계속 받을 수도 있을 것 같습니다. 이렇게 했을 때 실제로 재고의 가시성은 커머스에 입점한 판매자에게만 있는데 시스템에서 정확하게 관리되어야 하나요? 실제 커머스의 정책에서 정확하게 관리돼야한다면 그 이유가 궁금합니다.</span><br><span class="line"></span><br><span class="line">  - </span><br><span class="line"></span><br><span class="line">- 동시성 테스트를 통해 충돌이 많은 상황이라면 비관적 락이 낙관적 락보다 빠르다는 것을 도출했습니다. 롤백과 재시도가 없어 그렇다고 판단했는데 맞나요? 그리고 밑의 표처럼 적용하여도 문제가 없을까요?</span><br><span class="line"></span><br><span class="line">  - [Step 9](https:&#x2F;&#x2F;www.notion.so&#x2F;Step-9-1dc97b3441a180d28ed1ec75694a30fd?pvs&#x3D;21) [충돌비율에 따른 낙관락 비관락 성능에 대한 동시성 테스트]</span><br><span class="line"></span><br><span class="line">  -</span><br></pre></td></tr></table></figure>
+100명이 동시에 -;.. 전부 작업은 성공시켜야 함
+
+UPDATE 쿼리 개수
+비관적 락 = 100개
+낙관적 락 = 1+..+100개 = n(n+1)/2 = 5050</code></pre></li>
+<li></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>서비스</th>
+<th>락 방식</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>CouponService.publish</strong></td>
+<td>Pessimistic Lock</td>
+<td>남은 수량이 핵심이고, 실패 가능성을 0으로 보장해야 하므로 재시도 없이 바로 비관적 락 적용</td>
+</tr>
+<tr>
+<td><strong>OrderService.create</strong></td>
+<td>Pessimistic Lock</td>
+<td>재고는 충돌 확률이 높고 중요하므로 비관적 락 적용</td>
+</tr>
+<tr>
+<td><strong>PointService.charge</strong></td>
+<td>Optimistic Lock (retry=5)</td>
+<td>충돌 확률이 낮아 낙관적 락 적용</td>
+</tr>
+<tr>
+<td><strong>PointService.use</strong></td>
+<td>Optimistic Lock (retry=5)</td>
+<td>충돌 확률이 낮아 낙관적 락 적용</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>낙관 락의 재시도 횟수는 어느 정도가 적당할까요? (쿠폰과 포인트 각각 어떤 기준으로 지정할 수 있을지)</p>
+</li>
+</ul>
+<h1 id="이번주차에-어디에-집중하냐"><a href="#이번주차에-어디에-집중하냐" class="headerlink" title="이번주차에 어디에 집중하냐?"></a>이번주차에 어디에 집중하냐?</h1><ul>
+<li>동시성<ul>
+<li>어떤 동시성 문제에 대해 식별했는지</li>
+<li>어떤 이유에서 어떤 Lock 을 적용했는지 완성 </li>
+</ul>
+</li>
+<li>필터/인터셉터… 이것저것 쑤셔박기.. <ul>
+<li>필터 : HTTP Message 로깅 </li>
+<li>인터셉터 : 유저 조회해서 들여보내기.. </li>
+</ul>
+</li>
+<li>내부 자세히 안 볼 거고.</li>
+<li><strong>API 가 다 정상적으로 동작하는지 ( 기능적 요구사항 )</strong> </li>
+<li><strong>비기능적 요구사항 ( 성능, … ) =&gt; 안봄</strong></li>
+</ul>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2025/04/26/hanghae-6week/" title= "hanghae-6week">
+                    <div class="nextTitle">hanghae-6week</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2025/04/12/hanghae-4week/" title= "(항해) 4주차 서버 DB 설계 및 성능테스트">
+                    <div class="prevTitle">(항해) 4주차 서버 DB 설계 및 성능테스트</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 사각형 반응형 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="2080063347"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#5주차-공개-Q-A"><span class="toc-number">1.</span> <span class="toc-text">5주차 공개 Q&#x2F;A</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#결제가-외부-API를-이용할-경우-트랜잭션-전략"><span class="toc-number">1.1.</span> <span class="toc-text">결제가 외부 API를 이용할 경우 트랜잭션 전략</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#낙관락-비관락"><span class="toc-number">1.2.</span> <span class="toc-text">낙관락, 비관락</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#낙관락"><span class="toc-number">1.2.1.</span> <span class="toc-text">낙관락</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#비관락"><span class="toc-number">1.2.2.</span> <span class="toc-text">비관락</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#비관적락-낙관적락-테스트시-고려사항"><span class="toc-number">1.3.</span> <span class="toc-text">비관적락, 낙관적락 테스트시 고려사항</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#filter는-로깅-interceptor-는-인증-이외에-e-commerce에-적용할만한-예시"><span class="toc-number">1.4.</span> <span class="toc-text">filter는 로깅, interceptor 는 인증 이외에 e-commerce에 적용할만한 예시</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#도메인-엔티티-JPA-엔티티-분리에-대한-견해"><span class="toc-number">1.5.</span> <span class="toc-text">도메인 엔티티 - JPA 엔티티 분리에 대한 견해</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#분산락의-목적"><span class="toc-number">1.6.</span> <span class="toc-text">분산락의 목적</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#실무에서는-성능-db-부하-문제로-비관적락을-많이-안쓴다-경합이-있다고-판단할때-Redis-사용"><span class="toc-number">1.7.</span> <span class="toc-text">실무에서는 성능, db 부하 문제로 비관적락을 많이 안쓴다? 경합이 있다고 판단할때, Redis 사용?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql이-mvcc기반이여서-상품-재고-차감시-쓰기-락을-걸더라도-상품-조회에-대한-지연이-없어보이는데-상품-정보와-상품-재고-테이블-분리하면-좋은-이유가있을까"><span class="toc-number">1.8.</span> <span class="toc-text">mysql이 mvcc기반이여서 상품 재고 차감시, 쓰기 락을 걸더라도 상품 조회에 대한 지연이 없어보이는데 상품 정보와 상품 재고 테이블 분리하면 좋은 이유가있을까?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#어떤-락은-활용하는가-실무에서"><span class="toc-number">1.9.</span> <span class="toc-text">어떤 락은 활용하는가 실무에서</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#롱-트랜잭션이-비관적락일때-안좋은이유"><span class="toc-number">1.10.</span> <span class="toc-text">롱-트랜잭션이 비관적락일때, 안좋은이유</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#현업에서-낙관적-락-사용시-주의사항-flush"><span class="toc-number">1.11.</span> <span class="toc-text">현업에서 낙관적 락 사용시 주의사항(flush)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#동일한-자원에-대해-각각의-비즈니스-로직에서-서로-다른-락-전략-적용-시-발생할-수-있는-문제가-궁금했습니다"><span class="toc-number">1.12.</span> <span class="toc-text">동일한 자원에 대해 각각의 비즈니스 로직에서 서로 다른 락 전략 적용 시 발생할 수 있는 문제가 궁금했습니다.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#퍼사드의-한-메소드에서-낙관락-비관락-로직이-섞여있을-때-되도록-예외-가능성이-높은-낙관락을-먼저-수행하려고-early-return-처럼-합니다-괜찮은-생각일까요"><span class="toc-number">1.13.</span> <span class="toc-text">퍼사드의 한 메소드에서 낙관락 비관락 로직이 섞여있을 때 되도록 예외 가능성이 높은 낙관락을 먼저 수행하려고(early return 처럼..)합니다. 괜찮은 생각일까요?</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이번주차에-어디에-집중하냐"><span class="toc-number">2.</span> <span class="toc-text">이번주차에 어디에 집중하냐?</span></a></li></ol>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 수직형 반응형 디스플레이광고 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="1645513725"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 249
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2025 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/17</span><a class="archive-post-title" href= "/2025/05/17/hanghae-9week/" >hanghae-9week</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/17</span><a class="archive-post-title" href= "/2025/05/17/hanghae-8week/" >hanghae-8week</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span><a class="archive-post-title" href= "/2025/05/10/hanghae-7week/" >hanghae-7week</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2025/04/26/linear-use-manual/" >리니어 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2025/04/26/hanghae-6week/" >hanghae-6week</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2025/04/22/hanghae-5week/" >(항해) 5주차 서버 동시성 설계 및 테스트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/12</span><a class="archive-post-title" href= "/2025/04/12/hanghae-4week/" >(항해) 4주차 서버 DB 설계 및 성능테스트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2025/04/05/hanghae-3week/" >(항해) 3주차 이커머스 설계(아키택처 및 DDD)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/31</span><a class="archive-post-title" href= "/2025/03/31/ddd-start-book-review/" >(책읽기)도매인 주도 설계 시작하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/31</span><a class="archive-post-title" href= "/2025/03/31/hanghae-2week/" >(항해) 2주차 주문 서비스 설계</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/26</span><a class="archive-post-title" href= "/2025/03/26/review-of-object-book/" >(책읽기) 오브젝트 (조영호 지음)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/24</span><a class="archive-post-title" href= "/2025/03/24/hanghae-1week/" >(항해) 1주차 TDD 자료 정리 및 동시성 자료 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/10</span><a class="archive-post-title" href= "/2025/03/10/TDD-by-Example/" >TDD by Example</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/26</span><a class="archive-post-title" href= "/2025/02/26/issue-override-kotlin/" >kotlin 부모-자식 속성 override시 생성주기 주의하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2025/01/26/spring-batch-basic/" >spring-batch 해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2025/01/07/bullet-journal/" >bullet-journal</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/06</span><a class="archive-post-title" href= "/2025/01/06/event-storming-review/" >event-storming-review</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/04</span><a class="archive-post-title" href= "/2025/01/04/review-end-2024/" >2024년을 마무리 하며...(2025년 목표)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/03</span><a class="archive-post-title" href= "/2025/01/03/clean-architecture-review/" >(책읽기) 만들면서 배우는 클린 아키텍처</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2024 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2024/12/24/domain-driven-design-quickly/" >(책읽기) 도메인 주도 설계란 무엇인가</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2024/08/24/Spring-Servlet%EA%B3%BC-Spring-Webflux-%ED%8A%B9%EC%A7%95/" >Spring-Servlet과 Spring-Webflux 특징 </a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/2024/08/18/SpringSecurity-jwt%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%9D%B8%EC%A6%9D-%EC%9D%B8%EA%B0%80/" >SpringSecurity + jwt를 이용한 인증, 인가 </a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/17</span><a class="archive-post-title" href= "/2024/08/17/kotlin-basic/" >코틀린 기본 문법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/16</span><a class="archive-post-title" href= "/2024/06/16/post-Transactional%EC%97%90-%EB%8C%80%ED%95%9C-5%EA%B0%80%EC%A7%80-%EC%98%B5%EC%85%98/" >Spring Transactional에 대한 5가지 옵션</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2024/05/30/java-recommend-coding-style/" >자바 주니어 개발자를 위한 강의</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/21</span><a class="archive-post-title" href= "/2024/04/21/TDD-%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%BD%94%EB%93%9C-%EB%8F%84%EC%9E%85%EA%B8%B0/" >TDD-테스트코드 도입기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/21</span><a class="archive-post-title" href= "/2024/04/21/Virtual-Thread-VS-CompletableFuture/" >Virtual Thread VS CompletableFuture</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/21</span><a class="archive-post-title" href= "/2024/04/21/%EB%8B%A8%EC%9D%BC%EC%B1%85%EC%9E%84%EC%9B%90%EC%B9%99-md/" >단일책임원칙이란?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/14</span><a class="archive-post-title" href= "/2024/04/14/2024%20hashmap/" >2024 hashmap</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2024/02/11/1-N-%EA%B4%80%EA%B3%84%EA%B0%84%EC%9D%98-%EC%A1%B0%ED%9A%8C-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0/" >1:N 관계 간의 중복 데이터 쿼리 성능 개선</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2024/02/11/spring-cache/" >spring-cache에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/09</span><a class="archive-post-title" href= "/2024/01/09/spring-core-advanced-AOP-etc/" >스프링 핵심 원리 고급편(AOP 포함)(작성중)</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2023 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/27</span><a class="archive-post-title" href= "/2023/12/27/review-end-2023/" >2023년을 마무리 하며...(2024년 목표)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/2023/08/18/BasicDB/" >DB에 대한 전반적인 개념(SQL,NoSQL)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/11</span><a class="archive-post-title" href= "/2023/07/11/Advenced-JPA2-CH01/" >(핵심요약)스프링 부트와 JPA 활용2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/27</span><a class="archive-post-title" href= "/2023/06/27/Advenced-JPA1-CH04/" >Advenced-JPA1-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/19</span><a class="archive-post-title" href= "/2023/06/19/Advenced-JPA1-CH03/" >Advenced-JPA1-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/28</span><a class="archive-post-title" href= "/2023/05/28/Review-The-Essence-Of-Object-Orientation/" >(리뷰)객체 지향의 사실과 오해 책 리뷰</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2023/05/20/Advenced-JPA1-CH02/" >Advenced-JPA1-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2023/05/08/Advenced-JPA1-CH01/" >Advenced-JPA1-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2023/04/26/JPA-Basic-CH10/" >(JPA) JPA-Basic-CH10(fetch-join)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2023/04/22/Design-pattern-3/" >(ETC) 디자인 패턴에 대해서 CH3 (행동 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2023/04/22/JPA-Basic-CH09/" >(JPA) JPA-Basic-CH09(객체지향 쿼리 언어)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/20</span><a class="archive-post-title" href= "/2023/04/20/JPA-Basic-CH08/" >(JPA)JPA-Basic-CH08(값 타입)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/18</span><a class="archive-post-title" href= "/2023/04/18/JPA-Basic-CH07/" >(JPA) JPA-Basic-CH07(프록시)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/17</span><a class="archive-post-title" href= "/2023/04/17/JPA-Basic-CH06/" >(JPA) JPA-Basic-CH06(고급매핑- 상속관계 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/13</span><a class="archive-post-title" href= "/2023/04/13/Issue-Java-ClassCastException/" >(Issue) ResponseBodyAdvice에서 ClassCastException 발생</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/13</span><a class="archive-post-title" href= "/2023/04/13/JPA-Basic-CH05/" >(JPA) JPA-Basic-CH05(다양한 연관관계 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/09</span><a class="archive-post-title" href= "/2023/04/09/JPA-Basic-CH04/" >(JPA) JPA-Basic-CH04 (연관관계 매핑 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/08</span><a class="archive-post-title" href= "/2023/04/08/JPA-Basic-CH03/" >(JPA) JPA-Basic-CH03 (엔티티 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2023/04/06/JPA-Basic-CH02/" >(JPA) JPA 기본편 CH02 (JPA 영속성 컨텍스트)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/JPA-Basic-CH01/" >(JPA) JPA 기본편 CH01 (JPA 시작)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/querydsl/" >DataSource, QueryDSL이란?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/29</span><a class="archive-post-title" href= "/2023/03/29/SpringMVC2-CH02/" >SpringMVC2-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/21</span><a class="archive-post-title" href= "/2023/03/21/Design-pattern-2/" >(ETC) 디자인 패턴에 대해서 CH2 (구조 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/12</span><a class="archive-post-title" href= "/2023/03/12/Design-pattern-1/" >(ETC) 디자인 패턴에 대해서 CH1 (생성 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/10</span><a class="archive-post-title" href= "/2023/03/10/l2-l4-l7-switching/" >L2-L4-L7 스위치란? (허브, 스위치, 라우터)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span><a class="archive-post-title" href= "/2023/02/25/Review-System-Design-Interview/" >(리뷰)(강추)가상 면접 사례로 배우는 대규모 시스템 설계 기초</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2023/02/23/gitlab-CI-CD-springproject/" >Gitlab-CI/CD 구축하기(withSpring)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span><a class="archive-post-title" href= "/2023/02/16/SpringMVC2-CH01/" >SpringMVC2-CH01(스프링 thymeleaf)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span><a class="archive-post-title" href= "/2023/02/07/JavaScript-Basic/" >JavaScript-Basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/05</span><a class="archive-post-title" href= "/2023/02/05/Html-JQuery/" >Html-JQuery</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2023/01/22/mysql/" >Mysql 기본 공부 (수정본)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-maven/" >About-maven</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-mybatis/" >About-mybatis</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-xml/" >XML 파일에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/ubuntu-command/" >우분투 자주 쓰는 명령어(2023버전)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2023/01/02/n-plus-1-problem-i/" >JPA N+1 문제와 해결법(수정중)</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/31</span><a class="archive-post-title" href= "/2022/12/31/review-end-2022/" >2022년을 마무리 하며...(2023년 목표)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/AboutSpring/" >AboutSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/CS-Lock-MutexAndSemaphore/" >CS Lock MutexAndSemaphore</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Isolation-Level-4-And-Lock/" >Isolation Level 4 And Lock</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/READ-ME-Writing/" >READ-ME Writing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Entity-DAO-DTO/" >Spring-Entity-DAO-DTO</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/SpringAndJenkins/" >SpringAndJenkins</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Lambda-Capturing/" >Java Lambda-Capturing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Basic-JVM/" >Java Basic JVM</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-SOLID/" >Java SOLID</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Null-Optional-Empty/" >Null-Optional-Empty</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Singleton-Stateless/" >Spring Singleton Stateless</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutMessageQ/" >AboutMessageQ</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutKafka/" >AboutKafka</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutSpringSecurity/" >AboutSpringSecurity</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Sequence-Diagram/" >Sequence-Diagram</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH01/" >SpringProject-TrackingPost-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH04/" >SpringProject-TrackingPost-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH03/" >SpringProject-TrackingPost-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH05/" >SpringProject-TrackingPost-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH02/" >SpringProject-TrackingPost-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH06/" >SpringProject-TrackingPost-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutLombokAtSpring/" >AboutLombokAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Basic-Vue-js/" >Basic Vue.js</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Http-Status/" >Http-Status</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Spring-Logger/" >Spring-Logger</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH01/" >SpringProject-Board-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH02/" >SpringProject-Board-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH03/" >SpringProject-Board-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH07/" >SpringProject-Board-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH08/" >SpringProject-Board-CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH06/" >SpringProject-Board-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH04/" >SpringProject-Board-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH10/" >SpringProject-Board-CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH09/" >SpringProject-Board-CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/UsingAOPAtSpring/" >UsingAOPAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH05/" >SpringProject-Board-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH01/" >SpringCore CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH00/" >SpringCore CH00</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH04/" >SpringCore CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH02-03/" >SpringCore CH02~03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH05/" >SpringCore CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH07/" >SpringCore CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH01/" >SpringMVC-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH03/" >SpringMVC-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH09/" >SpringCore CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH06/" >SpringCore CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH02/" >SpringMVC-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH05/" >SpringMVC-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH04/" >SpringMVC-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH07/" >SpringMVC-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH08/" >SpringCore CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH06/" >SpringMVC-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/effective-java-review/" >(책리뷰)이펙티브 자바</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH01/" >Java 배우기 CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH02/" >Java 배우기 CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH03/" >Java 배우기 CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH04/" >Java 배우기 CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH06/" >Java 배우기 CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH09/" >Java 배우기 CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH08/" >Java 배우기 CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH07/" >Java 배우기 CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH10/" >Java 배우기 CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH11/" >Java 배우기 CH11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH05/" >Java 배우기 CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH12/" >Java 배우기 CH12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH14/" >Java 배우기 CH14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH13/" >Java 배우기 CH13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/ConnectDomainToNotion/" >Notion과 개인 Domain 연결하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/OSI7layer/" >OSI7계층과 TCP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Book"><span class="iconfont-archer">&#xe606;</span>Book</span>
+    
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mybatis"><span class="iconfont-archer">&#xe606;</span>Mybatis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Lombok"><span class="iconfont-archer">&#xe606;</span>Lombok</span>
+    
+        <span class="sidebar-tag-name" data-tags="MessageQ"><span class="iconfont-archer">&#xe606;</span>MessageQ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kafka"><span class="iconfont-archer">&#xe606;</span>Kafka</span>
+    
+        <span class="sidebar-tag-name" data-tags="JPA"><span class="iconfont-archer">&#xe606;</span>JPA</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advance"><span class="iconfont-archer">&#xe606;</span>Advance</span>
+    
+        <span class="sidebar-tag-name" data-tags="Vue"><span class="iconfont-archer">&#xe606;</span>Vue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="Notion"><span class="iconfont-archer">&#xe606;</span>Notion</span>
+    
+        <span class="sidebar-tag-name" data-tags="Domain"><span class="iconfont-archer">&#xe606;</span>Domain</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="CS"><span class="iconfont-archer">&#xe606;</span>CS</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jquery"><span class="iconfont-archer">&#xe606;</span>Jquery</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="FrontEnd"><span class="iconfont-archer">&#xe606;</span>FrontEnd</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Issue"><span class="iconfont-archer">&#xe606;</span>Issue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Structure"><span class="iconfont-archer">&#xe606;</span>Structure</span>
+    
+        <span class="sidebar-tag-name" data-tags="Interview"><span class="iconfont-archer">&#xe606;</span>Interview</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Logger"><span class="iconfont-archer">&#xe606;</span>Logger</span>
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jenkins"><span class="iconfont-archer">&#xe606;</span>Jenkins</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thymeleaf"><span class="iconfont-archer">&#xe606;</span>Thymeleaf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="AOP"><span class="iconfont-archer">&#xe606;</span>AOP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="TDD"><span class="iconfont-archer">&#xe606;</span>TDD</span>
+    
+        <span class="sidebar-tag-name" data-tags="Testcode"><span class="iconfont-archer">&#xe606;</span>Testcode</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Gitlab"><span class="iconfont-archer">&#xe606;</span>Gitlab</span>
+    
+        <span class="sidebar-tag-name" data-tags="CI-CD"><span class="iconfont-archer">&#xe606;</span>CI-CD</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kotlin"><span class="iconfont-archer">&#xe606;</span>Kotlin</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Problem"><span class="iconfont-archer">&#xe606;</span>Problem</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jpa"><span class="iconfont-archer">&#xe606;</span>Jpa</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="QueryDSL"><span class="iconfont-archer">&#xe606;</span>QueryDSL</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="SpringSecurity"><span class="iconfont-archer">&#xe606;</span>SpringSecurity</span>
+    
+        <span class="sidebar-tag-name" data-tags="ETC"><span class="iconfont-archer">&#xe606;</span>ETC</span>
+    
+        <span class="sidebar-tag-name" data-tags="bulletjournal"><span class="iconfont-archer">&#xe606;</span>bulletjournal</span>
+    
+        <span class="sidebar-tag-name" data-tags="Batch"><span class="iconfont-archer">&#xe606;</span>Batch</span>
+    
+        <span class="sidebar-tag-name" data-tags="DDD"><span class="iconfont-archer">&#xe606;</span>DDD</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linear"><span class="iconfont-archer">&#xe606;</span>Linear</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Maven"><span class="iconfont-archer">&#xe60a;</span>Maven</span>
+    
+        <span class="sidebar-category-name" data-categories="Mybatis"><span class="iconfont-archer">&#xe60a;</span>Mybatis</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+        <span class="sidebar-category-name" data-categories="Spring"><span class="iconfont-archer">&#xe60a;</span>Spring</span>
+    
+        <span class="sidebar-category-name" data-categories="MessageQ"><span class="iconfont-archer">&#xe60a;</span>MessageQ</span>
+    
+        <span class="sidebar-category-name" data-categories="JPA"><span class="iconfont-archer">&#xe60a;</span>JPA</span>
+    
+        <span class="sidebar-category-name" data-categories="Vue"><span class="iconfont-archer">&#xe60a;</span>Vue</span>
+    
+        <span class="sidebar-category-name" data-categories="Tips"><span class="iconfont-archer">&#xe60a;</span>Tips</span>
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="CS"><span class="iconfont-archer">&#xe60a;</span>CS</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="Jquery"><span class="iconfont-archer">&#xe60a;</span>Jquery</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="Issue"><span class="iconfont-archer">&#xe60a;</span>Issue</span>
+    
+        <span class="sidebar-category-name" data-categories="Java"><span class="iconfont-archer">&#xe60a;</span>Java</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Javascript"><span class="iconfont-archer">&#xe60a;</span>Javascript</span>
+    
+        <span class="sidebar-category-name" data-categories="Jenkins"><span class="iconfont-archer">&#xe60a;</span>Jenkins</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="TDD"><span class="iconfont-archer">&#xe60a;</span>TDD</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Gitlab"><span class="iconfont-archer">&#xe60a;</span>Gitlab</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Kotlin"><span class="iconfont-archer">&#xe60a;</span>Kotlin</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="SpringBatch"><span class="iconfont-archer">&#xe60a;</span>SpringBatch</span>
+    
+        <span class="sidebar-category-name" data-categories="Hanghae"><span class="iconfont-archer">&#xe60a;</span>Hanghae</span>
+    
+        <span class="sidebar-category-name" data-categories="Linear"><span class="iconfont-archer">&#xe60a;</span>Linear</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

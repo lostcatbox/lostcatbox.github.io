@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">2k</span>Reading time: <span class="post-count reading-time">12 min</span></span>
+                        <span>Word count: <span class="post-count word-count">2.4k</span>Reading time: <span class="post-count reading-time">14 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -563,6 +563,75 @@ brandName: &quot;뉴진스&quot; 1/ NJZ
 <li>동시성 문제를 해결은 하지않아도되지만 ADR 보고, </li>
 <li>동시성 테스트 작성후 실패를 일어나게 하면됨.</li>
 </ul>
+<h1 id="백엔드-8기-4주차-평일-Q-amp-A"><a href="#백엔드-8기-4주차-평일-Q-amp-A" class="headerlink" title="백엔드 8기 4주차 평일 Q&amp;A"></a>백엔드 8기 4주차 평일 Q&amp;A</h1><h2 id="질문1"><a href="#질문1" class="headerlink" title="질문1"></a>질문1</h2><ul>
+<li>통합테스트시 파사드부터 진행하면될까요?</li>
+</ul>
+<h2 id="답변"><a href="#답변" class="headerlink" title="답변"></a>답변</h2><ul>
+<li>파사드는 사실상 통합테스트가 필요없다. -&gt; 파사드의 비즈니스 로직없으니까.<ul>
+<li>도메인 주도 설계를 했다면, 각 도메인 서비스와 도메인 모델의 비즈니스 로직들이 각자의 책임을 이미 테스트하고있기때문이다</li>
+<li>파사드에서 조립했는데, 잘못될 확률은 극히 낮다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="질문2"><a href="#질문2" class="headerlink" title="질문2"></a>질문2</h2><ul>
+<li>JPA연관관계 안쓰고 Long userId처럼 쓰는분, 어떤분은 @OneToMany, @ManyToOne 사용한 연관관계 사용. 그리고 라이프사이클 같은 도메인끼리 사용?</li>
+</ul>
+<h2 id="답변2"><a href="#답변2" class="headerlink" title="답변2"></a>답변2</h2><ul>
+<li>네, 라이프사이클이 완전히 동일한 경우에만, 연관관계를 매핑하며, 나머지는 id값만 해놓습니다.<ul>
+<li>연관관계 사용 케이스 : Order-OrderItem 서로 생성될려면 서로 필요함</li>
+<li>연관관계 사용 안하는 케이스 : User-coupon은 도메인, 생명주기가 다름. Coupon은 단순한 userId값으로만 들고있다고생각함.</li>
+<li>MSA로 분리될때, 모든 연관관계를 처리하는것은 비추합니다. </li>
+</ul>
+</li>
+</ul>
+<h2 id="질문3"><a href="#질문3" class="headerlink" title="질문3"></a>질문3</h2><ul>
+<li>실무에서는 db에 fk를 안거는데, 왜그런건가요?</li>
+</ul>
+<h2 id="답변3"><a href="#답변3" class="headerlink" title="답변3"></a>답변3</h2><ul>
+<li>물리적 fk를 걸면, 데이터를 이관하거나 삭제하기가 매우 힘들어지고, 동일 트랜잭션에서 부모 자식에서 fk락이 걸린다.</li>
+<li>논리적 fk는 많이건다</li>
+</ul>
+<h2 id="질문4"><a href="#질문4" class="headerlink" title="질문4"></a>질문4</h2><ul>
+<li>보고서 작서잇, 인덱스 적용후 쿼리 테스트 1만건? , 쿼리 튜닝 결과에 대해서는<br>쿼리 실행 계획 첨부 후 인덱스가 잘 탓는지, 실행 시간 줄었는지 검토?</li>
+</ul>
+<h2 id="답변4"><a href="#답변4" class="headerlink" title="답변4"></a>답변4</h2><ul>
+<li>보고서 작성 전에, 해당 service가 왜 동시성 이슈가 있으며, 어떤 식으로 해결하려고했고,<ul>
+<li>DB 옵티마이져 입장에서는 table의 카디널리티가 있는 테스트 데이터가 있어야 테스트 데이터 의미가 존재하며,</li>
+<li>어떤 테스트 기법?</li>
+<li>어떤 테스트 도구들을 활용해서 테스트 해볼껀지?<ul>
+<li>Grafana k6를 활용하여 부하 테스트 한번해봐라</li>
+</ul>
+</li>
+<li>어떤 것을 검증할것인지?</li>
+</ul>
+</li>
+</ul>
+<h2 id="질문5"><a href="#질문5" class="headerlink" title="질문5"></a>질문5</h2><ul>
+<li>coupon과 product가있는데, 고객사가 특정 product에 coupon을 사용할수없게 하는 기능을 추가해달라고했다. 과연 product 테이블에 can_use_coupon: boolean을 설계하는것이 좋은것인가? 아니라면 어떤점이 안좋고, 더 좋은 방법은 없나?</li>
+</ul>
+<h2 id="답변5"><a href="#답변5" class="headerlink" title="답변5"></a>답변5</h2><ul>
+<li>??</li>
+</ul>
+<h2 id="질문6"><a href="#질문6" class="headerlink" title="질문6"></a>질문6</h2><ul>
+<li>DB테이블에는 외래 키 제약조건을 걸지 않고, 애플리케이션 레벨에서 연관관계를 맺어도 괜찮을까요?</li>
+</ul>
+<h2 id="답변6"><a href="#답변6" class="headerlink" title="답변6"></a>답변6</h2><ul>
+<li>네 꼭 그렇게하세요</li>
+</ul>
+<h2 id="질문7"><a href="#질문7" class="headerlink" title="질문7"></a>질문7</h2><ul>
+<li>검색쿼리 최적화방법?</li>
+</ul>
+<h2 id="답변-7"><a href="#답변-7" class="headerlink" title="답변 7"></a>답변 7</h2><ul>
+<li>엘라스틱 서치 사용중 </li>
+</ul>
+<h2 id="질문-8"><a href="#질문-8" class="headerlink" title="질문 8"></a>질문 8</h2><ul>
+<li>CQRS 분리</li>
+</ul>
+<h2 id="답변-8"><a href="#답변-8" class="headerlink" title="답변 8"></a>답변 8</h2><ul>
+<li>Repository 에서 save, find등으로 이미 메서드명으로 분리되는데 구지?</li>
+<li>물론 Reader에서 캐시, 슬레이브 DB를 바라보고, Command에서는 마스터DB를 바라보면 인프라에서 분리하는것은 좋아보임</li>
+<li>가장 어려웟던 코드 -&gt; 광고가 3,3,3 9개가 노출, 첫번째부터 맨끝까지 가격이 달라야함. 위에잇는 광고는 돈많이, 마지막 광고는 적게, 3번째 상품이 제일 클릭률이 높앗고, 이를 옵티마이즈, 오른쪽 3번째 등등 조건을 가중평균 등등 실시간 옵티마이즈 계속 실시간성, 조회성능이 좋아..</li>
+</ul>
 
     </article>
     <!-- license  -->
@@ -570,6 +639,11 @@ brandName: &quot;뉴진스&quot; 1/ NJZ
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2025/04/22/hanghae-5week/" title= "(항해) 5주차 서버 동시성 설계 및 테스트">
+                    <div class="nextTitle">(항해) 5주차 서버 동시성 설계 및 테스트</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -707,7 +781,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Domain-Entity"><span class="toc-number">1.</span> <span class="toc-text">Domain, Entity</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Sync-Schedule-Strategy"><span class="toc-number">1.0.1.</span> <span class="toc-text">Sync Schedule Strategy</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#반드시-동시성-테스트-시-ADR-작성하기"><span class="toc-number">2.</span> <span class="toc-text">반드시 동시성 테스트 시 ADR 작성하기</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Domain-Entity"><span class="toc-number">1.</span> <span class="toc-text">Domain, Entity</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Sync-Schedule-Strategy"><span class="toc-number">1.0.1.</span> <span class="toc-text">Sync Schedule Strategy</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#반드시-동시성-테스트-시-ADR-작성하기"><span class="toc-number">2.</span> <span class="toc-text">반드시 동시성 테스트 시 ADR 작성하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#백엔드-8기-4주차-평일-Q-amp-A"><span class="toc-number">3.</span> <span class="toc-text">백엔드 8기 4주차 평일 Q&amp;A</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#질문1"><span class="toc-number">3.1.</span> <span class="toc-text">질문1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#답변"><span class="toc-number">3.2.</span> <span class="toc-text">답변</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#질문2"><span class="toc-number">3.3.</span> <span class="toc-text">질문2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#답변2"><span class="toc-number">3.4.</span> <span class="toc-text">답변2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#질문3"><span class="toc-number">3.5.</span> <span class="toc-text">질문3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#답변3"><span class="toc-number">3.6.</span> <span class="toc-text">답변3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#질문4"><span class="toc-number">3.7.</span> <span class="toc-text">질문4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#답변4"><span class="toc-number">3.8.</span> <span class="toc-text">답변4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#질문5"><span class="toc-number">3.9.</span> <span class="toc-text">질문5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#답변5"><span class="toc-number">3.10.</span> <span class="toc-text">답변5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#질문6"><span class="toc-number">3.11.</span> <span class="toc-text">질문6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#답변6"><span class="toc-number">3.12.</span> <span class="toc-text">답변6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#질문7"><span class="toc-number">3.13.</span> <span class="toc-text">질문7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#답변-7"><span class="toc-number">3.14.</span> <span class="toc-text">답변 7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#질문-8"><span class="toc-number">3.15.</span> <span class="toc-text">질문 8</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#답변-8"><span class="toc-number">3.16.</span> <span class="toc-text">답변 8</span></a></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
@@ -4927,9 +5001,116 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 244
+        Total : 249
         </div>
         <!-- search  -->
         
@@ -4942,6 +5123,36 @@ top:50vh;
     
     <div class="archive-year"> 2025 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/17</span><a class="archive-post-title" href= "/2025/05/17/hanghae-9week/" >hanghae-9week</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/17</span><a class="archive-post-title" href= "/2025/05/17/hanghae-8week/" >hanghae-8week</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span><a class="archive-post-title" href= "/2025/05/10/hanghae-7week/" >hanghae-7week</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2025/04/26/linear-use-manual/" >리니어 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2025/04/26/hanghae-6week/" >hanghae-6week</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2025/04/22/hanghae-5week/" >(항해) 5주차 서버 동시성 설계 및 테스트</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -4971,11 +5182,6 @@ top:50vh;
     
         <li class="archive-post-item">
             <span class="archive-post-date">03/24</span><a class="archive-post-title" href= "/2025/03/24/hanghae-1week/" >(항해) 1주차 TDD 자료 정리 및 동시성 자료 정리</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/24</span><a class="archive-post-title" href= "/2025/03/24/hanghae-1week-wil/" >(항해) 1주차 wil</a>
         </li>
     
     
@@ -6458,6 +6664,8 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="DDD"><span class="iconfont-archer">&#xe606;</span>DDD</span>
     
+        <span class="sidebar-tag-name" data-tags="Linear"><span class="iconfont-archer">&#xe606;</span>Linear</span>
+    
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -6614,6 +6822,8 @@ jsonContent:
         <span class="sidebar-category-name" data-categories="SpringBatch"><span class="iconfont-archer">&#xe60a;</span>SpringBatch</span>
     
         <span class="sidebar-category-name" data-categories="Hanghae"><span class="iconfont-archer">&#xe60a;</span>Hanghae</span>
+    
+        <span class="sidebar-category-name" data-categories="Linear"><span class="iconfont-archer">&#xe60a;</span>Linear</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
