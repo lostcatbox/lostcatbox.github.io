@@ -276,7 +276,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">562</span>Reading time: <span class="post-count reading-time">3 min</span></span>
+                        <span>Word count: <span class="post-count word-count">857</span>Reading time: <span class="post-count reading-time">5 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -457,79 +457,106 @@ height:50vh;
 </li>
 </ul>
 <h1 id="공개-Q-A"><a href="#공개-Q-A" class="headerlink" title="공개 Q/A"></a>공개 Q/A</h1><ul>
-<li>파사드 없이 이벤트로만 하려면 요청의 시작은 어떻게 해야하나요? 예를 들어, 주문의 경우에는 주문 서비스에서 먼저 주문 상태를 변경하는 것으로 시작하고 그 이벤트를 전파하는 형태로 가야하는건가요?<ul>
-<li>유저 입장에서는 주문을 결제한다. ., 즉 시작점은 주문을 결제하는것이다. </li>
-<li>맞아요</li>
+<li><p>current offset 은 유실 될 가능성은 없나요? 예를들어, 서버에서 1, 2번 offset 을 처리했는데, offset 2번까지 읽었다라는 내용이 유실되어 카프카에 업데이트 되지 않는다던지.. 혹은 1, 2번 offset 을 읽고 서버 처리를 시작했는데, 서버가 중단되어 1,2 번이 읽었다고 카프카에 처리가 되어있는데, 실질적으로 서비스 처리가 되지 않았다라던지 같은 문제요.</p>
+<ul>
+<li><p>컨슈머가 다음 메시지를 줘~ 브로커가 다음 메시지를 알아서 주는 구조는 정확히는 아닙니다.<br>브로커는 각 컨슈머의 current offset을 직접 관리해주지는 않습니다. current-offset은 브로커의 별도 내부 토픽에 저장되긴합니다.</p>
+</li>
+<li><p>auto-commit: 1번 메시지를 poll(조회)하고, 1번 메시지를 커밋(commit)하고 2번 메시지를 처리… max.poll.count 한번에 데이터를 조회하는 개수를 설정할 수 있어요. default: 500. 메시지를 bulk로 조회하고 한번에 커밋(manual)하고 따로 커밋 액션을 하지 않더라도 백그라운드에서 커밋을 호출해서 메시지를 읽었다고 표시해요.</p>
+<ul>
+<li>이런 관점에서 발생할 수 있는 다양한 이슈가 있을 수 있죠.</li>
+<li>auto-commit이 아닌 manual-commit으로 처리하거나, max.poll.count를 1로 줄이거나, auto.commit.interval.ms을 늘리거나..</li>
 </ul>
 </li>
-</ul>
+<li><p><strong>Offset Commit, Auto-commit, Manual-commit</strong></p>
 <ul>
-<li><p>각 도메인의 이벤트 객체, 이벤트 발행서비스, 이벤트 구독서비스(샘플 코드에 있는 <code>PaymentSuccessEvent</code>, <code>PaymentEventPublisher</code>, <code>PaymentEventListener</code>)는  클린 레이어드 아키텍처 구조에서 어느 레이어에 위치해야 할까요?  만약, 도메인 레이어에 위치해야 한다면 MSA 구조에서는 상관 없겠지만 <strong>다른 도메인의 서비스를 호출해서 DIP</strong>에 위배될 것 같은데 코치님 의견이 궁금합니다!<br>MSA에서는 잘은 모르지만 <code>StockClient</code> 같은 걸 주입받기 때문에 DIP는 위배되지 않는 것 같습니다.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">package kr.hhplus.be.ecommerce.domain.payment; &#x2F;&#x2F; 📦 결제 도메인 패키지</span><br><span class="line"></span><br><span class="line">@Component</span><br><span class="line">public class PaymentEventListener &#123;</span><br><span class="line"></span><br><span class="line">    private final StockService stockService; &#x2F;&#x2F; ⚠️ 재고 도메인 서비스를 직접 주입받아 DIP 위배</span><br><span class="line"> </span><br><span class="line">    public PaymentEventListener(StockService stockService) &#123;</span><br><span class="line">        this.stockService &#x3D; stockService;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Async</span><br><span class="line">    @TransactionalEventListener(phase &#x3D; TransactionPhase.AFTER_COMMIT)</span><br><span class="line">    public void paymentSuccessHandler(PaymentSuccessEvent event) &#123;</span><br><span class="line">        PaymentSuccessPayload payload &#x3D; new PaymentSuccessPayload(event);</span><br><span class="line">        stockService.deduct(payload); &#x2F;&#x2F; 📌 재고 차감</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>이벤트 발행은 주문, 이벤트 구독은 결제이다.</li>
-<li>단순히 이름이 Order라고해도, 구독해서 처리해야하는 비즈니스로직은 order 패키지가 아닌 payment 패키지에서 위치시킴.</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>여러 개의 @TransactionalEventListener(Async)로 비동기 후처리를 구성하려고 할 때, 예: “결제 완료 → 주문 정보 전송 → 영수증 발급”처럼 순서가 중요한 후속 작업이라면, 이벤트 리스너 간 순서 보장을 Spring 단에서 어떻게 처리할 수 있을까요? 또는 외부 시스템을 이용해야 할까요?<ul>
-<li>순서가 매우 중요하다면, 동기적+같은 Thread에서 처리해야함</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>파사드 안에서 각 서비스에 대한 성공/실패 이벤트가 필요한건가요?</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">결제파사드()&#123;</span><br><span class="line">결제 </span><br><span class="line">결제 기록</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>따로가 아니라 파사드 모두 성공했을경우, 이벤트 발행</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>특정 로직에서 2가지의 이벤트가 발행되는 경우도 있나요 ? 아니면 다수의 이벤트가 발행되어야 하는 경우에는 관심사가 많다고 판단하여 로직을 분리하는 것이 좋나요 ?<ul>
-<li>행위에 대한 성공, 실패가 나뉨. 행위에 다음로직을 포함하지않으므로<ul>
-<li>“결제완료” 이벤트 발생이 끝임</li>
-<li>2가지의 이벤트가 발행되는 케이스가 없음.</li>
+<li>카프카가 메시지를 중복처리하지 않게하는 방법들</li>
+<li>카프카가 메시지를 유실처리하지 않게하는 방법들</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 <ul>
-<li><p>이벤트를 어떻게 정의해하고 호출하고 리스닝할지 고민하던 중. 아래와같은 고민이 생겼습니다.</p>
-<ol>
-<li><p>이벤트가 도메인에만 정의될 수 있을까요? 어플리케이션에도 정의가 필요할까요?</p>
-<ol>
-<li>도메인에서는 dto개념이라, 애플리케이션에서 구현함</li>
-</ol>
-</li>
-<li><p>이벤트를 호출하는 것은 어플리케이션 레이어와 도메인 중 어디에서 해야할까요?</p>
-<ol>
-<li>애플리케이션에서 event발생, 호출하는것도 발생</li>
-</ol>
-</li>
-<li><p>이벤트 리스닝은 어플리케션 레이어에서만 하면 될까요?</p>
-<ol>
-<li>애플리케이션에서 리스닝함.</li>
-</ol>
-</li>
-</ol>
+<li>아까 Partition의 개수는 줄일 수 없다고 하셨었는데, 그렇다면 Consumer의 개수는 자유롭게 조정이 가능한 건가요?<ul>
+<li>파티션은 카프카 브로커의 설정 정보에요. 컨슈머는 브로커에 연결하는 클라이언트의 수 이기 때문에 컨슈머는 scale out 이 가능 -&gt; 처리량을 늘리고 싶을 때는 컨슈머 팟 개수를 늘릴 수 있습니다. </li>
+<li>브로커 설정은 컨슈머 수에 비해서는 정적인 설정에 가깝습니다. 잘 변경하지 않습니다.</li>
+</ul>
 </li>
 </ul>
 <ul>
-<li><p>외부 API호출 에 대해서 어플리케이션 레이어에서 포트인터페이스를 만들고, 인프라스트럭쳐에서 그 포트를 구현해줘도 괜찮을까요? 아니면 무조건 도메인을 통해서 호출하시는 것을 선호하시나요? </p>
-<ul>
-<li>인터페이스의 호출만 하면됨. 구현체는 그냥 단순히 Bean</li>
+<li>카프카에서 컨슈머가 오프셋을 수동으로 커밋할때, 커밋을 안하면(처리 실패) 다음 오프셋으로 안넘어가고 현재 오프셋에 계속 멈춰있는건가요?<br>그렇다면 커밋 실패시 다른 메시지들을 처리를 못하니 병목현상이 발생하는게 아닐까 싶습니다.<ul>
+<li>맞아요. 그래서 이 메시지의 실패가 다음 메시지로 넘어갈 수 없기 때문에 DLQ 등의 부가적인 설정들이 필요해요. </li>
+<li>순차 보장때문에라도, 같은 토픽에서 메시지 실패에서 다음 메시지로 넘어갈수없게 정책을 가져가는것이맞음</li>
+<li>실패된 메시지에 따른 정책 설정 <ul>
+<li>카프카 라이브러리를 활용할때 프로듀서의 설정으로 재시도 정책을 설정하거나 DLQ(Dead Letter Queu)를 설정하는 것이 쉽게 가능해요. </li>
 </ul>
 </li>
-<li><p>이벤트 기반 아키텍처인 경우, 서비스 전체 파악은 어떻게 진행되나요? (주문 완료가 일어나면 무슨 일들이 일어나나)    </p>
-<p>A이벤트 발행B에서 A 수신 → B’ 이벤트 발행C에서 B’이벤트 수신 → C’ 발행D에서 A 수신 → ………E에서 C’ 이벤트 수신 → …</p>
-<p>이렇게 진행될 경우 전체적인 흐름 파악이 어려워 관리가 어려울 것 같은데.. 전체 흐름 파악 필요도 없다고도 보시는 것인지.. 다른 방법이 있는 것인지 궁금합니다</p>
+</ul>
+</li>
+</ul>
 <ul>
-<li>이벤트 기반 아키텍처의 가장 큰 단점. </li>
+<li>AWS SQS에서는 메시지 수집시 커밋이 되지 않은 메시지를 N번 재발행하는 기능과 N번 실패시 DLQ로 보내는 기능이 존재하는데요.,<br>카프카에도 비슷한 기능이 존재할까요? 컨슈머의 실패 처리를 어떻게 해야할지 고민입니다. <ul>
+<li>위의 답변과 동일함</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>현업에서 카프카 설정 시에, 리밸런싱을 최대한 억제하기 위해서는 어느 정도의 컨슈머 개수와 파티션 개수를 설정해야 적당할까요?<ul>
+<li>리벨런싱을 최소화하는게 처리량 관점에서 중요해요. 컨슈머 개수와 파티션 개수를 적절하게 설정해야한 것은 연관성이 조금 달라요. 파티션과 컨슈머 수를 같게 유지하는게 도움이 되겠지만, 배포시점이나 특정 컨슈머의 장애 혹은 지연처리 등으로 리벨런싱은 항상 발생할 수 있어요.</li>
+<li>max.poll.interval.ms, heartbeat.interval.ms 두가지 속성으로 리벨런싱을 결정하는데 값을 조정하면서 리벨런싱을 최소화 할 수도 있음</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>카프카 토픽에 저장된 데이터는 “일시적으로 영속화” 되는 것으로 이해했습니다. 하지만 RDB처럼 무기한 저장을 보장하지는 않을 것 같은데, 현업에서는 보관 정책? 주기?를 어떻게 설정하시나요?<ul>
+<li>리텐션 정책. 이 저장된 메시지들을 얼마나 저장할까?<ul>
+<li>기간단위</li>
+<li>용량단위</li>
+</ul>
+</li>
+<li>현업에서는 저는 항상 기간단위 리텐션 정책을 활용. 기본값: 7일(아마도)<ul>
+<li>우리가 컨슈머 메시지를 제대로 처리하지 못했을때 메시지를 다시 읽어야 하는데 너무 빨리 메시지가 삭제되면 복구가 불가능하고, </li>
+<li>또 너무 길게 하면 카프카의 특성상 과거데이터는 사용될 일이 거의 없기 때문에 저장공간의 비효율을 야기할 수 있습니다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>이벤트 페이로드를 구성할 때, Zero-Payload 및 Full-Payload 방식이 있는 것으로 학습했습니다.<br>각 방식마다 장단점이 있지만 실무에서는 어떤 방식을 주로 적용하는지 궁금합니다.<ul>
+<li><strong>Zero-Payload:</strong> <ul>
+<li><strong>메시지의 양이 많고 컨슈머가 다양해서 원하는 데이터가 다 다를때 보통 이런 형태를 활용해요.</strong></li>
+<li>ex) 결제 완료 카프카 메시지:  <ul>
+<li>paymentId..</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Full-Payload:</strong><ul>
+<li><strong>메시지의 양이 너무 많은데, 이 메시지를 발행할때마다 추가 정보를 얻기 위해 API 호출 등의 부가 작업이 무겁다고 판단되면 메시지에 컨슈머가 원하는 모든 내용들을 담아서 전달해요.</strong></li>
+<li>모든 컨슈머가 동일한 형태의 이벤트 바디를 원하는 경우</li>
+<li>1:1 이벤트 발행 컨슘 관계인 경우..</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>아직 Kafka에 대한 이해도가 낮아서 그런지, Try if you want 부분이 모호하게 느껴집니다.<br>Kafka를 애플리케이션 내에서만 활용하다가 외부 모듈로 분리해보라는 의미일까요?<ul>
+<li>어플리케이션 이벤트 발행을 카프카로 발행하고 어플리케이션 이벤트 리스너도 카프카 컨슈머로 변경하고. 어플리케이션 이벤트는 트랜잭션을 같이 물고 처리하거나(BEFORE_COMMIT, AFTER_COMMIT) 할 수 있기 때문에 일반적으로 application layer에서 설정해요.</li>
+<li>그런데 카프카 컨슈머는 시스템의 인입단계로 보기 때문에 interface layer라고 보는 경우가 더 많아요. consumer layer라고 만드는 경우도 있고요. 어쨋든 트랜잭션을 관리하는 application 외부 layer가 될거에요. 그래서 이 변경까지 함께 고려해서 적용한다면 우리 서비스가 배포단위가 분리되더라도 별다른 코드작업 없이 분리가 가능할 것이다.</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>Kafaka 구동 할려고 검색 해보니까 Zookeeper에 대한 내용도 나오는데..  Zookeeper에 대한 간단하게 알려줄수 있을까요? 그리고 이번 과제에서 Zookeeper에 대한것도 알아야 될까요?<ul>
+<li>전에는 카프카가 주키퍼를 필수로 연결해서 운영했어야만 했는데, 요즘에는 주키퍼 없이 카프카를 운영할 수 있어요.</li>
+<li>주키퍼가 하는일이 카프카의 컨트롤러가 하는일을 주키퍼가 해줘요.주키퍼는 컨트롤러 선출만 도와줍니다.</li>
+<li>주키퍼가 하는 주요 역할<ul>
+<li>메타데이터 관리</li>
+<li>컨트롤러 선출</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
