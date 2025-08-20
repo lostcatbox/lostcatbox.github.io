@@ -1,0 +1,7514 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Seungwon Yang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Seungwon Yang">
+    
+    <meta name="keywords" content="hexo,Python,Go to Full-Stack">
+    
+    <meta name="description" content="생각을 자유롭게 만들때까지">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>(책 리뷰) it 영어 온보딩 가이드 · lostcatbox</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/img_0187_mRG_icon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >LostCatBox</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">(책 리뷰) it 영어 온보딩 가이드</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>LostCatBox</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            (책 리뷰) it 영어 온보딩 가이드
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Review">Review</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">1.4k</span>Reading time: <span class="post-count reading-time">8 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2025/07/14</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="책을-읽은-이유"><a href="#책을-읽은-이유" class="headerlink" title="책을 읽은 이유"></a>책을 읽은 이유</h1><ul>
+<li><p>과거에 발생한 문제 설명</p>
+<ul>
+<li><p>상황 : 메시지 발송 자동화 프로그램 개발 당시, 메시지 발송 전에 메시지 객체를 구성해주는 서비스를 <code>MessageCombineService</code> 로 명명하였다</p>
+</li>
+<li><p>문제: <code>Combine</code>의 의미는 단순히 단어 및 문장을 결합하는 의미이다. 이로 인해 팀원들이 <code>MessageCombineService</code>를 단순히 안내 문구들을 조합해주는 서비스로 오인하였다.</p>
+</li>
+<li><p>원인: 해당 서비스의 책임은 안내 문구 작성 및 메시지 객체를 구성해주는 역할을 하고 있었다</p>
+</li>
+<li><p>해결: 기존 서비스명에서 메시지를 구성해주는 기능에 적절한  <code>Composer</code> 로 이름을 변경하였다</p>
+<ul>
+<li><code>MessageCombineService</code> -&gt; <code>MessageComposer</code> </li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>문제의 핵심 요약</p>
+<ul>
+<li>프로그램 개발 시 클래스명, 속성명 등 이름을 작성하게 된다<br>이때, 본인은 <strong>대상의 목적과 책임을 명확히 설명할 수 있는 이름</strong>을  충분히 고민하지 않고 작성하였다<br>이로 인해 팀 구성원들에게 해당 클래스 책임에 오해를 불러일으켰다</li>
+</ul>
+</li>
+<li><p>해결책 및 결론</p>
+<ul>
+<li>이름을 작성 시 <strong>대상의 목적과 책임을 명확히 설명할 수 있는 이름</strong>을 정한다</li>
+<li>it 분야의 단어들을 해당 서적을 통해 배우고 이를 통해 실무에서 보다 정확한 개발용어 사용한다</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="책의-서론"><a href="#책의-서론" class="headerlink" title="책의 서론"></a>책의 서론</h1><h2 id="도움되는-영상-모음"><a href="#도움되는-영상-모음" class="headerlink" title="도움되는 영상 모음"></a>도움되는 영상 모음</h2><ul>
+<li><a href="https://www.youtube.com/live/fBlf_vml5w4?si=WIMoTucw_xl562Ie" target="_blank" rel="noopener">(필자 추천) 배민 유투브 - 글로벌 개발자로 성장하는…</a></li>
+<li><a href="https://youtube.com/playlist?list=PLU4NVN_p5BDJkq8DsMRTdQpLAvzlDoIDz&si=eOY77iGlowVVG5AI" target="_blank" rel="noopener">(필자 추천) 원어민 실제 발음 - 개발자를 위한 it 영어</a></li>
+</ul>
+<h2 id="영어의-언어적-특성"><a href="#영어의-언어적-특성" class="headerlink" title="영어의 언어적 특성"></a>영어의 언어적 특성</h2><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>영어</th>
+<th>한국어</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>어순</td>
+<td><strong>엄격함<br />(주어 반드시 필요)</strong></td>
+<td>비교적 자유로움<br />(주어 생략 가능)</td>
+</tr>
+<tr>
+<td>명사의 표현</td>
+<td>단/복수 구분 필요, 관사 필수</td>
+<td>단/복수 구분 필요, 관사 필수</td>
+</tr>
+<tr>
+<td>기본 문장 구조</td>
+<td>S + V + O <br /><strong>(동사 위치는 목적어 앞에 존재)</strong></td>
+<td>S + O + V</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="단어장"><a href="#단어장" class="headerlink" title="단어장"></a>단어장</h1><h2 id="테마-없는-단어장"><a href="#테마-없는-단어장" class="headerlink" title="테마 없는 단어장"></a>테마 없는 단어장</h2><table>
+<thead>
+<tr>
+<th>단어</th>
+<th>의미</th>
+<th>예문</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cast</td>
+<td>형 변환하다</td>
+<td></td>
+</tr>
+<tr>
+<td>resolve</td>
+<td>어떤 것의 주소나 위치를 찾거나 변환하다, 해결하다, 결심하다</td>
+<td>- Use a package manager to resolve dependencies<br>- The DNS server resolves the domain name into IP address</td>
+</tr>
+<tr>
+<td>commit</td>
+<td>변경된 내역을 저장소에 저장하다</td>
+<td></td>
+</tr>
+<tr>
+<td>patch</td>
+<td>버그 수정 및 기능 개선을 위해 기존 코드를 변경하다</td>
+<td></td>
+</tr>
+<tr>
+<td>sandbox</td>
+<td>안전한 환경에서 프로그램이나 코드를 테스트하는 격리된 공간</td>
+<td></td>
+</tr>
+<tr>
+<td>hook</td>
+<td>특정 이벤트가 발생할 때 실행되는 코드 또는 프로그램</td>
+<td></td>
+</tr>
+<tr>
+<td>scrape</td>
+<td>웹 페이지에서 데이터를 추출하다</td>
+<td></td>
+</tr>
+<tr>
+<td>mechanical pencil</td>
+<td>샤프</td>
+<td></td>
+</tr>
+<tr>
+<td>complimentary, free item</td>
+<td>무료 서비스</td>
+<td></td>
+</tr>
+<tr>
+<td>username</td>
+<td>아이디</td>
+<td></td>
+</tr>
+<tr>
+<td>overqualified</td>
+<td>오버스펙</td>
+<td></td>
+</tr>
+<tr>
+<td>renovation, redesign</td>
+<td>리모델링</td>
+<td></td>
+</tr>
+<tr>
+<td>customer complaint</td>
+<td>고객 클래임</td>
+<td></td>
+</tr>
+<tr>
+<td>Key member, Essential team member</td>
+<td>코어 멤버</td>
+<td></td>
+</tr>
+<tr>
+<td>in-person meeting</td>
+<td>오프라인 미팅</td>
+<td></td>
+</tr>
+<tr>
+<td>starting from scratch</td>
+<td>제로베이스</td>
+<td></td>
+</tr>
+<tr>
+<td>Front-end coding</td>
+<td>퍼블리싱</td>
+<td></td>
+</tr>
+<tr>
+<td>quote</td>
+<td>견적, 인용하다</td>
+<td></td>
+</tr>
+<tr>
+<td>agile</td>
+<td>민첩한</td>
+<td></td>
+</tr>
+<tr>
+<td>sprint</td>
+<td>단거리 전력 질주, 애자일 방법론에서의 개발 업무 주기의 짧은 단위</td>
+<td></td>
+</tr>
+<tr>
+<td>backlog</td>
+<td>로드맵을 달성하기 위해 개발되어야 하는 기능(task list)</td>
+<td></td>
+</tr>
+<tr>
+<td>hotfix</td>
+<td>긴급한 문제를 즉각 수정하기 위한 빠른 패치</td>
+<td></td>
+</tr>
+<tr>
+<td>nightly build</td>
+<td>개발 중인 소프트웨어의 상태를 하루에 한 번씩 자동으로 빌드하여 생성되는 버전</td>
+<td></td>
+</tr>
+<tr>
+<td>canary build</td>
+<td>소규모 사용자 그룹에게 배포되는 초기 버전의 소프트웨어</td>
+<td></td>
+</tr>
+<tr>
+<td>containerization</td>
+<td>애플리케이션을 실행 환경과 함께 격리된 컨테이너로 패키징하는 것</td>
+<td></td>
+</tr>
+<tr>
+<td>high availability</td>
+<td>고가용성</td>
+<td></td>
+</tr>
+<tr>
+<td>backward compatibility</td>
+<td>하위 호환성</td>
+<td></td>
+</tr>
+<tr>
+<td>partial outage</td>
+<td>부분적 장애</td>
+<td></td>
+</tr>
+<tr>
+<td>by default</td>
+<td>기본적으로, 디폴트로</td>
+<td>- the service requests the GPS permission by default</td>
+</tr>
+<tr>
+<td>bundle</td>
+<td>묶다, 추가로 주다, 묶음, 번들</td>
+<td></td>
+</tr>
+<tr>
+<td>render</td>
+<td>데이터와 UI 컴포넌트를 모아 웹 페이지를 만들다, 그래픽 요소를 그리다</td>
+<td></td>
+</tr>
+<tr>
+<td>opinionated</td>
+<td>체계와 시스템을 강하게 갖춘, 독선적인</td>
+<td></td>
+</tr>
+<tr>
+<td>mount</td>
+<td>편입시키다, 증가하다, 시작하다</td>
+<td></td>
+</tr>
+<tr>
+<td>optimize</td>
+<td>최적화하다</td>
+<td></td>
+</tr>
+<tr>
+<td>truncate</td>
+<td>짧게 하다, 잘라내다</td>
+<td>- The auth token needs to be truncated</td>
+</tr>
+<tr>
+<td>parse</td>
+<td>(문장이나 코드를) 분석하다, (기준에 따라 데이터를) 가공하여 해석하다</td>
+<td></td>
+</tr>
+<tr>
+<td>map</td>
+<td>(어떠한 대상과 다른 대상을) 연관시키다, 매핑하다</td>
+<td></td>
+</tr>
+<tr>
+<td>backward-compatible</td>
+<td>하위 호환되는</td>
+<td></td>
+</tr>
+<tr>
+<td>implement</td>
+<td>(도구나 수단을) 제공하다, (시스템이나 계획을) 활용하다, 도입하다, 구현하다, 도구</td>
+<td></td>
+</tr>
+<tr>
+<td>allocate</td>
+<td>(자원을) 할당하다, 배분하다</td>
+<td></td>
+</tr>
+<tr>
+<td>assign</td>
+<td>(메모리에) 값을 저장하다</td>
+<td></td>
+</tr>
+<tr>
+<td>compile</td>
+<td>명령을 번역하다, (여러 출처에서 자료를 가져와) 엮다</td>
+<td></td>
+</tr>
+<tr>
+<td>deprecate</td>
+<td>(사용 가능하지만) 구식이다, 권장하지 않는다</td>
+<td></td>
+</tr>
+<tr>
+<td>obsolete</td>
+<td>(사용 가능하지만) 구식이다, 권장하지 않는다</td>
+<td></td>
+</tr>
+<tr>
+<td>vulnerability</td>
+<td>(보안상의) 취약점</td>
+<td></td>
+</tr>
+<tr>
+<td>audit</td>
+<td>점검하다, 감사하다</td>
+<td></td>
+</tr>
+<tr>
+<td>indentation</td>
+<td>들여쓰기</td>
+<td></td>
+</tr>
+<tr>
+<td>recursive function</td>
+<td>재귀함수</td>
+<td></td>
+</tr>
+<tr>
+<td>nested</td>
+<td>중첩된</td>
+<td></td>
+</tr>
+<tr>
+<td>declare</td>
+<td>(변수, 함수,클래스 등) 선언하다</td>
+<td></td>
+</tr>
+<tr>
+<td>define</td>
+<td>(변수와 값이 메모리 할당되는) 선언하다</td>
+<td></td>
+</tr>
+<tr>
+<td>initialize</td>
+<td>(변수를 선언하고 값을) 초기화하다</td>
+<td></td>
+</tr>
+<tr>
+<td>traverse</td>
+<td>(자료구조 등을) 순회하다, 순회</td>
+<td></td>
+</tr>
+<tr>
+<td>instantiate</td>
+<td>(객체 등을) 인스턴스화하다</td>
+<td></td>
+</tr>
+<tr>
+<td>boilerplate</td>
+<td>반복되는 코드의 템플릿</td>
+<td></td>
+</tr>
+<tr>
+<td>flag</td>
+<td>옵션, 매개변수</td>
+<td></td>
+</tr>
+<tr>
+<td>binary</td>
+<td>실행 파일, 이진법</td>
+<td></td>
+</tr>
+<tr>
+<td>code of conduct</td>
+<td>행동 강령</td>
+<td></td>
+</tr>
+<tr>
+<td>semantic versioning</td>
+<td>의미적 버전 관리</td>
+<td></td>
+</tr>
+<tr>
+<td>deprecated</td>
+<td>권장되지 않거나 곧 제거되는(= phased out, obsolete)</td>
+<td></td>
+</tr>
+<tr>
+<td>if the condition is met</td>
+<td>조건이 충족되면</td>
+<td></td>
+</tr>
+<tr>
+<td>downtime</td>
+<td>가동 중단 시간</td>
+<td></td>
+</tr>
+<tr>
+<td>rolling updates</td>
+<td>일부 인스턴스부터 점진적으로 새로운 버전으로 교체하는 배포방식</td>
+<td></td>
+</tr>
+<tr>
+<td>code snippet</td>
+<td>코드 조각</td>
+<td></td>
+</tr>
+<tr>
+<td>toggle</td>
+<td>전환하다, 전환</td>
+<td></td>
+</tr>
+<tr>
+<td>compliance</td>
+<td>(가이드라인을) 준수하다</td>
+<td></td>
+</tr>
+<tr>
+<td>resume</td>
+<td>(중단된 작업을) 다시 시작하다. 재개하다</td>
+<td></td>
+</tr>
+<tr>
+<td>gracefully</td>
+<td>안정적으로</td>
+<td></td>
+</tr>
+<tr>
+<td>declarative</td>
+<td>선언적인</td>
+<td></td>
+</tr>
+<tr>
+<td>encapsulate</td>
+<td>캡슐화하다</td>
+<td></td>
+</tr>
+<tr>
+<td>under the hood</td>
+<td>내부적으로, 보이지 않는 곳에서</td>
+<td></td>
+</tr>
+<tr>
+<td>out-of-the-box</td>
+<td>기본 제공의, 즉시 사용 가능한</td>
+<td></td>
+</tr>
+<tr>
+<td>scaffold</td>
+<td>기본 구조를 생성하다, 초기 틀을 잡다</td>
+<td></td>
+</tr>
+<tr>
+<td>populate</td>
+<td>(배열, 객체 또는 DB에 데이터를) 채우다</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>agnostic</strong></td>
+<td>구애 받지 않는, 특정 플랫폼에 의존하지 않는</td>
+<td></td>
+</tr>
+<tr>
+<td>workload</td>
+<td>업무량, 작업량</td>
+<td></td>
+</tr>
+<tr>
+<td>cluster</td>
+<td>(하나의 시스템처럼 동작하는 서버 및 리소스의) 무리 모음</td>
+<td></td>
+</tr>
+<tr>
+<td>advertise</td>
+<td>(통신할 수 있도록) 드러내다, 보이다</td>
+<td></td>
+</tr>
+<tr>
+<td>interoperable</td>
+<td>서로 다른 시스템이나 소프트웨어가 원활하게 소통 가능한, 상호운용 가능한</td>
+<td></td>
+</tr>
+<tr>
+<td>prerequisites</td>
+<td>전제 조건, 사전 요구사항</td>
+<td></td>
+</tr>
+<tr>
+<td>deterministic</td>
+<td>예측가능한, 결정론적인, 같은 입력에 대해 항상 같은 출력을 내는</td>
+<td></td>
+</tr>
+<tr>
+<td>overhead</td>
+<td>시스템이나 프로그램에서 작업을 수행하는데 소모되는 추가적인 자원이나 시간, 비용</td>
+<td></td>
+</tr>
+<tr>
+<td>decompose</td>
+<td>분해하다, 나누다</td>
+<td></td>
+</tr>
+<tr>
+<td>latency</td>
+<td>지연시간, 시스템의 반응 속도</td>
+<td></td>
+</tr>
+<tr>
+<td>redundant</td>
+<td>과잉의, 여분의</td>
+<td></td>
+</tr>
+<tr>
+<td>intermediate</td>
+<td>중간의</td>
+<td></td>
+</tr>
+<tr>
+<td>align well with</td>
+<td>일치하다, 동의하다</td>
+<td></td>
+</tr>
+<tr>
+<td>implement</td>
+<td>수행하다, 도입하다</td>
+<td></td>
+</tr>
+<tr>
+<td>robust</td>
+<td>견고한</td>
+<td></td>
+</tr>
+<tr>
+<td>prioritize</td>
+<td>우선시하다</td>
+<td></td>
+</tr>
+<tr>
+<td>stackholder</td>
+<td>이해관계자</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="테마가-있는-단어장"><a href="#테마가-있는-단어장" class="headerlink" title="테마가 있는 단어장"></a>테마가 있는 단어장</h2><h3 id="기호를-표현하는-영단어"><a href="#기호를-표현하는-영단어" class="headerlink" title="기호를 표현하는 영단어"></a>기호를 표현하는 영단어</h3><table>
+<thead>
+<tr>
+<th>단어</th>
+<th>기호</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>parentheses</td>
+<td><code>()</code></td>
+<td>발음 : 퍼렌티시스</td>
+</tr>
+<tr>
+<td>square brackets</td>
+<td><code>[]</code></td>
+<td></td>
+</tr>
+<tr>
+<td>curly brackets</td>
+<td><code>{}</code></td>
+<td></td>
+</tr>
+<tr>
+<td>angle brackets</td>
+<td><code>&lt;&gt;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>open angle bracket, less than sign</td>
+<td><code>&lt;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>close angle bracket, greater than sign</td>
+<td><code>&gt;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>hash, number sign, pround, sharp</td>
+<td><code>#</code></td>
+<td></td>
+</tr>
+<tr>
+<td>at sign, ampersat</td>
+<td><code>@</code></td>
+<td>발음 : 엠퍼세트</td>
+</tr>
+<tr>
+<td>exclamation mark</td>
+<td><code>!</code></td>
+<td>발음 : 엑스클레메이션, <br />관련 단어 : exclam - 외치다</td>
+</tr>
+<tr>
+<td>percent sign</td>
+<td><code>%</code></td>
+<td></td>
+</tr>
+<tr>
+<td>asterisk, star</td>
+<td><code>*</code></td>
+<td></td>
+</tr>
+<tr>
+<td>caret</td>
+<td><code>^</code></td>
+<td>발음 : 캐럿</td>
+</tr>
+<tr>
+<td>dollar sign</td>
+<td><code>$</code></td>
+<td></td>
+</tr>
+<tr>
+<td>tilde</td>
+<td><code>~</code></td>
+<td></td>
+</tr>
+<tr>
+<td>question mark</td>
+<td><code>?</code></td>
+<td></td>
+</tr>
+<tr>
+<td>colon</td>
+<td><code>:</code></td>
+<td></td>
+</tr>
+<tr>
+<td>semicolon</td>
+<td><code>;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>hyphen</td>
+<td><code>-</code></td>
+<td></td>
+</tr>
+<tr>
+<td>underscore</td>
+<td><code>_</code></td>
+<td></td>
+</tr>
+<tr>
+<td>backslash</td>
+<td><code>\</code></td>
+<td></td>
+</tr>
+<tr>
+<td>backtick</td>
+<td><strong>`</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>double quotation marks</td>
+<td><code>&quot;&quot;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>single quotation mark</td>
+<td><code>&#39;&#39;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>comma</td>
+<td><code>,</code></td>
+<td></td>
+</tr>
+<tr>
+<td>vertical bar, pipe</td>
+<td>`</td>
+<td>`</td>
+</tr>
+<tr>
+<td>period, dot</td>
+<td><code>.</code></td>
+<td></td>
+</tr>
+<tr>
+<td>ampersand, and sign</td>
+<td><code>&amp;</code></td>
+<td>발음 : 엠퍼센드</td>
+</tr>
+<tr>
+<td>plus sign</td>
+<td><code>+</code></td>
+<td></td>
+</tr>
+<tr>
+<td>equal sign</td>
+<td><code>=</code></td>
+<td></td>
+</tr>
+<tr>
+<td>forward sign</td>
+<td><code>/</code></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="전치사-단어장"><a href="#전치사-단어장" class="headerlink" title="전치사 단어장"></a>전치사 단어장</h3><table>
+<thead>
+<tr>
+<th>전치사</th>
+<th>설명</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>On</strong></td>
+<td>스크린으로 소통하는 서비스(애플리케이션, SNS 등등) 또는 컴퓨터, 네트워크, 저장 장치와의 관계를 나타낸다</td>
+<td>- The module located on the server will process the input data<br>- you can review the codebase on Github</td>
+</tr>
+<tr>
+<td><strong>In</strong></td>
+<td>데이터를 저장하거나 프로그램을 수행하는 공간 및 시스템과의 관계를 나타냅니다</td>
+<td>- This API example written in the document is kind of confusing<br>- we’ve found a critical bug in the system</td>
+</tr>
+<tr>
+<td><strong>At</strong></td>
+<td>전치사 In보다 더 좁은 범위로 특정한 시간 및 공간과의 관계를 나타냅니다</td>
+<td>- I have worked at Google since 2008<br>- You can find more information at <a href="http://www.example" target="_blank" rel="noopener">www.example</a>….</td>
+</tr>
+<tr>
+<td><strong>To</strong></td>
+<td>방향성을 내포하여, 시간, 공간, 데이터 등이 작용하는 다른 대상과의 관계를 나타낸다</td>
+<td>- This code passes arguments to the function we defined above</td>
+</tr>
+</tbody></table>
+<h3 id="자주-사용되는-축약어"><a href="#자주-사용되는-축약어" class="headerlink" title="자주 사용되는 축약어"></a>자주 사용되는 축약어</h3><table>
+<thead>
+<tr>
+<th>약어</th>
+<th>원어</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MVP</td>
+<td>Minimum Viable Product</td>
+<td>테스터 고객에게 피드백을 받기 위한 최소한의 기능을 구현한 제품</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>Pull Request</td>
+<td>원본 저장소에 반영해달라고 요청하는 절차</td>
+</tr>
+<tr>
+<td>UX</td>
+<td>user experience</td>
+<td>사용자가 제품 및 서비스를 사용하며, 직간접적으로 느끼는 총체적 경험</td>
+</tr>
+<tr>
+<td>API</td>
+<td>Application Programming Interface</td>
+<td>소프트웨어 구성 요소가 서로 통신할 수 있도록 하는 인터페이스</td>
+</tr>
+<tr>
+<td>Saas</td>
+<td>Software as a Service</td>
+<td>서비스 제공자가 소프트웨어와 데이터를 관리하고, 사용자는 클라이언트를 사용하여 서비스를 사용하는 형태의 소프트웨어</td>
+</tr>
+<tr>
+<td>CMS</td>
+<td>Content Management System</td>
+<td>사용자가 디지털 콘텐츠를 생성, 편집, 발행하는 시스템</td>
+</tr>
+<tr>
+<td>GUI</td>
+<td>Graphic User Interface</td>
+<td>아이콘과 같은 그래픽 요소를 활용해서 컴퓨터와 상호작용하는 인터페이스</td>
+</tr>
+<tr>
+<td>WYSIWYG</td>
+<td>What you see is what you get</td>
+<td>편집 화면에 입력한 글자 등의 콘텐츠가 출력물에 동일하게 표시되는 방식</td>
+</tr>
+<tr>
+<td>CDN</td>
+<td>Content Delivery Network</td>
+<td>콘텐츠를 효율적으로 전달하기 위해 지리적으로 분산된 서버 집단</td>
+</tr>
+<tr>
+<td>RegEx</td>
+<td>Regular Expression</td>
+<td>문자열에서 특정 문자 조합을 찾거나 텍스트 검색 패턴을 지정하는 정규 표현식</td>
+</tr>
+<tr>
+<td>LGTM</td>
+<td>Looks Good To Me</td>
+<td>좋아 보입니다</td>
+</tr>
+<tr>
+<td>TL;DR</td>
+<td>Too Long; Didn’t Read</td>
+<td>너무 길어서 읽지 않습니다</td>
+</tr>
+<tr>
+<td>SSIA</td>
+<td>Subject Says It All</td>
+<td>제목에 모든 내용이 담겨있습니다</td>
+</tr>
+<tr>
+<td>TBD</td>
+<td>To Be Determined</td>
+<td>아직 결정하지 못했습니다, 추후 재논의</td>
+</tr>
+<tr>
+<td>RFC</td>
+<td>Request For Comments</td>
+<td>의전 주세요</td>
+</tr>
+<tr>
+<td>IMHO</td>
+<td>In My Honest Opinion</td>
+<td>제 소견으로는</td>
+</tr>
+<tr>
+<td>AFAIK</td>
+<td>As Far As I Know</td>
+<td>내가 아는 한</td>
+</tr>
+<tr>
+<td>FYI</td>
+<td>For Your Information</td>
+<td>참고로</td>
+</tr>
+<tr>
+<td>IRL</td>
+<td>In Real Life</td>
+<td>현실에서</td>
+</tr>
+<tr>
+<td>TIA</td>
+<td>Thanks In Advance</td>
+<td>미리 감사합니다</td>
+</tr>
+<tr>
+<td>TBH</td>
+<td>To Be Honest</td>
+<td>솔직히</td>
+</tr>
+<tr>
+<td>BTW</td>
+<td>By The Way</td>
+<td>그런데</td>
+</tr>
+<tr>
+<td>ACK</td>
+<td>acknowledgement</td>
+<td>인정, 승인, 동의</td>
+</tr>
+<tr>
+<td>WIP</td>
+<td>Work In Progress</td>
+<td>진행 중인 작업</td>
+</tr>
+<tr>
+<td>LTS</td>
+<td>Long Term Support</td>
+<td>장기 지원 버전(안정성 높음)</td>
+</tr>
+</tbody></table>
+<h3 id="수식-연산자"><a href="#수식-연산자" class="headerlink" title="수식 연산자"></a>수식 연산자</h3><table>
+<thead>
+<tr>
+<th>단어</th>
+<th>기호</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>addition, plus</td>
+<td><code>+</code></td>
+<td>더하기</td>
+</tr>
+<tr>
+<td>subtraction, minus</td>
+<td><code>-</code></td>
+<td>빼기</td>
+</tr>
+<tr>
+<td>muliplication, times</td>
+<td><code>*</code></td>
+<td>곱하기</td>
+</tr>
+<tr>
+<td>division</td>
+<td><code>/</code></td>
+<td>나누기</td>
+</tr>
+<tr>
+<td>modulus, modulo</td>
+<td><code>%</code></td>
+<td>나머지</td>
+</tr>
+<tr>
+<td>power, exponent, squared, cubed</td>
+<td><code>**</code></td>
+<td>제곱</td>
+</tr>
+<tr>
+<td>assignment</td>
+<td><code>=</code></td>
+<td>할당</td>
+</tr>
+</tbody></table>
+<h3 id="네트워크-통신-관련-표현"><a href="#네트워크-통신-관련-표현" class="headerlink" title="네트워크 통신 관련 표현"></a>네트워크 통신 관련 표현</h3><table>
+<thead>
+<tr>
+<th>단어</th>
+<th>의미</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>get</td>
+<td>(외부에서 데이터를) 가져오다</td>
+<td>get data from the API</td>
+</tr>
+<tr>
+<td>fetch</td>
+<td>(원격 또는 서버 등 위부 출처에서 데이터를) 가져오다</td>
+<td>fetch data from the API</td>
+</tr>
+<tr>
+<td>retrieve</td>
+<td>(데이터베이스와 같은 특정 위치에 저장된 데이터를) 가져오다</td>
+<td></td>
+</tr>
+<tr>
+<td>stream</td>
+<td>(데이터를 지속적으로 전송하거나 받아오는 ) 스트리밍하다</td>
+<td>stream real-time data</td>
+</tr>
+<tr>
+<td>query</td>
+<td>(외부 서버에 조건에 따른 특정 결과값을) 조회하다</td>
+<td>query the domain name</td>
+</tr>
+<tr>
+<td>encrypt</td>
+<td>(데이터를 보호하기 위해) 암호화하다</td>
+<td>Encrypt the connection with TLS</td>
+</tr>
+<tr>
+<td>invalidate</td>
+<td>(캐시 등을) 무효화하다</td>
+<td>invalidate  the browser cache</td>
+</tr>
+</tbody></table>
+<h3 id="에러-관련-표현"><a href="#에러-관련-표현" class="headerlink" title="에러 관련 표현"></a>에러 관련 표현</h3><table>
+<thead>
+<tr>
+<th>문장</th>
+<th>의미</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>access is denied</td>
+<td>접근이 거부되다</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>permissions are insufficient</strong></td>
+<td>권한이 부족하다</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>exploit a vulnerability</strong></td>
+<td>취약점을 악용하다</td>
+<td>exploit : 시스템의 약점을 이용해 비정상적으로 데이터를 탈취하는 행위</td>
+</tr>
+<tr>
+<td>grant access</td>
+<td>접근을 허가하다</td>
+<td>grant : 특정 리소스나 데이터에 접근 권한 부여하다</td>
+</tr>
+<tr>
+<td>restrict user privileges</td>
+<td>사용자 권한을 제한하다</td>
+<td>restrict: 특정 사용자에게 제한된 권한을 부여하다</td>
+</tr>
+<tr>
+<td>tamper with data</td>
+<td>데이터를 무단으로 수정하다</td>
+<td>tamper with : 데이터를 허가 없이 수정하다</td>
+</tr>
+</tbody></table>
+<h3 id="커밋-타입-표현"><a href="#커밋-타입-표현" class="headerlink" title="커밋 타입 표현"></a>커밋 타입 표현</h3><table>
+<thead>
+<tr>
+<th>타입</th>
+<th>의미</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>feat</td>
+<td>코드에 새로운 기능 추가</td>
+<td></td>
+</tr>
+<tr>
+<td>fix</td>
+<td>기존 버그 수정</td>
+<td></td>
+</tr>
+<tr>
+<td>BREAKING CHANGE</td>
+<td>이전 버전과 호환되지 않는 변경 내역</td>
+<td></td>
+</tr>
+<tr>
+<td>docs</td>
+<td>개발 문서 변경</td>
+<td></td>
+</tr>
+<tr>
+<td>style</td>
+<td>들여쓰기 등 코드 형식 및 스타일 변경</td>
+<td></td>
+</tr>
+<tr>
+<td>ci</td>
+<td>CI/CD 관련 코드 변경</td>
+<td></td>
+</tr>
+<tr>
+<td>refactor</td>
+<td>중복 코드 제거, 변수명 변경, 코드 단순화 등 리팩토링 관련</td>
+<td></td>
+</tr>
+<tr>
+<td>test</td>
+<td>테스트 관련 코드 변경</td>
+<td></td>
+</tr>
+<tr>
+<td>build</td>
+<td>빌드 시스템 관련 코드 변경</td>
+<td></td>
+</tr>
+<tr>
+<td>perf</td>
+<td>성능 개선 관련 코드 변경</td>
+<td></td>
+</tr>
+<tr>
+<td>chore</td>
+<td>기타 코드 변경</td>
+<td></td>
+</tr>
+</tbody></table>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2025/08/20/generate-entityId-strategy/" title= "generate entityId strategy">
+                    <div class="nextTitle">generate entityId strategy</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2025/07/11/%EC%B1%85%EC%9D%BD%EA%B8%B0-%EC%BD%94%EB%93%9C-%EB%B0%96-%EC%BB%A4%EB%AE%A4%EB%8B%88%EC%BC%80%EC%9D%B4%EC%85%98/" title= "(책 리뷰) 코드 밖 커뮤니케이션">
+                    <div class="prevTitle">(책 리뷰) 코드 밖 커뮤니케이션</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 사각형 반응형 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="2080063347"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:lostcatbox@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lostcatbox" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#책을-읽은-이유"><span class="toc-number">1.</span> <span class="toc-text">책을 읽은 이유</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#책의-서론"><span class="toc-number">2.</span> <span class="toc-text">책의 서론</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#도움되는-영상-모음"><span class="toc-number">2.1.</span> <span class="toc-text">도움되는 영상 모음</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#영어의-언어적-특성"><span class="toc-number">2.2.</span> <span class="toc-text">영어의 언어적 특성</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#단어장"><span class="toc-number">3.</span> <span class="toc-text">단어장</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#테마-없는-단어장"><span class="toc-number">3.1.</span> <span class="toc-text">테마 없는 단어장</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#테마가-있는-단어장"><span class="toc-number">3.2.</span> <span class="toc-text">테마가 있는 단어장</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#기호를-표현하는-영단어"><span class="toc-number">3.2.1.</span> <span class="toc-text">기호를 표현하는 영단어</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#전치사-단어장"><span class="toc-number">3.2.2.</span> <span class="toc-text">전치사 단어장</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#자주-사용되는-축약어"><span class="toc-number">3.2.3.</span> <span class="toc-text">자주 사용되는 축약어</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#수식-연산자"><span class="toc-number">3.2.4.</span> <span class="toc-text">수식 연산자</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#네트워크-통신-관련-표현"><span class="toc-number">3.2.5.</span> <span class="toc-text">네트워크 통신 관련 표현</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#에러-관련-표현"><span class="toc-number">3.2.6.</span> <span class="toc-text">에러 관련 표현</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#커밋-타입-표현"><span class="toc-number">3.2.7.</span> <span class="toc-text">커밋 타입 표현</span></a></li></ol></li></ol></li></ol>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2674162185211259"
+     crossorigin="anonymous"></script>
+<!-- 수직형 반응형 디스플레이광고 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2674162185211259"
+     data-ad-slot="1645513725"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 243
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2025 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span><a class="archive-post-title" href= "/2025/08/20/generate-entityId-strategy/" >generate entityId strategy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2025/07/14/%E1%84%8E%E1%85%A2%E1%86%A8%E1%84%8B%E1%85%B5%E1%86%B0%E1%84%80%E1%85%B5-it%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%8B%E1%85%A5%E1%84%8B%E1%85%A9%E1%86%AB%E1%84%87%E1%85%A9%E1%84%83%E1%85%B5%E1%86%BC%E1%84%80%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%83%E1%85%B3/" >(책 리뷰) it 영어 온보딩 가이드</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/11</span><a class="archive-post-title" href= "/2025/07/11/%EC%B1%85%EC%9D%BD%EA%B8%B0-%EC%BD%94%EB%93%9C-%EB%B0%96-%EC%BB%A4%EB%AE%A4%EB%8B%88%EC%BC%80%EC%9D%B4%EC%85%98/" >(책 리뷰) 코드 밖 커뮤니케이션</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/10</span><a class="archive-post-title" href= "/2025/07/10/%EA%B0%9C%EB%B0%9C%EC%9E%90%EB%A5%BC-%EC%9C%84%ED%95%9C-%EC%83%9D%EA%B0%81%EC%9D%98-%EC%A0%95%EB%A6%AC-%EB%AC%B8%EC%84%9C%EC%9E%91%EC%84%B1%EB%B2%95/" >(책 리뷰) 개발자를 위한 생각의 정리 - 문서작성법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/04</span><a class="archive-post-title" href= "/2025/07/04/llm-and-cursor-study/" >LLM 및 Cursor 학습</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/31</span><a class="archive-post-title" href= "/2025/03/31/ddd-start-book-review/" >(책읽기)도매인 주도 설계 시작하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/10</span><a class="archive-post-title" href= "/2025/03/10/TDD-by-Example/" >TDD by Example</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/26</span><a class="archive-post-title" href= "/2025/02/26/issue-override-kotlin/" >kotlin 부모-자식 속성 override시 생성주기 주의하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2025/01/26/spring-batch-basic/" >spring-batch 해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2025/01/07/bullet-journal/" >bullet-journal</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/06</span><a class="archive-post-title" href= "/2025/01/06/event-storming-review/" >event-storming-review</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/04</span><a class="archive-post-title" href= "/2025/01/04/review-end-2024/" >2024년을 마무리 하며...(2025년 목표)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/03</span><a class="archive-post-title" href= "/2025/01/03/clean-architecture-review/" >(책읽기) 만들면서 배우는 클린 아키텍처</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2024 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2024/12/24/domain-driven-design-quickly/" >(책읽기) 도메인 주도 설계란 무엇인가</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2024/08/24/Spring-Servlet%EA%B3%BC-Spring-Webflux-%ED%8A%B9%EC%A7%95/" >Spring-Servlet과 Spring-Webflux 특징 </a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/2024/08/18/SpringSecurity-jwt%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%9D%B8%EC%A6%9D-%EC%9D%B8%EA%B0%80/" >SpringSecurity + jwt를 이용한 인증, 인가 </a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/17</span><a class="archive-post-title" href= "/2024/08/17/kotlin-basic/" >코틀린 기본 문법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/16</span><a class="archive-post-title" href= "/2024/06/16/post-Transactional%EC%97%90-%EB%8C%80%ED%95%9C-5%EA%B0%80%EC%A7%80-%EC%98%B5%EC%85%98/" >Spring Transactional에 대한 5가지 옵션</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2024/05/30/java-recommend-coding-style/" >자바 주니어 개발자를 위한 강의</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/21</span><a class="archive-post-title" href= "/2024/04/21/TDD-%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%BD%94%EB%93%9C-%EB%8F%84%EC%9E%85%EA%B8%B0/" >TDD-테스트코드 도입기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/21</span><a class="archive-post-title" href= "/2024/04/21/Virtual-Thread-VS-CompletableFuture/" >Virtual Thread VS CompletableFuture</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/21</span><a class="archive-post-title" href= "/2024/04/21/%EB%8B%A8%EC%9D%BC%EC%B1%85%EC%9E%84%EC%9B%90%EC%B9%99-md/" >단일책임원칙이란?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/14</span><a class="archive-post-title" href= "/2024/04/14/2024%20hashmap/" >2024 hashmap</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2024/02/11/1-N-%EA%B4%80%EA%B3%84%EA%B0%84%EC%9D%98-%EC%A1%B0%ED%9A%8C-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0/" >1:N 관계 간의 중복 데이터 쿼리 성능 개선</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2024/02/11/spring-cache/" >spring-cache에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/09</span><a class="archive-post-title" href= "/2024/01/09/spring-core-advanced-AOP-etc/" >스프링 핵심 원리 고급편(AOP 포함)(작성중)</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2023 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/27</span><a class="archive-post-title" href= "/2023/12/27/review-end-2023/" >2023년을 마무리 하며...(2024년 목표)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/2023/08/18/BasicDB/" >DB에 대한 전반적인 개념(SQL,NoSQL)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/11</span><a class="archive-post-title" href= "/2023/07/11/Advenced-JPA2-CH01/" >(핵심요약)스프링 부트와 JPA 활용2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/27</span><a class="archive-post-title" href= "/2023/06/27/Advenced-JPA1-CH04/" >Advenced-JPA1-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/19</span><a class="archive-post-title" href= "/2023/06/19/Advenced-JPA1-CH03/" >Advenced-JPA1-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/28</span><a class="archive-post-title" href= "/2023/05/28/Review-The-Essence-Of-Object-Orientation/" >(리뷰)객체 지향의 사실과 오해 책 리뷰</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2023/05/20/Advenced-JPA1-CH02/" >Advenced-JPA1-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2023/05/08/Advenced-JPA1-CH01/" >Advenced-JPA1-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2023/04/26/JPA-Basic-CH10/" >(JPA) JPA-Basic-CH10(fetch-join)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2023/04/22/Design-pattern-3/" >(ETC) 디자인 패턴에 대해서 CH3 (행동 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2023/04/22/JPA-Basic-CH09/" >(JPA) JPA-Basic-CH09(객체지향 쿼리 언어)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/20</span><a class="archive-post-title" href= "/2023/04/20/JPA-Basic-CH08/" >(JPA)JPA-Basic-CH08(값 타입)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/18</span><a class="archive-post-title" href= "/2023/04/18/JPA-Basic-CH07/" >(JPA) JPA-Basic-CH07(프록시)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/17</span><a class="archive-post-title" href= "/2023/04/17/JPA-Basic-CH06/" >(JPA) JPA-Basic-CH06(고급매핑- 상속관계 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/13</span><a class="archive-post-title" href= "/2023/04/13/Issue-Java-ClassCastException/" >(Issue) ResponseBodyAdvice에서 ClassCastException 발생</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/13</span><a class="archive-post-title" href= "/2023/04/13/JPA-Basic-CH05/" >(JPA) JPA-Basic-CH05(다양한 연관관계 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/09</span><a class="archive-post-title" href= "/2023/04/09/JPA-Basic-CH04/" >(JPA) JPA-Basic-CH04 (연관관계 매핑 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/08</span><a class="archive-post-title" href= "/2023/04/08/JPA-Basic-CH03/" >(JPA) JPA-Basic-CH03 (엔티티 매핑)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2023/04/06/JPA-Basic-CH02/" >(JPA) JPA 기본편 CH02 (JPA 영속성 컨텍스트)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/JPA-Basic-CH01/" >(JPA) JPA 기본편 CH01 (JPA 시작)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/05</span><a class="archive-post-title" href= "/2023/04/05/querydsl/" >DataSource, QueryDSL이란?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/29</span><a class="archive-post-title" href= "/2023/03/29/SpringMVC2-CH02/" >SpringMVC2-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/21</span><a class="archive-post-title" href= "/2023/03/21/Design-pattern-2/" >(ETC) 디자인 패턴에 대해서 CH2 (구조 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/12</span><a class="archive-post-title" href= "/2023/03/12/Design-pattern-1/" >(ETC) 디자인 패턴에 대해서 CH1 (생성 디자인 패턴에 대해)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/10</span><a class="archive-post-title" href= "/2023/03/10/l2-l4-l7-switching/" >L2-L4-L7 스위치란? (허브, 스위치, 라우터)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span><a class="archive-post-title" href= "/2023/02/25/Review-System-Design-Interview/" >(리뷰)(강추)가상 면접 사례로 배우는 대규모 시스템 설계 기초</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2023/02/23/gitlab-CI-CD-springproject/" >Gitlab-CI/CD 구축하기(withSpring)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span><a class="archive-post-title" href= "/2023/02/16/SpringMVC2-CH01/" >SpringMVC2-CH01(스프링 thymeleaf)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span><a class="archive-post-title" href= "/2023/02/07/JavaScript-Basic/" >JavaScript-Basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/05</span><a class="archive-post-title" href= "/2023/02/05/Html-JQuery/" >Html-JQuery</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2023/01/22/mysql/" >Mysql 기본 공부 (수정본)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-maven/" >About-maven</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-mybatis/" >About-mybatis</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2023/01/21/About-xml/" >XML 파일에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/ubuntu-command/" >우분투 자주 쓰는 명령어(2023버전)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2023/01/15/path-setting/" >환경변수 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2023/01/02/n-plus-1-problem-i/" >JPA N+1 문제와 해결법(수정중)</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/31</span><a class="archive-post-title" href= "/2022/12/31/review-end-2022/" >2022년을 마무리 하며...(2023년 목표)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/AboutSpring/" >AboutSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/CS-Lock-MutexAndSemaphore/" >CS Lock MutexAndSemaphore</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Isolation-Level-4-And-Lock/" >Isolation Level 4 And Lock</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/READ-ME-Writing/" >READ-ME Writing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Entity-DAO-DTO/" >Spring-Entity-DAO-DTO</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/SpringAndJenkins/" >SpringAndJenkins</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Lambda-Capturing/" >Java Lambda-Capturing</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-Basic-JVM/" >Java Basic JVM</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Java-SOLID/" >Java SOLID</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Null-Optional-Empty/" >Null-Optional-Empty</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span><a class="archive-post-title" href= "/2022/12/25/Spring-Singleton-Stateless/" >Spring Singleton Stateless</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutMessageQ/" >AboutMessageQ</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutKafka/" >AboutKafka</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutSpringSecurity/" >AboutSpringSecurity</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Sequence-Diagram/" >Sequence-Diagram</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH01/" >SpringProject-TrackingPost-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH04/" >SpringProject-TrackingPost-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH03/" >SpringProject-TrackingPost-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH05/" >SpringProject-TrackingPost-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH02/" >SpringProject-TrackingPost-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-TrackingPost-CH06/" >SpringProject-TrackingPost-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/AboutLombokAtSpring/" >AboutLombokAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Basic-Vue-js/" >Basic Vue.js</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Http-Status/" >Http-Status</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/Spring-Logger/" >Spring-Logger</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH01/" >SpringProject-Board-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH02/" >SpringProject-Board-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH03/" >SpringProject-Board-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH07/" >SpringProject-Board-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH08/" >SpringProject-Board-CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH06/" >SpringProject-Board-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH04/" >SpringProject-Board-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH10/" >SpringProject-Board-CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH09/" >SpringProject-Board-CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/UsingAOPAtSpring/" >UsingAOPAtSpring</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringProject-Board-CH05/" >SpringProject-Board-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH01/" >SpringCore CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH00/" >SpringCore CH00</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH04/" >SpringCore CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH02-03/" >SpringCore CH02~03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH05/" >SpringCore CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH07/" >SpringCore CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH01/" >SpringMVC-CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH03/" >SpringMVC-CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH09/" >SpringCore CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH06/" >SpringCore CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH02/" >SpringMVC-CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH05/" >SpringMVC-CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH04/" >SpringMVC-CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH07/" >SpringMVC-CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringCore-CH08/" >SpringCore CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/SpringMVC-CH06/" >SpringMVC-CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/24</span><a class="archive-post-title" href= "/2022/12/24/effective-java-review/" >(책리뷰)이펙티브 자바</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH01/" >Java 배우기 CH01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH02/" >Java 배우기 CH02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH03/" >Java 배우기 CH03</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH04/" >Java 배우기 CH04</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH06/" >Java 배우기 CH06</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH09/" >Java 배우기 CH09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH08/" >Java 배우기 CH08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH07/" >Java 배우기 CH07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH10/" >Java 배우기 CH10</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH11/" >Java 배우기 CH11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH05/" >Java 배우기 CH05</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH12/" >Java 배우기 CH12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH14/" >Java 배우기 CH14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/JavaCH13/" >Java 배우기 CH13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/ConnectDomainToNotion/" >Notion과 개인 Domain 연결하기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2022/12/23/OSI7layer/" >OSI7계층과 TCP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2022/05/08/Algorithm-Design-with-python/" >알고리즘 디자인 4가지</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2021/12/18/common-knowledge/" >주택분양보증 vs 분양가상한제</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2021/12/07/regularly-report-21-11/" >11월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2021/10/23/common-knowledge%202/" >세대수와 가구수 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/17</span><a class="archive-post-title" href= "/2021/10/17/excel-skill/" >엑셀 단축키 모음</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2021/10/11/regularly-report-21-10/" >10월 월간 정기 보고서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/21</span><a class="archive-post-title" href= "/2021/09/21/regularly-report-21-09/" >2021.09 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-07/" >2021.07 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2021/08/28/regularly-report-21-08/" >2021.08 정기 리포트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/24</span><a class="archive-post-title" href= "/2021/06/24/review-regular-form/" >부동산 물건 분석 양식</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2021/06/21/sinchendongbuilding1/" >삼학사로 xx xx빌딩 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2021/06/18/registered-apt/" >셀프 등기 하는법 (2021)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/2021/05/31/janmi-apt-review/" >잠실 신천동 장미아파트 분석</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span><a class="archive-post-title" href= "/2021/05/30/finsh_and_restart/" >개발자를 마무리하고, 부동산업계를 준비하다.</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/basic-api/" >REST API란? (RESTful,REST)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span><a class="archive-post-title" href= "/2021/01/19/django-serializer/" >django-serializer 자세히 알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/outsouring2/" >외주 2번째 DRF 후기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/15</span><a class="archive-post-title" href= "/2021/01/15/django-crontab/" >django-crontab 사용하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/30</span><a class="archive-post-title" href= "/2020/12/30/end-of-2020/" >2020를 마무리하며...열심히 살았어?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/data-structure-with-python/" >자료구조 공부 (파이썬활용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href= "/2020/12/23/fromserver-todrf/" >aws부터 drf 설정까지</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/2020/12/05/letsencrypt/" >letsencrypt</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2020/12/02/howtoalgorithm/" >알고리즘 어떻게 공부해나갈거야?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2020/11/26/codingtestreview2/" >(코테) 2렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2020/11/04/python-function/" >python 함수, 자료형, 그외</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/codingtestreview1/" >(코테) 1렙 프로그래머스 리뷰노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/2020/10/30/dynamo-db-basic/" >dynamo-db-basic</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/coding-skill-book/" >알고리즘 문제 해결 전략 책 요약</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href= "/2020/10/27/tech-terms-concept/" >tech-terms-concept</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/23</span><a class="archive-post-title" href= "/2020/10/23/DB-cache-server/" >DB-cache-server에 대해서</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span><a class="archive-post-title" href= "/2020/10/22/mysql-indexing/" >mysql indexing 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2020/10/19/array-vs-list/" >배열(array)와 리스트(list) 차이</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-apt-get/" >우분투 apt-get</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/2020/09/27/ubuntu-authentication/" >우분투 유저, 권환 관련</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/ubuntu-fixed-ip/" >우분투에서 IP고정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/2020/09/25/wordpress/" >워드프레스 도커활용하여 배포하기(https포함)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/backend-interview/" >backend-interview(백엔드-면접준비)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/statistics/" >통계학 기본 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span><a class="archive-post-title" href= "/2020/09/07/networkbasic3/" >후니의 네트워크로 기본 잡기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/2020/08/26/OSTEP/" >OS에 관한 쉬운 세가지 이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/nginx/" >Nginx 자세히</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span><a class="archive-post-title" href= "/2020/08/23/python-basic-library/" >파이썬 기본 라이브러리 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/2020/08/15/python-pep/" >PEP 규칙 읽어보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/2020/08/12/nginx-proxy/" >Nginx로 Reverse-proxy 서버 구성 +SSL인증서 (Docker로 구성)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span><a class="archive-post-title" href= "/2020/08/11/asyncio/" >비동기 asyncio 활용</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/04</span><a class="archive-post-title" href= "/2020/08/04/chattingadvanced/" >소켓을 이용한 실시간 채팅 만들기 (심화편)(wss적용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/websocket/" >HTTP,Ajax,Websocket</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2020/07/31/chattingbasic/" >소켓을 이용한 실시간 채팅 만들기 (기본편)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/21</span><a class="archive-post-title" href= "/2020/07/21/docker-deploy/" >DockerFile,Docker-compose,Deploy</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/networkbasic2/" >네트워크 지식 02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2020/07/17/nginx-DRF/" >Nginx 웹서비스 배포(DRF 사용)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2020/07/15/transfer01/" >(영어공부용)HTML Render vs Parse</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/2020/07/14/django-DRFmechanism/" >Django, DRF 메커니즘 그림</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/html-css-js/" >Html/Css</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2020/06/28/http-https/" >Http/Https</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/21</span><a class="archive-post-title" href= "/2020/06/21/studying_way/" >공부하는법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span><a class="archive-post-title" href= "/2020/05/27/ubuntu-ssh/" >우분투 ssh,ftp,sftp 설정</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span><a class="archive-post-title" href= "/2020/05/26/makingserver/" >서버 구성 살펴보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2020/05/20/importantThings/" >importantThings</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/2020/05/15/messingtimetowage/" >딴짓 시급 계산기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span><a class="archive-post-title" href= "/2020/05/14/review-python-coding-skill05/" >파이썬 코딩의 스킬 리뷰 5</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/networkbasic/" >네트워크 지식 01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span><a class="archive-post-title" href= "/2020/05/07/review-python-coding-skill04/" >파이썬 코딩의 스킬 리뷰 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span><a class="archive-post-title" href= "/2020/04/22/review-python-coding-skill03/" >파이썬 코딩의 스킬 리뷰 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2020/04/16/datamining/" >선형 회귀 분석,로지스틱 회귀 분석, 신경망</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/01</span><a class="archive-post-title" href= "/2020/04/01/data-scientist/" >데이터 마이닝 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/R-language/" >R_언어 공부</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/05</span><a class="archive-post-title" href= "/2020/03/05/outsoucing-impactstation/" >처음 외주를 시작하며</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/23</span><a class="archive-post-title" href= "/2020/02/23/review-python-coding-skill02/" >파이썬 코딩의 스킬 리뷰 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/18</span><a class="archive-post-title" href= "/2020/02/18/review-python-coding-skill01/" >파이썬 코딩의 스킬 리뷰 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/IP/" >IP는 유일한가?</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/15</span><a class="archive-post-title" href= "/2020/02/15/django-add/" >Django 더알아보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/13</span><a class="archive-post-title" href= "/2020/02/13/HTTPie/" >HTTPie 사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/2020/02/11/SessionAndCookie/" >세션,쿠키와 캐시 (session and cookie)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/2020/02/06/Elastic%20Beanstalk/" >AWS Elastic Beanstalk + django</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/28</span><a class="archive-post-title" href= "/2020/01/28/DRF14/" >DRF 기본편 14</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span><a class="archive-post-title" href= "/2020/01/27/missing-note/" >실수노트</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2020/01/26/DRF13/" >DRF 기본편 13</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/2020/01/24/DRF12/" >DRF 기본편 12</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/project-processing/" >효율적인 프로젝트 진행을 위한 것</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2020/01/23/DRF10+11/" >DRF 기본편 10+11</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/kakao-api-basic/" >카카오채널 구현해보기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/2020/01/22/DRF09/" >DRF 기본편 9</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2020/01/21/DRF08/" >DRF 기본편 8</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span><a class="archive-post-title" href= "/2020/01/18/DRF05+06+07/" >DRF 기본편 5+6+7</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/17</span><a class="archive-post-title" href= "/2020/01/17/DRF04/" >DRF 기본편 4</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href= "/2020/01/11/DRF03/" >DRF 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2020/01/08/DRF02/" >DRF 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/DRF01/" >DRF 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span><a class="archive-post-title" href= "/2020/01/02/front-end-prac4/" >프론트엔드 기본편 4</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2019/12/22/front-end-prac3/" >프론트엔드 기본편 3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/front-end-prac2/" >프론트엔드 기본편 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2019/12/15/Devfesjunior/" >한빛소프트 devfest for junior</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/front-end-prac-1/" >프론트엔드 기본편 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2019/12/06/class-view2/" >클래스뷰 정확히 쓰기 2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2019/12/03/class-view1/" >클래스뷰 정확히 쓰기 1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2019/11/26/django6/" >Django 기본 여섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/django5/" >Django 기본 다섯번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2019/11/21/django04/" >Django 기본 네번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2019/11/15/django03/" >Django 기본 세번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span><a class="archive-post-title" href= "/2019/11/05/django02/" >Django 기본 두번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2019/11/01/django01/" >Django 기본 첫번째이야기</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span><a class="archive-post-title" href= "/2019/10/21/whereU/" >WhereU</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/festa1/" >Devfest Seoul Bingo 2019에서 배운 것들</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2019/10/20/using_makedown/" >Markdown 기본사용법</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/django-basic/" >django-basic (장고 개념 기초)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/git-memo/" >git memo</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/henoy-tips/" >기타 꿀팁과 햇갈리는 것 정리</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span><a class="archive-post-title" href= "/2019/01/08/whereMyPost/" >whereMyPost</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Review"><span class="iconfont-archer">&#xe606;</span>Review</span>
+    
+        <span class="sidebar-tag-name" data-tags="Book"><span class="iconfont-archer">&#xe606;</span>Book</span>
+    
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic"><span class="iconfont-archer">&#xe606;</span>Basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="DB"><span class="iconfont-archer">&#xe606;</span>DB</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mybatis"><span class="iconfont-archer">&#xe606;</span>Mybatis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Lombok"><span class="iconfont-archer">&#xe606;</span>Lombok</span>
+    
+        <span class="sidebar-tag-name" data-tags="MessageQ"><span class="iconfont-archer">&#xe606;</span>MessageQ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kafka"><span class="iconfont-archer">&#xe606;</span>Kafka</span>
+    
+        <span class="sidebar-tag-name" data-tags="JPA"><span class="iconfont-archer">&#xe606;</span>JPA</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advance"><span class="iconfont-archer">&#xe606;</span>Advance</span>
+    
+        <span class="sidebar-tag-name" data-tags="Vue"><span class="iconfont-archer">&#xe606;</span>Vue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Project"><span class="iconfont-archer">&#xe606;</span>Project</span>
+    
+        <span class="sidebar-tag-name" data-tags="Notion"><span class="iconfont-archer">&#xe606;</span>Notion</span>
+    
+        <span class="sidebar-tag-name" data-tags="Domain"><span class="iconfont-archer">&#xe606;</span>Domain</span>
+    
+        <span class="sidebar-tag-name" data-tags="Network"><span class="iconfont-archer">&#xe606;</span>Network</span>
+    
+        <span class="sidebar-tag-name" data-tags="API"><span class="iconfont-archer">&#xe606;</span>API</span>
+    
+        <span class="sidebar-tag-name" data-tags="DRF"><span class="iconfont-archer">&#xe606;</span>DRF</span>
+    
+        <span class="sidebar-tag-name" data-tags="CS"><span class="iconfont-archer">&#xe606;</span>CS</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTPie"><span class="iconfont-archer">&#xe606;</span>HTTPie</span>
+    
+        <span class="sidebar-tag-name" data-tags="WebBasic"><span class="iconfont-archer">&#xe606;</span>WebBasic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Elastic Beanstalk"><span class="iconfont-archer">&#xe606;</span>Elastic Beanstalk</span>
+    
+        <span class="sidebar-tag-name" data-tags="AWS"><span class="iconfont-archer">&#xe606;</span>AWS</span>
+    
+        <span class="sidebar-tag-name" data-tags="hanbik"><span class="iconfont-archer">&#xe606;</span>hanbik</span>
+    
+        <span class="sidebar-tag-name" data-tags="Junior"><span class="iconfont-archer">&#xe606;</span>Junior</span>
+    
+        <span class="sidebar-tag-name" data-tags="Devfest"><span class="iconfont-archer">&#xe606;</span>Devfest</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jquery"><span class="iconfont-archer">&#xe606;</span>Jquery</span>
+    
+        <span class="sidebar-tag-name" data-tags="Html"><span class="iconfont-archer">&#xe606;</span>Html</span>
+    
+        <span class="sidebar-tag-name" data-tags="FrontEnd"><span class="iconfont-archer">&#xe606;</span>FrontEnd</span>
+    
+        <span class="sidebar-tag-name" data-tags="Http"><span class="iconfont-archer">&#xe606;</span>Http</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tip"><span class="iconfont-archer">&#xe606;</span>Tip</span>
+    
+        <span class="sidebar-tag-name" data-tags="Issue"><span class="iconfont-archer">&#xe606;</span>Issue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="Coding"><span class="iconfont-archer">&#xe606;</span>Coding</span>
+    
+        <span class="sidebar-tag-name" data-tags="Structure"><span class="iconfont-archer">&#xe606;</span>Structure</span>
+    
+        <span class="sidebar-tag-name" data-tags="Interview"><span class="iconfont-archer">&#xe606;</span>Interview</span>
+    
+        <span class="sidebar-tag-name" data-tags="OS"><span class="iconfont-archer">&#xe606;</span>OS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Session"><span class="iconfont-archer">&#xe606;</span>Session</span>
+    
+        <span class="sidebar-tag-name" data-tags="R"><span class="iconfont-archer">&#xe606;</span>R</span>
+    
+        <span class="sidebar-tag-name" data-tags="Univ"><span class="iconfont-archer">&#xe606;</span>Univ</span>
+    
+        <span class="sidebar-tag-name" data-tags="Logger"><span class="iconfont-archer">&#xe606;</span>Logger</span>
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jenkins"><span class="iconfont-archer">&#xe606;</span>Jenkins</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thymeleaf"><span class="iconfont-archer">&#xe606;</span>Thymeleaf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Library"><span class="iconfont-archer">&#xe606;</span>Library</span>
+    
+        <span class="sidebar-tag-name" data-tags="Python"><span class="iconfont-archer">&#xe606;</span>Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="Basic. Python"><span class="iconfont-archer">&#xe606;</span>Basic. Python</span>
+    
+        <span class="sidebar-tag-name" data-tags="AOP"><span class="iconfont-archer">&#xe606;</span>AOP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socket"><span class="iconfont-archer">&#xe606;</span>Socket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Threading"><span class="iconfont-archer">&#xe606;</span>Threading</span>
+    
+        <span class="sidebar-tag-name" data-tags="Django"><span class="iconfont-archer">&#xe606;</span>Django</span>
+    
+        <span class="sidebar-tag-name" data-tags="ClassView"><span class="iconfont-archer">&#xe606;</span>ClassView</span>
+    
+        <span class="sidebar-tag-name" data-tags="TDD"><span class="iconfont-archer">&#xe606;</span>TDD</span>
+    
+        <span class="sidebar-tag-name" data-tags="Testcode"><span class="iconfont-archer">&#xe606;</span>Testcode</span>
+    
+        <span class="sidebar-tag-name" data-tags="Data"><span class="iconfont-archer">&#xe606;</span>Data</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tips"><span class="iconfont-archer">&#xe606;</span>Tips</span>
+    
+        <span class="sidebar-tag-name" data-tags="Knowledge"><span class="iconfont-archer">&#xe606;</span>Knowledge</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mechanism"><span class="iconfont-archer">&#xe606;</span>Mechanism</span>
+    
+        <span class="sidebar-tag-name" data-tags="Advanced"><span class="iconfont-archer">&#xe606;</span>Advanced</span>
+    
+        <span class="sidebar-tag-name" data-tags="Djagno"><span class="iconfont-archer">&#xe606;</span>Djagno</span>
+    
+        <span class="sidebar-tag-name" data-tags="Serializer"><span class="iconfont-archer">&#xe606;</span>Serializer</span>
+    
+        <span class="sidebar-tag-name" data-tags="Dataminging"><span class="iconfont-archer">&#xe606;</span>Dataminging</span>
+    
+        <span class="sidebar-tag-name" data-tags="Statistics"><span class="iconfont-archer">&#xe606;</span>Statistics</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="Endofyear"><span class="iconfont-archer">&#xe606;</span>Endofyear</span>
+    
+        <span class="sidebar-tag-name" data-tags="Excel"><span class="iconfont-archer">&#xe606;</span>Excel</span>
+    
+        <span class="sidebar-tag-name" data-tags="Skill"><span class="iconfont-archer">&#xe606;</span>Skill</span>
+    
+        <span class="sidebar-tag-name" data-tags="GDG"><span class="iconfont-archer">&#xe606;</span>GDG</span>
+    
+        <span class="sidebar-tag-name" data-tags="Google"><span class="iconfont-archer">&#xe606;</span>Google</span>
+    
+        <span class="sidebar-tag-name" data-tags="Festival"><span class="iconfont-archer">&#xe606;</span>Festival</span>
+    
+        <span class="sidebar-tag-name" data-tags="Finish"><span class="iconfont-archer">&#xe606;</span>Finish</span>
+    
+        <span class="sidebar-tag-name" data-tags="Restart"><span class="iconfont-archer">&#xe606;</span>Restart</span>
+    
+        <span class="sidebar-tag-name" data-tags="Realestate"><span class="iconfont-archer">&#xe606;</span>Realestate</span>
+    
+        <span class="sidebar-tag-name" data-tags="Aws"><span class="iconfont-archer">&#xe606;</span>Aws</span>
+    
+        <span class="sidebar-tag-name" data-tags="Drf"><span class="iconfont-archer">&#xe606;</span>Drf</span>
+    
+        <span class="sidebar-tag-name" data-tags="Frontend"><span class="iconfont-archer">&#xe606;</span>Frontend</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ajax"><span class="iconfont-archer">&#xe606;</span>Ajax</span>
+    
+        <span class="sidebar-tag-name" data-tags="Gitlab"><span class="iconfont-archer">&#xe606;</span>Gitlab</span>
+    
+        <span class="sidebar-tag-name" data-tags="CI-CD"><span class="iconfont-archer">&#xe606;</span>CI-CD</span>
+    
+        <span class="sidebar-tag-name" data-tags="Css"><span class="iconfont-archer">&#xe606;</span>Css</span>
+    
+        <span class="sidebar-tag-name" data-tags="Front-End"><span class="iconfont-archer">&#xe606;</span>Front-End</span>
+    
+        <span class="sidebar-tag-name" data-tags="Important"><span class="iconfont-archer">&#xe606;</span>Important</span>
+    
+        <span class="sidebar-tag-name" data-tags="Https"><span class="iconfont-archer">&#xe606;</span>Https</span>
+    
+        <span class="sidebar-tag-name" data-tags="Apt"><span class="iconfont-archer">&#xe606;</span>Apt</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kotlin"><span class="iconfont-archer">&#xe606;</span>Kotlin</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssl"><span class="iconfont-archer">&#xe606;</span>Ssl</span>
+    
+        <span class="sidebar-tag-name" data-tags="Server"><span class="iconfont-archer">&#xe606;</span>Server</span>
+    
+        <span class="sidebar-tag-name" data-tags="Kakao"><span class="iconfont-archer">&#xe606;</span>Kakao</span>
+    
+        <span class="sidebar-tag-name" data-tags="basic"><span class="iconfont-archer">&#xe606;</span>basic</span>
+    
+        <span class="sidebar-tag-name" data-tags="Problem"><span class="iconfont-archer">&#xe606;</span>Problem</span>
+    
+        <span class="sidebar-tag-name" data-tags="Nginx"><span class="iconfont-archer">&#xe606;</span>Nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wsgi"><span class="iconfont-archer">&#xe606;</span>Wsgi</span>
+    
+        <span class="sidebar-tag-name" data-tags="Proxy"><span class="iconfont-archer">&#xe606;</span>Proxy</span>
+    
+        <span class="sidebar-tag-name" data-tags="Jpa"><span class="iconfont-archer">&#xe606;</span>Jpa</span>
+    
+        <span class="sidebar-tag-name" data-tags="Outsourcing"><span class="iconfont-archer">&#xe606;</span>Outsourcing</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ubuntu"><span class="iconfont-archer">&#xe606;</span>Ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="Ssh"><span class="iconfont-archer">&#xe606;</span>Ssh</span>
+    
+        <span class="sidebar-tag-name" data-tags="QueryDSL"><span class="iconfont-archer">&#xe606;</span>QueryDSL</span>
+    
+        <span class="sidebar-tag-name" data-tags="How"><span class="iconfont-archer">&#xe606;</span>How</span>
+    
+        <span class="sidebar-tag-name" data-tags="PEP"><span class="iconfont-archer">&#xe606;</span>PEP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Analysis"><span class="iconfont-archer">&#xe606;</span>Analysis</span>
+    
+        <span class="sidebar-tag-name" data-tags="Form"><span class="iconfont-archer">&#xe606;</span>Form</span>
+    
+        <span class="sidebar-tag-name" data-tags="Building"><span class="iconfont-archer">&#xe606;</span>Building</span>
+    
+        <span class="sidebar-tag-name" data-tags="English"><span class="iconfont-archer">&#xe606;</span>English</span>
+    
+        <span class="sidebar-tag-name" data-tags="Thinking"><span class="iconfont-archer">&#xe606;</span>Thinking</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
+    
+        <span class="sidebar-tag-name" data-tags="Websocket"><span class="iconfont-archer">&#xe606;</span>Websocket</span>
+    
+        <span class="sidebar-tag-name" data-tags="Wordpress"><span class="iconfont-archer">&#xe606;</span>Wordpress</span>
+    
+        <span class="sidebar-tag-name" data-tags="Markdown"><span class="iconfont-archer">&#xe606;</span>Markdown</span>
+    
+        <span class="sidebar-tag-name" data-tags="SpringSecurity"><span class="iconfont-archer">&#xe606;</span>SpringSecurity</span>
+    
+        <span class="sidebar-tag-name" data-tags="ETC"><span class="iconfont-archer">&#xe606;</span>ETC</span>
+    
+        <span class="sidebar-tag-name" data-tags="bulletjournal"><span class="iconfont-archer">&#xe606;</span>bulletjournal</span>
+    
+        <span class="sidebar-tag-name" data-tags="Batch"><span class="iconfont-archer">&#xe606;</span>Batch</span>
+    
+        <span class="sidebar-tag-name" data-tags="LLM"><span class="iconfont-archer">&#xe606;</span>LLM</span>
+    
+        <span class="sidebar-tag-name" data-tags="Cursor"><span class="iconfont-archer">&#xe606;</span>Cursor</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Review"><span class="iconfont-archer">&#xe60a;</span>Review</span>
+    
+        <span class="sidebar-category-name" data-categories="Maven"><span class="iconfont-archer">&#xe60a;</span>Maven</span>
+    
+        <span class="sidebar-category-name" data-categories="Mybatis"><span class="iconfont-archer">&#xe60a;</span>Mybatis</span>
+    
+        <span class="sidebar-category-name" data-categories="ETC"><span class="iconfont-archer">&#xe60a;</span>ETC</span>
+    
+        <span class="sidebar-category-name" data-categories="Spring"><span class="iconfont-archer">&#xe60a;</span>Spring</span>
+    
+        <span class="sidebar-category-name" data-categories="MessageQ"><span class="iconfont-archer">&#xe60a;</span>MessageQ</span>
+    
+        <span class="sidebar-category-name" data-categories="JPA"><span class="iconfont-archer">&#xe60a;</span>JPA</span>
+    
+        <span class="sidebar-category-name" data-categories="Vue"><span class="iconfont-archer">&#xe60a;</span>Vue</span>
+    
+        <span class="sidebar-category-name" data-categories="Tips"><span class="iconfont-archer">&#xe60a;</span>Tips</span>
+    
+        <span class="sidebar-category-name" data-categories="DB"><span class="iconfont-archer">&#xe60a;</span>DB</span>
+    
+        <span class="sidebar-category-name" data-categories="API"><span class="iconfont-archer">&#xe60a;</span>API</span>
+    
+        <span class="sidebar-category-name" data-categories="CS"><span class="iconfont-archer">&#xe60a;</span>CS</span>
+    
+        <span class="sidebar-category-name" data-categories="HTTPie"><span class="iconfont-archer">&#xe60a;</span>HTTPie</span>
+    
+        <span class="sidebar-category-name" data-categories="Elastic-Beanstalk"><span class="iconfont-archer">&#xe60a;</span>Elastic-Beanstalk</span>
+    
+        <span class="sidebar-category-name" data-categories="Conference"><span class="iconfont-archer">&#xe60a;</span>Conference</span>
+    
+        <span class="sidebar-category-name" data-categories="Jquery"><span class="iconfont-archer">&#xe60a;</span>Jquery</span>
+    
+        <span class="sidebar-category-name" data-categories="Network"><span class="iconfont-archer">&#xe60a;</span>Network</span>
+    
+        <span class="sidebar-category-name" data-categories="WebBasic"><span class="iconfont-archer">&#xe60a;</span>WebBasic</span>
+    
+        <span class="sidebar-category-name" data-categories="Issue"><span class="iconfont-archer">&#xe60a;</span>Issue</span>
+    
+        <span class="sidebar-category-name" data-categories="Java"><span class="iconfont-archer">&#xe60a;</span>Java</span>
+    
+        <span class="sidebar-category-name" data-categories="Git"><span class="iconfont-archer">&#xe60a;</span>Git</span>
+    
+        <span class="sidebar-category-name" data-categories="OS"><span class="iconfont-archer">&#xe60a;</span>OS</span>
+    
+        <span class="sidebar-category-name" data-categories="R"><span class="iconfont-archer">&#xe60a;</span>R</span>
+    
+        <span class="sidebar-category-name" data-categories="Javascript"><span class="iconfont-archer">&#xe60a;</span>Javascript</span>
+    
+        <span class="sidebar-category-name" data-categories="Jenkins"><span class="iconfont-archer">&#xe60a;</span>Jenkins</span>
+    
+        <span class="sidebar-category-name" data-categories="Library"><span class="iconfont-archer">&#xe60a;</span>Library</span>
+    
+        <span class="sidebar-category-name" data-categories="Basic"><span class="iconfont-archer">&#xe60a;</span>Basic</span>
+    
+        <span class="sidebar-category-name" data-categories="Chatting"><span class="iconfont-archer">&#xe60a;</span>Chatting</span>
+    
+        <span class="sidebar-category-name" data-categories="Django"><span class="iconfont-archer">&#xe60a;</span>Django</span>
+    
+        <span class="sidebar-category-name" data-categories="Coding"><span class="iconfont-archer">&#xe60a;</span>Coding</span>
+    
+        <span class="sidebar-category-name" data-categories="TDD"><span class="iconfont-archer">&#xe60a;</span>TDD</span>
+    
+        <span class="sidebar-category-name" data-categories="Data-Mining"><span class="iconfont-archer">&#xe60a;</span>Data-Mining</span>
+    
+        <span class="sidebar-category-name" data-categories="Knowledge"><span class="iconfont-archer">&#xe60a;</span>Knowledge</span>
+    
+        <span class="sidebar-category-name" data-categories="DRF"><span class="iconfont-archer">&#xe60a;</span>DRF</span>
+    
+        <span class="sidebar-category-name" data-categories="Skill"><span class="iconfont-archer">&#xe60a;</span>Skill</span>
+    
+        <span class="sidebar-category-name" data-categories="Statistics"><span class="iconfont-archer">&#xe60a;</span>Statistics</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="Endofyear"><span class="iconfont-archer">&#xe60a;</span>Endofyear</span>
+    
+        <span class="sidebar-category-name" data-categories="Excel"><span class="iconfont-archer">&#xe60a;</span>Excel</span>
+    
+        <span class="sidebar-category-name" data-categories="realestate"><span class="iconfont-archer">&#xe60a;</span>realestate</span>
+    
+        <span class="sidebar-category-name" data-categories="Server"><span class="iconfont-archer">&#xe60a;</span>Server</span>
+    
+        <span class="sidebar-category-name" data-categories="Frontend"><span class="iconfont-archer">&#xe60a;</span>Frontend</span>
+    
+        <span class="sidebar-category-name" data-categories="Gitlab"><span class="iconfont-archer">&#xe60a;</span>Gitlab</span>
+    
+        <span class="sidebar-category-name" data-categories="Tip"><span class="iconfont-archer">&#xe60a;</span>Tip</span>
+    
+        <span class="sidebar-category-name" data-categories="Html-Css"><span class="iconfont-archer">&#xe60a;</span>Html-Css</span>
+    
+        <span class="sidebar-category-name" data-categories="Important"><span class="iconfont-archer">&#xe60a;</span>Important</span>
+    
+        <span class="sidebar-category-name" data-categories="Kotlin"><span class="iconfont-archer">&#xe60a;</span>Kotlin</span>
+    
+        <span class="sidebar-category-name" data-categories="Kakao"><span class="iconfont-archer">&#xe60a;</span>Kakao</span>
+    
+        <span class="sidebar-category-name" data-categories="Project"><span class="iconfont-archer">&#xe60a;</span>Project</span>
+    
+        <span class="sidebar-category-name" data-categories="Outsourcing"><span class="iconfont-archer">&#xe60a;</span>Outsourcing</span>
+    
+        <span class="sidebar-category-name" data-categories="Python"><span class="iconfont-archer">&#xe60a;</span>Python</span>
+    
+        <span class="sidebar-category-name" data-categories="Linux"><span class="iconfont-archer">&#xe60a;</span>Linux</span>
+    
+        <span class="sidebar-category-name" data-categories="How"><span class="iconfont-archer">&#xe60a;</span>How</span>
+    
+        <span class="sidebar-category-name" data-categories="Report"><span class="iconfont-archer">&#xe60a;</span>Report</span>
+    
+        <span class="sidebar-category-name" data-categories="Form"><span class="iconfont-archer">&#xe60a;</span>Form</span>
+    
+        <span class="sidebar-category-name" data-categories="Analysis"><span class="iconfont-archer">&#xe60a;</span>Analysis</span>
+    
+        <span class="sidebar-category-name" data-categories="Ubuntu"><span class="iconfont-archer">&#xe60a;</span>Ubuntu</span>
+    
+        <span class="sidebar-category-name" data-categories="Html"><span class="iconfont-archer">&#xe60a;</span>Html</span>
+    
+        <span class="sidebar-category-name" data-categories="Thinking"><span class="iconfont-archer">&#xe60a;</span>Thinking</span>
+    
+        <span class="sidebar-category-name" data-categories="Markdown"><span class="iconfont-archer">&#xe60a;</span>Markdown</span>
+    
+        <span class="sidebar-category-name" data-categories="SpringBatch"><span class="iconfont-archer">&#xe60a;</span>SpringBatch</span>
+    
+        <span class="sidebar-category-name" data-categories="Cursor"><span class="iconfont-archer">&#xe60a;</span>Cursor</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Seungwon Yang"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
