@@ -22,7 +22,7 @@
     <meta name="description" content="생각을 자유롭게 만들때까지">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>Transaction 전파단계 학습 · lostcatbox</title>
+    <title>Transaction 전파단계와 TransactionManager에 대해서 · lostcatbox</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >LostCatBox</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">Transaction 전파단계 학습</a>
+                <a href="#" class="post-name">Transaction 전파단계와 TransactionManager에 대해서</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            Transaction 전파단계 학습
+            Transaction 전파단계와 TransactionManager에 대해서
             <!-- 404 -->
             
         </h1>
@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">403</span>Reading time: <span class="post-count reading-time">2 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1k</span>Reading time: <span class="post-count reading-time">6 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -403,18 +403,109 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="왜"><a href="#왜" class="headerlink" title="왜"></a>왜</h1><p>spring 에서 전파단계를 학습하여, Transaction을 더 잘 다뤄보자</p>
-<h1 id="테스트-상황"><a href="#테스트-상황" class="headerlink" title="테스트 상황"></a>테스트 상황</h1><p>둘다 <code>@Transactional</code>을 의존하며, </p>
+        <h1 id="참조"><a href="#참조" class="headerlink" title="참조"></a>참조</h1><ul>
+<li><p><a href="https://mangkyu.tistory.com/269" target="_blank" rel="noopener">참조1</a></p>
+</li>
+<li><p><a href="https://velog.io/@ho-tea/Spring-Transaction%EC%9D%98-2%EA%B0%80%EC%A7%80-%ED%8A%B9%EC%84%B1%EA%B3%BC-TransactionManager" target="_blank" rel="noopener">참조2</a></p>
+</li>
+<li><p><a href="https://jiwondev.tistory.com/154" target="_blank" rel="noopener">참조3</a></p>
+</li>
+</ul>
+<h1 id="왜"><a href="#왜" class="headerlink" title="왜"></a>왜</h1><ul>
+<li>spring 에서 전파단계를 학습하여, Transaction을 더 잘 다뤄보자</li>
+<li>JDBC, JPA 의 차이를 알아보자</li>
+</ul>
+<h1 id="기본지식-JDBC-JPA"><a href="#기본지식-JDBC-JPA" class="headerlink" title="기본지식 (JDBC, JPA)"></a>기본지식 (JDBC, JPA)</h1><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202512011037546.png" alt="스크린샷 2025-11-27 20.53.05"></p>
+<h2 id="JDBC-Java-Database-Connectivity"><a href="#JDBC-Java-Database-Connectivity" class="headerlink" title="JDBC (Java Database Connectivity)"></a><strong>JDBC (Java Database Connectivity)</strong></h2><ul>
+<li>Java 프로그래밍 언어와 광범위한 데이터베이스 사이의 연결을 제공하는 자바 API (인터페이스+클래스로 구성)</li>
+<li>해당 JDBC API를 DB별로 알맞게 구현한 <strong>JDBC 드라이버</strong>를 활용하여 DB에 접근한다.</li>
+<li>직접 사용 시, 해당 DB에 맞는 SQL 문은 직접 작성해야한다.</li>
+</ul>
+<h2 id="JPA"><a href="#JPA" class="headerlink" title="JPA"></a>JPA</h2><ul>
+<li>JPA는 Java Persist API의 약자로 Java ORM 기술 표준 (인터페이스)</li>
+<li>해당 JPA를 알맞게 구현한 hibernate 등의 구현체로 JDBC API를 활용한다.</li>
+</ul>
+<blockquote>
+<p>ORM(Object Relation Mapping)이란? </p>
+<p>ORM은 지속성을 유지하기 위해 도입된 개념으로, POJO 자바 클래스를 관계형 데이터베이스에 맵핑하는 기술을 의미한다. 쉽게 말하자면, 순수 자바 클래스와 데이터베이스의 데이터가 서로 대응되게 만든다는 뜻이다.</p>
+</blockquote>
+<h1 id="Transaction이란"><a href="#Transaction이란" class="headerlink" title="Transaction이란?"></a>Transaction이란?</h1><p>트랜잭션은 반드시 시작-종료를 갖는다</p>
+<p>트랜잭션은 하나의 connection을 가져와 사용하다가 닫는 사이에서 일어난다.</p>
+<ul>
+<li><p>시작 방법은 1가지(connection)</p>
+</li>
+<li><p>종료방법은 2가지(commit, rollback)</p>
+</li>
+</ul>
+<h2 id="JDBC-사용-시"><a href="#JDBC-사용-시" class="headerlink" title="JDBC 사용 시"></a>JDBC 사용 시</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">	<span class="meta">@DisplayName</span>(<span class="string">"DataSource를 이용해 수동으로 트랜잭션을 관리할 수 있다."</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">executeQuery</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">		Connection connection = dataSource.getConnection();</span><br><span class="line">		connection.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">		<span class="comment">// 쿼리 실행</span></span><br><span class="line">		connection.commit();</span><br><span class="line">		connection.close();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Spring-사용-시"><a href="#Spring-사용-시" class="headerlink" title="Spring 사용 시"></a>Spring 사용 시</h2><p><strong>스프링을 이용하면 내부적으로 커넥션을 갖고 있는 추상화된 트랜잭션 매니저를 이용하게 된다.</strong> </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@DisplayName</span>(<span class="string">"TransactionManager를 이용해 수동으로 트랜잭션을 관리할 수 있다."</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">executeQueryWithTransactionManager</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">	TransactionStatus status = transactionManager.getTransaction(<span class="keyword">new</span> DefaultTransactionDefinition());</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		<span class="comment">// 쿼리 실행</span></span><br><span class="line">		<span class="comment">// 트랜잭션 종료</span></span><br><span class="line">		transactionManager.commit(status);</span><br><span class="line">	&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">		<span class="comment">// 오류 발생 시 롤백</span></span><br><span class="line">		<span class="comment">// 트랜잭션 종료</span></span><br><span class="line">		transactionManager.rollback(status);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="TransactionManger란"><a href="#TransactionManger란" class="headerlink" title="TransactionManger란?"></a>TransactionManger란?</h1><p><strong>스프링은 트랜잭션 처리를 TransactionManager 객체를 통해 처리합니다.</strong></p>
+<p>트랜잭션을 시작하고, 커밋하거나 롤백하는 트랜잭션 제어 책임 객체</p>
+<p><strong>PlatformTransactionManager</strong> 인터페이스이며, 구현체를 런타임에 주입합니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PlatformTransactionManager</span> </span>&#123;</span><br><span class="line">    <span class="function">TransactionStatus <span class="title">getTransaction</span><span class="params">(@Nullable TransactionDefinition var1)</span> <span class="keyword">throws</span> TransactionException</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">commit</span><span class="params">(TransactionStatus var1)</span> <span class="keyword">throws</span> TransactionException</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">rollback</span><span class="params">(TransactionStatus var1)</span> <span class="keyword">throws</span> TransactionException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202511301602378.png" alt="스크린샷 2025-11-30 16.02.41"></p>
+<h1 id="Transaction-전파단계에-대해"><a href="#Transaction-전파단계에-대해" class="headerlink" title="Transaction 전파단계에 대해"></a>Transaction 전파단계에 대해</h1><h2 id="트랜잭션-전파란"><a href="#트랜잭션-전파란" class="headerlink" title="트랜잭션 전파란?"></a>트랜잭션 전파란?</h2><p>Spring이 제공하는 선언적 트랜잭션(@Transactional)의 장점 중 하나는 여러 트랜잭션을 묶어서 커다란 하나의 트랜잭션 경계를 만들수 있다는 점이다. </p>
+<p>이미 트랜잭션이 진행중일 때 추가 트랜잭션 진행을 어떻게 할지 결정하는 것이 전파 속성(Propagation)이다. </p>
+<h2 id="물리-트랜잭션과-논리-트랜잭션"><a href="#물리-트랜잭션과-논리-트랜잭션" class="headerlink" title="물리 트랜잭션과 논리 트랜잭션"></a>물리 트랜잭션과 논리 트랜잭션</h2><ul>
+<li><p><strong>물리 트랜잭션 : 실제 DB에 적용되는 트랜잭션으로 커넥션을 통해 커밋/롤백하는 단위</strong></p>
+<p>트랜잭션은 데이터베이스에서 제공하는 기술이므로 커넥션 객체를 통해 처리한다.<br>그래서 1개의 트랜잭션을 사용한다는 것은 하나의 커넥션 객체를 사용한다는 것이고,<br>실제 데이터베이스의 트랜잭션을 사용한다는 점에서 물리 트랜잭션이라고도 한다.<br>물리 트랜잭션은 실제 커넥션에 롤백/커밋을 호출하는 것으로 해당 트랜잭션이 끝난다.</p>
+</li>
+</ul>
+<ul>
+<li><p><strong>논리 트랜잭션 : 스프링이 트랜잭션 매니저를 통해 트랜잭션을 처리하는 단위</strong></p>
+<p>DB 트랜잭션과 구별되는 스프링 입장에서 트랜잭션 매니저를 통해 트랜잭션을 뜻한다. </p>
+<p>이는 물리 트랜잭션의 갯수와 다를수있다.</p>
+<p>트랜잭션 전파 속성에 따라서 논리 트랜잭션 2개-&gt; 물리 트랜잭션 1개인 상황을 나타낸다.<br><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202511301637028.png" alt="스크린샷 2025-11-30 16.37.37"></p>
+<ul>
+<li><p><strong>스프링에서 논리 트랜잭션의 원칙</strong></p>
+<ol>
+<li><p>모든 논리 트랜잭션이 커밋되어야 물리 트랜잭션이 커밋됨</p>
+</li>
+<li><p>같은 물리 트랜잭션을 공유하는 하나의 논리 트랜잭션이라도 롤백되면 물리 트랜잭션은 롤백됨</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Transactional-전파-단계-설정-시-Spring에서-발생하는-내부-로직"><a href="#Transactional-전파-단계-설정-시-Spring에서-발생하는-내부-로직" class="headerlink" title="@Transactional 전파 단계 설정 시 Spring에서 발생하는 내부 로직"></a>@Transactional 전파 단계 설정 시 Spring에서 발생하는 내부 로직</h2><ul>
+<li><strong>@Transactional</strong> 가 존재하는 MyService.method() 호출 전 발생하는 내부 로직</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">MyService.method() 호출 → 프록시의 invoke()</span><br><span class="line">    ↓</span><br><span class="line">TransactionInterceptor → invokeWithinTransaction()</span><br><span class="line">    ↓</span><br><span class="line">PlatformTransactionManager → getTransaction() / commit() / rollback()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>PlatformTransactionManager.getTransaction()</strong> 중 <strong>전파 단계</strong> 관련 처리 코드</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">final</span> TransactionStatus <span class="title">getTransaction</span><span class="params">(@Nullable TransactionDefinition definition)</span></span></span><br><span class="line"><span class="function">	<span class="keyword">throws</span> TransactionException </span>&#123;</span><br><span class="line">       <span class="comment">// 생략</span></span><br><span class="line">    <span class="comment">// 해당 부분에서 현재 쓰레드에서 이미 시작된 트랜잭션이 있는지 확인하고, 트랜잭션 객체(여기서는 JpaTransactionObject)를 생성해 반환합니다.</span></span><br><span class="line">Object transaction = doGetTransaction();  </span><br><span class="line"><span class="keyword">boolean</span> debugEnabled = logger.isDebugEnabled();</span><br><span class="line">		<span class="keyword">if</span> (isExistingTransaction(transaction)) &#123;</span><br><span class="line">			<span class="comment">// Existing transaction found -&gt; check propagation behavior to find out how to behave.</span></span><br><span class="line">      <span class="comment">// 기존에 Transaction이 존재한다면, Propagation에 맞게 어떻게 트랜잭션을 다룰지 결정합니다.(핸들링)</span></span><br><span class="line">			<span class="keyword">return</span> handleExistingTransaction(def, transaction, debugEnabled);</span><br><span class="line">		&#125;</span><br><span class="line">   <span class="comment">// 기존 Transaction없을 시, 등등 케이스에 대해서 비즈니스 로직 존재(생략)</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="테스트-상황"><a href="#테스트-상황" class="headerlink" title="테스트 상황"></a>테스트 상황</h2><p>둘다 <code>@Transactional</code>을 의존하며, </p>
 <p>PaymentService.processPayment() -&gt; PointService.usePoint()를 호출한다.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line"></span><br><span class="line">    PaymentService.processPayment --&gt; PointService.usePoint</span><br></pre></td></tr></table></figure>
 
-<h1 id="테스트-방법"><a href="#테스트-방법" class="headerlink" title="테스트 방법"></a>테스트 방법</h1><p>usePoint() 메서드의 <code>@Transactional(propagation = XXX)</code>  전파 단계를 바꿔가며,</p>
+
+
+<h2 id="테스트-방법"><a href="#테스트-방법" class="headerlink" title="테스트 방법"></a>테스트 방법</h2><p>usePoint() 메서드의 <code>@Transactional(propagation = XXX)</code>  전파 단계를 바꿔가며,</p>
 <p>상황 및 에러를 확인해보자</p>
-<h1 id="전파-단계별-특징과-예시"><a href="#전파-단계별-특징과-예시" class="headerlink" title="전파 단계별 특징과 예시"></a>전파 단계별 특징과 예시</h1><h2 id="REQUIRED"><a href="#REQUIRED" class="headerlink" title="REQUIRED"></a>REQUIRED</h2><ul>
-<li><p>의미: 트랜잭션이 필요함(없으면 새로 만듬)</p>
+<h2 id="전파-단계별-특징과-예시"><a href="#전파-단계별-특징과-예시" class="headerlink" title="전파 단계별 특징과 예시"></a>전파 단계별 특징과 예시</h2><h3 id="REQUIRED"><a href="#REQUIRED" class="headerlink" title="REQUIRED"></a>REQUIRED</h3><ul>
+<li><p><strong>의미: 트랜잭션이 필요함(없으면 새로 만듬)</strong></p>
 <ul>
 <li>기존 트랜잭션 없음: 새로운 트랜잭션을 생성함</li>
-<li>기존 트랜잭션이 있음: 기존 트랜잭션에 참여함</li>
+<li>기존 트랜잭션이 있음: 기존 트랜잭션에 참여함<ul>
+<li>외부 트랜잭션 1개에는 내부 트랜잭션 2개 포함됨</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><p>예시</p>
@@ -435,7 +526,7 @@ height:50vh;
 </li>
 </ul>
 </li>
-<li><p>이 전파단계에서의 에러 </p>
+<li><p>해당 전파단계에서의 발생된 에러</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.transaction.UnexpectedRollbackException: Transaction silently rolled back because it has been marked as rollback-only</span><br></pre></td></tr></table></figure>
 
 
@@ -444,10 +535,13 @@ height:50vh;
 </ul>
 </li>
 </ul>
-<h2 id="REQUIRES-NEW"><a href="#REQUIRES-NEW" class="headerlink" title="REQUIRES_NEW"></a>REQUIRES_NEW</h2><ul>
-<li>의미: 항상 새로운 트랜잭션이 필요함<ul>
+<h3 id="REQUIRES-NEW"><a href="#REQUIRES-NEW" class="headerlink" title="REQUIRES_NEW"></a>REQUIRES_NEW</h3><ul>
+<li><strong>의미: 항상 새로운 트랜잭션이 필요함</strong><ul>
 <li>기존 트랜잭션 없음: 새로운 트랜잭션을 생성함</li>
-<li>기존 트랜잭션이 있음: 기존 트랜잭션을 보류시키고 새로운 트랜잭션을 생성함</li>
+<li>기존 트랜잭션이 있음: 기존 트랜잭션을 보류시키고 새로운 트랜잭션을 생성함<ul>
+<li>외부 트랜잭션 2개에 각각 내부 트랜잭션 1개씩 포함됨.</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>예시<ul>
@@ -471,11 +565,14 @@ height:50vh;
 </ul>
 </li>
 </ul>
-<h2 id="SUPPORTS"><a href="#SUPPORTS" class="headerlink" title="SUPPORTS"></a>SUPPORTS</h2><ul>
-<li><p>의미: 트랜잭션이 있으면 지원함(트랜잭션이 없어도 됨)</p>
+<h3 id="SUPPORTS"><a href="#SUPPORTS" class="headerlink" title="SUPPORTS"></a>SUPPORTS</h3><ul>
+<li><p><strong>의미: 트랜잭션이 있으면 지원함(트랜잭션이 없어도 됨)</strong></p>
 <ul>
 <li>기존 트랜잭션 없음: 트랜잭션 없이 진행함</li>
-<li>기존 트랜잭션이 있음: 기존 트랜잭션에 참여함</li>
+<li>기존 트랜잭션이 있음: 기존 트랜잭션에 참여함<ul>
+<li>외부 트랜잭션 1개에 2개의 내부 트랜잭션 포함됨</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><p>예시</p>
@@ -497,17 +594,18 @@ height:50vh;
 <li><p>이 전파단계에서의 에러 -&gt; 기존 트랜잭션 존재했으므로 rollback-only marked</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.transaction.UnexpectedRollbackException: Transaction silently rolled back because it has been marked as rollback-only</span><br></pre></td></tr></table></figure>
 
-
-
 </li>
 </ul>
 </li>
 </ul>
-<h2 id="NOT-SUPPORTED"><a href="#NOT-SUPPORTED" class="headerlink" title="NOT_SUPPORTED"></a>NOT_SUPPORTED</h2><ul>
-<li><p>의미: 트랜잭션을 지원하지 않음(트랜잭션 없이 진행함)</p>
+<h3 id="NOT-SUPPORTED"><a href="#NOT-SUPPORTED" class="headerlink" title="NOT_SUPPORTED"></a>NOT_SUPPORTED</h3><ul>
+<li><p><strong>의미: 트랜잭션을 지원하지 않음(트랜잭션 없이 진행함)</strong></p>
 <ul>
 <li>기존 트랜잭션 없음: 트랜잭션 없이 진행함</li>
-<li>기존 트랜잭션이 있음: 기존 트랜잭션을 보류시키고 트랜잭션 없이 진행함</li>
+<li>기존 트랜잭션이 있음: 기존 트랜잭션을 보류시키고 트랜잭션 없이 진행함<ul>
+<li>외부 트랜잭션 1개에 1개의 내부 트랜잭션이 존재</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><p>예시</p>
@@ -532,17 +630,16 @@ height:50vh;
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jakarta.persistence.TransactionRequiredException: Query requires transaction be in progress, but no transaction is known to be in progress</span><br></pre></td></tr></table></figure>
 
-
-
-
-
 </li>
 </ul>
-<h2 id="MANDATORY"><a href="#MANDATORY" class="headerlink" title="MANDATORY"></a>MANDATORY</h2><ul>
-<li><p>의미: 트랜잭션이 의무임(트랜잭션이 반드시 필요함)</p>
+<h3 id="MANDATORY"><a href="#MANDATORY" class="headerlink" title="MANDATORY"></a>MANDATORY</h3><ul>
+<li><p><strong>의미: 트랜잭션이 의무임(트랜잭션이 반드시 필요함)</strong></p>
 <ul>
 <li>기존 트랜잭션 없음: IllegalTransactionStateException 예외 발생</li>
-<li>기존 트랜잭션이 있음: 기존 트랜잭션에 참여함</li>
+<li>기존 트랜잭션이 있음: 기존 트랜잭션에 참여함<ul>
+<li>외부 트랜잭션 1개에 2개의 내부 트랜잭션 포함됨</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><p>예시 </p>
@@ -563,17 +660,18 @@ height:50vh;
 <li><p>이 전파단계에서의 에러 : </p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.transaction.IllegalTransactionStateException: No existing transaction found for transaction marked with propagation 'mandatory'</span><br></pre></td></tr></table></figure>
 
-
-
 </li>
 </ul>
 </li>
 </ul>
-<h2 id="NEVER"><a href="#NEVER" class="headerlink" title="NEVER"></a>NEVER</h2><ul>
-<li><p>의미: 트랜잭션을 사용하지 않음(기존 트랜잭션도 허용하지 않음)</p>
+<h3 id="NEVER"><a href="#NEVER" class="headerlink" title="NEVER"></a>NEVER</h3><ul>
+<li><p><strong>의미: 트랜잭션을 사용하지 않음(기존 트랜잭션도 허용하지 않음)</strong></p>
 <ul>
 <li>기존 트랜잭션 없음: 트랜잭션 없이 진행</li>
-<li>기존 트랜잭션이 있음: <code>IllegalTransactionStateException</code> 예외 발생</li>
+<li>기존 트랜잭션이 있음: <code>IllegalTransactionStateException</code> 예외 발생<ul>
+<li>외부 트랜잭션 1개와 내부 트랜잭션 1개 존재 시 Exception 발생</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><p>예시</p>
@@ -740,7 +838,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#테스트-상황"><span class="toc-number">2.</span> <span class="toc-text">테스트 상황</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#테스트-방법"><span class="toc-number">3.</span> <span class="toc-text">테스트 방법</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#전파-단계별-특징과-예시"><span class="toc-number">4.</span> <span class="toc-text">전파 단계별 특징과 예시</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#REQUIRED"><span class="toc-number">4.1.</span> <span class="toc-text">REQUIRED</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#REQUIRES-NEW"><span class="toc-number">4.2.</span> <span class="toc-text">REQUIRES_NEW</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SUPPORTS"><span class="toc-number">4.3.</span> <span class="toc-text">SUPPORTS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NOT-SUPPORTED"><span class="toc-number">4.4.</span> <span class="toc-text">NOT_SUPPORTED</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MANDATORY"><span class="toc-number">4.5.</span> <span class="toc-text">MANDATORY</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NEVER"><span class="toc-number">4.6.</span> <span class="toc-text">NEVER</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#참조"><span class="toc-number">1.</span> <span class="toc-text">참조</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">2.</span> <span class="toc-text">왜</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#기본지식-JDBC-JPA"><span class="toc-number">3.</span> <span class="toc-text">기본지식 (JDBC, JPA)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JDBC-Java-Database-Connectivity"><span class="toc-number">3.1.</span> <span class="toc-text">JDBC (Java Database Connectivity)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPA"><span class="toc-number">3.2.</span> <span class="toc-text">JPA</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Transaction이란"><span class="toc-number">4.</span> <span class="toc-text">Transaction이란?</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JDBC-사용-시"><span class="toc-number">4.1.</span> <span class="toc-text">JDBC 사용 시</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-사용-시"><span class="toc-number">4.2.</span> <span class="toc-text">Spring 사용 시</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TransactionManger란"><span class="toc-number">5.</span> <span class="toc-text">TransactionManger란?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Transaction-전파단계에-대해"><span class="toc-number">6.</span> <span class="toc-text">Transaction 전파단계에 대해</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#트랜잭션-전파란"><span class="toc-number">6.1.</span> <span class="toc-text">트랜잭션 전파란?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#물리-트랜잭션과-논리-트랜잭션"><span class="toc-number">6.2.</span> <span class="toc-text">물리 트랜잭션과 논리 트랜잭션</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Transactional-전파-단계-설정-시-Spring에서-발생하는-내부-로직"><span class="toc-number">6.3.</span> <span class="toc-text">@Transactional 전파 단계 설정 시 Spring에서 발생하는 내부 로직</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#테스트-상황"><span class="toc-number">6.4.</span> <span class="toc-text">테스트 상황</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#테스트-방법"><span class="toc-number">6.5.</span> <span class="toc-text">테스트 방법</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#전파-단계별-특징과-예시"><span class="toc-number">6.6.</span> <span class="toc-text">전파 단계별 특징과 예시</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#REQUIRED"><span class="toc-number">6.6.1.</span> <span class="toc-text">REQUIRED</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#REQUIRES-NEW"><span class="toc-number">6.6.2.</span> <span class="toc-text">REQUIRES_NEW</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SUPPORTS"><span class="toc-number">6.6.3.</span> <span class="toc-text">SUPPORTS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NOT-SUPPORTED"><span class="toc-number">6.6.4.</span> <span class="toc-text">NOT_SUPPORTED</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MANDATORY"><span class="toc-number">6.6.5.</span> <span class="toc-text">MANDATORY</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NEVER"><span class="toc-number">6.6.6.</span> <span class="toc-text">NEVER</span></a></li></ol></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
@@ -4977,7 +5075,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2025/11/26/about-transaction-propagation/" >Transaction 전파단계 학습</a>
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2025/11/26/about-transaction-propagation/" >Transaction 전파단계와 TransactionManager에 대해서</a>
         </li>
     
     
