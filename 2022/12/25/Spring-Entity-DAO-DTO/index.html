@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">964</span>Reading time: <span class="post-count reading-time">6 min</span></span>
+                        <span>Word count: <span class="post-count word-count">886</span>Reading time: <span class="post-count reading-time">5 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -403,8 +403,8 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="Entity-DAO-DTO"><a href="#Entity-DAO-DTO" class="headerlink" title="Entity, DAO, DTO"></a>Entity, DAO, DTO</h1><p>Created Time: November 17, 2022 3:56 PM<br>Last Edited Time: November 19, 2022 5:26 AM<br>References: <a href="https://velog.io/@ohzzi/Entity-DAO-DTO%EA%B0%80-%EB%AC%B4%EC%97%87%EC%9D%B4%EB%A9%B0-%EC%99%9C-%EC%82%AC%EC%9A%A9%ED%95%A0%EA%B9%8C" target="_blank" rel="noopener">https://velog.io/@ohzzi/Entity-DAO-DTO%EA%B0%80-%EB%AC%B4%EC%97%87%EC%9D%B4%EB%A9%B0-%EC%99%9C-%EC%82%AC%EC%9A%A9%ED%95%A0%EA%B9%8C</a><br>Tags: Spring</p>
-<p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212251823421.png" alt="1"></p>
+        <h1 id="참고"><a href="#참고" class="headerlink" title="참고"></a>참고</h1><p><a href="https://velog.io/@ohzzi/Entity-DAO-DTO%EA%B0%80-%EB%AC%B4%EC%97%87%EC%9D%B4%EB%A9%B0-%EC%99%9C-%EC%82%AC%EC%9A%A9%ED%95%A0%EA%B9%8C" target="_blank" rel="noopener">참고</a></p>
+<h1 id="Entity-DAO-DTO"><a href="#Entity-DAO-DTO" class="headerlink" title="Entity, DAO, DTO"></a>Entity, DAO, DTO</h1><p><img src="https://raw.githubusercontent.com/lostcatbox/lostcatbox.github.io-image_repo/uploadimage/img202212251823421.png" alt="1"></p>
 <p>개인적으로 Spring Boot를 가지고 CRUD를 구현한 Todo-list를 만들어면서, Spring Data JPA를 사용하게 되었다. JPA를 사용하면서, 생전 처음 보는 <code>Entity</code>, <code>DAO</code>, <code>DTO</code> 개념을 사용하게 되었는데, 앞으로 계속 많이 쓰게 될 것 같아서 정리하는 시간을 가지려고 한다.</p>
 <h2 id="Entity란"><a href="#Entity란" class="headerlink" title="Entity란?"></a>Entity란?</h2><p><code>Entity</code> 클래스는 DB의 테이블에 존재하는 Column들을 필드로 가지는 객체를 말한다. Entity는 <strong>DB의 테이블과 1대 1로 대응되며,</strong> 때문에 테이블이 가지지 않는 컬럼을 필드로 가져서는 안된다. 또한 Entity 클래스는 다른 클래스를 상속받거나 인터페이스의 구현체여서는 안된다.</p>
 <p>예를 들어 post 라는 테이블이 title, content, author 라는 컬럼들을 가지고 있다면, 이에 대응하는 Entity 클래스 Post는</p>
@@ -415,7 +415,6 @@ height:50vh;
 <p>Entity의 Getter 사용을 최대한 피하라고 했지만, 기본적으로 Entity를 만들 때 Getter는 만들어줘야 한다. 그런데 이동욱님이 쓰신 책을 보니, Entity 클래스에서 <code>Setter</code>를 만드는 것은 피하라는 조언이 있었다.</p>
 <p>일반적으로 자바 클래스를 만들때 private 필드들을 가지고 습관적으로 Getter와 Setter를 만들고는 하는데, 문제는 Setter의 사용이 Entity의 일관성을 해칠 수 있다는 것이다.</p>
 <p>Setter를 무분별하게 사용하게 되면, Entity의 인스턴스 값들이 언제 어디서 변하는지 명확히 알 수 없다. 따라서 Setter 대신 다른 방법으로 필드에 값을 넣어 주는 것이 좋다. 그런데 일반적으로 생각할 수 있는 인스턴스의 생성 시점에 생성자로 필드에 값을 넣어주는 방법 또한 그다지 좋지 않은 방법일 수 있는데, 생성자에 현재 넣는 값이 어떤 필드인지 명확히 알 수 없고, 매개변수끼리의 순서가 바뀌더라도 코드가 모두 실행되기 전까지는 문제를 알 수 없다는 단점이 있기 때문이다.</p>
-<p>따라서 <code>Builder</code> 패턴을 사용하는 것이 가장 좋다. 멤버 변수가 많아지더라도 어떤 값을 어떤 필드에 넣는지 코드를 통해 확인할 수 있고, 필요한 값만 집어넣는 것이 가능하기 때문이다.</p>
 <h3 id="Entity-클래스-생성-및-Builder-패턴-예시"><a href="#Entity-클래스-생성-및-Builder-패턴-예시" class="headerlink" title="Entity 클래스 생성 및 Builder 패턴 예시"></a>Entity 클래스 생성 및 Builder 패턴 예시</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Membmer</span> <span class="title">member</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String email;</span><br><span class="line">    <span class="meta">@Column</span>(length = <span class="number">13</span>, nullable = <span class="keyword">false</span>)</span><br><span class="line">    <span class="keyword">private</span> String phoneNumber;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Builder</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Member</span><span class="params">(<span class="keyword">long</span> id, String name, String email, String phoneNumber)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.email = email;</span><br><span class="line">        <span class="keyword">this</span>.phoneNumber = phoneNumber;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 사용 방법</span></span><br><span class="line"></span><br><span class="line">Member member = <span class="keyword">new</span> member.builder()</span><br><span class="line">        .name(<span class="string">"홍길동"</span>)</span><br><span class="line">        .email(<span class="string">"test@gmail.com"</span>)</span><br><span class="line">        .phoneNumber(<span class="string">"010-1234-5678"</span>)</span><br><span class="line">        .build();</span><br></pre></td></tr></table></figure>
 
 <h2 id="DAO란"><a href="#DAO란" class="headerlink" title="DAO란?"></a>DAO란?</h2><p><code>DAO</code>는 <strong>Data Access Object</strong>의 약자로, 실제로 DB에 접근하는 객체다. DAO는 프로젝트의 서비스 모델과 실제 데이터베이스를 연결하는 역할을 하며, JPA에서는 DB에 데이터를 CRUD 하는 <code>Repository</code> 객체들이 DAO라고 볼 수 있다.</p>
@@ -582,7 +581,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Entity-DAO-DTO"><span class="toc-number">1.</span> <span class="toc-text">Entity, DAO, DTO</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Entity란"><span class="toc-number">1.1.</span> <span class="toc-text">Entity란?</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Entity-클래스-생성-및-Builder-패턴-예시"><span class="toc-number">1.1.1.</span> <span class="toc-text">Entity 클래스 생성 및 Builder 패턴 예시</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DAO란"><span class="toc-number">1.2.</span> <span class="toc-text">DAO란?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DTO란"><span class="toc-number">1.3.</span> <span class="toc-text">DTO란?</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Entity와-DTO를-분리하는-이유"><span class="toc-number">1.3.1.</span> <span class="toc-text">Entity와 DTO를 분리하는 이유</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DTO와-VO와의-차이"><span class="toc-number">1.3.2.</span> <span class="toc-text">DTO와 VO와의 차이</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#참고"><span class="toc-number">1.</span> <span class="toc-text">참고</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Entity-DAO-DTO"><span class="toc-number">2.</span> <span class="toc-text">Entity, DAO, DTO</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Entity란"><span class="toc-number">2.1.</span> <span class="toc-text">Entity란?</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Entity-클래스-생성-및-Builder-패턴-예시"><span class="toc-number">2.1.1.</span> <span class="toc-text">Entity 클래스 생성 및 Builder 패턴 예시</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DAO란"><span class="toc-number">2.2.</span> <span class="toc-text">DAO란?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DTO란"><span class="toc-number">2.3.</span> <span class="toc-text">DTO란?</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Entity와-DTO를-분리하는-이유"><span class="toc-number">2.3.1.</span> <span class="toc-text">Entity와 DTO를 분리하는 이유</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DTO와-VO와의-차이"><span class="toc-number">2.3.2.</span> <span class="toc-text">DTO와 VO와의 차이</span></a></li></ol></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
@@ -4801,9 +4800,26 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 245
+        Total : 246
         </div>
         <!-- search  -->
         
@@ -4816,6 +4832,11 @@ top:50vh;
     
     <div class="archive-year"> 2025 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/01</span><a class="archive-post-title" href= "/2025/12/01/about-entity-and-vo/" >DDD관점에서의 Entity 와 VO에 대해서</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -6343,6 +6364,8 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="study"><span class="iconfont-archer">&#xe606;</span>study</span>
     
+        <span class="sidebar-tag-name" data-tags="DDD"><span class="iconfont-archer">&#xe606;</span>DDD</span>
+    
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -6501,6 +6524,8 @@ jsonContent:
         <span class="sidebar-category-name" data-categories="SpringBatch"><span class="iconfont-archer">&#xe60a;</span>SpringBatch</span>
     
         <span class="sidebar-category-name" data-categories="ADR"><span class="iconfont-archer">&#xe60a;</span>ADR</span>
+    
+        <span class="sidebar-category-name" data-categories="DDD"><span class="iconfont-archer">&#xe60a;</span>DDD</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
