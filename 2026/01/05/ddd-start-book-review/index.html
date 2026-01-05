@@ -274,12 +274,12 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">268</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">644</span>Reading time: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2025/03/31</span>
+                    <span class="post-intro-time">2026/01/05</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -407,59 +407,132 @@ height:50vh;
 <li>DDD 개발 예시를 알기위해서</li>
 <li>DDD의 정확한 예시를 알기위해</li>
 </ul>
-<h1 id="도메인-기본-지식"><a href="#도메인-기본-지식" class="headerlink" title="도메인 기본 지식"></a>도메인 기본 지식</h1><ul>
+<h1 id="도메인-모델-시작하기"><a href="#도메인-모델-시작하기" class="headerlink" title="도메인 모델 시작하기"></a>도메인 모델 시작하기</h1><ul>
 <li>도메인 = 문제의 영역</li>
-<li>도메인 모델 -&gt; 엔티티와 값객체로 나눔<ul>
-<li>엔티티 - 식별값이 존재</li>
-<li>값 객체 - 식별값이 없음<ul>
-<li>보통은 루트 엔티티 + 값 객체로 구성되어 하나의 애그리거트가 된다.</li>
+<li>도메인 모델 -&gt; 엔티티와 밸류로 나눔<ul>
+<li>엔티티 - 식별값이 존재<ul>
+<li>setter를 제공하지않고, changeXXX, close() 등의 다양한 목적를 나타내는 행위를 정의한 메서드로 제공하자.</li>
+<li>예시 - Order, Delivery</li>
+</ul>
+</li>
+<li>밸류 - 식별값이 없음<ul>
+<li>밸류는 불변 객체를 원칙으로 설계하고, 매번 새로운 객체를 반환하도록 한다.</li>
+<li>예시 - Money, Address, OrderItem</li>
 </ul>
 </li>
 </ul>
 </li>
+</ul>
+<h1 id="아키텍처-개요"><a href="#아키텍처-개요" class="headerlink" title="아키텍처 개요"></a>아키텍처 개요</h1><h2 id="계층-구조-아키텍처"><a href="#계층-구조-아키텍처" class="headerlink" title="계층 구조 아키텍처"></a>계층 구조 아키텍처</h2><ul>
+<li>표현 : 클라이언트의 요청에 따라 알맞는 응용 서비스 호출 및 응답 반환</li>
+<li>응용 : 비즈니스 로직을 갖지 않으며, 도메인 계층에게 비즈니스 로직 처리 요청함.<ul>
+<li>응용 서비스</li>
+</ul>
+</li>
+<li>도메인 : <ul>
+<li>도메인 모델</li>
+<li>도메인 서비스</li>
+</ul>
+</li>
+<li>인프라스트럭처</li>
 </ul>
 <h1 id="애그리거트"><a href="#애그리거트" class="headerlink" title="애그리거트"></a>애그리거트</h1><ul>
-<li>애그리거트는 하나의 Repository, 하나의 Transaction 단위를 가지는 집합이다.<ul>
-<li>다음과 같이 하위 도메인 모델들의 기능들의 상태변화 및 비즈니스 로직을 구현하고있다. 따라서 루트 애그리거트를 통하여 하위 도메인 모델의 상태변화를 일으키도록 해야한다.</li>
-<li>예시<ul>
-<li>주문(루트)<ul>
-<li>주문리스트</li>
-<li>발송상태</li>
+<li><p>애그리거트는 하나의 Transaction 단위를 가지는 집합이다.</p>
+</li>
+<li><p>하위 도메인 모델들의 기능들의 상태변화 및 비즈니스 로직을 구현하고있다. </p>
+</li>
+<li><p><strong>루트 에그리거트(엔티티) + 밸류 + 엔티티 등로 구성</strong>되어 하나의 애그리거트가 된다.</p>
+</li>
+<li><p>루트 애그리거트를 통해서만 하위 도메인 모델(하위 밸류, 하위 엔티티) 의 상태변화를 일으키도록 해야한다.</p>
+</li>
+<li><p>다른 애그리거트의 값이 필요할 경우, ID값을 이용하여 다른 애그리거트를 참조하는것을 추천한다</p>
+<ul>
+<li>특징 : lazy로딩과 유사함. 실제로 필요할때 정보를 가져오도록 쿼리하는 형태로 로직 구현</li>
+<li>문제점 : N+1 문제가 동일하게 발생할 수 있음</li>
+<li>해결방법 : 데이터 조회를 위한 DAO를 만들어서 한번에 쿼리</li>
 </ul>
 </li>
-</ul>
+<li><p>예시</p>
+<p>주문(루트)</p>
+<ul>
+<li><p>주문리스트(밸류)</p>
 </li>
-<li>추가적으로 ID값을 이용하여 다른 애그리거트를 참조하는것을 추천한다. -&gt; lazy로딩과 비슷함. 실제로 필요할때 정보를 가져오도록 쿼리하는 형태로 로직 구현</li>
+<li><p>발송상태(밸류)</p>
+</li>
 </ul>
 </li>
 </ul>
 <h1 id="리포지터리와-모델-구현"><a href="#리포지터리와-모델-구현" class="headerlink" title="리포지터리와 모델 구현"></a>리포지터리와 모델 구현</h1><ul>
-<li>JPA를 활요한 리포지터리 구현</li>
-<li>도메인 모델과 영속성 모델을 합쳐놓으신거같은데, 마지막에는 분리하는것을 추천하셨다.</li>
-<li>다양한 JPA 활용법 포함</li>
+<li><p>JPA를 활용한 리포지터리 구현</p>
+</li>
+<li><p>다양한 JPA 활용법 포함</p>
+<ul>
+<li>AttributeConverter</li>
+<li>Collection</li>
+<li>밸류를 이용한 ID 매핑</li>
+<li>별도 테이블에 저장하는 밸류 매핑</li>
+<li>ID 참조와 조인 테이블 이용한 단방향 M-N 매핑</li>
+</ul>
+</li>
+<li><p>기타 특이사항</p>
+<ul>
+<li>도메인 엔티티와 JPA 엔티티를 같은 객체로 구현하였다.(개발 비용 절감)</li>
+<li>도메인 엔티티에 @Entity, @Column와 같은 에너테이션 존재 -&gt; 인프라 계층에 의존성 생김 -&gt; JPA 기술을 바꿀일이 거의없고, 단위테스트 가능한 구조기때문에 단점이지만, 장점인 개발 비용절감 효과큼</li>
+</ul>
+</li>
 </ul>
 <h1 id="스프링-데이터-JPA를-이용한-조회기능-CQRS-관련에서-조회"><a href="#스프링-데이터-JPA를-이용한-조회기능-CQRS-관련에서-조회" class="headerlink" title="스프링 데이터 JPA를 이용한 조회기능 (CQRS 관련에서 조회)"></a>스프링 데이터 JPA를 이용한 조회기능 (CQRS 관련에서 조회)</h1><ul>
-<li>JPA 활용법</li>
-<li>페이징 활용법</li>
+<li><p>스펙 구현(Spec)</p>
+</li>
+<li><p>정렬 구현(Sort)</p>
+</li>
+<li><p>페이징 활용법(Pageable, PageRequest)</p>
+</li>
+<li><p>동적 인스턴스 생성(new Object())</p>
+</li>
+<li><p>하이버네이트 @Subselect 활용</p>
+</li>
 </ul>
 <h1 id="응용-서비스와-표현-영역"><a href="#응용-서비스와-표현-영역" class="headerlink" title="응용 서비스와 표현 영역"></a>응용 서비스와 표현 영역</h1><ul>
-<li>응용 서비스 구현<ul>
+<li><p>응용 서비스 구현</p>
+<ul>
 <li>응용 서비스의 매개변수는 비즈니스로직+ 입력 검증 필요</li>
 <li>에그리거트 찾음 -&gt; 에그리거트.도메인로직 -&gt; 결과리턴</li>
-<li>응용 서비스와 도메인 서비스 구별법<ul>
-<li>도메인 서비스는 도메인 데이터 값 활용 + 변경을 한다. 따라서 데이터와 비즈니스로직이 바로 붙어있어야하고 캡슐화되어있어야한다.</li>
-<li>도메인 로직이 응용 서비스에 있다면, 모든 응용 서비스들에 중복 검증 코드가 생기므로 바람직하지않다.</li>
+<li>도메인 서비스 특징<ul>
+<li>도메인 서비스는 도메인 데이터 값 활용 + 변경을 한다.</li>
+<li><strong>만약, 도메인 로직이 응용 서비스에 있다면, 모든 응용 서비스들에 중복 검증 코드가 생기므로 바람직하지않다.</strong></li>
 </ul>
 </li>
-<li>응용 서비스는 한 책임을 여러개 가져가는거 보다, 클래스를 분리하여, 각자의 책임을 가져가는 것이 좋다. <ul>
-<li>Controller -&gt; ChangePasswordService-&gt; password 도메인모델의 검증호출</li>
+<li>응용 서비스 특징<ul>
+<li>한 책임을 여러개 가져가는거 보다, 클래스를 분리하여, 각자의 책임을 가져가는 것이 좋다. <ul>
+<li>Controller -&gt; ChangePasswordService-&gt; password 도메인 모델의 검증 호출</li>
+<li>Controller -&gt; OrderCreateService-&gt; order 도메인 모델 생성 팩토리 호출</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>표현 영역의 역할<ul>
-<li>표현 영역에서는 입력에 대한 검증</li>
-<li>반드시 응용 서비스 호출 DTO로 전환해줘야한다.-&gt; 표현 영역의 DTO그대로 활용시 사이드 이팩 발생가능</li>
+</ul>
+</li>
+<li><p>표현 영역의 역할</p>
+<ul>
+<li><strong>알맞는 응용 서비스를 호출하고 그에 맞는 DTO로 전환 필수</strong> (사이드 이펙트 방지를 위해 표현과 응용 계층 완벽한 분리하는것 추천)</li>
+<li><strong>입력에 대한 검증 책임 위치에 대한 2가지 유형</strong><ul>
+<li><strong>2개 계층에 분산하여 각각 검증</strong><ul>
+<li>표현 영역 : 필수 값, 값의 형식, 범위 등을 검증한다.</li>
+<li>응용 서비스: 데이터의 존재 유무와 같은 논리적 오류를 검증한다.</li>
+</ul>
+</li>
+<li><strong>응용 서비스에서 필수값, 논리적인 검증 모두 한다.</strong><ul>
+<li>응용 서비스: 필수 값, 값의 형식, 범위 +  데이터의 존재 유무와 같은 논리적 오류를 검증한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>조회 전용 기능과 응용 서비스</p>
+<ul>
+<li>표현에서 단순 쿼리, 검색 쿼리 등이 필요할 경우, 간단한 응용 서비스를 통해 구현된 DAO를 활용하는 것 추천 (경우에 따라 응용 서비스 계층도 생략)</li>
 </ul>
 </li>
 </ul>
@@ -471,10 +544,56 @@ height:50vh;
 <li>외부 서비스(포트) 이용해야할 경우</li>
 </ul>
 </li>
-<li>도메인 서비스를 에그리거트에 넣지말자.(많이 실수함)<ul>
+<li><strong>도메인 서비스를 에그리거트에 포함시키지말자</strong> <strong>-&gt; 응용 서비스에서 주입받아서 사용.</strong><ul>
 <li>에그리거트의 책임은 다른 에그리거트에 대한 책임을 포함하지 않는것이 바람직하다.</li>
 </ul>
 </li>
+</ul>
+<h1 id="애그리거트-트랜잭션-관리"><a href="#애그리거트-트랜잭션-관리" class="headerlink" title="애그리거트 트랜잭션 관리"></a>애그리거트 트랜잭션 관리</h1><ul>
+<li>배타락, 낙관적락 설명</li>
+</ul>
+<h1 id="도메인-모델과-바운디드-컨텍스트"><a href="#도메인-모델과-바운디드-컨텍스트" class="headerlink" title="도메인 모델과 바운디드 컨텍스트"></a>도메인 모델과 바운디드 컨텍스트</h1><ul>
+<li>문맥이 달라지는 곳이 바운디드 컨텍스트이며, 바운디드 컨텍스트에 도메인 모델은 하나다.</li>
+<li>바운디드 컨텍스트 간의 통신할때, 동기(API), 비동기(messageQ) 를 알맞게 사용하고, 상류-하류를 구분하여, 상류 코드를 변경하는 것에 각별히 주의하자.</li>
+</ul>
+<h1 id="이벤트"><a href="#이벤트" class="headerlink" title="이벤트"></a>이벤트</h1><ul>
+<li>바운디드 컨텍스트 간의 강결합을 없앨때, 효과적이다.</li>
+<li>이벤트는 과거에 벌어진 어떤 것이다.</li>
+<li>이벤트 처리는 퍼블리셔-브로커-리스너으로 구성되어있다.</li>
+<li>구현방법<ul>
+<li>동기 처리 <ul>
+<li>@EventLister 사용<ul>
+<li>동일한 트랜잭션 범위에서 실행된다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>비동기 처리 (기본적으로 트랜잭션 범위 분리됨)<ul>
+<li>로컬 핸들러로 비동기 실행<ul>
+<li>@Async 로 별도 쓰레드를 이용해 비동기 처리</li>
+</ul>
+</li>
+<li>메시지 큐 사용<ul>
+<li>카프카, 래빗 사용</li>
+</ul>
+</li>
+<li>이벤트 저장소와 이벤트 포워더 사용</li>
+<li>이벤트 저장소와 이벤트 제공 API 사용</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>주의할점<ul>
+<li>이벤트 발급이 포함된 트랜잭션은 막상 실패하고 이벤트는 발급됨과 같은 실패 케이스 등도 고민해봐야한다.<ul>
+<li>@TransactionEventListener 사용해보기</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="CQRS"><a href="#CQRS" class="headerlink" title="CQRS"></a>CQRS</h1><ul>
+<li>조회노드, 명령 노드를 나누면, 조회성능이 매우 올라간다.</li>
+<li>JPA 모델과 DAO 모델을 나눠서, 쓰기와 읽기에 알맞게 활용가능하다.</li>
 </ul>
 
     </article>
@@ -484,17 +603,12 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href= "/2025/07/04/llm-and-cursor-study/" title= "LLM 및 Cursor 학습">
-                    <div class="nextTitle">LLM 및 Cursor 학습</div>
-                </a>
-            
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href= "/2025/03/10/TDD-by-Example/" title= "TDD by Example">
-                    <div class="prevTitle">TDD by Example</div>
+                <a href= "/2025/12/12/about-java-stream-api/" title= "about-java-stream-api">
+                    <div class="prevTitle">about-java-stream-api</div>
                 </a>
             
         </li>
@@ -625,7 +739,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#도메인-기본-지식"><span class="toc-number">2.</span> <span class="toc-text">도메인 기본 지식</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#애그리거트"><span class="toc-number">3.</span> <span class="toc-text">애그리거트</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#리포지터리와-모델-구현"><span class="toc-number">4.</span> <span class="toc-text">리포지터리와 모델 구현</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#스프링-데이터-JPA를-이용한-조회기능-CQRS-관련에서-조회"><span class="toc-number">5.</span> <span class="toc-text">스프링 데이터 JPA를 이용한 조회기능 (CQRS 관련에서 조회)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#응용-서비스와-표현-영역"><span class="toc-number">6.</span> <span class="toc-text">응용 서비스와 표현 영역</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#도메인-서비스"><span class="toc-number">7.</span> <span class="toc-text">도메인 서비스</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#왜"><span class="toc-number">1.</span> <span class="toc-text">왜?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#도메인-모델-시작하기"><span class="toc-number">2.</span> <span class="toc-text">도메인 모델 시작하기</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#아키텍처-개요"><span class="toc-number">3.</span> <span class="toc-text">아키텍처 개요</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#계층-구조-아키텍처"><span class="toc-number">3.1.</span> <span class="toc-text">계층 구조 아키텍처</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#애그리거트"><span class="toc-number">4.</span> <span class="toc-text">애그리거트</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#리포지터리와-모델-구현"><span class="toc-number">5.</span> <span class="toc-text">리포지터리와 모델 구현</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#스프링-데이터-JPA를-이용한-조회기능-CQRS-관련에서-조회"><span class="toc-number">6.</span> <span class="toc-text">스프링 데이터 JPA를 이용한 조회기능 (CQRS 관련에서 조회)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#응용-서비스와-표현-영역"><span class="toc-number">7.</span> <span class="toc-text">응용 서비스와 표현 영역</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#도메인-서비스"><span class="toc-number">8.</span> <span class="toc-text">도메인 서비스</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#애그리거트-트랜잭션-관리"><span class="toc-number">9.</span> <span class="toc-text">애그리거트 트랜잭션 관리</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#도메인-모델과-바운디드-컨텍스트"><span class="toc-number">10.</span> <span class="toc-text">도메인 모델과 바운디드 컨텍스트</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#이벤트"><span class="toc-number">11.</span> <span class="toc-text">이벤트</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CQRS"><span class="toc-number">12.</span> <span class="toc-text">CQRS</span></a></li></ol>
         <br/>
         <br/>
         <br/>
@@ -4900,8 +5014,6 @@ top:50vh;
     
     
     
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 247
@@ -4914,6 +5026,20 @@ top:50vh;
     
     
     
+    
+    <div class="archive-year"> 2026 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/05</span><a class="archive-post-title" href= "/2026/01/05/ddd-start-book-review/" >(책읽기)도매인 주도 설계 시작하기</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
     
     <div class="archive-year"> 2025 </div>
     <ul class="year-list">
@@ -4961,11 +5087,6 @@ top:50vh;
     
         <li class="archive-post-item">
             <span class="archive-post-date">07/04</span><a class="archive-post-title" href= "/2025/07/04/llm-and-cursor-study/" >LLM 및 Cursor 학습</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/31</span><a class="archive-post-title" href= "/2025/03/31/ddd-start-book-review/" >(책읽기)도매인 주도 설계 시작하기</a>
         </li>
     
     
