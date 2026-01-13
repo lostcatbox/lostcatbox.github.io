@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">107</span>Reading time: <span class="post-count reading-time">1 min</span></span>
+                        <span>Word count: <span class="post-count word-count">409</span>Reading time: <span class="post-count reading-time">2 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -442,6 +442,78 @@ height:50vh;
 </ul>
 </li>
 </ul>
+<h1 id="예시-AccountNumber"><a href="#예시-AccountNumber" class="headerlink" title="예시(AccountNumber)"></a>예시(AccountNumber)</h1><h2 id="빠른-Id-생성-id-accountNumber를-AccountId로-통합-시"><a href="#빠른-Id-생성-id-accountNumber를-AccountId로-통합-시" class="headerlink" title="(빠른 Id 생성) id, accountNumber를 AccountId로 통합 시"></a>(빠른 Id 생성) id, accountNumber를 AccountId로 통합 시</h2><ul>
+<li>빠른 Id 생성</li>
+<li>AccountId (String, 예: “240523-0123456789”) = PK = 계좌번호</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span>(access = AccessLevel.PROTECTED)</span><br><span class="line"><span class="meta">@AllArgsConstructor</span>(access = AccessLevel.PRIVATE)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Account</span> </span>&#123;</span><br><span class="line">	<span class="meta">@EmbeddedId</span></span><br><span class="line">	<span class="keyword">private</span> AccountId accountId;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="장점"><a href="#장점" class="headerlink" title="장점"></a>장점</h3><pre><code>1. 단순함</code></pre><ul>
+<li><p>하나의 값으로 PK와 비즈니스 식별자를 동시에 처리</p>
+</li>
+<li><p>조인이나 조회 시 추가 컬럼 불필요</p>
+</li>
+<li><p>코드가 간결해짐</p>
+<ol start="2">
+<li>자연키의 이점</li>
+</ol>
+</li>
+<li><p>계좌번호만 알면 바로 조회 가능 (외부 시스템 연동 시 편리)</p>
+</li>
+<li><p>개발/디버깅 시 데이터 파악이 직관적</p>
+</li>
+</ul>
+<hr>
+<h3 id="단점-시스템-확장-시-문제점"><a href="#단점-시스템-확장-시-문제점" class="headerlink" title="단점 (시스템 확장 시 문제점)"></a>단점 (시스템 확장 시 문제점)</h3><pre><code>1. 인덱스 성능 저하</code></pre><ul>
+<li><p>String(17자) PK는 Long(8byte) 대비 2배 이상의 저장 공간 필요</p>
+</li>
+<li><p>B-Tree 인덱스에서 문자열 비교는 숫자 비교보다 느림</p>
+</li>
+<li><p>클러스터드 인덱스 크기 증가 → 모든 세컨더리 인덱스도 영향</p>
+<ol start="2">
+<li>FK 참조하는 모든 테이블에 전파</li>
+</ol>
+</li>
+<li><p>Transaction 테이블에서 from_account_id, to_account_id 모두 String 17자</p>
+</li>
+<li><p>테이블 수가 늘어날수록 저장 공간 낭비 가중</p>
+<ol start="3">
+<li>계좌번호 변경 불가</li>
+</ol>
+</li>
+<li><p>PK를 변경하면 모든 FK 참조도 변경해야 함</p>
+</li>
+<li><p>실무에서 계좌번호 체계 변경 시 대규모 마이그레이션 필요</p>
+<ol start="4">
+<li>분산 시스템에서의 문제</li>
+</ol>
+</li>
+<li><p>현재 Random으로 생성 → 충돌 가능성 존재</p>
+</li>
+<li><p>여러 인스턴스에서 동시에 같은 ID 생성 가능</p>
+</li>
+<li><p>UUID나 Snowflake 같은 분산 ID 전략으로 변경 시 계좌번호 형식과 충돌</p>
+<ol start="5">
+<li>샤딩 시 불리</li>
+</ol>
+</li>
+<li><p>문자열 기반 샤딩은 숫자 기반보다 범위 분할이 어려움</p>
+</li>
+<li><p>날짜 prefix가 있어 시간 기반 핫스팟 발생 가능 (같은 날 생성 계좌가 한 샤드에 몰림)</p>
+</li>
+</ul>
+<h2 id="느린-Id-생성-id-accountNumber를-AccountId로-분리-시"><a href="#느린-Id-생성-id-accountNumber를-AccountId로-분리-시" class="headerlink" title="(느린 Id 생성) id, accountNumber를 AccountId로 분리 시"></a>(느린 Id 생성) id, accountNumber를 AccountId로 분리 시</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">@Entity</span></span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Account</span> </span>&#123;</span><br><span class="line">      <span class="meta">@Id</span></span><br><span class="line">      <span class="meta">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)</span><br><span class="line">      <span class="keyword">private</span> Long id;  <span class="comment">// 내부 PK (surrogate key)</span></span><br><span class="line"><span class="meta">@Embedded</span></span><br><span class="line">  <span class="meta">@Column</span>(unique = <span class="keyword">true</span>)</span><br><span class="line">  <span class="keyword">private</span> AccountId accountNumber;  <span class="comment">// 계좌번호 (business key)</span></span><br><span class="line">    </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="분리의-이점"><a href="#분리의-이점" class="headerlink" title="분리의 이점:"></a>분리의 이점:</h3><ul>
+<li>PK: Long → 인덱스 성능 최적화</li>
+<li>계좌번호: 비즈니스 로직용 유니크 키</li>
+<li>계좌번호 체계 변경 시 PK 영향 없음</li>
+<li>FK는 Long으로 참조 → 저장 공간 절약</li>
+</ul>
+<hr>
+<h2 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h2><p>현재 소규모 시스템에서는 문제없지만, 데이터가 수백만 건 이상이거나 분산 환경으로 확장 시이슈가 발생할 수 있습니다. 초기 단계라면 지금 분리하는 것이 마이그레이션 비용이 적습니다.</p>
 
     </article>
     <!-- license  -->
@@ -591,7 +663,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Entity-id-생성-방식-정리"><span class="toc-number">1.</span> <span class="toc-text">Entity id 생성 방식 정리</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#빠른-ID-생성"><span class="toc-number">1.1.</span> <span class="toc-text">빠른 ID 생성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#느린-ID-생성"><span class="toc-number">1.2.</span> <span class="toc-text">느린 ID 생성</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Entity-id-생성-방식-정리"><span class="toc-number">1.</span> <span class="toc-text">Entity id 생성 방식 정리</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#빠른-ID-생성"><span class="toc-number">1.1.</span> <span class="toc-text">빠른 ID 생성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#느린-ID-생성"><span class="toc-number">1.2.</span> <span class="toc-text">느린 ID 생성</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#예시-AccountNumber"><span class="toc-number">2.</span> <span class="toc-text">예시(AccountNumber)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#빠른-Id-생성-id-accountNumber를-AccountId로-통합-시"><span class="toc-number">2.1.</span> <span class="toc-text">(빠른 Id 생성) id, accountNumber를 AccountId로 통합 시</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#장점"><span class="toc-number">2.1.1.</span> <span class="toc-text">장점</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#단점-시스템-확장-시-문제점"><span class="toc-number">2.1.2.</span> <span class="toc-text">단점 (시스템 확장 시 문제점)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#느린-Id-생성-id-accountNumber를-AccountId로-분리-시"><span class="toc-number">2.2.</span> <span class="toc-text">(느린 Id 생성) id, accountNumber를 AccountId로 분리 시</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#분리의-이점"><span class="toc-number">2.2.1.</span> <span class="toc-text">분리의 이점:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#결론"><span class="toc-number">2.3.</span> <span class="toc-text">결론</span></a></li></ol></li></ol>
         <br/>
         <br/>
         <br/>
@@ -4900,9 +4972,28 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 249
+        Total : 250
         </div>
         <!-- search  -->
         
@@ -4915,6 +5006,11 @@ top:50vh;
     
     <div class="archive-year"> 2026 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/13</span><a class="archive-post-title" href= "/2026/01/13/%EC%B1%85%EC%9D%BD%EA%B8%B0-%EA%B0%9C%EB%B0%9C%EC%9E%90-%EC%98%A8%EB%B3%B4%EB%94%A9-%EA%B0%80%EC%9D%B4%EB%93%9C/" >책읽기-개발자-온보딩-가이드</a>
+        </li>
     
     
         <li class="archive-post-item">
